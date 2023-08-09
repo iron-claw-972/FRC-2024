@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Robot.RobotId;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.auto.PathPlannerCommand;
-import frc.robot.constants.miscConstants.Constants;
+import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.controls.BaseDriverConfig;

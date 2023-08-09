@@ -6,7 +6,7 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.constants.miscConstants.Constants;
+import frc.robot.constants.Constants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.LogManager;
 import frc.robot.util.Vision;

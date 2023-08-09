@@ -7,7 +7,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Robot.RobotId;
-import frc.robot.constants.miscConstants.Constants;
+import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.FalconConstants;
 import lib.COTSFalconSwerveConstants;
 

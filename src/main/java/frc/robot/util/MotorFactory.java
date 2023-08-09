@@ -18,7 +18,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
-import frc.robot.constants.miscConstants.Constants;
+import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.FalconConstants;
 
 /**
