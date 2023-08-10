@@ -2,9 +2,7 @@ package frc.robot.commands.vision;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Drivetrain;
@@ -12,7 +10,7 @@ import frc.robot.util.LogManager;
 import frc.robot.util.Vision;
 
 /**
- * Gathers data on the distance limits of the camera used for vision.
+ * Calculates distance traveled from drivetrain and vision and compares the results
  */
 public class TestVisionDistance extends CommandBase {
   private final Drivetrain m_drive;
@@ -65,36 +63,43 @@ public class TestVisionDistance extends CommandBase {
   }
 
   /**
-   * Drives the robot, finds the pose fromt he drivetrain and vision, and someimes prints the distances
+   * Drives the robot, finds the pose from the drivetrain and vision, and someimes prints the distances
    */
   @Override
   public void execute() {
     m_drive.drive(m_speed, 0, 0, false, false);
     Pose2d newestPose = m_vision.getPose2d(m_currentPose, m_drive.getPose());
 
-    // If the camera can see the apriltag
+    // If the camera can see the april tag
     if (newestPose != null) {
-      //update current pose
+      // update current pose
       m_currentPose = newestPose;
       // reset the timer
       m_endTimer.reset();
-      // If kPrintDelay seconds have passed, print the data
+      // calculate distances
       m_driveDistance = m_drive.getPose().getTranslation().getDistance(m_driveStartTranslation);
       m_visionDistance = m_currentPose.getTranslation().getDistance(m_visionStartTranslation);
+      // log data on shuffleboard
       m_vision.getVisionTestDriveEntry().setDouble(m_driveDistance);
       m_vision.getVisionTestVisionEntry().setDouble(m_visionDistance);
       m_vision.getVisionTestDiffEntry().setDouble(m_visionDistance - m_driveDistance);
-      m_vision.getVisionTestPercentDiffEntry().setDouble((m_visionDistance-m_driveDistance) / m_driveDistance * 100);
+      m_vision.getVisionTestPercentDiffEntry().setDouble((m_visionDistance - m_driveDistance) / m_driveDistance * 100);
+      // If kPrintDelay seconds have passed, print the data
       if (m_printTimer.advanceIfElapsed(kPrintDelay)) {
-        System.out.println(m_driveDistance + " " + m_visionDistance);
+        System.out.println("\nDrive distance: " + m_driveDistance);
+        System.out.println("Vision distance: " + m_visionDistance);
+        System.out.println("Difference: " + (m_visionDistance - m_driveDistance));
+        System.out.println("Percent difference: " + (m_visionDistance - m_driveDistance) / m_driveDistance * 100);
       }
+      // log data
       if(Constants.kLogging){
-        LogManager.addDouble("Vision/Distance Test Drive Distance", m_driveDistance);
-        LogManager.addDouble("Vision/Distance Test Vision Distance", m_visionDistance);
-        LogManager.addDouble("Vision/Distance Test Vision Error Value", m_visionDistance - m_driveDistance);
-        LogManager.addDouble("Vision/Distance Test Vision Error Percentage", (m_visionDistance - m_driveDistance) / m_driveDistance * 100);
+        LogManager.addDouble("Vision/Distance Test/Drive Distance", m_driveDistance);
+        LogManager.addDouble("Vision/Distance Test/Vision Distance", m_visionDistance);
+        LogManager.addDouble("Vision/Distance Test/Vision Error Value", m_visionDistance - m_driveDistance);
+        LogManager.addDouble("Vision/Distance Test/Vision Error Percentage", (m_visionDistance - m_driveDistance) / m_driveDistance * 100);
       }
     } else {
+      // start end timer
       m_endTimer.start();
     }
   }
