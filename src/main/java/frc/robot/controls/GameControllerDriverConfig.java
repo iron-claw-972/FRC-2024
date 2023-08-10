@@ -1,29 +1,17 @@
 package frc.robot.controls;
 
-import java.util.function.DoubleSupplier;
-
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import frc.robot.commands.GoToPose;
-import frc.robot.commands.GoToPosePID;
 import frc.robot.commands.SetFormationX;
-import frc.robot.constants.miscConstants.AutoConstants;
-import frc.robot.constants.miscConstants.FieldConstants;
 import frc.robot.constants.miscConstants.OIConstants;
-import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.Functions;
 import lib.controllers.GameController;
 import lib.controllers.GameController.Axis;
 import lib.controllers.GameController.Button;
-import lib.controllers.GameController.DPad;
 
 /**
  * Driver controls for the generic game controller.
@@ -45,47 +33,9 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
 
     // set the wheels to X
     kDriver.get(Button.X).onTrue(new SetFormationX(super.getDrivetrain()));
-
-    // Moves to the single substation using Path Planner
-    kDriver.get(Button.RB).whileTrue(new GoToPose(() -> new Pose2d(
-      // the single substation X
-      DriverStation.getAlliance() == Alliance.Blue ? FieldConstants.kBlueSingleSubstationX : FieldConstants.kRedSingleSubstationX, 
-      // don't move the robot in the Y
-      getDrivetrain().getPose().getY(),
-      // facing upwards
-      new Rotation2d(Math.PI/2)),
-      
-      // max speed
-      AutoConstants.kMaxAutoSpeed, 
-      // max accel
-      AutoConstants.kMaxAutoAccel + 1,
-      
-      getDrivetrain())
-    );
-
+    
     // Resets the modules to absolute if they are having the unresolved zeroing error
     kDriver.get(Button.A).onTrue(new InstantCommand(() -> getDrivetrain().resetModulesToAbsolute()));
-    
-    // TODO: test chassis PID alignment
-    // // Moves to the selected scoring position using PID
-    // kDriver.get(DPad.LEFT).whileTrue(new GoToPosePID(() -> getNodePose(), getDrivetrain()));
-    
-    // // Moves to the single substation using PID
-    // kDriver.get(DPad.DOWN).whileTrue(new GoToPosePID(() -> new Pose2d(
-    //   // the single substation X
-    //   DriverStation.getAlliance() == Alliance.Blue ? FieldConstants.kBlueSingleSubstationX : FieldConstants.kRedSingleSubstationX, 
-    //   // don't move the robot in the Y
-    //   getDrivetrain().getPose().getY(),
-    //   // facing upwards
-    //   new Rotation2d(Math.PI/2)),
-    //   getDrivetrain())
-    // );
-
-    // // Moves to the shelf using PID
-    // kDriver.get(DPad.RIGHT).whileTrue(new GoToPosePID(() -> (
-    //   DriverStation.getAlliance() == Alliance.Blue ? VisionConstants.kBlueShelfAlignPose : VisionConstants.kRedShelfAlignPose),
-    //   getDrivetrain())
-    // );
   }
 
 

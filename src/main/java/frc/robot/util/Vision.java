@@ -20,7 +20,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -106,8 +105,6 @@ public class Vision {
       }
     }
     ArrayList<EstimatedRobotPose> estimatedPoses = getEstimatedPoses(referencePose);
-    Translation2d translation = new Translation2d();
-    double rotation = 0;
     
     if (estimatedPoses.size() == 1) return estimatedPoses.get(0).estimatedPose.toPose2d();
     
@@ -126,12 +123,14 @@ public class Vision {
     }
           
     //TODO: VERY LOW PRIORITY FOR FUTURE ROBOTS, make the rotation average work with more than 2 cameras
+    // Translation2d translation = new Translation2d();
+    // Rotatoin2d rotation = new Rotation2d();
     // for(int i = 0; i < estimatedPoses.size(); i ++){
-    //   translation=translation.plus(estimatedPoses.get(i).estimatedPose.toPose2d().getTranslation());
+    //   translation = translation.plus(estimatedPoses.get(i).estimatedPose.toPose2d().getTranslation());
     // }
 
-    // if(posesUsed>0){
-    //   return new Pose2d(translation.div(estimatedPoses.size()), new Rotation2d());
+    // if(estimatedPoses.size()>0){
+    //   return new Pose2d(translation.div(estimatedPoses.size()), rotation);
     // }
     return null;
   }
@@ -154,10 +153,10 @@ public class Vision {
   }
   
   public void setupVisionShuffleboard() {
-    GenericEntry visionTestDriveEntry = m_shuffleboardTab.add("Distance Test Drive Distance", 0).getEntry();
-    GenericEntry visionTestVisionEntry = m_shuffleboardTab.add("Distance Test Vision Distance", 0).getEntry();
-    GenericEntry visionTestDiffEntry = m_shuffleboardTab.add("Distance Test Difference", 0).getEntry();
-    GenericEntry visionTestPercentDiffEntry = m_shuffleboardTab.add("Distance Test % Difference", 0).getEntry();
+    m_visionTestDriveEntry = m_shuffleboardTab.add("Distance Test Drive Distance", 0).getEntry();
+    m_visionTestVisionEntry = m_shuffleboardTab.add("Distance Test Vision Distance", 0).getEntry();
+    m_visionTestDiffEntry = m_shuffleboardTab.add("Distance Test Difference", 0).getEntry();
+    m_visionTestPercentDiffEntry = m_shuffleboardTab.add("Distance Test % Difference", 0).getEntry();
   }
   
   class VisionCamera {

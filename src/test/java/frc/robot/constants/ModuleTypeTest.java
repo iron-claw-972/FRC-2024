@@ -10,18 +10,18 @@ public class ModuleTypeTest {
 
     /** Make sure that ModuleType.id returns the same as ModuleType.getID() */
     @Test
+    @SuppressWarnings("deprecation")
     public void testEnums() {
         for (ModuleType mt : ModuleType.values()) {
-            // @SuppressWarnings("deprecated")
             assertEquals(mt.id, mt.getID());
         }
     }
 
     /** Make sure that ModuleType.abbrev returns the same as ModuleType.getAbbreviation() */
     @Test
+    @SuppressWarnings("deprecation")
     public void testAbbreviations() {
         for (ModuleType mt : ModuleType.values()) {
-            // @SuppressWarnings("deprecated")
             assertEquals(mt.abbrev, mt.getAbbreviation());
         }
 

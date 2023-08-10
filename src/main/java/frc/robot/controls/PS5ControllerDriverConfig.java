@@ -1,22 +1,13 @@
 package frc.robot.controls;
 
-import java.util.function.DoubleSupplier;
-
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
-import frc.robot.commands.GoToPose;
 import frc.robot.commands.SetFormationX;
-import frc.robot.constants.miscConstants.AutoConstants;
-import frc.robot.constants.miscConstants.FieldConstants;
 import frc.robot.constants.miscConstants.OIConstants;
-import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.Functions;
 import lib.controllers.PS5Controller;
