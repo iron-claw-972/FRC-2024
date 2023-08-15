@@ -7,8 +7,6 @@ import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.Pair;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -16,7 +14,6 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Robot.RobotId;
-import frc.robot.constants.swerve.DriveConstants;
 
 /**
  * Container class for vision constants.
@@ -25,21 +22,7 @@ public class VisionConstants {
   // If vision is enabled
   public static final boolean kEnabled = true;
 
-  // The angle to use charge station vision at in degrees. 
-  // If the pitch or the roll of the robot is above this amount, it will trust vision more for a bit.
-  public static final double kChargeStationAngle = 2.5;
-
   //TODO: Change these to whatever the actual distances are
-  /**  How far from the grid the robot should be to score for alignment, in meters */
-  public static double kGridDistanceAlignment = 0 + DriveConstants.kRobotWidthWithBumpers / 2; // meters
-  /** How far from the shelf the robot should be to intake for alignment, in meters */
-  public static double kShelfDistanceAlignment = 0.5 + DriveConstants.kRobotWidthWithBumpers / 2;
-
-  /** The Pose2d the robot should align to for the Blue Shelf */
-  public static Pose2d kBlueShelfAlignPose = new Pose2d(FieldConstants.kBlueShelfX - kShelfDistanceAlignment, FieldConstants.kShelfY, new Rotation2d(0));
-  /** The Pose2d the robot should align to for the Red Shelf */
-  public static Pose2d kRedShelfAlignPose = new Pose2d(FieldConstants.kRedShelfX + kShelfDistanceAlignment, FieldConstants.kShelfY, new Rotation2d(Math.PI));
-
 
   public static double kStdDevCommandEndTime = 5;
 
@@ -90,15 +73,7 @@ public class VisionConstants {
     1000  // heading in radians. The gyroscope is very accurate, so as long as it is reset correctly it is unnecessary to correct it with vision
   );
 
-  // How much to trust vision after passing over the charge station
-  // Should be lower to correct pose after charge station
-  public static final Matrix<N3, N1> kChargeStationVisionPoseStdDevs = new MatBuilder<>(Nat.N3(), Nat.N1()).fill(
-    0.01, // x in meters
-    0.01, // y in meters
-    1000   // heading in radians. The gyroscope is very accurate, so as long as it is reset correctly it is unnecessary to correct it with vision
-  );
-
   // Increasing this makes pose estimation trust vision measurements less as distance from Apriltags increases
   // This is how much is added to std dev for vision when closest visible Apriltag is 1 meter away
-  public static final double kVisionPoseStdDevFactor = 1.0;
+  public static final double kVisionPoseStdDevFactor = 0;
 }

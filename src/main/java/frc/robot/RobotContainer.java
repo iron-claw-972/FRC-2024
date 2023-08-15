@@ -155,8 +155,6 @@ public class RobotContainer {
 
     if (m_drive != null) {
       m_drive.addTestCommands(m_testTab, testEntry);
-      m_testTab.add("Reset Odometry to Blue Shelf", new InstantCommand(() -> m_drive.resetOdometry(VisionConstants.kBlueShelfAlignPose)));
-      m_testTab.add("Reset Odometry to Red Shelf", new InstantCommand(() -> m_drive.resetOdometry(VisionConstants.kRedShelfAlignPose)));
     }
 
     if (m_vision != null) {

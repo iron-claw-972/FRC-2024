@@ -63,8 +63,6 @@ public class Drivetrain extends SubsystemBase {
   private final PIDController m_yController;
   private final PIDController m_rotationController;
 
-  private boolean m_chargeStationVision = false;
-
   // Displays the field with the robots estimated pose on it
   private final Field2d m_fieldDisplay;
 
@@ -365,23 +363,8 @@ public class Drivetrain extends SubsystemBase {
   public void updateOdometry() {
     // Updates pose based on encoders and gyro. NOTE: must use yaw directly from gyro!
     m_poseEstimator.update(Rotation2d.fromDegrees(m_pigeon.getYaw()), getModulePositions());
-    // if (DriverStation.getAlliance() == Alliance.Blue) {
-    //   m_mechanism.setDistanceToGrid(Math.max(m_poseEstimator.getEstimatedPosition().getX()
-    //   - (FieldConstants.kAprilTags.get(5).pose.getX() + FieldConstants.kAprilTagOffset)
-    //   - DriveConstants.kRobotWidthWithBumpers/2, 0));
-    // }
-    // else {
-    //   m_mechanism.setDistanceToGrid(Math.max(Math.abs(m_poseEstimator.getEstimatedPosition().getX()-FieldConstants.kFieldLength)
-    //   - (FieldConstants.kAprilTags.get(5).pose.getX() + FieldConstants.kAprilTagOffset)
-    //   - DriveConstants.kRobotWidthWithBumpers/2, 0));
-    // }
     // Updates pose based on vision
     if (RobotBase.isReal() && m_visionEnabled && VisionConstants.kEnabled) {
-
-      // When the angle is greater than the threshold, then set charge station vision to true
-      if (Math.abs(getPitch().getDegrees()) > VisionConstants.kChargeStationAngle || Math.abs(getRoll().getDegrees()) > VisionConstants.kChargeStationAngle) {
-        m_chargeStationVision = true;
-      }
 
       // An array list of poses returned by different cameras
       ArrayList<EstimatedRobotPose> estimatedPoses = m_vision.getEstimatedPoses(m_poseEstimator.getEstimatedPosition());
@@ -406,26 +389,19 @@ public class Drivetrain extends SubsystemBase {
           }
         }
 
-        double visionFactor = (currentEstimatedPoseTranslation.getDistance(closestTagPoseTranslation) * VisionConstants.kVisionPoseStdDevFactor) - 1;
-        visionFactor = Math.max(0, visionFactor);
+        double visionFactor = (currentEstimatedPoseTranslation.getDistance(closestTagPoseTranslation) * VisionConstants.kVisionPoseStdDevFactor);
 
         // Adds the vision measurement for this camera
         m_poseEstimator.addVisionMeasurement(
           estimatedPose.estimatedPose.toPose2d(),
           estimatedPose.timestampSeconds,
-          m_chargeStationVision ? VisionConstants.kChargeStationVisionPoseStdDevs :
-            VisionConstants.kBaseVisionPoseStdDevs.plus(
-              visionFactor
-            )
+          VisionConstants.kBaseVisionPoseStdDevs.plus(
+            visionFactor
+          )
         );
         LogManager.addDouble("Vision/ClosestTag Distance", 
           currentEstimatedPoseTranslation.getDistance(closestTagPoseTranslation)
         );
-      }
-      
-      // If it used vision after going over the charge station, it should trust vision normally again
-      if (estimatedPoses.size()>0) {
-        m_chargeStationVision = false;
       }
     }
   }
