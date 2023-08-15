@@ -399,9 +399,11 @@ public class Drivetrain extends SubsystemBase {
             visionFactor
           )
         );
-        LogManager.addDouble("Vision/ClosestTag Distance", 
-          currentEstimatedPoseTranslation.getDistance(closestTagPoseTranslation)
-        );
+        if(Constants.kLogging){
+          LogManager.addDouble("Vision/ClosestTag Distance", 
+            currentEstimatedPoseTranslation.getDistance(closestTagPoseTranslation)
+          );
+        }
       }
     }
   }
