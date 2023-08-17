@@ -94,14 +94,16 @@ public class Drivetrain extends SubsystemBase {
 
   // If vision is enabled
   // Do not change this. Instead, change kEnabled in VisionConstants
-  boolean m_visionEnabled = true;
+  // This is used in some commands that need vision disabled
+  private boolean m_visionEnabled = true;
 
-  int m_loggerStep = 0;
+  private int m_loggerStep = 0;
 
   /**
    * Creates a new Swerve Style Drivetrain.
    * @param drivetrainTab the shuffleboard tab to display drivetrain data on
    * @param swerveModulesTab the shuffleboard tab to display module data on
+   * @param vision the vision
    */
   public Drivetrain(ShuffleboardTab drivetrainTab, ShuffleboardTab swerveModulesTab, Vision vision) {
 
