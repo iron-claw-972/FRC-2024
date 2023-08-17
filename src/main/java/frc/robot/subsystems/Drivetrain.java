@@ -53,7 +53,7 @@ public class Drivetrain extends SubsystemBase {
   private final SwerveDrivePoseEstimator m_poseEstimator;
 
   // This is left intentionally public
-  public final Module[] m_modules;
+  public final Module[] modules;
 
   private final WPI_Pigeon2 m_pigeon;
   private Vision m_vision;
@@ -116,14 +116,14 @@ public class Drivetrain extends SubsystemBase {
     m_pigeon.configMountPose(AxisDirection.PositiveY, AxisDirection.PositiveZ);
 
     if (RobotBase.isReal()) {
-      m_modules = new Module[] {
+      modules = new Module[] {
         new Module(ModuleConstants.FRONT_LEFT, swerveModulesTab),
         new Module(ModuleConstants.FRONT_RIGHT, swerveModulesTab),
         new Module(ModuleConstants.BACK_LEFT, swerveModulesTab),
         new Module(ModuleConstants.BACK_RIGHT, swerveModulesTab),
       };
     } else {
-      m_modules = new ModuleSim[] {
+      modules = new ModuleSim[] {
         new ModuleSim(ModuleConstants.FRONT_LEFT, swerveModulesTab),
         new ModuleSim(ModuleConstants.FRONT_RIGHT, swerveModulesTab),
         new ModuleSim(ModuleConstants.BACK_LEFT, swerveModulesTab),
@@ -131,7 +131,7 @@ public class Drivetrain extends SubsystemBase {
       };
     }
 
-    m_prevModule = m_modules[0];
+    m_prevModule = modules[0];
 
     /*
      * By pausing init for a second before setting module offsets, we avoid a bug
@@ -277,7 +277,7 @@ public class Drivetrain extends SubsystemBase {
   public void setModuleStates(SwerveModuleState[] swerveModuleStates, boolean isOpenLoop) {
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeed);
     for (int i = 0; i < 4; i++) {
-      m_modules[i].setDesiredState(swerveModuleStates[i], isOpenLoop);
+      modules[i].setDesiredState(swerveModuleStates[i], isOpenLoop);
     }
   }
   
@@ -304,7 +304,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public void enableStateDeadband(boolean stateDeadBand){
     for (int i = 0; i < 4; i++) {
-      m_modules[i].enableStateDeadband(stateDeadBand);
+      modules[i].enableStateDeadband(stateDeadBand);
     }
   }
 
@@ -320,7 +320,7 @@ public class Drivetrain extends SubsystemBase {
   */
   public SwerveModulePosition[] getModulePositions() {
     SwerveModulePosition[] positions = new SwerveModulePosition[4];
-    for (Module mod : m_modules) {
+    for (Module mod : modules) {
       positions[mod.getModuleIndex()] = mod.getPosition();
     }
     return positions;
@@ -332,7 +332,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public SwerveModuleState[] getModuleStates() {
     SwerveModuleState[] states = new SwerveModuleState[4];
-    for (Module mod : m_modules) {
+    for (Module mod : modules) {
       states[mod.getModuleIndex()] = mod.getState();
     }
     return states;
@@ -354,7 +354,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void resetModulesToAbsolute() {
-    for (Module mod : m_modules) {
+    for (Module mod : modules) {
       mod.resetToAbsolute();
     }
   }
@@ -469,7 +469,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public void setAllOptimize(Boolean optimizeSate) {
     for (int i = 0; i < 4; i++) {
-      m_modules[i].setOptimize(optimizeSate);
+      modules[i].setOptimize(optimizeSate);
     }
   }
   
@@ -478,7 +478,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public void stop() {
     for (int i = 0; i < 4; i++) {
-      m_modules[i].stop();
+      modules[i].stop();
     }
   }
 
@@ -487,28 +487,28 @@ public class Drivetrain extends SubsystemBase {
    */
   private void setUpFeedforwardSavers() {
     m_driveStaticFeedForwardSaver = new Double[] {
-      m_modules[0].getDriveFeedForwardKS(),
-      m_modules[1].getDriveFeedForwardKS(),
-      m_modules[2].getDriveFeedForwardKS(),
-      m_modules[3].getDriveFeedForwardKS()
+      modules[0].getDriveFeedForwardKS(),
+      modules[1].getDriveFeedForwardKS(),
+      modules[2].getDriveFeedForwardKS(),
+      modules[3].getDriveFeedForwardKS()
     };
     m_driveVelFeedForwardSaver = new Double[] {
-      m_modules[0].getDriveFeedForwardKV(),
-      m_modules[1].getDriveFeedForwardKV(),
-      m_modules[2].getDriveFeedForwardKV(),
-      m_modules[3].getDriveFeedForwardKV()
+      modules[0].getDriveFeedForwardKV(),
+      modules[1].getDriveFeedForwardKV(),
+      modules[2].getDriveFeedForwardKV(),
+      modules[3].getDriveFeedForwardKV()
     };
     m_steerStaticFeedForwardSaver = new Double[] {
-      m_modules[0].getSteerFeedForwardKS(),
-      m_modules[1].getSteerFeedForwardKS(),
-      m_modules[2].getSteerFeedForwardKS(),
-      m_modules[3].getSteerFeedForwardKS()
+      modules[0].getSteerFeedForwardKS(),
+      modules[1].getSteerFeedForwardKS(),
+      modules[2].getSteerFeedForwardKS(),
+      modules[3].getSteerFeedForwardKS()
     };
     m_steerVelFeedForwardSaver = new Double[] {
-      m_modules[0].getSteerFeedForwardKV(),
-      m_modules[1].getSteerFeedForwardKV(),
-      m_modules[2].getSteerFeedForwardKV(),
-      m_modules[3].getSteerFeedForwardKV()
+      modules[0].getSteerFeedForwardKV(),
+      modules[1].getSteerFeedForwardKV(),
+      modules[2].getSteerFeedForwardKV(),
+      modules[3].getSteerFeedForwardKV()
     };
   }
   
@@ -574,10 +574,10 @@ public class Drivetrain extends SubsystemBase {
   private void setupModulesShuffleboard() {
     if (Constants.kUseTelemetry) {
       
-      m_moduleChooser.setDefaultOption("Front Left", m_modules[0]);
-      m_moduleChooser.addOption("Front Right", m_modules[1]);
-      m_moduleChooser.addOption("Back Left", m_modules[2]);
-      m_moduleChooser.addOption("Back Right", m_modules[3]);
+      m_moduleChooser.setDefaultOption("Front Left", modules[0]);
+      m_moduleChooser.addOption("Front Right", modules[1]);
+      m_moduleChooser.addOption("Back Left", modules[2]);
+      m_moduleChooser.addOption("Back Right", modules[3]);
 
       setUpFeedforwardSavers();
       
@@ -724,7 +724,7 @@ public class Drivetrain extends SubsystemBase {
   }
   
   public Module getModuleChoosen() {
-    if (!Constants.kUseTelemetry) return m_modules[0];
+    if (!Constants.kUseTelemetry) return modules[0];
     return m_moduleChooser.getSelected();
   }
 
@@ -763,26 +763,26 @@ public class Drivetrain extends SubsystemBase {
     LogManager.addDoubleArray("Swerve/Pose2d", pose);
 
     double[] actualStates = {
-      m_modules[0].getAngle().getRadians(),
-      m_modules[0].getState().speedMetersPerSecond,
-      m_modules[1].getAngle().getRadians(),
-      m_modules[1].getState().speedMetersPerSecond,
-      m_modules[2].getAngle().getRadians(),
-      m_modules[2].getState().speedMetersPerSecond,
-      m_modules[3].getAngle().getRadians(),
-      m_modules[3].getState().speedMetersPerSecond
+      modules[0].getAngle().getRadians(),
+      modules[0].getState().speedMetersPerSecond,
+      modules[1].getAngle().getRadians(),
+      modules[1].getState().speedMetersPerSecond,
+      modules[2].getAngle().getRadians(),
+      modules[2].getState().speedMetersPerSecond,
+      modules[3].getAngle().getRadians(),
+      modules[3].getState().speedMetersPerSecond
     };
     LogManager.addDoubleArray("Swerve/actual swerve states", actualStates);
 
     double[] desiredStates = {
-      m_modules[0].getDesiredAngle().getRadians(),
-      m_modules[0].getDesiredVelocity(),
-      m_modules[1].getDesiredAngle().getRadians(),
-      m_modules[1].getDesiredVelocity(),
-      m_modules[2].getDesiredAngle().getRadians(),
-      m_modules[2].getDesiredVelocity(),
-      m_modules[3].getDesiredAngle().getRadians(),
-      m_modules[3].getDesiredVelocity()
+      modules[0].getDesiredAngle().getRadians(),
+      modules[0].getDesiredVelocity(),
+      modules[1].getDesiredAngle().getRadians(),
+      modules[1].getDesiredVelocity(),
+      modules[2].getDesiredAngle().getRadians(),
+      modules[2].getDesiredVelocity(),
+      modules[3].getDesiredAngle().getRadians(),
+      modules[3].getDesiredVelocity()
     };
     LogManager.addDoubleArray("Swerve/desired swerve states", desiredStates);
 
