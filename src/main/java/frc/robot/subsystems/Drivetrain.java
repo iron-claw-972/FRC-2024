@@ -375,7 +375,7 @@ public class Drivetrain extends SubsystemBase {
       for (int i = 0; i < estimatedPoses.size(); i++) {
         EstimatedRobotPose estimatedPose = estimatedPoses.get(i);
         // The position of the closest april tag as a translation
-        Translation2d closestTagPoseTranslation = new Translation2d();
+        Translation2d closestTagPoseTranslation = null;
         for (int j = 0; j < estimatedPose.targetsUsed.size(); j++) {
           // The position of the current april tag
           Pose3d currentTagPose = m_vision.getTagPose(estimatedPose.targetsUsed.get(j).getFiducialId());
@@ -386,7 +386,7 @@ public class Drivetrain extends SubsystemBase {
           Translation2d currentTagPoseTranslation = currentTagPose.toPose2d().getTranslation();
           
           // If the current april tag position is closer than the closest one, this makes makes it the closest
-          if (j == 0 || currentEstimatedPoseTranslation.getDistance(currentTagPoseTranslation) < currentEstimatedPoseTranslation.getDistance(closestTagPoseTranslation)) {
+          if (closestTagPoseTranslation == null || currentEstimatedPoseTranslation.getDistance(currentTagPoseTranslation) < currentEstimatedPoseTranslation.getDistance(closestTagPoseTranslation)) {
             closestTagPoseTranslation = currentTagPoseTranslation;
           }
         }

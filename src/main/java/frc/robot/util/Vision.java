@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.vision.CalculateStdDevs;
 import frc.robot.commands.vision.TestVisionAlignment;
 import frc.robot.commands.vision.TestVisionDistance;
+import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.FieldConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
@@ -81,11 +82,13 @@ public class Vision {
       // April tags that don't exist might return a result that is present but doesn't have a pose
       if (estimatedPose.isPresent() && estimatedPose.get().estimatedPose != null) {
         estimatedPoses.add(estimatedPose.get());
-        LogManager.addDoubleArray("Vision/camera " + i + "/estimated pose2d", new double[] {
-          estimatedPose.get().estimatedPose.getX(),
-          estimatedPose.get().estimatedPose.getY(),
-          estimatedPose.get().estimatedPose.getRotation().getZ()
-        });
+        if(Constants.kLogging){
+          LogManager.addDoubleArray("Vision/camera " + i + "/estimated pose2d", new double[] {
+            estimatedPose.get().estimatedPose.getX(),
+            estimatedPose.get().estimatedPose.getY(),
+            estimatedPose.get().estimatedPose.getRotation().getZ()
+          });
+        }
       }
     }
     return estimatedPoses;
