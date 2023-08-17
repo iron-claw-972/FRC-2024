@@ -15,7 +15,7 @@ public class StatisticsUtil {
     return mean(arrayListToArray(data));
   }
 
-  public static double mean(double[] data){
+  public static double mean(double... data){
     double mean = 0;
     for (int i = 0; i < data.length; i++) {
       mean += data[i];
@@ -28,7 +28,7 @@ public class StatisticsUtil {
     return stdDev(arrayListToArray(data));
   }
 
-  public static double stdDev(double[] data){
+  public static double stdDev(double... data){
     if (data.length == 0 || data.length == 1) return 0;
     
     double mean = mean(data);
