@@ -23,13 +23,20 @@ public abstract class BaseDriverConfig {
   private GenericEntry m_rotationSensitivityEntry, m_rotationExpoEntry, m_rotationDeadbandEntry, m_rotationSlewrateEntry;
   private GenericEntry m_headingSensitivityEntry, m_headingExpoEntry, m_headingDeadbandEntry;
 
+  // Some of these are not currently used, but we might want them later
+  @SuppressWarnings("unused")
   private double m_translationalSensitivity = OIConstants.kTranslationalSensitivity;
+  @SuppressWarnings("unused")
   private double m_translationalExpo = OIConstants.kTranslationalExpo;
+  @SuppressWarnings("unused")
   private double m_translationalDeadband = OIConstants.kTranslationalDeadband;
   private double m_translationalSlewrate = OIConstants.kTranslationalSlewrate;
 
+  @SuppressWarnings("unused")
   private double m_rotationSensitivity = OIConstants.kRotationSensitivity;
+  @SuppressWarnings("unused")
   private double m_rotationExpo = OIConstants.kRotationExpo;
+  @SuppressWarnings("unused")
   private double m_rotationDeadband = OIConstants.kRotationDeadband;
   private double m_rotationSlewrate = OIConstants.kRotationSlewrate;
 
@@ -38,8 +45,11 @@ public abstract class BaseDriverConfig {
   private double m_headingDeadband = OIConstants.kHeadingDeadband;
   private double m_previousHeading = 0;
 
+  @SuppressWarnings("unused")
   private final DynamicSlewRateLimiter m_xSpeedLimiter = new DynamicSlewRateLimiter(m_translationalSlewrate);
+  @SuppressWarnings("unused")
   private final DynamicSlewRateLimiter m_ySpeedLimiter = new DynamicSlewRateLimiter(m_translationalSlewrate);
+  @SuppressWarnings("unused")
   private final DynamicSlewRateLimiter m_rotLimiter = new DynamicSlewRateLimiter(m_rotationSlewrate);
   private final DynamicSlewRateLimiter m_headingLimiter = new DynamicSlewRateLimiter(m_headingSensitivity);
 

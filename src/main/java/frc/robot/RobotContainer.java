@@ -34,6 +34,8 @@ public class RobotContainer {
   private final SendableChooser<Command> m_autoCommand = new SendableChooser<>();
 
   //shuffleboard tabs
+  // The main tab is not currently used. Delete the SuppressWarning if it is used.
+  @SuppressWarnings("unused")
   private final ShuffleboardTab m_mainTab = Shuffleboard.getTab("Main");
   private final ShuffleboardTab m_drivetrainTab = Shuffleboard.getTab("Drive");
   private final ShuffleboardTab m_swerveModulesTab = Shuffleboard.getTab("Swerve Modules");
