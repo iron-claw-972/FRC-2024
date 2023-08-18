@@ -7,8 +7,6 @@ import lib.PolynomialRegression;
 
 /**
  * A class for storing and processing feedforward characterization data. Used in automatic feedforward characterization.
- * @see frc.robot.commands.test.DriveFeedForwardCharacterization
- * @see frc.robot.commands.test.SteerFeedForwardCharacterizationSingle
  */
 public class FeedForwardCharacterizationData {
   private PolynomialRegression m_regression;
