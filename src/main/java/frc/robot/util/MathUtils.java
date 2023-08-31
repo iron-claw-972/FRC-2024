@@ -3,10 +3,12 @@ package frc.robot.util;
 import edu.wpi.first.math.MathUtil;
 import frc.robot.constants.miscConstants.OIConstants;
 
+import java.util.List;
+
 /**
  * Utility class for useful functions.
  */
-public class Functions {
+public class MathUtils {
 
   /**
    * Deadbands an input to [-1, -deadband], [deadband, 1], rescaling inputs to be linear from
@@ -81,5 +83,62 @@ public class Functions {
     }
     return (num1+num2)/2;
   }
-  
+
+  /**
+   * Calls {@link #mean(double...)}.
+   *
+   * @param data the list of data to find the mean of
+   * @return the mean of the data
+   */
+  public static double mean(List<Double> data){
+    return mean(doubleListToArray(data));
+  }
+
+  /**
+   * Finds the mean of the provided array of doubles
+   *
+   * @param data an array of doubles
+   * @return the mean of the data
+   */
+  public static double mean(double... data){
+    double mean = 0;
+    for (double datum : data) {
+      mean += datum;
+    }
+    mean /= data.length;
+    return mean;
+  }
+
+  /**
+   * Calls {@link #stdDev(double...)}.
+   *
+   * @param data the list of data to find the standard deviation of
+   * @return the standard deviation of the data
+   */
+  public static double stdDev(List<Double> data){
+    return stdDev(doubleListToArray(data));
+  }
+
+  /**
+   * Finds the standard deviation of the provided array of doubles
+   *
+   * @param data an array of doubles
+   * @return the standard deviation of the data
+   */
+  public static double stdDev(double... data){
+    if (data.length == 0 || data.length == 1) return 0;
+
+    double mean = mean(data);
+
+    double total = 0;
+    for (double datum : data) {
+      total += Math.pow(datum - mean, 2);
+    }
+    return Math.sqrt(total / (data.length-1));
+  }
+
+  private static double[] doubleListToArray(List<Double> arrayList){
+    return arrayList.stream().mapToDouble(Double::doubleValue).toArray();
+  }
+
 }

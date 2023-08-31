@@ -9,7 +9,7 @@ import lib.CTREModuleState;
 import frc.robot.constants.Constants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
-import frc.robot.util.Conversions;
+import frc.robot.util.ConversionUtils;
 import frc.robot.util.LogManager;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -84,14 +84,14 @@ public class Module extends SubsystemBase {
       double percentOutput = desiredState.speedMetersPerSecond / DriveConstants.kMaxSpeed;
       m_driveMotor.set(ControlMode.PercentOutput, percentOutput);
     } else {
-      double velocity = Conversions.MPSToFalcon(desiredState.speedMetersPerSecond, DriveConstants.kWheelCircumference,
-          DriveConstants.kDriveGearRatio);
+      double velocity = ConversionUtils.MPSToFalcon(desiredState.speedMetersPerSecond, DriveConstants.kWheelCircumference,
+                                                    DriveConstants.kDriveGearRatio);
       m_driveMotor.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward,
           feedforward.calculate(desiredState.speedMetersPerSecond));
     }
     if(Constants.kLogging){
-      double motorSpeed = Conversions.falconToMPS(m_driveMotor.getSelectedSensorVelocity(), DriveConstants.kWheelCircumference,
-        DriveConstants.kDriveGearRatio);
+      double motorSpeed = ConversionUtils.falconToMPS(m_driveMotor.getSelectedSensorVelocity(), DriveConstants.kWheelCircumference,
+                                                      DriveConstants.kDriveGearRatio);
       LogManager.addDouble("Swerve/Modules/DriveSpeed/"+m_moduleAbbr,
           motorSpeed
       );
@@ -113,10 +113,10 @@ public class Module extends SubsystemBase {
       stop();
       return;
     }
-    m_angleMotor.set(ControlMode.Position, Conversions.degreesToFalcon(desiredState.angle.getDegrees(), DriveConstants.kAngleGearRatio));
+    m_angleMotor.set(ControlMode.Position, ConversionUtils.degreesToFalcon(desiredState.angle.getDegrees(), DriveConstants.kAngleGearRatio));
     if(Constants.kLogging){
-      double position = Conversions.falconToDegrees(m_angleMotor.getSelectedSensorPosition(), 
-        DriveConstants.kAngleGearRatio);
+      double position = ConversionUtils.falconToDegrees(m_angleMotor.getSelectedSensorPosition(),
+                                                        DriveConstants.kAngleGearRatio);
       LogManager.addDouble("Swerve/Modules/SteerPosition/"+m_moduleAbbr,
           position
       );
@@ -124,8 +124,8 @@ public class Module extends SubsystemBase {
           position-desiredState.angle.getDegrees()
       );
       LogManager.addDouble("Swerve/Modules/SteerVelocity/"+m_moduleAbbr,
-          Conversions.falconToDegrees(m_angleMotor.getSelectedSensorVelocity(), 
-            DriveConstants.kAngleGearRatio)
+                           ConversionUtils.falconToDegrees(m_angleMotor.getSelectedSensorVelocity(),
+                                                           DriveConstants.kAngleGearRatio)
       );
       LogManager.addDouble("Swerve/Modules/SteerVoltage/"+m_moduleAbbr,
           m_angleMotor.getMotorOutputVoltage()
@@ -152,7 +152,7 @@ public class Module extends SubsystemBase {
 
   public Rotation2d getAngle() {
     return Rotation2d.fromDegrees(
-        Conversions.falconToDegrees(m_angleMotor.getSelectedSensorPosition(), DriveConstants.kAngleGearRatio));
+            ConversionUtils.falconToDegrees(m_angleMotor.getSelectedSensorPosition(), DriveConstants.kAngleGearRatio));
   }
 
   public Rotation2d getCANcoder() {
@@ -160,8 +160,8 @@ public class Module extends SubsystemBase {
   }
 
   public void resetToAbsolute() {
-    double absolutePosition = Conversions.degreesToFalcon(getCANcoder().getDegrees() - m_angleOffset.getDegrees(),
-        DriveConstants.kAngleGearRatio);
+    double absolutePosition = ConversionUtils.degreesToFalcon(getCANcoder().getDegrees() - m_angleOffset.getDegrees(),
+                                                              DriveConstants.kAngleGearRatio);
     m_angleMotor.setSelectedSensorPosition(absolutePosition);
   }
 
@@ -193,7 +193,7 @@ public class Module extends SubsystemBase {
   }
 
   public void setDriveCharacterizationVoltage(double voltage) {
-    m_angleMotor.set(ControlMode.Position, Conversions.degreesToFalcon(0, DriveConstants.kAngleGearRatio));
+    m_angleMotor.set(ControlMode.Position, ConversionUtils.degreesToFalcon(0, DriveConstants.kAngleGearRatio));
     m_driveMotor.set(ControlMode.PercentOutput, voltage / Constants.kRobotVoltage);
     if(Constants.kLogging){
       LogManager.addDouble("Swerve/Modules/DriveCharacterizationVoltage/"+m_moduleAbbr,
@@ -214,7 +214,7 @@ public class Module extends SubsystemBase {
   }
 
   public double getSteerVelocity() {
-    return Conversions.falconToRPM(m_angleMotor.getSelectedSensorVelocity(), DriveConstants.kAngleGearRatio) * 2 * Math.PI / 60;
+    return ConversionUtils.falconToRPM(m_angleMotor.getSelectedSensorVelocity(), DriveConstants.kAngleGearRatio) * 2 * Math.PI / 60;
   }
 
   private void configDriveMotor() {
@@ -240,16 +240,16 @@ public class Module extends SubsystemBase {
 
   public SwerveModuleState getState() {
     return new SwerveModuleState(
-        Conversions.falconToMPS(m_driveMotor.getSelectedSensorVelocity(), DriveConstants.kWheelCircumference,
-            DriveConstants.kDriveGearRatio),
-        getAngle());
+            ConversionUtils.falconToMPS(m_driveMotor.getSelectedSensorVelocity(), DriveConstants.kWheelCircumference,
+                                        DriveConstants.kDriveGearRatio),
+            getAngle());
   }
 
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
-        Conversions.falconToMeters(m_driveMotor.getSelectedSensorPosition(), DriveConstants.kWheelCircumference,
-            DriveConstants.kDriveGearRatio),
-        getAngle());
+            ConversionUtils.falconToMeters(m_driveMotor.getSelectedSensorPosition(), DriveConstants.kWheelCircumference,
+                                           DriveConstants.kDriveGearRatio),
+            getAngle());
   }
 
   private void setupShuffleboard() {

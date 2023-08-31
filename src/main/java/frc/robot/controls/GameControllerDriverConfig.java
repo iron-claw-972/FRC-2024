@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.SetFormationX;
 import frc.robot.constants.miscConstants.OIConstants;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.util.Functions;
+import frc.robot.util.MathUtils;
 import lib.controllers.GameController;
 import lib.controllers.GameController.Axis;
 import lib.controllers.GameController.Button;
@@ -62,7 +62,7 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
   
   @Override
   public double getRawHeadingMagnitude() { 
-    return Functions.calculateHypotenuse(kDriver.get(Axis.RIGHT_X), kDriver.get(Axis.RIGHT_Y));
+    return MathUtils.calculateHypotenuse(kDriver.get(Axis.RIGHT_X), kDriver.get(Axis.RIGHT_Y));
   }
 
   @Override

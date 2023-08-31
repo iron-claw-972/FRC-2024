@@ -2,6 +2,7 @@ package frc.robot.commands.vision;
 
 import java.util.ArrayList;
 
+import frc.robot.util.MathUtils;
 import org.photonvision.EstimatedRobotPose;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -11,7 +12,6 @@ import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.LogManager;
-import frc.robot.util.StatisticsUtil;
 import frc.robot.util.Vision;
 
 /**
@@ -102,9 +102,9 @@ public class CalculateStdDevs extends CommandBase {
     }
 
     // Calculate the standard deviations
-    double stdDevX = StatisticsUtil.stdDev(xArray);
-    double stdDevY = StatisticsUtil.stdDev(yArray);
-    double stdDevRot = StatisticsUtil.stdDev(rotArray);
+    double stdDevX = MathUtils.stdDev(xArray);
+    double stdDevY = MathUtils.stdDev(yArray);
+    double stdDevRot = MathUtils.stdDev(rotArray);
     
     // Calculate distance to closest April tag
     double closest = 1000000;

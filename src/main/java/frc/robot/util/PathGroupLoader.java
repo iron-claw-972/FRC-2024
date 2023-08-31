@@ -17,19 +17,19 @@ import frc.robot.constants.miscConstants.AutoConstants;
  */
 public class PathGroupLoader {
 
-  private static HashMap<String, List<PathPlannerTrajectory>> pathGroups = new HashMap<>();
+  private static final HashMap<String, List<PathPlannerTrajectory>> pathGroups = new HashMap<>();
 
   /**
-   * Loads all of the paths in the trajectory directory (specified in the constants). 
+   * Loads all the paths in the trajectory directory (specified in the constants).
    * These paths are loaded and stored so that they do not take time while the robot is running 
-   * and can be accessed with {@link #getPathGroup() PathGroupLoader.getPathGroup()}
+   * and can be accessed with {@link #getPathGroup(String)}
    */
   public static void loadPathGroups() {
     double totalTime = 0;
     File[] directoryListing = Filesystem.getDeployDirectory().toPath().resolve(AutoConstants.kTrajectoryDirectory).toFile().listFiles();
     if (directoryListing != null) {
       for (File file : directoryListing) {
-        if (file.isFile() && file.getName().indexOf(".") != -1) {
+        if (file.isFile() && file.getName().contains(".")) {
           long startTime = System.nanoTime();
           String name = file.getName().substring(0, file.getName().indexOf("."));
           pathGroups.put(name, PathPlanner.loadPathGroup(name, new PathConstraints(AutoConstants.kMaxAutoSpeed, AutoConstants.kMaxAutoAccel)));

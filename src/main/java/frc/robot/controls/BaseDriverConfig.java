@@ -7,7 +7,7 @@ import frc.robot.constants.miscConstants.OIConstants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.DynamicSlewRateLimiter;
-import frc.robot.util.Functions;
+import frc.robot.util.MathUtils;
 
 /**
  * Abstract class for different controller types.
@@ -67,20 +67,20 @@ public abstract class BaseDriverConfig {
   }
 
   public double getForwardTranslation() {
-    return -Functions.expoMS(MathUtil.applyDeadband(getRawForwardTranslation(), OIConstants.kDeadband), 2) * DriveConstants.kMaxSpeed * 1;
+    return -MathUtils.expoMS(MathUtil.applyDeadband(getRawForwardTranslation(), OIConstants.kDeadband), 2) * DriveConstants.kMaxSpeed * 1;
   }
 
   public double getSideTranslation() {
-    return -Functions.expoMS(MathUtil.applyDeadband(getRawSideTranslation(), OIConstants.kDeadband), 2) * DriveConstants.kMaxSpeed * 1;
+    return -MathUtils.expoMS(MathUtil.applyDeadband(getRawSideTranslation(), OIConstants.kDeadband), 2) * DriveConstants.kMaxSpeed * 1;
   }
   
   public double getRotation() {
-    return -Functions.expoMS(MathUtil.applyDeadband(getRawRotation(), OIConstants.kDeadband), 2) * DriveConstants.kMaxAngularSpeed * 1;
+    return -MathUtils.expoMS(MathUtil.applyDeadband(getRawRotation(), OIConstants.kDeadband), 2) * DriveConstants.kMaxAngularSpeed * 1;
   }
 
   public double getHeading() {
     if (getRawHeadingMagnitude() <= m_headingDeadband) return m_headingLimiter.calculate(m_previousHeading,1e-6);
-    m_previousHeading = m_headingLimiter.calculate(getRawHeadingAngle(), Functions.expoMS(getRawHeadingMagnitude(), m_headingExpo) * m_headingSensitivity);
+    m_previousHeading = m_headingLimiter.calculate(getRawHeadingAngle(), MathUtils.expoMS(getRawHeadingMagnitude(), m_headingExpo) * m_headingSensitivity);
     return m_previousHeading;
   }
 

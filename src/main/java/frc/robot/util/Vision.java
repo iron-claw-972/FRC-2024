@@ -95,7 +95,7 @@ public class Vision {
   }
 
   /**
-   * Gets the pose as a Pose2d
+   * Gets the pose as a {@link Pose2d}
    * @param referencePoses The reference poses in order of preference, null poses will be skipped
    * @return The pose of the robot, or null if it can't see april tags
    */
@@ -117,7 +117,7 @@ public class Vision {
           .plus(estimatedPoses.get(1).estimatedPose.toPose2d().getTranslation())
           .div(2),
         
-        new Rotation2d(Functions.modulusMidpoint(
+        new Rotation2d(MathUtils.modulusMidpoint(
           estimatedPoses.get(0).estimatedPose.toPose2d().getRotation().getRadians(),
           estimatedPoses.get(1).estimatedPose.toPose2d().getRotation().getRadians(),
           -Math.PI, Math.PI)

@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import frc.robot.commands.SetFormationX;
 import frc.robot.constants.miscConstants.OIConstants;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.util.Functions;
+import frc.robot.util.MathUtils;
 import lib.controllers.PS5Controller;
 import lib.controllers.PS5Controller.PS5Axis;
 import lib.controllers.PS5Controller.PS5Button;
@@ -69,7 +69,7 @@ public class PS5ControllerDriverConfig extends BaseDriverConfig {
   
   @Override
   public double getRawHeadingMagnitude() { 
-    return Functions.calculateHypotenuse(kDriver.get(PS5Axis.RIGHT_X), kDriver.get(PS5Axis.RIGHT_Y));
+    return MathUtils.calculateHypotenuse(kDriver.get(PS5Axis.RIGHT_X), kDriver.get(PS5Axis.RIGHT_Y));
   }
 
   @Override

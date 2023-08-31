@@ -9,7 +9,7 @@ import lib.PolynomialRegression;
  * A class for storing and processing feedforward characterization data. Used in automatic feedforward characterization.
  */
 public class FeedForwardCharacterizationData {
-  private PolynomialRegression m_regression;
+  private PolynomialRegression regression;
   private final List<Double> velocityData = new LinkedList<>();
   private final List<Double> voltageData = new LinkedList<>();
   
@@ -31,7 +31,7 @@ public class FeedForwardCharacterizationData {
    */
   public void process() {
     // creates a new process polynomial regression to get calculated values
-    m_regression = new PolynomialRegression(
+    regression = new PolynomialRegression(
       velocityData.stream().mapToDouble(Double::doubleValue).toArray(),
       voltageData.stream().mapToDouble(Double::doubleValue).toArray(),
       1
@@ -44,7 +44,7 @@ public class FeedForwardCharacterizationData {
    */
   public double getStatic() {
     // gets y-intercept
-    return m_regression.beta(0);
+    return regression.beta(0);
   }
 
   /**
@@ -53,7 +53,7 @@ public class FeedForwardCharacterizationData {
    */
   public double getVelocity() {
     // gets slope of regression line
-    return m_regression.beta(1);
+    return regression.beta(1);
   }
   
   /**
@@ -62,7 +62,7 @@ public class FeedForwardCharacterizationData {
    */
   public double getVariance() {
     // gets variance of data set
-    return m_regression.R2();
+    return regression.R2();
   }
 }
 

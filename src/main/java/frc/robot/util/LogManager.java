@@ -1,6 +1,7 @@
 package frc.robot.util;
 
 import java.util.HashMap;
+import java.util.Map;
 
 
 import edu.wpi.first.util.datalog.BooleanLogEntry;
@@ -17,18 +18,16 @@ import edu.wpi.first.wpilibj.DataLogManager;
  */
 public class LogManager {
 
-  private static DataLog log = DataLogManager.getLog();
-
-
+  private static final DataLog log = DataLogManager.getLog();
 
   // These are the log entries that are not updated periodically, they just receive individual values.
-  private static HashMap<String, DoubleLogEntry> individualDoubleLogs = new HashMap<>();
-  private static HashMap<String, DoubleArrayLogEntry> individualDoubleArrayLogs = new HashMap<>();
-  private static HashMap<String, BooleanLogEntry> individualBooleanLogs = new HashMap<>();
-  private static HashMap<String, IntegerLogEntry> individualIntegerLogs = new HashMap<>();
+  private static final Map<String, DoubleLogEntry> individualDoubleLogs = new HashMap<>();
+  private static final Map<String, DoubleArrayLogEntry> individualDoubleArrayLogs = new HashMap<>();
+  private static final Map<String, BooleanLogEntry> individualBooleanLogs = new HashMap<>();
+  private static final Map<String, IntegerLogEntry> individualIntegerLogs = new HashMap<>();
 
   /**
-   * Records the metadata supplied by gversion (https://github.com/lessthanoptimal/gversion-plugin) in BuildData.java.
+   * Records the metadata supplied by <a href="https://github.com/lessthanoptimal/gversion-plugin">gversion</a> in BuildData.java.
    */
   public static void recordMetadata() {
     new StringLogEntry(log, "BuildData/Maven Group").append(BuildData.MAVEN_GROUP);
@@ -114,9 +113,5 @@ public class LogManager {
       individualBooleanLogs.get(name).append(value);
     }
   }
-
-  /**
-   * Logs all the values that have been collected. Should be called periodically. 
-   */
  
 }
