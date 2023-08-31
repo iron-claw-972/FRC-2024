@@ -64,8 +64,8 @@ public class Vision {
     m_aprilTagFieldLayout.setOrigin(OriginPosition.kBlueAllianceWallRightSide);
 
     // Puts the cameras in an array list
-    for (int i = 0; i < camList.size(); i++) {
-      m_cameras.add(this.new VisionCamera(camList.get(i).getFirst(), camList.get(i).getSecond()));
+    for (Pair<String, Transform3d> stringTransform3dPair : camList) {
+      m_cameras.add(this.new VisionCamera(stringTransform3dPair.getFirst(), stringTransform3dPair.getSecond()));
     }
   }
 
