@@ -148,7 +148,7 @@ public class RobotContainer {
   }
 
   /**
-   * Adds the test commands to shuffleboard so they can be run that way.
+   * Adds the test commands to shuffleboard, so they can be run that way.
    */
   public void addTestCommands() {
     GenericEntry testEntry = m_testTab.add("Test Results", false).getEntry();
@@ -185,7 +185,7 @@ public class RobotContainer {
   }
 
   /**
-   * Sets whether or not the drivetrain uses vision to update odometry
+   * Sets whether the drivetrain uses vision to update odometry
    */
   public void setVisionEnabled(boolean enabled) {
     m_drive.enableVision(enabled);

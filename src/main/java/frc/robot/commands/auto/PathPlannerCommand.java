@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.constants.miscConstants.AutoConstants;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.util.Conversions;
+import frc.robot.util.ConversionUtils;
 import frc.robot.util.PathGroupLoader;
 
 
@@ -70,13 +70,13 @@ public class PathPlannerCommand extends SequentialCommandGroup {
         PathPlannerTrajectory path = PathPlannerTrajectory.transformTrajectoryForAlliance(
           pathGroup.get(pathIndex), DriverStation.getAlliance());
         if (resetPose) {
-          drive.resetOdometry(Conversions.absolutePoseToPathPlannerPose(path.getInitialHolonomicPose(), DriverStation.getAlliance()));
+          drive.resetOdometry(ConversionUtils.absolutePoseToPathPlannerPose(path.getInitialHolonomicPose(), DriverStation.getAlliance()));
         }
       }),
       createSwerveControllerCommand(
         pathGroup.get(pathIndex), 
         useAllianceColor ? // Pose supplier
-          () -> Conversions.absolutePoseToPathPlannerPose(drive.getPose(), DriverStation.getAlliance()) : 
+          () -> ConversionUtils.absolutePoseToPathPlannerPose(drive.getPose(), DriverStation.getAlliance()) :
           () -> drive.getPose(), 
         drive.getPathplannerXController(), // X controller can't normal PID as pathplanner has Feed Forward 
         drive.getPathplannerYController(), // Y controller can't normal PID as pathplanner has Feed Forward 

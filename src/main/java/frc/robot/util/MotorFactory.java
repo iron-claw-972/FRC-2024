@@ -26,11 +26,11 @@ import frc.robot.constants.miscConstants.FalconConstants;
  */
 public class MotorFactory {
 
-  private static int talonSRXDefaultContinuousLimit = 38;
-  private static int kTalonSRXDefaultPeakLimit = 45;
-  private static int kTalonSRXDefaultPeakDuration = 125;
+  private static final int talonSRXDefaultContinuousLimit = 38;
+  private static final int kTalonSRXDefaultPeakLimit = 45;
+  private static final int kTalonSRXDefaultPeakDuration = 125;
 
-  private static int kSparkMaxDefaultCurrentLimit = 60;
+  private static final int kSparkMaxDefaultCurrentLimit = 60;
 
   ///////////////////////////////////////////////////////////////////////////////////////////////
   // TALON SRX
@@ -116,20 +116,19 @@ public class MotorFactory {
   ///////////////////////////////////////////////////////////////////////////////////////////////
 
   /**
-   * 
    * Creates a TalonFX with all current limit options. If you would like to use
    * defaults it is recommended to use the other createTalonFX.. methods.
    * 
-   * @param id                     the CAN ID of the the TalonFX
+   * @param id                     the CAN ID of the TalonFX
    * @param CANBus                 the CAN bus the TalonFX is on. If connected to the rio it is "rio".
-   * @param StatorLimitEnable      whether or not to enable stator limiting
+   * @param StatorLimitEnable      whether to enable stator limiting
    * @param StatorCurrentLimit     the current, in amps, to return to after the
    *                               stator limit is triggered
    * @param StatorTriggerThreshold the threshold current to trigger the stator
    *                               limit
    * @param StatorTriggerDuration  the duration, in seconds, the current is above
    *                               the threshold before triggering
-   * @param SupplyLimitEnable      whether or not to enable supply limiting
+   * @param SupplyLimitEnable      whether to enable supply limiting
    * @param SupplyCurrentLimit     the current, in amps, to return to after the
    *                               supply limit is triggered
    * @param SupplyTriggerThreshold the threshold current to trigger the supply
@@ -183,7 +182,7 @@ public class MotorFactory {
    * 
    * Creates a TalonFX with all the default settings.
    * 
-   * @param id the id of the the motor
+   * @param id the id of the motor
    * @param CANBus the CAN bus the TalonFX is on. If connected to the rio it is "rio".
    */
   public static WPI_TalonFX createTalonFX(int id, String CANBus) {
@@ -196,11 +195,11 @@ public class MotorFactory {
   /**
    * 
    * Creates a TalonFX with supply current limit options. 
-   * 
+   * <p>
    * Supply current is current that's being drawn at the input bus voltage. 
    * Supply limiting is useful for preventing breakers from tripping in the PDP.
    * 
-   * @param id               the CAN ID of the the TalonFX
+   * @param id               the CAN ID of the TalonFX
    * @param CANBus           the CAN bus the TalonFX is on. If connected to the rio it is "rio".
    * @param currentLimit     the current, in amps, to return to after the supply limit is triggered
    * @param triggerThreshold the threshold current to trigger the supply limit
@@ -216,11 +215,11 @@ public class MotorFactory {
   /**
    * 
    * Creates a TalonFX with stator current limit options.
-   * 
+   * <p>
    * Stator current is current that’s being drawn by the motor.
    * Stator limiting is useful for limiting acceleration/heat.
    * 
-   * @param id               the CAN ID of the the TalonFX
+   * @param id               the CAN ID of the TalonFX
    * @param CANBus           the CAN bus the TalonFX is on. If connected to the rio it is "rio".
    * @param currentLimit     the current, in amps, to return to after the stator limit is triggered
    * @param triggerThreshold the threshold current to trigger the stator limit
