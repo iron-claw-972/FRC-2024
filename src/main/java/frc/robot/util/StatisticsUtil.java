@@ -1,31 +1,29 @@
 package frc.robot.util;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class StatisticsUtil {
-  public static double[] arrayListToArray(ArrayList<Double> arrayList){
-    double[] array = new double[arrayList.size()];
-    for(int i = 0; i < arrayList.size(); i++){
-        array[i] = arrayList.get(i);
-    }
-    return array;
+
+  private static double[] doubleListToArray(List<Double> arrayList){
+    return arrayList.stream().mapToDouble(Double::doubleValue).toArray();
   }
 
-  public static double mean(ArrayList<Double> data){
-    return mean(arrayListToArray(data));
+  public static double mean(List<Double> data){
+    return mean(doubleListToArray(data));
   }
 
   public static double mean(double... data){
     double mean = 0;
-    for (int i = 0; i < data.length; i++) {
-      mean += data[i];
+    for (double datum : data) {
+      mean += datum;
     }
     mean /= data.length;
     return mean;
   }
 
-  public static double stdDev(ArrayList<Double> data){
-    return stdDev(arrayListToArray(data));
+  public static double stdDev(List<Double> data){
+    return stdDev(doubleListToArray(data));
   }
 
   public static double stdDev(double... data){
@@ -34,8 +32,8 @@ public class StatisticsUtil {
     double mean = mean(data);
     
     double total = 0;
-    for (int i = 0; i < data.length; i++) {
-      total += Math.pow(data[i] - mean, 2);
+    for (double datum : data) {
+      total += Math.pow(datum - mean, 2);
     }
     return Math.sqrt(total / (data.length-1));
   }
