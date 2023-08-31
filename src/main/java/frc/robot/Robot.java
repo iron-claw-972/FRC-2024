@@ -32,6 +32,16 @@ public class Robot extends TimedRobot {
     Default,
     SwerveCompetition, SwerveTest,
     ClassBot1, ClassBot2, ClassBot3, ClassBot4
+    ;
+
+    public boolean isClassBot() {
+      return this == ClassBot1 || this == ClassBot2 || this == ClassBot3 || this == ClassBot4;
+    }
+
+    public boolean isSwerveBot() {
+      return this == SwerveCompetition || this == SwerveTest;
+    }
+
   };
 
   /**
