@@ -13,38 +13,38 @@ import frc.robot.subsystems.Drivetrain;
  * Sets all module angles to a given trajectory's initial angle.
  */
 public class TrajectoryPresetSteerAngles extends InstantCommand {
-  /*
-   * make sure to add wait command after called to give time to correct
-   */
-  public TrajectoryPresetSteerAngles(Drivetrain drive, Trajectory trajectory) {
-    super(
-      ()->  {
+    /*
+     * make sure to add wait command after called to give time to correct
+     */
+    public TrajectoryPresetSteerAngles(Drivetrain drive, Trajectory trajectory) {
+        super(
+                () -> {
 
-      // 0.01 is the time between trajectory samples, in seconds
-      // Can be replaced for any small number, but it should be the same as the time between all uses
-      double time = 0.01;
-  
-      drive.enableStateDeadband(false);
-  
-      Pose2d initialPose = trajectory.getInitialPose();
-      State sample = trajectory.sample(time);
-      Pose2d nextPose = sample.poseMeters;
-  
-      double xVelocity = sample.velocityMetersPerSecond * nextPose.getRotation().getCos();
-      double yVelocity = sample.velocityMetersPerSecond * nextPose.getRotation().getSin();
-      double angularVelo = (nextPose.getRotation().getRadians() - initialPose.getRotation().getRadians()) / time;
-  
-      ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xVelocity, yVelocity, angularVelo, initialPose.getRotation());
-  
-      SwerveModuleState[] swerveModuleStates = DriveConstants.kKinematics.toSwerveModuleStates(chassisSpeeds);
-      for (int i = 0; i < swerveModuleStates.length; i++){
-        swerveModuleStates[i].speedMetersPerSecond = 0;
-      }
-      drive.setModuleStates(swerveModuleStates, true);
-      drive.enableStateDeadband(true);
-    }, 
-    drive
-    );
-    
-  }
+                    // 0.01 is the time between trajectory samples, in seconds
+                    // Can be replaced for any small number, but it should be the same as the time between all uses
+                    double time = 0.01;
+
+                    drive.enableStateDeadband(false);
+
+                    Pose2d initialPose = trajectory.getInitialPose();
+                    State sample = trajectory.sample(time);
+                    Pose2d nextPose = sample.poseMeters;
+
+                    double xVelocity = sample.velocityMetersPerSecond * nextPose.getRotation().getCos();
+                    double yVelocity = sample.velocityMetersPerSecond * nextPose.getRotation().getSin();
+                    double angularVelo = (nextPose.getRotation().getRadians() - initialPose.getRotation().getRadians()) / time;
+
+                    ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xVelocity, yVelocity, angularVelo, initialPose.getRotation());
+
+                    SwerveModuleState[] swerveModuleStates = DriveConstants.KINEMATICS.toSwerveModuleStates(chassisSpeeds);
+                    for (SwerveModuleState swerveModuleState : swerveModuleStates) {
+                        swerveModuleState.speedMetersPerSecond = 0;
+                    }
+                    drive.setModuleStates(swerveModuleStates, true);
+                    drive.enableStateDeadband(true);
+                },
+                drive
+             );
+
+    }
 }

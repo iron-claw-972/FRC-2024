@@ -19,195 +19,199 @@ import frc.robot.constants.Constants;
  */
 public class Robot extends TimedRobot {
 
-  private Command m_autoCommand;
-  private RobotContainer m_robotContainer;
+    private Command autoCommand;
+    private RobotContainer robotContainer;
 
-  /**
-   * Set of known Robot Names.
-   * <p>The name of a robot in the RoboRIO's persistent memory.
-   * At deploy time, that name is used to set the corresponding RobotId.
-   * <p>Note that the RobotId is determined at Deploy time.
-   */
-  public enum RobotId {
-    Default,
-    SwerveCompetition, SwerveTest,
-    ClassBot1, ClassBot2, ClassBot3, ClassBot4
-    ;
+    /**
+     * Set of known Robot Names.
+     * <p>The name of a robot in the RoboRIO's persistent memory.
+     * At deploy time, that name is used to set the corresponding RobotId.
+     * <p>Note that the RobotId is determined at Deploy time.
+     */
+    public enum RobotId {
+        Default,
+        SwerveCompetition, SwerveTest,
+        ClassBot1, ClassBot2, ClassBot3, ClassBot4;
 
-    public boolean isClassBot() {
-      return this == ClassBot1 || this == ClassBot2 || this == ClassBot3 || this == ClassBot4;
+        public boolean isClassBot() {
+            return this == ClassBot1 || this == ClassBot2 || this == ClassBot3 || this == ClassBot4;
+        }
+
+        public boolean isSwerveBot() {
+            return this == SwerveCompetition || this == SwerveTest;
+        }
+
     }
 
-    public boolean isSwerveBot() {
-      return this == SwerveCompetition || this == SwerveTest;
+    /**
+     * This function is run when the robot is first started up and should be used for any
+     * initialization code.
+     */
+    @Override
+    public void robotInit() {
+        // To Set the Robot Identity
+        //   SimGUI: Persistent Values, Preferences, RobotId, then restart Simulation
+        //     changes networktables.json, networktables.json.bck (both Untracked)
+        //   Uncomment the next line, set the desired RobotId, deploy, and then comment the line out
+        // setRobotId(RobotId.SwerveTest);
+
+        // build the RobotContainer with the robot id from preferences
+        robotContainer = new RobotContainer(getRobotId());
     }
 
-  };
-
-  /**
-   * This function is run when the robot is first started up and should be used for any
-   * initialization code.
-   */
-  @Override
-  public void robotInit() {
-    // To Set the Robot Identity
-    //   SimGUI: Persistent Values, Preferences, RobotId, then restart Simulation
-    //     changes networktables.json, networktables.json.bck (both Untracked)
-    //   Uncomment the next line, set the desired RobotId, deploy, and then comment the line out
-    // setRobotId(RobotId.SwerveTest);
-
-    // build the RobotContainer with the robot id from preferences
-    m_robotContainer = new RobotContainer(getRobotId());
-  }
- 
-  /**
-   * This function is called every robot packet, no matter the mode. Use this for items like
-   * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
-   *
-   * <p>This runs after the mode specific periodic functions, but before
-   * LiveWindow and SmartDashboard integrated updating.
-   */
-  @Override
-  public void robotPeriodic() {
-    // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
-    // commands, running already-scheduled commands, removing finished or interrupted commands,
-    // and running subsystem periodic() methods.  This must be called from the robot's periodic
-    // block in order for anything in the Command-based framework to work.
-    CommandScheduler.getInstance().run();
-  }
-
-  /**
-   * This function is called once each time the robot enters Disabled mode.
-   */
-  @Override
-  public void disabledInit() {
-    CommandScheduler.getInstance().cancelAll();
-  }
-
-  /** This function is called periodically when the robot is disabled */
-  @Override
-  public void disabledPeriodic() {}
-
-  /**
-   * This autonomous runs the autonomous command selected by your {@link RobotContainer} class.
-   */
-  @Override
-  public void autonomousInit() {
-
-    m_robotContainer.resetModules();
-
-    // In auto, only use odometry.
-    m_robotContainer.setVisionEnabled(false);
-
-    // Get the autonomous command.
-    // This access is fast (about 14 microseconds) because the value is already resident in the Network Tables.
-    // There was a problem last year because the operation also installed about over a dozen items (taking more than 20 ms).
-    m_autoCommand = m_robotContainer.getAutonomousCommand();
-
-    // If there is an autonomous command, then schedule it
-    if (m_autoCommand != null) {
-      m_autoCommand.schedule();
-    }
-  }
-
-  /**
-   * This function is called periodically during autonomous.
-   */
-  @Override
-  public void autonomousPeriodic() {
-  }
-  
-
-  /** This function is called once each time the robot enters Teleop mode. */
-  @Override
-  public void teleopInit() {
-    m_robotContainer.resetModules();
-    
-    // In teleop, may enable vision for use for grid/shelf alignment
-    m_robotContainer.setVisionEnabled(true);
-
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
-    if (m_autoCommand != null) {
-      m_autoCommand.cancel();
-    }
-  }
-
-  /**
-   * This function is called periodically during operator control.
-   */
-  @Override
-  public void teleopPeriodic() {
-  }
-
-  /** This function is called once each time the robot enters Test mode. */
-  @Override
-  public void testInit() {
-    // Cancels all running commands at the start of test mode.
-    CommandScheduler.getInstance().cancelAll();
-  }
-
-  /**
-   * This function is called periodically during test mode.
-   */
-  @Override
-  public void testPeriodic() {
-  }
-
-  @Override
-  public void simulationPeriodic() {
-  }
-
-  /**
-   * Determine the Robot Identity from the RoboRIO's onboard Preferences.
-   * 
-   * <p>This method is private.
-   * @return
-   */
-  private RobotId getRobotId() {
-    // assume a default identity
-    RobotId robotId = RobotId.Default;
-
-    // check whether Preferences has an entry for the RobotId
-    if (!Preferences.containsKey(Constants.kRobotIdKey)) {
-      // There is no such key. Set it to the default identity.
-      setRobotId(RobotId.Default);
+    /**
+     * This function is called every robot packet, no matter the mode. Use this for items like
+     * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
+     *
+     * <p>This runs after the mode-specific periodic functions, but before
+     * LiveWindow and SmartDashboard integrated updating.
+     */
+    @Override
+    public void robotPeriodic() {
+        // Runs the Scheduler. This is responsible for polling buttons, adding newly-scheduled
+        // commands, running already-scheduled commands, removing finished or interrupted commands,
+        // and running subsystem periodic() methods.  This must be called from the robot's periodic
+        // block in order for anything in the Command-based framework to work.
+        CommandScheduler.getInstance().run();
     }
 
-    // Remove the "Default" key if present
-    if (Preferences.containsKey("Default")) {
-      Preferences.remove("Default");
+    /**
+     * This function is called once each time the robot enters Disabled mode.
+     */
+    @Override
+    public void disabledInit() {
+        CommandScheduler.getInstance().cancelAll();
     }
 
-    // get the RobotId string from the RoboRIO's Preferences
-    String strId = Preferences.getString(Constants.kRobotIdKey, RobotId.Default.name());
-
-    // match that string to a RobotId by looking at all possible RobotId enums
-    for (RobotId rid : RobotId.values()) {
-      // does the preference string match the RobotId enum?
-      if (strId.equals(rid.name())) {
-        // yes, this instance is the desired RobotId
-        robotId = rid;
-      }
+    /**
+     * This function is called periodically when the robot is disabled
+     */
+    @Override
+    public void disabledPeriodic() {
     }
 
-    // report the RobotId to the SmartDashboard
-    SmartDashboard.putString("RobotID", robotId.name());
+    /**
+     * This autonomous runs the autonomous command selected by your {@link RobotContainer} class.
+     */
+    @Override
+    public void autonomousInit() {
 
-    // return the robot identity
-    return robotId;
-  }
+        robotContainer.resetModules();
 
-  /**
-   * Set the RobotId in the RoboRIO's preferences.
-   * <p>
-   * This method is private. Calling it after the robot has been constructed does not affect the robot.
-   * @param robotId
-   */
-  private void setRobotId(RobotId robotId) {
-      // Set the robot identity in the RoboRIO Preferences
-      Preferences.setString(Constants.kRobotIdKey, robotId.name());
-  }
+        // In auto, only use odometry.
+        robotContainer.setVisionEnabled(false);
+
+        // Get the autonomous command.
+        // This access is fast (about 14 microseconds) because the value is already resident in the Network Tables.
+        // There was a problem last year because the operation also installed about over a dozen items (taking more than 20 ms).
+        autoCommand = robotContainer.getAutonomousCommand();
+
+        // If there is an autonomous command, then schedule it
+        if (autoCommand != null) {
+            autoCommand.schedule();
+        }
+    }
+
+    /**
+     * This function is called periodically during autonomous.
+     */
+    @Override
+    public void autonomousPeriodic() {
+    }
+
+
+    /**
+     * This function is called once each time the robot enters Teleop mode.
+     */
+    @Override
+    public void teleopInit() {
+        robotContainer.resetModules();
+
+        // In teleop, may enable vision for use for grid/shelf alignment
+        robotContainer.setVisionEnabled(true);
+
+        // This makes sure that the autonomous stops running when
+        // teleop starts running. If you want the autonomous to
+        // continue until interrupted by another command, remove
+        // this line or comment it out.
+        if (autoCommand != null) {
+            autoCommand.cancel();
+        }
+    }
+
+    /**
+     * This function is called periodically during operator control.
+     */
+    @Override
+    public void teleopPeriodic() {
+    }
+
+    /**
+     * This function is called once each time the robot enters Test mode.
+     */
+    @Override
+    public void testInit() {
+        // Cancels all running commands at the start of test mode.
+        CommandScheduler.getInstance().cancelAll();
+    }
+
+    /**
+     * This function is called periodically during test mode.
+     */
+    @Override
+    public void testPeriodic() {
+    }
+
+    @Override
+    public void simulationPeriodic() {
+    }
+
+    /**
+     * Determine the Robot Identity from the RoboRIO's onboard Preferences.
+     *
+     * <p>This method is private.
+     */
+    private RobotId getRobotId() {
+        // assume a default identity
+        RobotId robotId = RobotId.Default;
+
+        // check whether Preferences has an entry for the RobotId
+        if (!Preferences.containsKey(Constants.ROBOT_ID_KEY)) {
+            // There is no such key. Set it to the default identity.
+            setRobotId(RobotId.Default);
+        }
+
+        // Remove the "Default" key if present
+        if (Preferences.containsKey("Default")) {
+            Preferences.remove("Default");
+        }
+
+        // get the RobotId string from the RoboRIO's Preferences
+        String strId = Preferences.getString(Constants.ROBOT_ID_KEY, RobotId.Default.name());
+
+        // match that string to a RobotId by looking at all possible RobotId enums
+        for (RobotId rid : RobotId.values()) {
+            // does the preference string match the RobotId enum?
+            if (strId.equals(rid.name())) {
+                // yes, this instance is the desired RobotId
+                robotId = rid;
+            }
+        }
+
+        // report the RobotId to the SmartDashboard
+        SmartDashboard.putString("RobotID", robotId.name());
+
+        // return the robot identity
+        return robotId;
+    }
+
+    /**
+     * Set the RobotId in the RoboRIO's preferences.
+     * <p>
+     * This method is private. Calling it after the robot has been constructed does not affect the robot.
+     */
+    private void setRobotId(RobotId robotId) {
+        // Set the robot identity in the RoboRIO Preferences
+        Preferences.setString(Constants.ROBOT_ID_KEY, robotId.name());
+    }
 }
