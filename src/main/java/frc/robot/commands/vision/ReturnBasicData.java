@@ -13,6 +13,7 @@ public class ReturnBasicData extends CommandBase{
   
   @Override
   public void execute() {
+    //put the offsets and area on SmartDashboard for testing 
     SmartDashboard.putNumber("X offset degrees", m_vision.getHorizontalOffsetDegrees()); 
     SmartDashboard.putNumber("Y offset degrees", m_vision.getVerticalOffsetDegrees()); 
     SmartDashboard.putNumber("Area", m_vision.getTargetAreaPercentage()); 

@@ -17,11 +17,15 @@ public class Vision {
 
 
   public Vision() {
+    //get the limelight table from the default NetworkTable instance
     visionTable = NetworkTableInstance.getDefault().getTable("limelight");
+
+    //from the table, get various entries that contain data 
     tx = visionTable.getEntry("tx"); 
     ty = visionTable.getEntry("ty"); 
     ta = visionTable.getEntry("ta"); 
 
+    //set up the vision commands on SmartDashboard so we can turn them on/off for testing
     setUpSmartDashboardCommandButtons();
   }
 
@@ -42,13 +46,16 @@ public class Vision {
   }
 
   /**
-   * Get the percentage of the image(screen?) that the target takes up
+   * Get the target area (percentage of the image[screen?] that the target takes up)
    * @return percentage
    */
   public double getTargetAreaPercentage(){
     return ta.getDouble(0.0);
   }
 
+  /**
+   * Set up the vision commands on SmartDashboard so we can turn them on/off for testing
+   */
   public void setUpSmartDashboardCommandButtons(){
     SmartDashboard.putData("ChaseTag command", new ReturnBasicData(this));
   }
