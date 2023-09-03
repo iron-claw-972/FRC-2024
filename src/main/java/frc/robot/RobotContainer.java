@@ -66,7 +66,7 @@ public class RobotContainer {
         DriveConstants.update(robotId);
         VisionConstants.update(robotId);
 
-        m_vision = new Vision(m_visionTab, VisionConstants.kCameras);
+        m_vision = new Vision();
 
         // Create Drivetrain
         m_drive = new Drivetrain(m_drivetrainTab, m_swerveModulesTab, m_vision);
@@ -80,7 +80,7 @@ public class RobotContainer {
 
         m_driver.configureControls();
 
-        m_vision.setupVisionShuffleboard();
+        m_vision.setUpSmartDashboardCommandButtons();
         m_driver.setupShuffleboard();
 
         m_drive.setDefaultCommand(new DefaultDriveCommand(m_drive, m_driver));
@@ -92,7 +92,7 @@ public class RobotContainer {
         DriveConstants.update(robotId);
         VisionConstants.update(robotId);
 
-        m_vision = new Vision(m_visionTab, VisionConstants.kCameras);
+        m_vision = new Vision();
 
         // Create Drivetrain, because every robot will have a drivetrain
         m_drive = new Drivetrain(m_drivetrainTab, m_swerveModulesTab, m_vision);
@@ -107,7 +107,7 @@ public class RobotContainer {
 
         m_driver.configureControls();
 
-        m_vision.setupVisionShuffleboard();
+        m_vision.setUpSmartDashboardCommandButtons();
         m_driver.setupShuffleboard();
 
         m_drive.setDefaultCommand(new DefaultDriveCommand(m_drive, m_driver));
@@ -135,7 +135,7 @@ public class RobotContainer {
 
     if (Constants.kUseTelemetry) loadCommandSchedulerShuffleboard();
     
-    addTestCommands();
+    //addTestCommands();
   }
 
   /**
@@ -147,22 +147,22 @@ public class RobotContainer {
     return m_autoCommand.getSelected();
   }
 
-  /**
-   * Adds the test commands to shuffleboard, so they can be run that way.
-   */
-  public void addTestCommands() {
-    GenericEntry testEntry = m_testTab.add("Test Results", false).getEntry();
-    m_testTab.add("Blinkin Id",0.65).getEntry();
-    m_testTab.add("Cancel Command", new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));
+  // /**
+  //  * Adds the test commands to shuffleboard, so they can be run that way.
+  //  */
+  // public void addTestCommands() {
+  //   GenericEntry testEntry = m_testTab.add("Test Results", false).getEntry();
+  //   m_testTab.add("Blinkin Id",0.65).getEntry();
+  //   m_testTab.add("Cancel Command", new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));
 
-    if (m_drive != null) {
-      m_drive.addTestCommands(m_testTab, testEntry);
-    }
+  //   if (m_drive != null) {
+  //     m_drive.addTestCommands(m_testTab, testEntry);
+  //   }
 
-    if (m_vision != null) {
-      m_vision.addTestCommands(m_testTab, testEntry, m_drive);
-    }
-  }
+  //   if (m_vision != null) {
+  //     m_vision.addTestCommands(m_testTab, testEntry, m_drive);
+  //   }
+  // }
 
    
   /**
