@@ -4,10 +4,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.util.Vision;
 
-public class ReturnBasicData extends CommandBase{
+public class ReturnData extends CommandBase{
   private final Vision m_vision; 
 
-  public ReturnBasicData(Vision vision){
+  public ReturnData(Vision vision){
     m_vision = vision;
   }
   
@@ -16,7 +16,9 @@ public class ReturnBasicData extends CommandBase{
     //put the offsets and area on SmartDashboard for testing 
     SmartDashboard.putNumber("X offset degrees", m_vision.getHorizontalOffsetDegrees()); 
     SmartDashboard.putNumber("Y offset degrees", m_vision.getVerticalOffsetDegrees()); 
-    SmartDashboard.putNumber("Area", m_vision.getTargetAreaPercentage()); 
+    SmartDashboard.putNumber("Area", m_vision.getTargetAreaPercentage());
+    SmartDashboard.putNumberArray("Robot pose", m_vision.getRobotPoseVision()); 
+ 
   }
 
   @Override
