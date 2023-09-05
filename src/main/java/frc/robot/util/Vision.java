@@ -11,15 +11,15 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 //Vision and it's commands are adapted from Iron Claw's FRC2022 and: https://www.youtube.com/watch?v=TG9KAa2EGzQ&t=1439s
 public class Vision {
 
-  NetworkTable m_visionTable; 
+  private NetworkTable m_visionTable; 
 
-  Debouncer m_tvDebouncer; 
+  private Debouncer m_tvDebouncer; 
 
-  NetworkTableEntry m_tv;
-  NetworkTableEntry m_tx;
-  NetworkTableEntry m_ty;
-  NetworkTableEntry m_ta;
-  NetworkTableEntry m_robotPoseVision; 
+  private NetworkTableEntry m_tv;
+  private NetworkTableEntry m_tx;
+  private NetworkTableEntry m_ty;
+  private NetworkTableEntry m_ta;
+  private NetworkTableEntry m_robotPoseVision; 
 
   public Vision() {
     //get the limelight table from the default NetworkTable instance
