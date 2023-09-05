@@ -21,10 +21,6 @@ public class Vision {
   NetworkTableEntry m_ta;
   NetworkTableEntry m_robotPoseVision; 
 
-  //default array of robot pose. TODO: Check if this is the right way of doing this. 
-  double[] array = {0.0};
-
-
   public Vision() {
     //get the limelight table from the default NetworkTable instance
     m_visionTable = NetworkTableInstance.getDefault().getTable("limelight");
@@ -48,7 +44,7 @@ public class Vision {
    * @return offset in degrees
    */
   public double getHorizontalOffsetDegrees(){
-    return m_tx.getDouble(0.0);
+    return m_tx.getDouble(0);
   }
 
   /**
@@ -56,7 +52,7 @@ public class Vision {
    * @return offset in degrees
    */
   public double getVerticalOffsetDegrees(){
-    return m_ty.getDouble(0.0);
+    return m_ty.getDouble(0);
   }
 
   /**
@@ -64,7 +60,7 @@ public class Vision {
    * @return percentage
    */
   public double getTargetAreaPercentage(){
-    return m_ta.getDouble(0.0);
+    return m_ta.getDouble(0);
   }
 
   /**
@@ -86,7 +82,7 @@ public class Vision {
    */
   public double[] getRobotPoseVision(){
     
-    return m_robotPoseVision.getDoubleArray(array); 
+    return m_robotPoseVision.getDoubleArray(new double[6]); 
   }
 
   /**
