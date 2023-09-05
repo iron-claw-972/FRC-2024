@@ -64,7 +64,6 @@ public class RobotContainer {
       case SwerveCompetition:
         // Update drive constants based off of robot type
         DriveConstants.update(robotId);
-        VisionConstants.update(robotId);
 
         m_vision = new Vision();
 
@@ -90,7 +89,6 @@ public class RobotContainer {
       case SwerveTest:
         // Update drive constants based off of robot type
         DriveConstants.update(robotId);
-        VisionConstants.update(robotId);
 
         m_vision = new Vision();
 
