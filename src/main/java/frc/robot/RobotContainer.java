@@ -79,7 +79,6 @@ public class RobotContainer {
 
         m_driver.configureControls();
 
-        m_vision.setUpSmartDashboardCommandButtons();
         m_driver.setupShuffleboard();
 
         m_drive.setDefaultCommand(new DefaultDriveCommand(m_drive, m_driver));
@@ -105,7 +104,6 @@ public class RobotContainer {
 
         m_driver.configureControls();
 
-        m_vision.setUpSmartDashboardCommandButtons();
         m_driver.setupShuffleboard();
 
         m_drive.setDefaultCommand(new DefaultDriveCommand(m_drive, m_driver));

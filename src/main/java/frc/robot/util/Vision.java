@@ -12,7 +12,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
-//Vision and it's commands are adapted from Iron Claw's FRC2022 and: https://www.youtube.com/watch?v=TG9KAa2EGzQ&t=1439s
+//Vision and it's commands are adapted from Iron Claw's FRC2022, FRC2023, and: https://www.youtube.com/watch?v=TG9KAa2EGzQ&t=1439s
 public class Vision {
 
   private NetworkTable m_visionTable; 
@@ -27,6 +27,9 @@ public class Vision {
   private NetworkTableEntry m_cl;
   private NetworkTableEntry m_robotPoseVision; 
 
+  /**
+   * Creates a new instance of Vision and sets up the limelight NetworkTable and the SmartDashboard
+   */
   public Vision() {
     //get the limelight table from the default NetworkTable instance
     m_visionTable = NetworkTableInstance.getDefault().getTable("limelight");
@@ -64,7 +67,7 @@ public class Vision {
   }
 
   /**
-   * Get the target area (percentage of the image[screen?] that the target takes up)
+   * Get the target area (percentage of the image (screen) that the target takes up)
    * @return percentage
    */
   public double getTargetAreaPercentage(){
@@ -82,7 +85,6 @@ public class Vision {
   /**
    * Returns whether or not a valid target was detected after being passed through a debouncer 
    * to make sure that we are really locked on the target. We wait 0.05 seconds and check whether or not we are still locked on our target. 
-   * 
    * @return true or false 
    */
   public boolean validTargetDetected(){
@@ -90,11 +92,8 @@ public class Vision {
   }
 
   /**
-   * Returns whether or not a valid target was detected after being passed through a debouncer 
-   * to make sure that we are really locked on the target. We wait 0.05 seconds and check whether or not we are still locked on our target. 
-   * This requires some setup in Limelight. https://docs.limelightvision.io/en/latest/apriltags_in_3d.html
-   * 
-   * @return true or false 
+   * Returns the robot pose as a double array
+   * @return A double array with x, y, z, roll, pitch, yaw
    */
   public double[] getRobotPose(){
     return m_robotPoseVision.getDoubleArray(new double[6]); 
@@ -126,8 +125,5 @@ public class Vision {
    */
   public void setUpSmartDashboardCommandButtons(){
     SmartDashboard.putData("ReturnData command", new ReturnData(this));
-
   }
-
-  
 }

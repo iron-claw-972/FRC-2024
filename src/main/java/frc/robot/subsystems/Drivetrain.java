@@ -361,12 +361,14 @@ public class Drivetrain extends SubsystemBase {
   public void updateOdometry() {
     // Updates pose based on encoders and gyro. NOTE: must use yaw directly from gyro!
     m_poseEstimator.update(Rotation2d.fromDegrees(m_pigeon.getYaw()), getModulePositions());
+
     // Updates pose based on vision
     if (RobotBase.isReal() && m_visionEnabled && VisionConstants.kEnabled) {
 
-      // An array list of poses returned by different cameras
+      // The pose and timestamp returned by the limelight
       Pair<Pose2d, Double> visionPose = m_vision.getPose2dWithTimeStamp();
 
+      // If the limelight can see an april tag
       if(visionPose.getFirst()!=null){
         // Adds the vision measurement
         m_poseEstimator.addVisionMeasurement(
