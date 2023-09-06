@@ -105,8 +105,12 @@ public class Vision {
    * @return a Pose2d
    */
   public Pose2d getPose2d(){
-    double[] pose = getRobotPose();
-    return new Pose2d(pose[0], pose[1], Rotation2d.fromDegrees(pose[5]));
+    if(validTargetDetected()){
+      double[] pose = getRobotPose();
+      return new Pose2d(pose[0], pose[1], Rotation2d.fromDegrees(pose[5]));
+    }else{
+      return null;
+    }
   }
 
   /**

@@ -1,9 +1,5 @@
 package frc.robot.subsystems;
 
-import java.util.ArrayList;
-
-import org.photonvision.EstimatedRobotPose;
-
 import com.ctre.phoenix.sensors.Pigeon2.AxisDirection;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
@@ -11,9 +7,7 @@ import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -373,17 +367,13 @@ public class Drivetrain extends SubsystemBase {
       // An array list of poses returned by different cameras
       Pair<Pose2d, Double> visionPose = m_vision.getPose2dWithTimeStamp();
 
-      // Adds the vision measurement for this camera
+      if(visionPose.getFirst()!=null){
+        // Adds the vision measurement
         m_poseEstimator.addVisionMeasurement(
           visionPose.getFirst(),
           visionPose.getSecond(),
-          VisionConstants.kBaseVisionPoseStdDevs
+          VisionConstants.kVisionStdDevs
         );
-        if(Constants.kLogging){
-          LogManager.addDouble("Vision/ClosestTag Distance", 
-            currentEstimatedPoseTranslation.getDistance(closestTagPoseTranslation)
-          );
-        }
       }
     }
   }
