@@ -1,5 +1,6 @@
 package frc.robot.util;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.vision.ReturnData;
@@ -90,11 +91,10 @@ public class Vision {
   }
 
   /**
-   * Returns whether or not a valid target was detected after being passed through a debouncer 
-   * to make sure that we are really locked on the target. We wait 0.05 seconds and check whether or not we are still locked on our target. 
+   * Returns robot pose as a double array of six values. 
    * This requires some setup in Limelight. https://docs.limelightvision.io/en/latest/apriltags_in_3d.html
    * 
-   * @return true or false 
+   * @return pose as a double array of six values. 
    */
   public double[] getRobotPose(){
     return m_robotPoseVision.getDoubleArray(new double[6]); 
@@ -109,6 +109,7 @@ public class Vision {
       double[] pose = getRobotPose();
       return new Pose2d(pose[0], pose[1], Rotation2d.fromDegrees(pose[5]));
     }else{
+      DriverStation.reportWarning("No April tag detected!!!", false);
       return null;
     }
   }

@@ -367,7 +367,7 @@ public class Drivetrain extends SubsystemBase {
       // An array list of poses returned by different cameras
       Pair<Pose2d, Double> visionPose = m_vision.getPose2dWithTimeStamp();
 
-      if(visionPose.getFirst()!=null){
+      if(visionPose.getFirst()!=null){ //if the visionPose isn't null(the camera detects an april tag) run the following if statement
         // Adds the vision measurement
         m_poseEstimator.addVisionMeasurement(
           visionPose.getFirst(),
