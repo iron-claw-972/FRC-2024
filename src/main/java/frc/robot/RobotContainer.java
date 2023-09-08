@@ -70,7 +70,7 @@ public class RobotContainer {
         // Create Drivetrain
         m_drive = new Drivetrain(m_drivetrainTab, m_swerveModulesTab, m_vision);
 
-        m_driver = new PS5ControllerDriverConfig(m_drive, m_controllerTab, false);
+        m_driver = new GameControllerDriverConfig(m_drive, m_controllerTab, false);
         // m_testController.configureControls();
         // m_manualController.configureControls();
   
