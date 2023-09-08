@@ -109,7 +109,6 @@ public class Vision {
       double[] pose = getRobotPose();
       return new Pose2d(pose[0], pose[1], Rotation2d.fromDegrees(pose[5]));
     }else{
-      DriverStation.reportWarning("No April tag detected!!!", false);
       return null;
     }
   }
