@@ -13,8 +13,13 @@ public class AimAtTag extends CommandBase {
   PIDController m_pid;
 
   public AimAtTag(Drivetrain swerve){
-    m_swerve = swerve; 
-    m_pid = new PIDController(0, 0, 0); 
+    m_swerve = swerve;
+    // Copy drive PID
+    m_pid = new PIDController(
+      m_swerve.getRotationController().getP(),
+      m_swerve.getRotationController().getI(),
+      m_swerve.getRotationController().getD()
+    );
     m_pid.setTolerance(Units.degreesToRadians(1));
     addRequirements(swerve);
   }
@@ -32,6 +37,7 @@ public class AimAtTag extends CommandBase {
         closest = translation;
       }
     }
+    m_pid.reset();
     m_pid.setSetpoint(Math.atan2(closest.getY() - driveTranslation.getY(), closest.getX() - driveTranslation.getX()));
   }
   
