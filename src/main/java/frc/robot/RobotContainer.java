@@ -71,8 +71,7 @@ public class RobotContainer {
         m_drive = new Drivetrain(m_drivetrainTab, m_swerveModulesTab, m_vision);
 
         m_driver = new GameControllerDriverConfig(m_drive, m_controllerTab, false);
-        // m_testController.configureControls();
-        // m_manualController.configureControls();
+        m_driver.configureControls(); 
   
         // load paths before auto starts
         PathGroupLoader.loadPathGroups();
@@ -171,7 +170,6 @@ public class RobotContainer {
     CommandScheduler.getInstance().onCommandFinish(command -> Shuffleboard.addEventMarker("Command finished", command.getName(), EventImportance.kNormal));
   }
 
-  
 
   /**
    * Resets the swerve modules to their absolute positions.
