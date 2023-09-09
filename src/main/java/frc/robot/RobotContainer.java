@@ -71,7 +71,6 @@ public class RobotContainer {
         m_drive = new Drivetrain(m_drivetrainTab, m_swerveModulesTab, m_vision);
 
         m_driver = new GameControllerDriverConfig(m_drive, m_controllerTab, false);
-        m_driver.configureControls(); 
   
         // load paths before auto starts
         PathGroupLoader.loadPathGroups();
