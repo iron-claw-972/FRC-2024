@@ -19,6 +19,11 @@ public class ReturnData extends CommandBase{
     SmartDashboard.putNumber("Area", m_vision.getTargetAreaPercentage());
     SmartDashboard.putNumberArray("Robot pose", m_vision.getRobotPose()); 
  
+    // Print data
+    System.out.println("X offset degrees: " + m_vision.getHorizontalOffsetDegrees()); 
+    System.out.println("Y offset degrees: " + m_vision.getVerticalOffsetDegrees()); 
+    System.out.println("Area: " + m_vision.getTargetAreaPercentage());
+    System.out.println("Robot pose: " + m_vision.getRobotPose()); 
   }
 
   @Override

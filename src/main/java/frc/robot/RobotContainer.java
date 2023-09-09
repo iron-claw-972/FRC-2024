@@ -1,6 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
@@ -9,15 +8,12 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Robot.RobotId;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.constants.Constants;
-import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
-import frc.robot.controls.PS5ControllerDriverConfig;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
@@ -42,6 +38,7 @@ public class RobotContainer {
   private final ShuffleboardTab m_autoTab = Shuffleboard.getTab("Auto");
   private final ShuffleboardTab m_controllerTab = Shuffleboard.getTab("Controller");
   private final ShuffleboardTab m_visionTab = Shuffleboard.getTab("Vision");
+  @SuppressWarnings("unused") // Remove this when the test tab is used
   private final ShuffleboardTab m_testTab = Shuffleboard.getTab("Test");
 
   private final Vision m_vision;
@@ -65,7 +62,7 @@ public class RobotContainer {
         // Update drive constants based off of robot type
         DriveConstants.update(robotId);
 
-        m_vision = new Vision();
+        m_vision = new Vision(m_visionTab);
 
         // Create Drivetrain
         m_drive = new Drivetrain(m_drivetrainTab, m_swerveModulesTab, m_vision);
@@ -87,7 +84,7 @@ public class RobotContainer {
         // Update drive constants based off of robot type
         DriveConstants.update(robotId);
 
-        m_vision = new Vision();
+        m_vision = new Vision(m_visionTab);
 
         // Create Drivetrain, because every robot will have a drivetrain
         m_drive = new Drivetrain(m_drivetrainTab, m_swerveModulesTab, m_vision);

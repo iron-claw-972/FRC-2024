@@ -1,8 +1,10 @@
 package frc.robot.util;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.vision.ReturnData;
+import frc.robot.constants.Constants;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
@@ -12,8 +14,10 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
-//Vision and it's commands are adapted from Iron Claw's FRC2022, FRC2023, and: https://www.youtube.com/watch?v=TG9KAa2EGzQ&t=1439s
+// Vision and it's commands are adapted from Iron Claw's FRC2022, FRC2023, and: https://www.youtube.com/watch?v=TG9KAa2EGzQ&t=1439s
 public class Vision {
+
+  private ShuffleboardTab m_shuffleboardTab;
 
   private NetworkTable m_visionTable; 
 
@@ -30,7 +34,9 @@ public class Vision {
   /**
    * Creates a new instance of Vision and sets up the limelight NetworkTable and the SmartDashboard
    */
-  public Vision() {
+  public Vision(ShuffleboardTab shuffleboardTab) {
+    m_shuffleboardTab = shuffleboardTab;
+
     //get the limelight table from the default NetworkTable instance
     m_visionTable = NetworkTableInstance.getDefault().getTable("limelight");
 
@@ -96,7 +102,11 @@ public class Vision {
    * @return A double array with x, y, z, roll, pitch, yaw
    */
   public double[] getRobotPose(){
-    return m_robotPoseVision.getDoubleArray(new double[6]); 
+    double[] pose = m_robotPoseVision.getDoubleArray(new double[6]);
+    if(Constants.kLogging){
+      LogManager.addDoubleArray("Vision/pose", pose);
+    }
+    return pose;
   }
 
   /**
@@ -124,6 +134,7 @@ public class Vision {
    * Set up the vision commands on SmartDashboard so we can turn them on/off for testing
    */
   public void setUpSmartDashboardCommandButtons(){
-    SmartDashboard.putData("ReturnData command", new ReturnData(this));
+    SmartDashboard.putData("Vision ReturnData command", new ReturnData(this));
+    m_shuffleboardTab.add("Return Data", new ReturnData(this));
   }
 }
