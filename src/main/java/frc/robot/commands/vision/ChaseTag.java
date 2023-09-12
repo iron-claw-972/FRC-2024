@@ -1,14 +1,11 @@
 package frc.robot.commands.vision;
 
-import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.constants.miscConstants.FieldConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.Vision;
 
@@ -17,13 +14,9 @@ public class ChaseTag extends CommandBase {
   PIDController m_rotationPID;
   Vision m_vision; 
 
-  private double m_pidValue;
-  private double m_wheelVelocity;
-
-
   public ChaseTag(Drivetrain swerve, Vision vision){
     m_swerve = swerve;
-    m_vision = vision; 
+    m_vision = vision;
     m_rotationPID = new PIDController(1, 0, 0);
     //TODO: Make those pid constants. 
   }
@@ -36,20 +29,20 @@ public class ChaseTag extends CommandBase {
   @Override
   public void execute() {
     //the setpoint is 2 degrees. 
-    m_pidValue = m_rotationPID.calculate(m_vision.getHorizontalOffsetDegrees(),2); 
-    m_wheelVelocity = MathUtil.clamp(m_pidValue,-4.3,4.3); 
-    setWheelSpeeds(m_wheelVelocity);
+    double pidValue = m_rotationPID.calculate(m_vision.getHorizontalOffsetDegrees(),2); 
+    double wheelVelocity = MathUtil.clamp(pidValue,-4.3,4.3); 
+    setWheelSpeeds(wheelVelocity);
     
   }
 
   @Override
   public void end(boolean interrupted) {
-    
+    m_swerve.stop();
   }
 
   @Override
   public boolean isFinished() {
-    return false; 
+    return m_rotationPID.atSetpoint(); 
   }
 
   private void setDrivetrainToTurnMode(){
