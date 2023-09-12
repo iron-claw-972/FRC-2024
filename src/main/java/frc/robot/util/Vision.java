@@ -1,7 +1,10 @@
 package frc.robot.util;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.vision.AimAtTag;
+import frc.robot.commands.vision.ChaseTag;
 import frc.robot.commands.vision.ReturnData;
+import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.networktables.NetworkTable;
@@ -21,7 +24,10 @@ public class Vision {
   NetworkTableEntry m_ta;
   NetworkTableEntry m_robotPoseVision; 
 
-  public Vision() {
+  Drivetrain m_drive; 
+
+
+  public Vision(Drivetrain drive) {
     //get the limelight table from the default NetworkTable instance
     m_visionTable = NetworkTableInstance.getDefault().getTable("limelight");
 
@@ -34,8 +40,11 @@ public class Vision {
     m_ta = m_visionTable.getEntry("ta"); 
     m_robotPoseVision = m_visionTable.getEntry("botpose"); 
 
+    m_drive = drive;
+
     //set up the vision commands on SmartDashboard so we can turn them on/off for testing
     setUpSmartDashboardCommandButtons();
+
   }
 
 
@@ -90,6 +99,10 @@ public class Vision {
    */
   public void setUpSmartDashboardCommandButtons(){
     SmartDashboard.putData("ReturnData command", new ReturnData(this));
+    SmartDashboard.putData("AimAtTag command", new AimAtTag(m_drive));
+    SmartDashboard.putData("ChaseTag command", new ChaseTag(m_drive, this));
+
+
 
   }
 
