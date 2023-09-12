@@ -13,17 +13,20 @@ public class ReturnData extends CommandBase{
   
   @Override
   public void execute() {
+    // Store pose
+    double[] pose = m_vision.getRobotPose();
+
     //put the offsets and area on SmartDashboard for testing 
     SmartDashboard.putNumber("X offset degrees", m_vision.getHorizontalOffsetDegrees()); 
     SmartDashboard.putNumber("Y offset degrees", m_vision.getVerticalOffsetDegrees()); 
     SmartDashboard.putNumber("Area", m_vision.getTargetAreaPercentage());
-    SmartDashboard.putNumberArray("Robot pose", m_vision.getRobotPose()); 
+    SmartDashboard.putNumberArray("Robot pose", pose); 
  
     // Print data
     System.out.println("X offset degrees: " + m_vision.getHorizontalOffsetDegrees()); 
     System.out.println("Y offset degrees: " + m_vision.getVerticalOffsetDegrees()); 
     System.out.println("Area: " + m_vision.getTargetAreaPercentage());
-    System.out.println("Robot pose: " + m_vision.getRobotPose()); 
+    System.out.printf("Robot pose: %.2f, %.2f at %.2f degrees\n", pose[0], pose[1], pose[5]); 
   }
 
   @Override
