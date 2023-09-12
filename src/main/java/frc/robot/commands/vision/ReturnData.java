@@ -6,6 +6,7 @@ import frc.robot.util.Vision;
 
 public class ReturnData extends CommandBase{
   private final Vision m_vision; 
+  private double[] m_pose; 
 
   public ReturnData(Vision vision){
     m_vision = vision;
@@ -14,13 +15,15 @@ public class ReturnData extends CommandBase{
   @Override
   public void execute() {
     // Store pose to make it easier to use
-    double[] pose = m_vision.getRobotPose();
+    m_pose = m_vision.getRobotPose();
 
     //put the offsets and area on SmartDashboard for testing 
     SmartDashboard.putNumber("X offset degrees", m_vision.getHorizontalOffsetDegrees()); 
     SmartDashboard.putNumber("Y offset degrees", m_vision.getVerticalOffsetDegrees()); 
     SmartDashboard.putNumber("Area", m_vision.getTargetAreaPercentage());
-    SmartDashboard.putNumberArray("Robot pose", pose); 
+    SmartDashboard.putNumberArray("Robot pose", m_pose);
+    //if the above line doesn't display the code to smart dashboard, try this line
+    //SmartDashboard.putNumberArray("Botpose", m_vision.getRobotPose()); 
  
     // Print data
     System.out.println("X offset degrees: " + m_vision.getHorizontalOffsetDegrees()); 
