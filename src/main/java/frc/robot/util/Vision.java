@@ -102,11 +102,11 @@ public class Vision {
    * @return A double array with x, y, z, roll, pitch, yaw
    */
   public double[] getRobotPose(){
-    //double[] pose = 
-    // if(Constants.kLogging){
-    //   LogManager.addDoubleArray("Vision/pose", pose);
-    // }
-    return m_robotPoseVision.getDoubleArray(new double[6]);
+    double[] pose = m_robotPoseVision.getDoubleArray(new double[6]);
+    if(Constants.kLogging){
+      LogManager.addDoubleArray("Vision/pose", pose);
+    }
+    return pose;
   }
 
   /**
