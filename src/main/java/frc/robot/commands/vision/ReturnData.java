@@ -13,7 +13,7 @@ public class ReturnData extends CommandBase{
   
   @Override
   public void execute() {
-    // Store pose
+    // Store pose to make it easier to use
     double[] pose = m_vision.getRobotPose();
 
     //put the offsets and area on SmartDashboard for testing 
