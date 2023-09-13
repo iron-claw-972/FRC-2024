@@ -20,6 +20,7 @@ public class ReturnData extends CommandBase{
     SmartDashboard.putNumber("X offset degrees", m_vision.getHorizontalOffsetDegrees()); 
     SmartDashboard.putNumber("Y offset degrees", m_vision.getVerticalOffsetDegrees()); 
     SmartDashboard.putNumber("Area", m_vision.getTargetAreaPercentage());
+    SmartDashboard.putNumber("Latency", m_vision.getLatency());
     SmartDashboard.putNumberArray("Robot pose", pose);
     //if the above line doesn't display the code to smart dashboard, try this line
     //SmartDashboard.putNumberArray("Botpose", m_vision.getRobotPose()); 
@@ -28,6 +29,7 @@ public class ReturnData extends CommandBase{
     System.out.println("X offset degrees: " + m_vision.getHorizontalOffsetDegrees()); 
     System.out.println("Y offset degrees: " + m_vision.getVerticalOffsetDegrees()); 
     System.out.println("Area: " + m_vision.getTargetAreaPercentage());
+    System.out.println("Latency: " + m_vision.getLatency());
     System.out.printf("Robot pose: %.2f, %.2f at %.2f degrees\n", pose[0], pose[1], pose[5]); 
   }
 
