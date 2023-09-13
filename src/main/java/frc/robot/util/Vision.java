@@ -50,7 +50,7 @@ public class Vision {
     m_ta = m_visionTable.getEntry("ta"); 
     m_tl = m_visionTable.getEntry("tl"); 
     m_cl = m_visionTable.getEntry("cl"); 
-    m_robotPoseVision = m_visionTable.getEntry("botpose"); 
+    m_robotPoseVision = m_visionTable.getEntry("botpose_wpiblue"); 
 
     //set up the vision commands on SmartDashboard so we can turn them on/off for testing
     setUpSmartDashboardCommandButtons();
