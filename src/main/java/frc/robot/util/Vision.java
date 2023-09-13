@@ -3,6 +3,7 @@ package frc.robot.util;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.vision.CalculateStdDevs;
 import frc.robot.commands.vision.ReturnData;
 import frc.robot.constants.Constants;
 import edu.wpi.first.math.Pair;
@@ -136,5 +137,7 @@ public class Vision {
   public void setUpSmartDashboardCommandButtons(){
     SmartDashboard.putData("Vision ReturnData command", new ReturnData(this));
     m_shuffleboardTab.add("Return Data", new ReturnData(this));
+    SmartDashboard.putData("Calculate vision std devs", new CalculateStdDevs(1000, this));
+    m_shuffleboardTab.add("Calculate std devs", new CalculateStdDevs(1000, this));
   }
 }
