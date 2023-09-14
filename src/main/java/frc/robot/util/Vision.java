@@ -41,7 +41,7 @@ public class Vision {
     //get the limelight table from the default NetworkTable instance
     m_visionTable = NetworkTableInstance.getDefault().getTable("limelight");
 
-    m_tvDebouncer = new Debouncer(0.05, DebounceType.kBoth);
+    m_tvDebouncer = new Debouncer(0.05, DebounceType.kRising);
 
     //from the table, get various entries that contain data 
     m_tv = m_visionTable.getEntry("tv"); 
