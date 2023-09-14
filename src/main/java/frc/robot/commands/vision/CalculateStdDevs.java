@@ -2,23 +2,18 @@ package frc.robot.commands.vision;
 
 import java.util.ArrayList;
 
-import frc.robot.util.MathUtils;
-import org.photonvision.EstimatedRobotPose;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.Constants;
-import frc.robot.constants.miscConstants.VisionConstants;
-import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.LogManager;
+import frc.robot.util.MathUtils;
 import frc.robot.util.Vision;
 
 /**
  * Calculates standard deviations for vision
  */
 public class CalculateStdDevs extends CommandBase {
-  private final Drivetrain m_drive;
   private final Vision m_vision;
   private ArrayList<Pose2d> m_poses;
   private int m_arrayLength;
@@ -27,11 +22,9 @@ public class CalculateStdDevs extends CommandBase {
   /**
    * Constructor for CalculateStdDevs
    * @param posesToUse the amount of poses to take the standard deviation of. More poses will take more time.
-   * @param drive The drivetrain
    * @param vision The vision
    */
-  public CalculateStdDevs(int posesToUse, Drivetrain drive, Vision vision) {
-    m_drive = drive;
+  public CalculateStdDevs(int posesToUse, Vision vision) {
     m_vision = vision;
     m_arrayLength = posesToUse;
     m_endTimer = new Timer();
@@ -45,9 +38,6 @@ public class CalculateStdDevs extends CommandBase {
     // create the ArrayList of poses to store
     // an ArrayList prevents issues if the command ends early, and makes checking if the command has finished easy
     m_poses = new ArrayList<Pose2d>();
-    // disable the drivetrain's vision usage. The drivetrain uses vision for the odometry which is used for the reference pose
-    // that can affect the vision pose slightly if we are using the REFERENCE_POSE strategy
-    m_drive.enableVision(false);
   }
 
   /**
@@ -55,7 +45,7 @@ public class CalculateStdDevs extends CommandBase {
    */
   @Override
   public void execute() {
-    Pose2d pose = m_vision.getPose2d(m_drive.getPose());
+    Pose2d pose = m_vision.getPose2d();
     // If the pose exists, add it to the first open spot in the array
     if (pose != null) {
       // if we see a pose, reset the timer (it will be started the next time it doesn't get a pose)
@@ -68,7 +58,7 @@ public class CalculateStdDevs extends CommandBase {
       m_endTimer.start();
       // If kStdDevCommandEndTime seconds have passed since it saw an April tag, stop the command
       // Prevents it from running forever
-      if (m_endTimer.hasElapsed(VisionConstants.kStdDevCommandEndTime)) {
+      if (m_endTimer.hasElapsed(10)) {
         cancel();
       }
     }
@@ -79,10 +69,6 @@ public class CalculateStdDevs extends CommandBase {
    */
   @Override
   public void end(boolean interrupted) {
-
-    // re-enable vision for drivetrain odometry
-    m_drive.enableVision(true);
-
     // If the array is empty, don't try to calculate std devs
     if (m_poses.size() == 0) {
       System.out.println("There are no poses in the array\nTry again where the robot can see an April tag.");
@@ -106,25 +92,17 @@ public class CalculateStdDevs extends CommandBase {
     double stdDevY = MathUtils.stdDev(yArray);
     double stdDevRot = MathUtils.stdDev(rotArray);
     
-    // Calculate distance to closest April tag
-    double closest = 1000000;
-    ArrayList<EstimatedRobotPose> estimatedPoses = m_vision.getEstimatedPoses(m_drive.getPose());
-    for (int i = 0; i < estimatedPoses.size(); i++) {
-      for (int j = 0; j < estimatedPoses.get(i).targetsUsed.size(); j++) {
-        double distance = estimatedPoses.get(i).targetsUsed.get(j).getBestCameraToTarget()
-          .getTranslation().toTranslation2d().getNorm();
-        closest = Math.min(closest, distance);
-      }
-    }
+    // Find area
+    double area = m_vision.getTargetAreaPercentage();
     
     // Print and log values
     System.out.printf("Standard deviation values:\nX: %.5f\nY: %.5f\nRotation: %.5f\nDistance: %.5f\n",
-      stdDevX, stdDevY, stdDevRot, closest);
+      stdDevX, stdDevY, stdDevRot, area);
     if (Constants.kLogging) {
       LogManager.addDouble("Vision/StdDevTest/StdDevX", stdDevX);
       LogManager.addDouble("Vision/StdDevTest/StdDevY", stdDevY);
       LogManager.addDouble("Vision/StdDevTest/StdDevRotation", stdDevRot);
-      LogManager.addDouble("Vision/StdDevTest/Distance", closest);
+      LogManager.addDouble("Vision/StdDevTest/TargetArea", area);
     }    
   }
 
@@ -134,6 +112,6 @@ public class CalculateStdDevs extends CommandBase {
    */
   @Override
   public boolean isFinished() {
-    return m_poses.size() == m_arrayLength;
+    return m_poses.size() >= m_arrayLength;
   }
 }

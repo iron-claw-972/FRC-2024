@@ -1,17 +1,13 @@
 package frc.robot.subsystems;
 
-import java.util.ArrayList;
-
-import org.photonvision.EstimatedRobotPose;
-
 import com.ctre.phoenix.sensors.Pigeon2.AxisDirection;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
+
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -150,7 +146,7 @@ public class Drivetrain extends SubsystemBase {
       getModulePositions(),
       new Pose2d() // initial Odometry Location
     );
-    m_poseEstimator.setVisionMeasurementStdDevs(VisionConstants.kBaseVisionPoseStdDevs);
+    //m_poseEstimator.setVisionMeasurementStdDevs(VisionConstants.kBaseVisionPoseStdDevs);
 
     m_xController = new PIDController(DriveConstants.kTranslationalP, 0, DriveConstants.kTranslationalD);
     m_yController = new PIDController(DriveConstants.kTranslationalP, 0, DriveConstants.kTranslationalD);
@@ -365,47 +361,21 @@ public class Drivetrain extends SubsystemBase {
   public void updateOdometry() {
     // Updates pose based on encoders and gyro. NOTE: must use yaw directly from gyro!
     m_poseEstimator.update(Rotation2d.fromDegrees(m_pigeon.getYaw()), getModulePositions());
+
     // Updates pose based on vision
     if (RobotBase.isReal() && m_visionEnabled && VisionConstants.kEnabled) {
 
-      // An array list of poses returned by different cameras
-      ArrayList<EstimatedRobotPose> estimatedPoses = m_vision.getEstimatedPoses(m_poseEstimator.getEstimatedPosition());
-      // The current position as a translation
-      Translation2d currentEstimatedPoseTranslation = m_poseEstimator.getEstimatedPosition().getTranslation();
-      for (int i = 0; i < estimatedPoses.size(); i++) {
-        EstimatedRobotPose estimatedPose = estimatedPoses.get(i);
-        // The position of the closest april tag as a translation
-        Translation2d closestTagPoseTranslation = null;
-        for (int j = 0; j < estimatedPose.targetsUsed.size(); j++) {
-          // The position of the current april tag
-          Pose3d currentTagPose = m_vision.getTagPose(estimatedPose.targetsUsed.get(j).getFiducialId());
-          // If it can't find the april tag's pose, don't run the rest of the for loop for this tag
-          if (currentTagPose == null) {
-            continue;
-          }
-          Translation2d currentTagPoseTranslation = currentTagPose.toPose2d().getTranslation();
-          
-          // If the current april tag position is closer than the closest one, this makes makes it the closest
-          if (closestTagPoseTranslation == null || currentEstimatedPoseTranslation.getDistance(currentTagPoseTranslation) < currentEstimatedPoseTranslation.getDistance(closestTagPoseTranslation)) {
-            closestTagPoseTranslation = currentTagPoseTranslation;
-          }
-        }
+      // The pose and timestamp returned by the limelight
+      Pair<Pose2d, Double> visionPose = m_vision.getPose2dWithTimeStamp();
 
-        double visionFactor = (currentEstimatedPoseTranslation.getDistance(closestTagPoseTranslation) * VisionConstants.kVisionPoseStdDevFactor);
-
-        // Adds the vision measurement for this camera
+      // If the limelight can see an april tag
+      if(visionPose.getFirst()!=null){
+        // Adds the vision measurement
         m_poseEstimator.addVisionMeasurement(
-          estimatedPose.estimatedPose.toPose2d(),
-          estimatedPose.timestampSeconds,
-          VisionConstants.kBaseVisionPoseStdDevs.plus(
-            visionFactor
-          )
+          visionPose.getFirst(),
+          visionPose.getSecond(),
+          VisionConstants.kVisionStdDevs
         );
-        if(Constants.kLogging){
-          LogManager.addDouble("Vision/ClosestTag Distance", 
-            currentEstimatedPoseTranslation.getDistance(closestTagPoseTranslation)
-          );
-        }
       }
     }
   }
