@@ -95,7 +95,7 @@ public class Vision {
    * @return true or false 
    */
   public boolean validTargetDetected(){
-    return m_tvDebouncer.calculate(m_tv.getBoolean(false)); 
+    return m_tvDebouncer.calculate(m_tv.getDouble(0)==1); 
   }
 
   /**
