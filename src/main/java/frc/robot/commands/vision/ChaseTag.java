@@ -20,19 +20,13 @@ public class ChaseTag extends CommandBase {
     m_rotationPID = new PIDController(1, 0, 0);
     //TODO: Make those pid constants. 
   }
-
-  @Override
-  public void initialize(){
-    setDrivetrainToTurnMode();
-  }
   
   @Override
   public void execute() {
     //the setpoint is 2 degrees. 
     double pidValue = m_rotationPID.calculate(m_vision.getHorizontalOffsetDegrees(),2); 
-    double wheelVelocity = MathUtil.clamp(pidValue,-4.3,4.3); 
-    setWheelSpeeds(wheelVelocity);
-    
+    double wheelVelocity = MathUtil.clamp(pidValue,-0.25,0.25); 
+    m_swerve.drive(0, 0, wheelVelocity, false);
   }
 
   @Override
@@ -44,28 +38,5 @@ public class ChaseTag extends CommandBase {
   public boolean isFinished() {
     return m_rotationPID.atSetpoint(); 
   }
-
-  private void setDrivetrainToTurnMode(){
-    //set drivetrain to "turn mode"
-    m_swerve.setModuleStates(new SwerveModuleState[] {
-      new SwerveModuleState(0, new Rotation2d(Units.degreesToRadians(-45))),
-      new SwerveModuleState(0, new Rotation2d(Units.degreesToRadians(45))),
-      new SwerveModuleState(0, new Rotation2d(Units.degreesToRadians(45))),
-      new SwerveModuleState(0, new Rotation2d(Units.degreesToRadians(-45)))
-    });
-  }
-
-  private void setWheelSpeeds(double velocity){
-    //set drivetrain wheel velocities. 
-
-    //may need to invert these velocities. 
-    m_swerve.setModuleStates(new SwerveModuleState[] {
-      new SwerveModuleState(velocity, new Rotation2d(Units.degreesToRadians(-45))),
-      new SwerveModuleState(velocity, new Rotation2d(Units.degreesToRadians(45))),
-      new SwerveModuleState(velocity, new Rotation2d(Units.degreesToRadians(45))),
-      new SwerveModuleState(velocity, new Rotation2d(Units.degreesToRadians(-45)))
-    });
-  }
-  
 }
 
