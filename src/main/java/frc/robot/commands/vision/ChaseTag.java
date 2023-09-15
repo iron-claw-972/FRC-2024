@@ -26,7 +26,7 @@ public class ChaseTag extends CommandBase {
     //the setpoint is 2 degrees. 
     double pidValue = m_rotationPID.calculate(m_vision.getHorizontalOffsetDegrees(),2); 
     double wheelVelocity = MathUtil.clamp(pidValue,-0.25,0.25); 
-    m_swerve.drive(0, 0, wheelVelocity, false);
+    m_swerve.drive(0, 0, wheelVelocity, false, false);
   }
 
   @Override
