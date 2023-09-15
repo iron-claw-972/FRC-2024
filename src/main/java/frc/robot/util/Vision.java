@@ -3,12 +3,12 @@ package frc.robot.util;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.vision.AimAtTag;
-import frc.robot.commands.vision.ChaseTag;
 import frc.robot.commands.vision.ReturnData;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.commands.vision.AimAtTag;
 import frc.robot.commands.vision.CalculateStdDevs;
+import frc.robot.commands.vision.ChaseTag;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
@@ -54,9 +54,6 @@ public class Vision {
     m_tl = m_visionTable.getEntry("tl"); 
     m_cl = m_visionTable.getEntry("cl"); 
     m_robotPoseVision = m_visionTable.getEntry("botpose_wpiblue"); 
-
-    //set up the vision commands on SmartDashboard so we can turn them on/off for testing
-    setUpSmartDashboardCommandButtons();
   }
 
 
@@ -137,11 +134,14 @@ public class Vision {
   /**
    * Set up the vision commands on SmartDashboard so we can turn them on/off for testing
    */
-  public void setUpSmartDashboardCommandButtons(){
-
+  public void setUpSmartDashboardCommandButtons(Drivetrain drive){
     SmartDashboard.putData("Vision ReturnData command", new ReturnData(this));
     m_shuffleboardTab.add("Return Data", new ReturnData(this));
     SmartDashboard.putData("Calculate vision std devs", new CalculateStdDevs(1000, this));
     m_shuffleboardTab.add("Calculate std devs", new CalculateStdDevs(1000, this));
+    SmartDashboard.putData("Vision aim at tag", new AimAtTag(drive));
+    m_shuffleboardTab.add("Aim at tag", new AimAtTag(drive));
+    SmartDashboard.putData("Vision aim at tag 2", new ChaseTag(drive, this));
+    m_shuffleboardTab.add("Aim at tag 2", new ChaseTag(drive, this));
   }
 }

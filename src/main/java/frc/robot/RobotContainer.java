@@ -61,11 +61,13 @@ public class RobotContainer {
       case SwerveCompetition:
         // Update drive constants based off of robot type
         DriveConstants.update(robotId);
-
+        
         m_vision = new Vision(m_visionTab);
 
         // Create Drivetrain
         m_drive = new Drivetrain(m_drivetrainTab, m_swerveModulesTab, m_vision);
+        
+        m_vision.setUpSmartDashboardCommandButtons(m_drive);
 
         m_driver = new GameControllerDriverConfig(m_drive, m_controllerTab, false);
   
@@ -88,6 +90,9 @@ public class RobotContainer {
 
         // Create Drivetrain, because every robot will have a drivetrain
         m_drive = new Drivetrain(m_drivetrainTab, m_swerveModulesTab, m_vision);
+
+        m_vision.setUpSmartDashboardCommandButtons(m_drive);
+
         m_driver = new GameControllerDriverConfig(m_drive, m_controllerTab, false);
 
         DriverStation.reportWarning("Not registering subsystems and controls due to incorrect robot", false);
