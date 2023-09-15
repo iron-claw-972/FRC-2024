@@ -33,7 +33,7 @@ public class GoToPose extends SequentialCommandGroup {
     this(poseSupplier, AutoConstants.kMaxAutoSpeed, AutoConstants.kMaxAutoAccel, drive);
   }
 
-    /**
+  /**
    * Uses PathPlanner to go to a pose
    * @param poseSupplier The supplier for the pose to use
    * @param maxSpeed The maximum speed to use

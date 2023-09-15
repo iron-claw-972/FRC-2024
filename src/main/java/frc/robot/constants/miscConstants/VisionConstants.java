@@ -3,20 +3,24 @@ package frc.robot.constants.miscConstants;
  * Container class for vision constants.
  */
 
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
-import frc.robot.Robot.RobotId;
+import edu.wpi.first.math.MatBuilder;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 
 public class VisionConstants {
-  public static final Pose3d m_tagPose = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)); 
-  //TODO: need to figure out how to represent the transform from the camera to the robot
-  public static final Transform3d m_cameraToRobot = new Transform3d(); 
+  /**
+   * If the vision is enabled on the robot
+   */
+  public static final boolean kEnabled = true;
 
-  public static void update(RobotId robotId) {
-    
-  }
- 
+  /*
+   * The standard deviations to use for the vision
+   */
+  public static final Matrix<N3, N1> kVisionStdDevs = new MatBuilder<>(Nat.N3(), Nat.N1()).fill(
+    0.00754, // x in meters (default=0.9)
+    0.03034, // y in meters (default=0.9)
+    1000  // heading in radians. The gyroscope is very accurate, so as long as it is reset correctly it is unnecessary to correct it with vision
+  );
 }
