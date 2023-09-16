@@ -96,8 +96,8 @@ public class Robot extends TimedRobot {
 
     m_robotContainer.resetModules();
 
-    // In auto, only use odometry.
-    m_robotContainer.setVisionEnabled(false);
+    // Make sure vision is enabled for auto
+    m_robotContainer.setVisionEnabled(true);
 
     // Get the autonomous command.
     // This access is fast (about 14 microseconds) because the value is already resident in the Network Tables.
@@ -123,7 +123,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     m_robotContainer.resetModules();
     
-    // In teleop, may enable vision for use for grid/shelf alignment
+    // In teleop, enable vision
     m_robotContainer.setVisionEnabled(true);
 
     // This makes sure that the autonomous stops running when

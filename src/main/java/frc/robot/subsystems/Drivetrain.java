@@ -377,6 +377,9 @@ public class Drivetrain extends SubsystemBase {
           VisionConstants.kVisionStdDevs
         );
       }
+
+      // TODO: DELETE THIS AFTER TESTING IT
+      System.out.printf("Pose: %.2f, %.2f at %.2f degrees\nTimestamp: %.3f\n", visionPose.getFirst().getX(), visionPose.getFirst().getY(), visionPose.getSecond());
     }
   }
 
