@@ -18,13 +18,14 @@ public class ChaseTag extends CommandBase {
     m_swerve = swerve;
     m_vision = vision;
     m_rotationPID = new PIDController(1, 0, 0);
+    m_rotationPID.setTolerance(2);
     //TODO: Make those pid constants. 
   }
   
   @Override
   public void execute() {
     //the setpoint is 2 degrees. 
-    double pidValue = m_rotationPID.calculate(m_vision.getHorizontalOffsetDegrees(),2); 
+    double pidValue = m_rotationPID.calculate(m_vision.getHorizontalOffsetDegrees(),0); 
     double wheelVelocity = MathUtil.clamp(pidValue,-0.25,0.25); 
     m_swerve.drive(0, 0, wheelVelocity, false, false);
   }
