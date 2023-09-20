@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.vision.ReturnData;
+import frc.robot.commands.vision.TestVisionDistance;
 import frc.robot.commands.vision.AimAtTag;
 import frc.robot.commands.vision.CalculateStdDevs;
 import frc.robot.commands.vision.ChaseTag;
@@ -143,5 +144,9 @@ public class Vision {
     m_shuffleboardTab.add("Aim at tag", new AimAtTag(drive));
     SmartDashboard.putData("Vision aim at tag 2", new ChaseTag(drive, this));
     m_shuffleboardTab.add("Aim at tag 2", new ChaseTag(drive, this));
+    SmartDashboard.putData("Vision distance test (forward)", new TestVisionDistance(0.1, drive, this));
+    m_shuffleboardTab.add("Distance test (forward)", new TestVisionDistance(0.1, drive, this));
+    SmartDashboard.putData("Vision distance test (backward)", new TestVisionDistance(-0.1, drive, this));
+    m_shuffleboardTab.add("Distance test (backward)", new TestVisionDistance(-0.1, drive, this));
   }
 }
