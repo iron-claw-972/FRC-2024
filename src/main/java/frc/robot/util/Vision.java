@@ -3,6 +3,7 @@ package frc.robot.util;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.vision.ReturnData;
 import frc.robot.commands.vision.TestVisionDistance;
 import frc.robot.commands.vision.AimAtTag;
@@ -57,6 +58,13 @@ public class Vision {
     m_robotPoseVision = m_visionTable.getEntry("botpose_wpiblue");
   }
 
+  /**
+   * Pipeline 0 detects an april tag with an ID of 0, pipeline 1 detects an april tag with an ID of 1
+   * @param pipeline
+   */
+  public void switchPipelines(int pipeline){
+    m_visionTable.getEntry("pipeline").setNumber(pipeline); 
+  }
 
   /**
    * Get the horizontal offset in degrees from the crosshair to the target
@@ -148,5 +156,9 @@ public class Vision {
     m_shuffleboardTab.add("Distance test (forward)", new TestVisionDistance(0.1, drive, this));
     SmartDashboard.putData("Vision distance test (backward)", new TestVisionDistance(-0.1, drive, this));
     m_shuffleboardTab.add("Distance test (backward)", new TestVisionDistance(-0.1, drive, this));
+    SmartDashboard.putData("Pipeline 0, tag ID 0", new InstantCommand(()->switchPipelines(0)));
+    //shuffleboard command here
+    SmartDashboard.putData("Pipeline 1, tag ID 1", new InstantCommand(()->switchPipelines(1)));
+    //shuffleboard command here 
   }
 }
