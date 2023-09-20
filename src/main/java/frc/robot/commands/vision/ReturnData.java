@@ -25,7 +25,6 @@ public class ReturnData extends CommandBase{
     //if the above line doesn't display the code to smart dashboard, try this line
     //SmartDashboard.putNumberArray("Botpose", m_vision.getRobotPose()); 
     SmartDashboard.putBoolean("Valid target detected", m_vision.validTargetDetected());
-    SmartDashboard.putBoolean("2 valid targets detected", m_vision.twoValidTargetsDetected());
  
     // Print data
     System.out.println("X offset degrees: " + m_vision.getHorizontalOffsetDegrees()); 
@@ -34,7 +33,6 @@ public class ReturnData extends CommandBase{
     System.out.println("Latency: " + m_vision.getLatency());
     System.out.printf("Robot pose: %.2f, %.2f at %.2f degrees\n", pose[0], pose[1], pose[5]);
     System.out.println("Valid target detected: "+m_vision.validTargetDetected());
-    System.out.println("2 valid targets detected: "+m_vision.twoValidTargetsDetected());
   }
 
   @Override

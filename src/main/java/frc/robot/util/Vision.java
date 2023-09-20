@@ -26,7 +26,6 @@ public class Vision {
   private NetworkTable m_visionTable; 
 
   private Debouncer m_tvDebouncer;
-  private Debouncer m_multipleTargetDebouncer;
 
   private NetworkTableEntry m_tv;
   private NetworkTableEntry m_tx;
@@ -35,7 +34,6 @@ public class Vision {
   private NetworkTableEntry m_tl;
   private NetworkTableEntry m_cl;
   private NetworkTableEntry m_robotPoseVision;
-  private NetworkTableEntry m_ta1;
 
   /**
    * Creates a new instance of Vision and sets up the limelight NetworkTable and the SmartDashboard
@@ -47,7 +45,6 @@ public class Vision {
     m_visionTable = NetworkTableInstance.getDefault().getTable("limelight");
 
     m_tvDebouncer = new Debouncer(0.05, DebounceType.kRising);
-    m_multipleTargetDebouncer = new Debouncer(0.05, DebounceType.kRising);
 
     //from the table, get various entries that contain data 
     m_tv = m_visionTable.getEntry("tv"); 
@@ -57,7 +54,6 @@ public class Vision {
     m_tl = m_visionTable.getEntry("tl"); 
     m_cl = m_visionTable.getEntry("cl"); 
     m_robotPoseVision = m_visionTable.getEntry("botpose_wpiblue");
-    m_ta1 = m_visionTable.getEntry("ta1");
   }
 
 
@@ -103,22 +99,6 @@ public class Vision {
   }
 
   /**
-   * Returns if the limelight can see at least 2 targets
-   * @return If it can see a second target
-   */
-  public boolean has2Targets(){
-    return m_ta1.getDouble(0) > 0;
-  }
-
-  /**
-   * Returns if there are at least two valid targets after debouncing
-   * @return If it has seen multiple targets for at least 0.05 seconds
-   */
-  public boolean twoValidTargetsDetected(){
-    return m_multipleTargetDebouncer.calculate(has2Targets());
-  }
-
-  /**
    * Returns the robot pose as a double array
    * @return A double array with x, y, z, roll, pitch, yaw
    */
@@ -135,7 +115,7 @@ public class Vision {
    * @return a Pose2d
    */
   public Pose2d getPose2d(){
-    if(twoValidTargetsDetected()){
+    if(validTargetDetected()){
       double[] pose = getRobotPose();
       return new Pose2d(pose[0], pose[1], Rotation2d.fromDegrees(pose[5]));
     }else{
