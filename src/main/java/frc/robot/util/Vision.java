@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.vision.ReturnData;
+import frc.robot.commands.vision.TakeSnapshots;
 import frc.robot.commands.vision.TestVisionDistance;
 import frc.robot.commands.vision.AimAtTag;
 import frc.robot.commands.vision.CalculateStdDevs;
@@ -36,6 +37,7 @@ public class Vision {
   private NetworkTableEntry m_tl;
   private NetworkTableEntry m_cl;
   private NetworkTableEntry m_robotPoseVision;
+  private NetworkTableEntry m_snapshot;
 
   /**
    * Creates a new instance of Vision and sets up the limelight NetworkTable and the SmartDashboard
@@ -56,6 +58,7 @@ public class Vision {
     m_tl = m_visionTable.getEntry("tl"); 
     m_cl = m_visionTable.getEntry("cl"); 
     m_robotPoseVision = m_visionTable.getEntry("botpose_wpiblue");
+    m_snapshot = m_visionTable.getEntry("snapshot");
   }
 
   /**
@@ -156,9 +159,7 @@ public class Vision {
     m_shuffleboardTab.add("Distance test (forward)", new TestVisionDistance(0.1, drive, this));
     SmartDashboard.putData("Vision distance test (backward)", new TestVisionDistance(-0.1, drive, this));
     m_shuffleboardTab.add("Distance test (backward)", new TestVisionDistance(-0.1, drive, this));
-    SmartDashboard.putData("Pipeline 0, tag ID 0", new InstantCommand(()->switchPipelines(0)));
-    //shuffleboard command here
-    SmartDashboard.putData("Pipeline 1, tag ID 1", new InstantCommand(()->switchPipelines(1)));
-    //shuffleboard command here 
+    SmartDashboard.putData("Take vision snapshots", new TakeSnapshots(m_snapshot));
+    m_shuffleboardTab.add("Take snapshots", new TakeSnapshots(m_snapshot));
   }
 }
