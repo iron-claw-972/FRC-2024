@@ -3,7 +3,6 @@ package frc.robot.util;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.vision.ReturnData;
 import frc.robot.commands.vision.TakeSnapshots;
 import frc.robot.commands.vision.TestVisionDistance;
