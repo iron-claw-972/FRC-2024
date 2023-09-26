@@ -145,6 +145,8 @@ public class Vision {
     double dist = (target.getZ()-camera[2])/Math.tan(verticalAngle);
     double x = target.getX()-Math.cos(fieldRelativeAngle)*dist;
     double y = target.getY()-Math.sin(fieldRelativeAngle)*dist;
+    x -= camera[0]*Math.cos(yaw) + camera[1]*Math.sin(yaw);
+    y -= camera[0]*Math.sin(yaw) + camera[1]*Math.cos(yaw);
     double[] pose = new double[]{x, y, 0, 0, 0, yaw};
     if(Constants.kLogging){
       LogManager.addDoubleArray("Vision/pose", pose);
