@@ -10,12 +10,15 @@ import frc.robot.commands.vision.AimAtTag;
 import frc.robot.commands.vision.CalculateStdDevs;
 import frc.robot.commands.vision.ChaseTag;
 import frc.robot.constants.Constants;
+import frc.robot.constants.miscConstants.FieldConstants;
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -37,6 +40,8 @@ public class Vision {
   private NetworkTableEntry m_cl;
   private NetworkTableEntry m_robotPoseVision;
   private NetworkTableEntry m_snapshot;
+  private NetworkTableEntry m_tid;
+  private NetworkTableEntry m_cameraPose;
 
   /**
    * Creates a new instance of Vision and sets up the limelight NetworkTable and the SmartDashboard
@@ -58,6 +63,8 @@ public class Vision {
     m_cl = m_visionTable.getEntry("cl"); 
     m_robotPoseVision = m_visionTable.getEntry("botpose_wpiblue");
     m_snapshot = m_visionTable.getEntry("snapshot");
+    m_tid = m_visionTable.getEntry("tid");
+    m_cameraPose = m_visionTable.getEntry("camerapose_robotspace");
   }
 
   /**
@@ -122,6 +129,30 @@ public class Vision {
   }
 
   /**
+   * Returns the robot pose as a double array calculated using the target height and camera position
+   * @param yaw The yaw of the robot to use in the calculation (radians)
+   * @return A double array with x, y, z, roll, pitch, yaw
+   */
+  public double[] getRobotPose(double yaw){
+    int id = (int) m_tid.getDouble(0)-1;
+    if(id<=0||id>FieldConstants.kAprilTags.size()){
+      return new double[6];
+    }
+    Pose3d target = FieldConstants.kAprilTags.get(id).pose;
+    double[] camera = m_cameraPose.getDoubleArray(new double[6]);
+    double fieldRelativeAngle = yaw+Units.degreesToRadians(camera[5]-getHorizontalOffsetDegrees());
+    double verticalAngle = Units.degreesToRadians(camera[4]+getVerticalOffsetDegrees());
+    double dist = (target.getZ()-camera[2])/Math.tan(verticalAngle);
+    double x = target.getX()-Math.cos(fieldRelativeAngle)*dist;
+    double y = target.getY()-Math.sin(fieldRelativeAngle)*dist;
+    double[] pose = new double[]{x, y, 0, 0, 0, yaw};
+    if(Constants.kLogging){
+      LogManager.addDoubleArray("Vision/pose", pose);
+    }
+    return pose;
+  }
+
+  /**
    * Returns the estimated position as a Pose2d
    * @return a Pose2d
    */
@@ -135,11 +166,34 @@ public class Vision {
   }
 
   /**
+   * Returns the estimated position as a Pose2d calculated using the target height and camera position
+   * @param yaw The yaw of the robot to use for the calculation (radians)
+   * @return a Pose2d
+   */
+  public Pose2d getPose2d(double yaw){
+    if(validTargetDetected()){
+      double[] pose = getRobotPose(yaw);
+      return new Pose2d(pose[0], pose[1], Rotation2d.fromDegrees(pose[5]));
+    }else{
+      return null;
+    }
+  }
+
+  /**
    * Returns the Pose2d and the time stamp in seconds
    * @return a pair with a Pose2d and double
    */
   public Pair<Pose2d, Double> getPose2dWithTimeStamp(){
     return new Pair<Pose2d, Double>(getPose2d(), Timer.getFPGATimestamp()-getLatency()/1000);
+  }
+
+  /**
+   * Returns the Pose2d and the time stamp in seconds calculated using the target height and camera position
+   * @param yaw The yaw to use in the calculation (radians)
+   * @return a pair with a Pose2d and double
+   */
+  public Pair<Pose2d, Double> getPose2dWithTimeStamp(double yaw){
+    return new Pair<Pose2d, Double>(getPose2d(yaw), Timer.getFPGATimestamp()-getLatency()/1000);
   }
 
   /**
