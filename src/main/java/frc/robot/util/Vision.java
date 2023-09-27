@@ -43,6 +43,8 @@ public class Vision {
   private NetworkTableEntry m_tid;
   private NetworkTableEntry m_cameraPose;
 
+  private double m_yaw;
+
   /**
    * Creates a new instance of Vision and sets up the limelight NetworkTable and the SmartDashboard
    */
@@ -169,12 +171,15 @@ public class Vision {
 
   /**
    * Returns the estimated position as a Pose2d calculated using the target height and camera position
-   * @param yaw The yaw of the robot to use for the calculation (radians)
+   * @param useManualCalculation If it should use manual calculations (recommended true)
    * @return a Pose2d
    */
-  public Pose2d getPose2d(double yaw){
+  public Pose2d getPose2d(boolean useManualCalculation){
+    if(!useManualCalculation){
+      return getPose2d();
+    }
     if(validTargetDetected()){
-      double[] pose = getRobotPose(yaw);
+      double[] pose = getRobotPose(m_yaw);
       return new Pose2d(pose[0], pose[1], Rotation2d.fromDegrees(pose[5]));
     }else{
       return null;
@@ -191,11 +196,11 @@ public class Vision {
 
   /**
    * Returns the Pose2d and the time stamp in seconds calculated using the target height and camera position
-   * @param yaw The yaw to use in the calculation (radians)
+   * @param useManualCalculation If it should use manual calculations (recommended true)
    * @return a pair with a Pose2d and double
    */
-  public Pair<Pose2d, Double> getPose2dWithTimeStamp(double yaw){
-    return new Pair<Pose2d, Double>(getPose2d(yaw), Timer.getFPGATimestamp()-getLatency()/1000);
+  public Pair<Pose2d, Double> getPose2dWithTimeStamp(boolean useManualCalculation){
+    return new Pair<Pose2d, Double>(getPose2d(useManualCalculation), Timer.getFPGATimestamp()-getLatency()/1000);
   }
 
   /**
@@ -216,5 +221,9 @@ public class Vision {
     m_shuffleboardTab.add("Distance test (backward)", new TestVisionDistance(-0.1, drive, this));
     SmartDashboard.putData("Take vision snapshots", new TakeSnapshots(m_snapshot));
     m_shuffleboardTab.add("Take snapshots", new TakeSnapshots(m_snapshot));
+  }
+
+  public void setYaw(double yaw){
+    m_yaw = yaw;
   }
 }

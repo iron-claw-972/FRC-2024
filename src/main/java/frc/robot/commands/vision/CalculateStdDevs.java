@@ -45,7 +45,7 @@ public class CalculateStdDevs extends CommandBase {
    */
   @Override
   public void execute() {
-    Pose2d pose = m_vision.getPose2d();
+    Pose2d pose = m_vision.getPose2d(true);
     // If the pose exists, add it to the first open spot in the array
     if (pose != null) {
       // if we see a pose, reset the timer (it will be started the next time it doesn't get a pose)
