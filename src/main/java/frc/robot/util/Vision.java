@@ -71,7 +71,8 @@ public class Vision {
     m_tid = m_visionTable.getEntry("tid");
     m_cameraPose = m_visionTable.getEntry("camerapose_robotspace");
 
-    m_yaws = new ArrayList<double[]>;
+    m_yaws = new ArrayList<double[]>();
+    m_yaws.add(new double[]{0, 0});
   }
 
   /**
