@@ -12,6 +12,9 @@ import frc.robot.commands.vision.ChaseTag;
 import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.FieldConstants;
 import frc.robot.subsystems.Drivetrain;
+
+import java.util.ArrayList;
+
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
@@ -43,7 +46,7 @@ public class Vision {
   private NetworkTableEntry m_tid;
   private NetworkTableEntry m_cameraPose;
 
-  private double m_yaw;
+  private ArrayList<double[]> m_yaws;
 
   /**
    * Creates a new instance of Vision and sets up the limelight NetworkTable and the SmartDashboard
@@ -67,6 +70,8 @@ public class Vision {
     m_snapshot = m_visionTable.getEntry("snapshot");
     m_tid = m_visionTable.getEntry("tid");
     m_cameraPose = m_visionTable.getEntry("camerapose_robotspace");
+
+    m_yaws = new ArrayList<double[]>;
   }
 
   /**
@@ -182,7 +187,8 @@ public class Vision {
       return getPose2d();
     }
     if(validTargetDetected()){
-      double[] pose = getRobotPose(m_yaw);
+      updateYaws();
+      double[] pose = getRobotPose(m_yaws.get(0)[0]);
       return new Pose2d(pose[0], pose[1], Rotation2d.fromDegrees(pose[5]));
     }else{
       return null;
@@ -203,7 +209,11 @@ public class Vision {
    * @return a pair with a Pose2d and double
    */
   public Pair<Pose2d, Double> getPose2dWithTimeStamp(boolean useManualCalculation){
-    return new Pair<Pose2d, Double>(getPose2d(useManualCalculation), Timer.getFPGATimestamp()-getLatency()/1000);
+    return new Pair<Pose2d, Double>(getPose2d(useManualCalculation), getTimeStamp());
+  }
+
+  public double getTimeStamp(){
+    return Timer.getFPGATimestamp()-getLatency()/1000;
   }
 
   /**
@@ -226,7 +236,14 @@ public class Vision {
     m_shuffleboardTab.add("Take snapshots", new TakeSnapshots(m_snapshot));
   }
 
-  public void setYaw(double yaw){
-    m_yaw = yaw;
+  public void addYaw(double yaw){
+    m_yaws.add(new double[]{yaw, Timer.getFPGATimestamp()});
+    updateYaws();
+  }
+
+  public void updateYaws(){
+    if(m_yaws.size() > 1 && m_yaws.get(1)[1] < getTimeStamp()){
+      m_yaws.remove(0);
+    }
   }
 }

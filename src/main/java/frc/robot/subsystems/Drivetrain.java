@@ -359,12 +359,11 @@ public class Drivetrain extends SubsystemBase {
 
   /** Updates the field relative position of the robot. */
   public void updateOdometry() {
-    // Store yaw from last frame before updating
-    // Used for vision because the limelight's latency is appoximately 1 frame
-    m_vision.setYaw(getPose().getRotation().getRadians());
-
     // Updates pose based on encoders and gyro. NOTE: must use yaw directly from gyro!
     m_poseEstimator.update(Rotation2d.fromDegrees(m_pigeon.getYaw()), getModulePositions());
+    
+    // Add the yaw to vision
+    m_vision.addYaw(getPose().getRotation().getRadians());
 
     // Updates pose based on vision
     if (RobotBase.isReal() && m_visionEnabled && VisionConstants.kEnabled) {
