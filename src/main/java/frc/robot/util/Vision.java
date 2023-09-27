@@ -163,6 +163,9 @@ public class Vision {
   public Pose2d getPose2d(){
     if(validTargetDetected()){
       double[] pose = getRobotPose();
+      if(pose[0] >= 0 || pose[1] >= 0){
+        return null;
+      }
       return new Pose2d(pose[0], pose[1], Rotation2d.fromDegrees(pose[5]));
     }else{
       return null;
