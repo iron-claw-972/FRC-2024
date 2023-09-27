@@ -56,7 +56,7 @@ public class TestVisionDistance extends CommandBase {
 
     m_drive.enableVision(false);
 
-    m_currentPose = m_vision.getPose2d();
+    m_currentPose = m_vision.getPose2d(true);
     m_visionStartTranslation = m_currentPose.getTranslation();
     m_driveStartTranslation = m_drive.getPose().getTranslation();
     m_driveDistance = 0;
