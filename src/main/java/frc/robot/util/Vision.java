@@ -157,6 +157,7 @@ public class Vision {
     y -= camera[0]*Math.sin(yaw) + camera[1]*Math.cos(yaw);
     double[] pose = new double[]{x, y, 0, 0, 0, yaw};
     if(Constants.kLogging){
+      LogManager.addDouble("Vision/tag dist", dist);
       LogManager.addDoubleArray("Vision/pose", pose);
     }
     return pose;
