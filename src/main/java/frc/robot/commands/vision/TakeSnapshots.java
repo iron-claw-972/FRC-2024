@@ -10,6 +10,7 @@ public class TakeSnapshots extends CommandBase {
   private Timer m_timer;
   private double m_delay;
   private NetworkTableEntry m_snapshotEntry;
+  private int m_value = 0;
 
   public TakeSnapshots(NetworkTableEntry snapshotEntry){
     this(snapshotEntry, 0.5);
@@ -21,19 +22,24 @@ public class TakeSnapshots extends CommandBase {
     m_snapshotEntry = snapshotEntry;
     m_delay = delay;
     m_snapshotsToTake = snapshotsToTake;
+    m_timer = new Timer();
   }
 
   @Override
   public void initialize(){
     m_snapshots = 0;
     m_timer.restart();
+    m_value = 0;
   }
   @Override
   public void execute(){
     if(m_timer.advanceIfElapsed(m_delay)){
-      m_snapshotEntry.setNumber(1);
-      m_snapshots++;
-      System.out.println(m_snapshots+" snapshots taken");
+      m_value = 1 - m_value;
+      m_snapshotEntry.setNumber(m_value);
+      if(m_value==1){
+        m_snapshots++;
+        System.out.println(m_snapshots+" snapshots taken");
+      }
     }
   }
   @Override
