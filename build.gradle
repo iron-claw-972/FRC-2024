@@ -107,7 +107,7 @@ gversion {
     className    = "BuildData"
     dateFormat   = "yyyy-MM-dd HH:mm:ss z"
     timeZone     = "PST"
-    indent       = "  "
+    indent       = "    "
 }
 // Configure string concat to always inline compile
 tasks.withType(JavaCompile) {
