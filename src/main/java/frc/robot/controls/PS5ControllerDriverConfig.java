@@ -18,67 +18,67 @@ import lib.controllers.PS5Controller.PS5Button;
  * Driver controls for the PS5 controller
  */
 public class PS5ControllerDriverConfig extends BaseDriverConfig {
-  
-  private final PS5Controller kDriver = new PS5Controller(OIConstants.kDriverJoy);
 
-  public PS5ControllerDriverConfig(Drivetrain drive, ShuffleboardTab controllerTab, boolean shuffleboardUpdates) {
-    super(drive, controllerTab, shuffleboardUpdates);
-  }
-  
-  @Override
-  public void configureControls() { 
+    private final PS5Controller kDriver = new PS5Controller(OIConstants.DRIVER_JOY);
 
-    // reset the yaw forward. Mainly useful for testing/driver practice 
-    kDriver.get(PS5Button.OPTIONS).onTrue(new InstantCommand(() -> super.getDrivetrain().setYaw(
-      new Rotation2d(DriverStation.getAlliance() == Alliance.Blue ? 0 : Math.PI)
-    )));
+    public PS5ControllerDriverConfig(Drivetrain drive, ShuffleboardTab controllerTab, boolean shuffleboardUpdates) {
+        super(drive, controllerTab, shuffleboardUpdates);
+    }
 
-    // reset the yaw backward. Mainly useful for testing/driver practice 
-    kDriver.get(PS5Button.CREATE).onTrue(new InstantCommand(() -> super.getDrivetrain().setYaw(
-      new Rotation2d(DriverStation.getAlliance() == Alliance.Red ? 0 : Math.PI)
-    )));
+    @Override
+    public void configureControls() {
 
-    // set the wheels to X
-    kDriver.get(PS5Button.SQUARE).whileTrue(new RepeatCommand(new SetFormationX(super.getDrivetrain())));
+        // reset the yaw forward. Mainly useful for testing/driver practice
+        kDriver.get(PS5Button.OPTIONS).onTrue(new InstantCommand(() -> super.getDrivetrain().setYaw(
+                new Rotation2d(DriverStation.getAlliance() == Alliance.Blue ? 0 : Math.PI)
+                                                                                                   )));
+
+        // reset the yaw backward. Mainly useful for testing/driver practice
+        kDriver.get(PS5Button.CREATE).onTrue(new InstantCommand(() -> super.getDrivetrain().setYaw(
+                new Rotation2d(DriverStation.getAlliance() == Alliance.Red ? 0 : Math.PI)
+                                                                                                  )));
+
+        // set the wheels to X
+        kDriver.get(PS5Button.SQUARE).whileTrue(new RepeatCommand(new SetFormationX(super.getDrivetrain())));
 
 
-    // Resets the modules to absolute if they are having the unresolved zeroing error
-    kDriver.get(PS5Button.CROSS).onTrue(new InstantCommand(() -> getDrivetrain().resetModulesToAbsolute()));
-  }
+        // Resets the modules to absolute if they are having the unresolved zeroing error
+        kDriver.get(PS5Button.CROSS).onTrue(new InstantCommand(() -> getDrivetrain().resetModulesToAbsolute()));
+    }
 
-  
-  @Override
-  public double getRawSideTranslation() { 
-    return kDriver.get(PS5Axis.LEFT_X);
-  }
-  
-  @Override
-  public double getRawForwardTranslation() {
-    return kDriver.get(PS5Axis.LEFT_Y);
-  }
-  
-  @Override
-  public double getRawRotation() { 
-    return kDriver.get(PS5Axis.RIGHT_X);
-  }
-  
-  @Override
-  public double getRawHeadingAngle() { 
-    return Math.atan2(kDriver.get(PS5Axis.RIGHT_X), -kDriver.get(PS5Axis.RIGHT_Y)) - Math.PI/2;
-  }
-  
-  @Override
-  public double getRawHeadingMagnitude() { 
-    return MathUtils.calculateHypotenuse(kDriver.get(PS5Axis.RIGHT_X), kDriver.get(PS5Axis.RIGHT_Y));
-  }
 
-  @Override
-  public boolean getIsSlowMode() {
-    return kDriver.get(PS5Button.RIGHT_TRIGGER).getAsBoolean();
-  }
+    @Override
+    public double getRawSideTranslation() {
+        return kDriver.get(PS5Axis.LEFT_X);
+    }
 
-  @Override
-  public boolean getIsAlign() {
-    return kDriver.get(PS5Button.LEFT_TRIGGER).getAsBoolean();
-  }
+    @Override
+    public double getRawForwardTranslation() {
+        return kDriver.get(PS5Axis.LEFT_Y);
+    }
+
+    @Override
+    public double getRawRotation() {
+        return kDriver.get(PS5Axis.RIGHT_X);
+    }
+
+    @Override
+    public double getRawHeadingAngle() {
+        return Math.atan2(kDriver.get(PS5Axis.RIGHT_X), -kDriver.get(PS5Axis.RIGHT_Y)) - Math.PI / 2;
+    }
+
+    @Override
+    public double getRawHeadingMagnitude() {
+        return MathUtils.calculateHypotenuse(kDriver.get(PS5Axis.RIGHT_X), kDriver.get(PS5Axis.RIGHT_Y));
+    }
+
+    @Override
+    public boolean getIsSlowMode() {
+        return kDriver.get(PS5Button.RIGHT_TRIGGER).getAsBoolean();
+    }
+
+    @Override
+    public boolean getIsAlign() {
+        return kDriver.get(PS5Button.LEFT_TRIGGER).getAsBoolean();
+    }
 }

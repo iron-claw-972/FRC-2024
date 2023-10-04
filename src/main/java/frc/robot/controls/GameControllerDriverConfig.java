@@ -17,61 +17,61 @@ import lib.controllers.GameController.Button;
  * Driver controls for the generic game controller.
  */
 public class GameControllerDriverConfig extends BaseDriverConfig {
-  
-  private final GameController kDriver = new GameController(OIConstants.kDriverJoy);
-  public GameControllerDriverConfig(Drivetrain drive, ShuffleboardTab controllerTab, boolean shuffleboardUpdates) {
-    super(drive, controllerTab, shuffleboardUpdates);
-  }
-  
-  @Override
-  public void configureControls() { 
 
-    // reset the yaw forward if it hasn't been. Mainly useful for testing/driver practice 
-    kDriver.get(Button.START).onTrue(new InstantCommand(() -> super.getDrivetrain().setYaw(
-      new Rotation2d(DriverStation.getAlliance() == Alliance.Blue ? 0 : Math.PI)
-    )));
+    private final GameController kDriver = new GameController(OIConstants.DRIVER_JOY);
 
-    // set the wheels to X
-    kDriver.get(Button.X).onTrue(new SetFormationX(super.getDrivetrain()));
-    
-    // Resets the modules to absolute if they are having the unresolved zeroing error
-    kDriver.get(Button.A).onTrue(new InstantCommand(() -> getDrivetrain().resetModulesToAbsolute()));
-  }
+    public GameControllerDriverConfig(Drivetrain drive, ShuffleboardTab controllerTab, boolean shuffleboardUpdates) {
+        super(drive, controllerTab, shuffleboardUpdates);
+    }
+
+    @Override
+    public void configureControls() {
+
+        // reset the yaw forward if it hasn't been. Mainly useful for testing/driver practice
+        kDriver.get(Button.START).onTrue(new InstantCommand(() -> super.getDrivetrain().setYaw(
+                new Rotation2d(DriverStation.getAlliance() == Alliance.Blue ? 0 : Math.PI)
+                                                                                              )));
+
+        // set the wheels to X
+        kDriver.get(Button.X).onTrue(new SetFormationX(super.getDrivetrain()));
+
+        // Resets the modules to absolute if they are having the unresolved zeroing error
+        kDriver.get(Button.A).onTrue(new InstantCommand(() -> getDrivetrain().resetModulesToAbsolute()));
+    }
 
 
-  
-  @Override
-  public double getRawSideTranslation() { 
-    return kDriver.get(Axis.LEFT_X);
-  }
-  
-  @Override
-  public double getRawForwardTranslation() {
-    return kDriver.get(Axis.LEFT_Y);
-  }
-  
-  @Override
-  public double getRawRotation() { 
-    return kDriver.get(Axis.RIGHT_X);
-  }
-  
-  @Override
-  public double getRawHeadingAngle() { 
-    return Math.atan2(kDriver.get(Axis.RIGHT_X), -kDriver.get(Axis.RIGHT_Y)) - Math.PI/2;
-  }
-  
-  @Override
-  public double getRawHeadingMagnitude() { 
-    return MathUtils.calculateHypotenuse(kDriver.get(Axis.RIGHT_X), kDriver.get(Axis.RIGHT_Y));
-  }
+    @Override
+    public double getRawSideTranslation() {
+        return kDriver.get(Axis.LEFT_X);
+    }
 
-  @Override
-  public boolean getIsSlowMode() {
-    return kDriver.RIGHT_TRIGGER_BUTTON.getAsBoolean();
-  }
+    @Override
+    public double getRawForwardTranslation() {
+        return kDriver.get(Axis.LEFT_Y);
+    }
 
-  @Override
-  public boolean getIsAlign() {
-    return kDriver.LEFT_TRIGGER_BUTTON.getAsBoolean();
-  }
+    @Override
+    public double getRawRotation() {
+        return kDriver.get(Axis.RIGHT_X);
+    }
+
+    @Override
+    public double getRawHeadingAngle() {
+        return Math.atan2(kDriver.get(Axis.RIGHT_X), -kDriver.get(Axis.RIGHT_Y)) - Math.PI / 2;
+    }
+
+    @Override
+    public double getRawHeadingMagnitude() {
+        return MathUtils.calculateHypotenuse(kDriver.get(Axis.RIGHT_X), kDriver.get(Axis.RIGHT_Y));
+    }
+
+    @Override
+    public boolean getIsSlowMode() {
+        return kDriver.RIGHT_TRIGGER_BUTTON.getAsBoolean();
+    }
+
+    @Override
+    public boolean getIsAlign() {
+        return kDriver.LEFT_TRIGGER_BUTTON.getAsBoolean();
+    }
 }
