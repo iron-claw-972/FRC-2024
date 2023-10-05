@@ -21,14 +21,11 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.vision.AimAtTag;
 import frc.robot.commands.vision.CalculateStdDevs;
-import frc.robot.commands.vision.ChaseTag;
-import frc.robot.commands.vision.ReturnData;
 import frc.robot.commands.vision.TestVisionDistance;
 import frc.robot.constants.miscConstants.FieldConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
@@ -71,14 +68,10 @@ public class Vision {
    * Set up the vision commands on SmartDashboard so we can turn them on/off for testing
    */
   public void setUpSmartDashboardCommandButtons(Drivetrain drive){
-    SmartDashboard.putData("Vision ReturnData command", new ReturnData(this));
-    m_shuffleboardTab.add("Return Data", new ReturnData(this));
-    SmartDashboard.putData("Calculate vision std devs", new CalculateStdDevs(1000, this));
-    m_shuffleboardTab.add("Calculate std devs", new CalculateStdDevs(1000, this));
+    SmartDashboard.putData("Calculate vision std devs", new CalculateStdDevs(1000, this, drive));
+    m_shuffleboardTab.add("Calculate std devs", new CalculateStdDevs(1000, this, drive));
     SmartDashboard.putData("Vision aim at tag", new AimAtTag(drive));
     m_shuffleboardTab.add("Aim at tag", new AimAtTag(drive));
-    SmartDashboard.putData("Vision aim at tag 2", new ChaseTag(drive, this));
-    m_shuffleboardTab.add("Aim at tag 2", new ChaseTag(drive, this));
     SmartDashboard.putData("Vision distance test (forward)", new TestVisionDistance(0.1, drive, this));
     m_shuffleboardTab.add("Distance test (forward)", new TestVisionDistance(0.1, drive, this));
     SmartDashboard.putData("Vision distance test (backward)", new TestVisionDistance(-0.1, drive, this));
@@ -99,8 +92,6 @@ public class Vision {
       }
     }
     ArrayList<EstimatedRobotPose> estimatedPoses = getEstimatedPoses(referencePose);
-    Translation2d translation = new Translation2d();
-    double rotation = 0;
     
     if (estimatedPoses.size() == 1) return estimatedPoses.get(0).estimatedPose.toPose2d();
     
@@ -208,7 +199,7 @@ public class Vision {
         List<PhotonTrackedTarget> targetsUsed = cameraResult.targets;
         for (int i = 0; i < targetsUsed.size(); i++) {
           // check their ambiguity, if it is above the highest wanted amount, return nothing
-          if (targetsUsed.get(i).getPoseAmbiguity() > VisionConstants.highestAmbiguity) {
+          if (targetsUsed.get(i).getPoseAmbiguity() > VisionConstants.kHighestAmbiguity) {
             return Optional.empty();
           }
         }
