@@ -177,7 +177,7 @@ public class Vision {
         camera, 
         robotToCam
       );
-      photonPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.CLOSEST_TO_REFERENCE_POSE);
+      photonPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
       photonPoseEstimator.setReferencePose(new Pose2d());
       camera.setLED(VisionLEDMode.kOn);
     }
