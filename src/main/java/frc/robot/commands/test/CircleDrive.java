@@ -5,17 +5,17 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DrivetrainImpl;
 
 /**
  * Drives robot in a circle. There is often drift due to inaccuracy.
  */
 public class CircleDrive extends CommandBase {
 
-    private final Drivetrain drive;
+    private final DrivetrainImpl drive;
     private double steerPosition = 0, prevTime;
 
-    public CircleDrive(Drivetrain drive) {
+    public CircleDrive(DrivetrainImpl drive) {
         this.drive = drive;
         addRequirements(drive);
     }

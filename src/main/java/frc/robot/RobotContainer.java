@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.SubsystemFactory;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -35,7 +37,7 @@ public class RobotContainer {
 //    private final Vision vision;
 
     // The robot's subsystems are defined here...
-//    private final Drivetrain drive;
+    private final Drivetrain drive;
 
 
     // Controllers are defined here
@@ -46,9 +48,7 @@ public class RobotContainer {
      */
     public RobotContainer(RobotId robotId) {
 
-        // PowerDistribution PDModule = new PowerDistribution(1, ModuleType.kRev);
-        // PDModule.clearStickyFaults();
-        // PDModule.close();
+        drive = (Drivetrain) SubsystemFactory.get(Drivetrain.class);
 
 //        switch (robotId) {
 //            case SwerveCompetition:

@@ -18,7 +18,7 @@ import frc.robot.commands.vision.TestVisionDistance;
 import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.FieldConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DrivetrainImpl;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -215,7 +215,7 @@ public class Vision {
         }
     }
 
-    public void addTestCommands(ShuffleboardTab testTab, GenericEntry testEntry, Drivetrain drive) {
+    public void addTestCommands(ShuffleboardTab testTab, GenericEntry testEntry, DrivetrainImpl drive) {
         testTab.add("Calculate vision std devs", new CalculateStdDevs(1000, drive, this).beforeStarting(new WaitCommand(5)));
         testTab.add("Test vision (forward)", new TestVisionDistance(0.2, drive, this));
         testTab.add("Test vision (backward)", new TestVisionDistance(-0.2, drive, this));
