@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.Drivetrain;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  */
 public enum RobotId {
     Default,
-    SwerveCompetition, SwerveTest,
+    SwerveCompetition(Drivetrain.class), SwerveTest(Drivetrain.class),
     ClassBot1, ClassBot2, ClassBot3, ClassBot4;
 
     /**
