@@ -60,7 +60,7 @@ public class Drivetrain extends SubsystemBase {
     private final Vision vision;
 
     // PID Controllers for chassis movement
-    private final PIDController xController;
+    private final PIDController xController; 
     private final PIDController yController;
     private final PIDController rotationController;
     private final PIDController balanceController = new PIDController(DriveConstants.kBalanceP, DriveConstants.kBalanceI, DriveConstants.kBalanceD);
@@ -68,6 +68,7 @@ public class Drivetrain extends SubsystemBase {
     // Displays the field with the robots estimated pose on it
     private final Field2d fieldDisplay;
 
+    //should be in pathplanner
     private final PIDController pathplannerXController;
     private final PIDController pathplannerYController;
     private final PIDController pathplannerRotationController;
