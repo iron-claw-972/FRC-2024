@@ -11,9 +11,7 @@ import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -372,35 +370,14 @@ public class Drivetrain extends SubsystemBase {
     if (RobotBase.isReal() && m_visionEnabled && VisionConstants.kEnabled) {
       // An array list of poses returned by different cameras
       ArrayList<EstimatedRobotPose> estimatedPoses = m_vision.getEstimatedPoses(m_poseEstimator.getEstimatedPosition());
-      // The current position as a translation
-      Translation2d currentEstimatedPoseTranslation = m_poseEstimator.getEstimatedPosition().getTranslation();
       for (int i = 0; i < estimatedPoses.size(); i++) {
         EstimatedRobotPose estimatedPose = estimatedPoses.get(i);
-        // The position of the closest april tag as a translation
-        Translation2d closestTagPoseTranslation = new Translation2d();
-        for (int j = 0; j < estimatedPose.targetsUsed.size(); j++) {
-          // The position of the current april tag
-          Pose3d currentTagPose = m_vision.getTagPose(estimatedPose.targetsUsed.get(j).getFiducialId());
-          // If it can't find the april tag's pose, don't run the rest of the for loop for this tag
-          if (currentTagPose == null) {
-            continue;
-          }
-          Translation2d currentTagPoseTranslation = currentTagPose.toPose2d().getTranslation();
-          
-          // If the current april tag position is closer than the closest one, this makes makes it the closest
-          if (j == 0 || currentEstimatedPoseTranslation.getDistance(currentTagPoseTranslation) < currentEstimatedPoseTranslation.getDistance(closestTagPoseTranslation)) {
-            closestTagPoseTranslation = currentTagPoseTranslation;
-          }
-        }
 
         // Adds the vision measurement for this camera
         m_poseEstimator.addVisionMeasurement(
           estimatedPose.estimatedPose.toPose2d(),
           estimatedPose.timestampSeconds,
           VisionConstants.kVisionStdDevs
-        );
-        LogManager.addDouble("Vision/ClosestTag Distance", 
-          currentEstimatedPoseTranslation.getDistance(closestTagPoseTranslation)
         );
       }
     }
