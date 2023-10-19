@@ -7,7 +7,7 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.miscConstants.TestConstants;
 import frc.robot.constants.swerve.DriveConstants;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DrivetrainImpl;
 import frc.robot.util.TimeAccuracyTest;
 
 /**
@@ -15,11 +15,11 @@ import frc.robot.util.TimeAccuracyTest;
  */
 public class TestHeadingPID extends CommandBase {
 
-    private final Drivetrain drive;
+    private final DrivetrainImpl drive;
     private final GenericEntry testEntry;
     private TimeAccuracyTest timeAccuracyTest;
 
-    public TestHeadingPID(Drivetrain drive, GenericEntry testEntry) {
+    public TestHeadingPID(DrivetrainImpl drive, GenericEntry testEntry) {
         this.drive = drive;
         this.testEntry = testEntry;
         addRequirements(drive);

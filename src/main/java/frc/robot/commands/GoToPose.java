@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.auto.PathPlannerCommand;
 import frc.robot.constants.miscConstants.AutoConstants;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DrivetrainImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.function.Supplier;
  */
 public class GoToPose extends SequentialCommandGroup {
 
-    private final Drivetrain drive;
+    private final DrivetrainImpl drive;
     private final Supplier<Pose2d> poseSupplier;
     private final double maxSpeed;
     private final double maxAccel;
@@ -29,7 +29,7 @@ public class GoToPose extends SequentialCommandGroup {
      * @param poseSupplier The supplier for the pose to use
      * @param drive        The drivetrain
      */
-    public GoToPose(Supplier<Pose2d> poseSupplier, Drivetrain drive) {
+    public GoToPose(Supplier<Pose2d> poseSupplier, DrivetrainImpl drive) {
         this(poseSupplier, AutoConstants.MAX_AUTO_SPEED, AutoConstants.MAX_AUTO_ACCEL, drive);
     }
 
@@ -41,7 +41,7 @@ public class GoToPose extends SequentialCommandGroup {
      * @param maxAccel     The maximum acceleration to use
      * @param drive        The drivetrain
      */
-    public GoToPose(Supplier<Pose2d> poseSupplier, double maxSpeed, double maxAccel, Drivetrain drive) {
+    public GoToPose(Supplier<Pose2d> poseSupplier, double maxSpeed, double maxAccel, DrivetrainImpl drive) {
         this.poseSupplier = poseSupplier;
         this.maxSpeed = maxSpeed;
         this.maxAccel = maxAccel;

@@ -3,7 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DrivetrainImpl;
 
 /**
  * Attempts to set all four modules to a constant angle. Determines if the modules are able to reach the angle requested in a certain time.
@@ -15,7 +15,7 @@ public class SimplePresetSteerAngles extends InstantCommand {
      *
      * @param drive drivetrain to be used
      */
-    public SimplePresetSteerAngles(Drivetrain drive) {
+    public SimplePresetSteerAngles(DrivetrainImpl drive) {
         this(drive, new Rotation2d());
     }
 
@@ -25,7 +25,7 @@ public class SimplePresetSteerAngles extends InstantCommand {
      * @param angle angle to set module steer to in radians
      * @param drive drivetrain to be used
      */
-    public SimplePresetSteerAngles(Drivetrain drive, double angle) {
+    public SimplePresetSteerAngles(DrivetrainImpl drive, double angle) {
         this(drive, new Rotation2d(angle));
     }
 
@@ -35,7 +35,7 @@ public class SimplePresetSteerAngles extends InstantCommand {
      * @param rotation rotation to set module steer to
      * @param drive    drivetrain to be used
      */
-    public SimplePresetSteerAngles(Drivetrain drive, Rotation2d rotation) {
+    public SimplePresetSteerAngles(DrivetrainImpl drive, Rotation2d rotation) {
         super(() -> {
             drive.enableStateDeadband(false);
             drive.setModuleStates(new SwerveModuleState[]{
