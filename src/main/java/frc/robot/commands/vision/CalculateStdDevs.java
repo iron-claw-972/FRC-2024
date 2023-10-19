@@ -8,7 +8,6 @@ import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.DrivetrainImpl;
 import frc.robot.util.LogManager;
 import frc.robot.util.MathUtils;
-import frc.robot.util.Vision;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.targeting.PhotonTrackedTarget;
 

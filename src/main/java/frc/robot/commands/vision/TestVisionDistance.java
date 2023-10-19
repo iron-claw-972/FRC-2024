@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.DrivetrainImpl;
 import frc.robot.util.LogManager;
-import frc.robot.util.Vision;
 
 /**
  * Calculates distance traveled from drivetrain and vision and compares the results

@@ -30,7 +30,6 @@ import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
 import frc.robot.util.LogManager;
-import frc.robot.util.Vision;
 import org.photonvision.EstimatedRobotPose;
 
 import java.util.ArrayList;
@@ -56,7 +55,6 @@ public class DrivetrainImpl extends Drivetrain {
     public final Module[] modules;
 
     private final WPI_Pigeon2 pigeon;
-    private final Vision vision;
 
     // PID Controllers for chassis movement
     private final PIDController xController;
@@ -109,12 +107,10 @@ public class DrivetrainImpl extends Drivetrain {
      * @param swerveModulesTab the shuffleboard tab to display module data on
      * @param vision           the vision
      */
-    public DrivetrainImpl(ShuffleboardTab drivetrainTab, ShuffleboardTab swerveModulesTab, Vision vision) {
+    public DrivetrainImpl(ShuffleboardTab drivetrainTab, ShuffleboardTab swerveModulesTab) {
 
         this.drivetrainTab = drivetrainTab;
         this.swerveModulesTab = swerveModulesTab;
-
-        this.vision = vision;
 
         pigeon = new WPI_Pigeon2(DriveConstants.kPigeon, DriveConstants.kPigeonCAN);
         pigeon.configFactoryDefault();
@@ -391,47 +387,47 @@ public class DrivetrainImpl extends Drivetrain {
         // Updates pose based on encoders and gyro. NOTE: must use yaw directly from gyro!
         poseEstimator.update(Rotation2d.fromDegrees(pigeon.getYaw()), getModulePositions());
         // Updates pose based on vision
-        if (RobotBase.isReal() && visionEnabled && VisionConstants.ENABLED) {
-
-            // An array list of poses returned by different cameras
-            ArrayList<EstimatedRobotPose> estimatedPoses = vision.getEstimatedPoses(poseEstimator.getEstimatedPosition());
-            // The current position as a translation
-            Translation2d currentEstimatedPoseTranslation = poseEstimator.getEstimatedPosition().getTranslation();
-            for (EstimatedRobotPose estimatedPose : estimatedPoses) {
-                // The position of the closest april tag as a translation
-                Translation2d closestTagPoseTranslation = null;
-                for (int j = 0; j < estimatedPose.targetsUsed.size(); j++) {
-                    // The position of the current april tag
-                    Pose3d currentTagPose = vision.getTagPose(estimatedPose.targetsUsed.get(j).getFiducialId());
-                    // If it can't find the april tag's pose, don't run the rest of the for loop for this tag
-                    if (currentTagPose == null) {
-                        continue;
-                    }
-                    Translation2d currentTagPoseTranslation = currentTagPose.toPose2d().getTranslation();
-
-                    // If the current april tag position is closer than the closest one, this makes makes it the closest
-                    if (closestTagPoseTranslation == null || currentEstimatedPoseTranslation.getDistance(currentTagPoseTranslation) < currentEstimatedPoseTranslation.getDistance(closestTagPoseTranslation)) {
-                        closestTagPoseTranslation = currentTagPoseTranslation;
-                    }
-                }
-
-                double visionFactor = (currentEstimatedPoseTranslation.getDistance(closestTagPoseTranslation) * VisionConstants.kVisionPoseStdDevFactor);
-
-                // Adds the vision measurement for this camera
-                poseEstimator.addVisionMeasurement(
-                        estimatedPose.estimatedPose.toPose2d(),
-                        estimatedPose.timestampSeconds,
-                        VisionConstants.kBaseVisionPoseStdDevs.plus(
-                                visionFactor
-                                                                   )
-                                                  );
-                if (Constants.DO_LOGGING) {
-                    LogManager.addDouble("Vision/ClosestTag Distance",
-                                         currentEstimatedPoseTranslation.getDistance(closestTagPoseTranslation)
-                                        );
-                }
-            }
-        }
+//        if (RobotBase.isReal() && visionEnabled && VisionConstants.ENABLED) {
+//
+//            // An array list of poses returned by different cameras
+//            ArrayList<EstimatedRobotPose> estimatedPoses = vision.getEstimatedPoses(poseEstimator.getEstimatedPosition());
+//            // The current position as a translation
+//            Translation2d currentEstimatedPoseTranslation = poseEstimator.getEstimatedPosition().getTranslation();
+//            for (EstimatedRobotPose estimatedPose : estimatedPoses) {
+//                // The position of the closest april tag as a translation
+//                Translation2d closestTagPoseTranslation = null;
+//                for (int j = 0; j < estimatedPose.targetsUsed.size(); j++) {
+//                    // The position of the current april tag
+//                    Pose3d currentTagPose = vision.getTagPose(estimatedPose.targetsUsed.get(j).getFiducialId());
+//                    // If it can't find the april tag's pose, don't run the rest of the for loop for this tag
+//                    if (currentTagPose == null) {
+//                        continue;
+//                    }
+//                    Translation2d currentTagPoseTranslation = currentTagPose.toPose2d().getTranslation();
+//
+//                    // If the current april tag position is closer than the closest one, this makes makes it the closest
+//                    if (closestTagPoseTranslation == null || currentEstimatedPoseTranslation.getDistance(currentTagPoseTranslation) < currentEstimatedPoseTranslation.getDistance(closestTagPoseTranslation)) {
+//                        closestTagPoseTranslation = currentTagPoseTranslation;
+//                    }
+//                }
+//
+//                double visionFactor = (currentEstimatedPoseTranslation.getDistance(closestTagPoseTranslation) * VisionConstants.kVisionPoseStdDevFactor);
+//
+//                // Adds the vision measurement for this camera
+//                poseEstimator.addVisionMeasurement(
+//                        estimatedPose.estimatedPose.toPose2d(),
+//                        estimatedPose.timestampSeconds,
+//                        VisionConstants.kBaseVisionPoseStdDevs.plus(
+//                                visionFactor
+//                                                                   )
+//                                                  );
+//                if (Constants.DO_LOGGING) {
+//                    LogManager.addDouble("Vision/ClosestTag Distance",
+//                                         currentEstimatedPoseTranslation.getDistance(closestTagPoseTranslation)
+//                                        );
+//                }
+//            }
+//        }
     }
 
     /**
