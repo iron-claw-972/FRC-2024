@@ -1,11 +1,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.Pigeon2.AxisDirection;
-
-import java.util.ArrayList;
-
-import org.photonvision.EstimatedRobotPose;
-
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -368,18 +363,7 @@ public class Drivetrain extends SubsystemBase {
     
     // Updates pose based on vision
     if (RobotBase.isReal() && m_visionEnabled && VisionConstants.kEnabled) {
-      // An array list of poses returned by different cameras
-      ArrayList<EstimatedRobotPose> estimatedPoses = m_vision.getEstimatedPoses(m_poseEstimator.getEstimatedPosition());
-      for (int i = 0; i < estimatedPoses.size(); i++) {
-        EstimatedRobotPose estimatedPose = estimatedPoses.get(i);
-
-        // Adds the vision measurement for this camera
-        m_poseEstimator.addVisionMeasurement(
-          estimatedPose.estimatedPose.toPose2d(),
-          estimatedPose.timestampSeconds,
-          VisionConstants.kVisionStdDevs
-        );
-      }
+      m_vision.updateOdometry(m_poseEstimator);
     }
   }
 

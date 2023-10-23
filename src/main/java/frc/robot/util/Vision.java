@@ -17,6 +17,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Pair;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -27,6 +28,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.vision.AimAtTag;
 import frc.robot.commands.vision.CalculateStdDevs;
 import frc.robot.commands.vision.TestVisionDistance;
+import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.FieldConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
@@ -150,14 +152,34 @@ public class Vision {
       // April tags that don't exist might return a result that is present but doesn't have a pose
       if (estimatedPose.isPresent() && estimatedPose.get().estimatedPose != null) {
         estimatedPoses.add(estimatedPose.get());
-        LogManager.addDoubleArray("Vision/camera " + i + "/estimated pose2d", new double[] {
-          estimatedPose.get().estimatedPose.getX(),
-          estimatedPose.get().estimatedPose.getY(),
-          estimatedPose.get().estimatedPose.getRotation().getZ()
-        });
+        if(Constants.kLogging){
+          LogManager.addDoubleArray("Vision/camera " + i + "/estimated pose2d", new double[] {
+            estimatedPose.get().estimatedPose.getX(),
+            estimatedPose.get().estimatedPose.getY(),
+            estimatedPose.get().estimatedPose.getRotation().getZ()
+          });
+        }
       }
     }
     return estimatedPoses;
+  }
+
+  /**
+   * Updates the robot's odometry with vision
+   * @param poseEstimator The pose estimator to update
+   */
+  public void updateOdometry(SwerveDrivePoseEstimator poseEstimator){
+    // An array list of poses returned by different cameras
+    ArrayList<EstimatedRobotPose> estimatedPoses = getEstimatedPoses(poseEstimator.getEstimatedPosition());
+    for (int i = 0; i < estimatedPoses.size(); i++) {
+      EstimatedRobotPose estimatedPose = estimatedPoses.get(i);
+      // Adds the vision measurement for this camera
+      poseEstimator.addVisionMeasurement(
+        estimatedPose.estimatedPose.toPose2d(),
+        estimatedPose.timestampSeconds,
+        VisionConstants.kVisionStdDevs
+      );
+    }
   }
   
   private class VisionCamera {
