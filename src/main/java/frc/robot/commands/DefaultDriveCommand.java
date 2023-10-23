@@ -5,17 +5,17 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.controls.BaseDriverConfig;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DrivetrainImpl;
 
 /**
  * Default drive command. Drives robot using driver controls.
  */
 public class DefaultDriveCommand extends CommandBase {
-    private final Drivetrain swerve;
+    private final DrivetrainImpl swerve;
     private final BaseDriverConfig driver;
 
     public DefaultDriveCommand(
-            Drivetrain swerve,
+            DrivetrainImpl swerve,
             BaseDriverConfig driver
                               ) {
         this.swerve = swerve;

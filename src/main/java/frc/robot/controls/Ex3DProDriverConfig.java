@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.SetFormationX;
 import frc.robot.constants.miscConstants.OIConstants;
 import frc.robot.constants.swerve.DriveConstants;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DrivetrainImpl;
 import lib.controllers.Ex3DProController;
 import lib.controllers.Ex3DProController.Ex3DProAxis;
 import lib.controllers.Ex3DProController.Ex3DProButton;
@@ -17,7 +17,7 @@ public class Ex3DProDriverConfig extends BaseDriverConfig {
 
     private final Ex3DProController kDriver = new Ex3DProController(OIConstants.DRIVER_JOY);
 
-    public Ex3DProDriverConfig(Drivetrain drive, ShuffleboardTab controllerTab, boolean shuffleboardUpdates) {
+    public Ex3DProDriverConfig(DrivetrainImpl drive, ShuffleboardTab controllerTab, boolean shuffleboardUpdates) {
         super(drive, controllerTab, shuffleboardUpdates);
     }
 

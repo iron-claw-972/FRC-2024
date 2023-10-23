@@ -5,13 +5,13 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DrivetrainImpl;
 
 /**
  * Sets the robot's wheels to an X formation to prevent being pushed around by other bots.
  */
 public class SetFormationX extends SequentialCommandGroup {
-    public SetFormationX(Drivetrain drive) {
+    public SetFormationX(DrivetrainImpl drive) {
         addRequirements(drive);
         addCommands(
                 new InstantCommand(() -> drive.enableStateDeadband(false), drive),

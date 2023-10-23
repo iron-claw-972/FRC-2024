@@ -1,6 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
@@ -9,18 +8,9 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.Robot.RobotId;
-import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.constants.Constants;
-import frc.robot.constants.miscConstants.VisionConstants;
-import frc.robot.constants.swerve.DriveConstants;
-import frc.robot.controls.BaseDriverConfig;
-import frc.robot.controls.GameControllerDriverConfig;
-import frc.robot.controls.PS5ControllerDriverConfig;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.util.PathGroupLoader;
-import frc.robot.util.Vision;
+import frc.robot.subsystems.SubsystemFactory;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -44,88 +34,86 @@ public class RobotContainer {
     private final ShuffleboardTab visionTab = Shuffleboard.getTab("Vision");
     private final ShuffleboardTab testTab = Shuffleboard.getTab("Test");
 
-    private final Vision vision;
+//    private final Vision vision;
 
     // The robot's subsystems are defined here...
     private final Drivetrain drive;
 
 
     // Controllers are defined here
-    private final BaseDriverConfig driver;
+//    private final BaseDriverConfig driver;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer(RobotId robotId) {
 
-        // PowerDistribution PDModule = new PowerDistribution(1, ModuleType.kRev);
-        // PDModule.clearStickyFaults();
-        // PDModule.close();
+        drive = (Drivetrain) SubsystemFactory.get(Drivetrain.class);
 
-        switch (robotId) {
-            case SwerveCompetition:
-                // Update drive constants based off of robot type
-                DriveConstants.update(robotId);
-                VisionConstants.update(robotId);
-
-                vision = new Vision(visionTab, VisionConstants.kCameras);
-
-                // Create Drivetrain
-                drive = new Drivetrain(drivetrainTab, swerveModulesTab, vision);
-
-                driver = new PS5ControllerDriverConfig(drive, controllerTab, false);
-                // testController.configureControls();
-                // manualController.configureControls();
-
-                // load paths before auto starts
-                PathGroupLoader.loadPathGroups();
-
-                driver.configureControls();
-
-                vision.setupVisionShuffleboard();
-                driver.setupShuffleboard();
-
-                drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
-
-                break;
-
-            case SwerveTest:
-                // Update drive constants based off of robot type
-                DriveConstants.update(robotId);
-                VisionConstants.update(robotId);
-
-                vision = new Vision(visionTab, VisionConstants.kCameras);
-
-                // Create Drivetrain, because every robot will have a drivetrain
-                drive = new Drivetrain(drivetrainTab, swerveModulesTab, vision);
-                driver = new GameControllerDriverConfig(drive, controllerTab, false);
-
-                DriverStation.reportWarning("Not registering subsystems and controls due to incorrect robot", false);
-
-                // TODO: construct dummy subsystems so SwerveTest can run all auto routines
-
-                // load paths before auto starts
-                PathGroupLoader.loadPathGroups();
-
-                driver.configureControls();
-
-                vision.setupVisionShuffleboard();
-                driver.setupShuffleboard();
-
-                drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
-
-                break;
-
-            default:
-                DriverStation.reportWarning("Not registering subsystems and controls due to incorrect robot", false);
-
-                vision = null;
-
-                driver = null;
-                drive = null;
-
-                break;
-        }
+//        switch (robotId) {
+//            case SwerveCompetition:
+//                // Update drive constants based off of robot type
+//                DriveConstants.update(robotId);
+//                VisionConstants.update(robotId);
+//
+//                vision = new Vision(visionTab, VisionConstants.kCameras);
+//
+//                // Create Drivetrain
+//                drive = new Drivetrain(drivetrainTab, swerveModulesTab, vision);
+//
+//                driver = new PS5ControllerDriverConfig(drive, controllerTab, false);
+//                // testController.configureControls();
+//                // manualController.configureControls();
+//
+//                // load paths before auto starts
+//                PathGroupLoader.loadPathGroups();
+//
+//                driver.configureControls();
+//
+//                vision.setupVisionShuffleboard();
+//                driver.setupShuffleboard();
+//
+//                drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
+//
+//                break;
+//
+//            case SwerveTest:
+//                // Update drive constants based off of robot type
+//                DriveConstants.update(robotId);
+//                VisionConstants.update(robotId);
+//
+//                vision = new Vision(visionTab, VisionConstants.kCameras);
+//
+//                // Create Drivetrain, because every robot will have a drivetrain
+//                drive = new Drivetrain(drivetrainTab, swerveModulesTab, vision);
+//                driver = new GameControllerDriverConfig(drive, controllerTab, false);
+//
+//                DriverStation.reportWarning("Not registering subsystems and controls due to incorrect robot", false);
+//
+//                // TODO: construct dummy subsystems so SwerveTest can run all auto routines
+//
+//                // load paths before auto starts
+//                PathGroupLoader.loadPathGroups();
+//
+//                driver.configureControls();
+//
+//                vision.setupVisionShuffleboard();
+//                driver.setupShuffleboard();
+//
+//                drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
+//
+//                break;
+//
+//            default:
+//                DriverStation.reportWarning("Not registering subsystems and controls due to incorrect robot", false);
+//
+//                vision = null;
+//
+//                driver = null;
+//                drive = null;
+//
+//                break;
+//        }
 
         // This is really annoying so it's disabled
         DriverStation.silenceJoystickConnectionWarning(true);
@@ -153,17 +141,17 @@ public class RobotContainer {
      * Adds the test commands to shuffleboard, so they can be run that way.
      */
     public void addTestCommands() {
-        GenericEntry testEntry = testTab.add("Test Results", false).getEntry();
-        testTab.add("Blinkin Id", 0.65).getEntry();
-        testTab.add("Cancel Command", new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));
-
-        if (drive != null) {
-            drive.addTestCommands(testTab, testEntry);
-        }
-
-        if (vision != null) {
-            vision.addTestCommands(testTab, testEntry, drive);
-        }
+//        GenericEntry testEntry = testTab.add("Test Results", false).getEntry();
+//        testTab.add("Blinkin Id", 0.65).getEntry();
+//        testTab.add("Cancel Command", new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));
+//
+//        if (drive != null) {
+//            drive.addTestCommands(testTab, testEntry);
+//        }
+//
+//        if (vision != null) {
+//            vision.addTestCommands(testTab, testEntry, drive);
+//        }
     }
 
 
@@ -181,15 +169,15 @@ public class RobotContainer {
     /**
      * Resets the swerve modules to their absolute positions.
      */
-    public void resetModules() {
-        drive.resetModulesToAbsolute();
-    }
+//    public void resetModules() {
+//        drive.resetModulesToAbsolute();
+//    }
 
     /**
      * Sets whether the drivetrain uses vision to update odometry
      */
-    public void setVisionEnabled(boolean enabled) {
-        drive.enableVision(enabled);
-    }
+//    public void setVisionEnabled(boolean enabled) {
+//        drive.enableVision(enabled);
+//    }
 
 }

@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.constants.miscConstants.AutoConstants;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DrivetrainImpl;
 import frc.robot.util.ConversionUtils;
 import frc.robot.util.PathGroupLoader;
 
@@ -24,11 +24,11 @@ import java.util.function.Supplier;
 
 public class PathPlannerCommand extends SequentialCommandGroup {
 
-    public PathPlannerCommand(ArrayList<PathPoint> waypoints, Drivetrain drive) {
+    public PathPlannerCommand(ArrayList<PathPoint> waypoints, DrivetrainImpl drive) {
         this(waypoints, drive, true);
     }
 
-    public PathPlannerCommand(ArrayList<PathPoint> waypoints, Drivetrain drive, boolean useAllianceColor) {
+    public PathPlannerCommand(ArrayList<PathPoint> waypoints, DrivetrainImpl drive, boolean useAllianceColor) {
         this(new ArrayList<PathPlannerTrajectory>(List.of(PathPlanner.generatePath(
                 new PathConstraints(AutoConstants.MAX_AUTO_SPEED, AutoConstants.MAX_AUTO_ACCEL),
                 waypoints.get(0),
@@ -36,7 +36,7 @@ public class PathPlannerCommand extends SequentialCommandGroup {
                                                                                   ))), 0, drive, false, useAllianceColor, true);
     }
 
-    public PathPlannerCommand(ArrayList<PathPoint> waypoints, Drivetrain drive, boolean useAllianceColor, double maxSpeed, double maxAccel) {
+    public PathPlannerCommand(ArrayList<PathPoint> waypoints, DrivetrainImpl drive, boolean useAllianceColor, double maxSpeed, double maxAccel) {
         this(new ArrayList<PathPlannerTrajectory>(List.of(PathPlanner.generatePath(
                 new PathConstraints(maxSpeed, maxAccel),
                 waypoints.get(0),
@@ -44,19 +44,19 @@ public class PathPlannerCommand extends SequentialCommandGroup {
                                                                                   ))), 0, drive, false, useAllianceColor, true);
     }
 
-    public PathPlannerCommand(String pathGroupName, int pathIndex, Drivetrain drive) {
+    public PathPlannerCommand(String pathGroupName, int pathIndex, DrivetrainImpl drive) {
         this(PathGroupLoader.getPathGroup(pathGroupName), pathIndex, drive, true, true, false);
     }
 
-    public PathPlannerCommand(String pathGroupName, int pathIndex, Drivetrain drive, boolean resetPose) {
+    public PathPlannerCommand(String pathGroupName, int pathIndex, DrivetrainImpl drive, boolean resetPose) {
         this(PathGroupLoader.getPathGroup(pathGroupName), pathIndex, drive, resetPose, true, false);
     }
 
-    public PathPlannerCommand(List<PathPlannerTrajectory> pathGroup, int pathIndex, Drivetrain drive, boolean resetPose) {
+    public PathPlannerCommand(List<PathPlannerTrajectory> pathGroup, int pathIndex, DrivetrainImpl drive, boolean resetPose) {
         this(pathGroup, pathIndex, drive, resetPose, true, false);
     }
 
-    public PathPlannerCommand(List<PathPlannerTrajectory> pathGroup, int pathIndex, Drivetrain drive, boolean resetPose, boolean useAllianceColor, boolean isPerpetual) {
+    public PathPlannerCommand(List<PathPlannerTrajectory> pathGroup, int pathIndex, DrivetrainImpl drive, boolean resetPose, boolean useAllianceColor, boolean isPerpetual) {
 
         addRequirements(drive);
         if (pathIndex < 0 || pathIndex > pathGroup.size() - 1) {
@@ -92,7 +92,7 @@ public class PathPlannerCommand extends SequentialCommandGroup {
     public static PPSwerveControllerCommand createSwerveControllerCommand(
             PathPlannerTrajectory trajectory, Supplier<Pose2d> poseSupplier,
             PIDController xController, PIDController yController, PIDController rotationController,
-            Consumer<ChassisSpeeds> outputChassisSpeeds, boolean useAllianceColor, Drivetrain drive, boolean isPerpetual) {
+            Consumer<ChassisSpeeds> outputChassisSpeeds, boolean useAllianceColor, DrivetrainImpl drive, boolean isPerpetual) {
         if (isPerpetual) {
             return new PPSwerveControllerCommandPerpetual(
                     trajectory,

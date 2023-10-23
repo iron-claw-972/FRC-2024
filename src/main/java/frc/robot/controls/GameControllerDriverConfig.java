@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.SetFormationX;
 import frc.robot.constants.miscConstants.OIConstants;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DrivetrainImpl;
 import frc.robot.util.MathUtils;
 import lib.controllers.GameController;
 import lib.controllers.GameController.Axis;
@@ -20,7 +20,7 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
 
     private final GameController kDriver = new GameController(OIConstants.DRIVER_JOY);
 
-    public GameControllerDriverConfig(Drivetrain drive, ShuffleboardTab controllerTab, boolean shuffleboardUpdates) {
+    public GameControllerDriverConfig(DrivetrainImpl drive, ShuffleboardTab controllerTab, boolean shuffleboardUpdates) {
         super(drive, controllerTab, shuffleboardUpdates);
     }
 

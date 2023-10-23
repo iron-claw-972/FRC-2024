@@ -5,7 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
-import frc.robot.Robot.RobotId;
+import frc.robot.RobotId;
 import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.FalconConstants;
 import lib.COTSFalconSwerveConstants;
@@ -13,8 +13,6 @@ import lib.COTSFalconSwerveConstants;
 /**
  * Constants are, by default, for the competition robot.
  * Constants get changed if the RobotId detected is not the competition robot.
- *
- * @see RobotId
  */
 public class DriveConstants {
 

@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.VisionConstants;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DrivetrainImpl;
 import frc.robot.util.LogManager;
 import frc.robot.util.MathUtils;
 import frc.robot.util.Vision;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
  * Calculates standard deviations for vision
  */
 public class CalculateStdDevs extends CommandBase {
-    private final Drivetrain drive;
+    private final DrivetrainImpl drive;
     private final Vision vision;
     private ArrayList<Pose2d> poses;
     private final int arrayLength;
@@ -31,7 +31,7 @@ public class CalculateStdDevs extends CommandBase {
      * @param drive      The drivetrain
      * @param vision     The vision
      */
-    public CalculateStdDevs(int posesToUse, Drivetrain drive, Vision vision) {
+    public CalculateStdDevs(int posesToUse, DrivetrainImpl drive, Vision vision) {
         this.drive = drive;
         this.vision = vision;
         arrayLength = posesToUse;

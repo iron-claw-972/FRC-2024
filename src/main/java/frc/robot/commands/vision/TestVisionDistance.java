@@ -5,7 +5,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DrivetrainImpl;
 import frc.robot.util.LogManager;
 import frc.robot.util.Vision;
 
@@ -13,7 +13,7 @@ import frc.robot.util.Vision;
  * Calculates distance traveled from drivetrain and vision and compares the results
  */
 public class TestVisionDistance extends CommandBase {
-    private final Drivetrain drive;
+    private final DrivetrainImpl drive;
     private final Vision vision;
     private Translation2d visionStartTranslation, driveStartTranslation;
     private Pose2d currentPose = null;
@@ -38,7 +38,7 @@ public class TestVisionDistance extends CommandBase {
      * @param drive  The drivetrain
      * @param vision The vision
      */
-    public TestVisionDistance(double speed, Drivetrain drive, Vision vision) {
+    public TestVisionDistance(double speed, DrivetrainImpl drive, Vision vision) {
         addRequirements(drive);
         this.drive = drive;
         this.speed = speed;
