@@ -100,7 +100,10 @@ public class CalculateStdDevs extends CommandBase {
     double stdDevRot = MathUtils.stdDev(rotArray);
     
     // Find distance to tag
-    double distance = m_vision.getTagPose(m_vision.getEstimatedPoses(m_drive.getPose()).get(0).targetsUsed.get(0).getFiducialId()).toPose2d().getTranslation().getDistance(m_drive.getPose().getTranslation());
+    double distance = 0;
+    try{
+      distance = m_vision.getTagPose(m_vision.getEstimatedPoses(m_drive.getPose()).get(0).targetsUsed.get(0).getFiducialId()).toPose2d().getTranslation().getDistance(m_drive.getPose().getTranslation());
+    }catch(Exception e){}
     
     // Print and log values
     System.out.printf("Standard deviation values:\nX: %.5f\nY: %.5f\nRotation: %.5f\nDistance: %.5f\n",
