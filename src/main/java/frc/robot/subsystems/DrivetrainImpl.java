@@ -5,9 +5,7 @@ import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -26,13 +24,9 @@ import frc.robot.commands.test.TestDriveVelocity;
 import frc.robot.commands.test.TestHeadingPID;
 import frc.robot.commands.test.TestSteerAngle;
 import frc.robot.constants.Constants;
-import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
 import frc.robot.util.LogManager;
-import org.photonvision.EstimatedRobotPose;
-
-import java.util.ArrayList;
 
 /**
  * Represents a swerve drive style drivetrain.
@@ -105,7 +99,7 @@ public class DrivetrainImpl extends Drivetrain {
      *
      * @param drivetrainTab    the shuffleboard tab to display drivetrain data on
      * @param swerveModulesTab the shuffleboard tab to display module data on
-     * @param vision           the vision
+//     * @param vision           the vision
      */
     public DrivetrainImpl(ShuffleboardTab drivetrainTab, ShuffleboardTab swerveModulesTab) {
 
@@ -150,7 +144,7 @@ public class DrivetrainImpl extends Drivetrain {
                 getModulePositions(),
                 new Pose2d() // initial Odometry Location
         );
-        poseEstimator.setVisionMeasurementStdDevs(VisionConstants.kBaseVisionPoseStdDevs);
+//        poseEstimator.setVisionMeasurementStdDevs(VisionConstants.kBaseVisionPoseStdDevs);
 
         xController = new PIDController(DriveConstants.kTranslationalP, 0, DriveConstants.kTranslationalD);
         yController = new PIDController(DriveConstants.kTranslationalP, 0, DriveConstants.kTranslationalD);
