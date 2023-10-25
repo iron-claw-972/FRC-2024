@@ -32,7 +32,7 @@ public class VisionConstants {
   );
 
   // The highest ambiguity to use
-  public static final double kHighestAmbiguity = 0.2;
+  public static final double kHighestAmbiguity = 1;
 
   // The limelight pose
   public static final ArrayList<Pair<String, Transform3d>> kCameras = new ArrayList<Pair<String, Transform3d>>(List.of(

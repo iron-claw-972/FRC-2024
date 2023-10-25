@@ -58,7 +58,9 @@ public class CalculateStdDevs extends CommandBase {
       m_endTimer.reset();
       // add the pose to our data
       m_poses.add(pose);
-      System.out.printf("%.1f%% done\n", ((double)m_poses.size())/m_arrayLength * 100);
+      if(m_poses.size()%10==0){
+        System.out.printf("%.0f%% done\n", ((double)m_poses.size())/m_arrayLength * 100);
+      }
     } else {
       m_endTimer.start();
       // If kStdDevCommandEndTime seconds have passed since it saw an April tag, stop the command
