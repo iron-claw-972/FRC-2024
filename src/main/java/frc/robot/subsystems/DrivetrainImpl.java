@@ -46,7 +46,7 @@ public class DrivetrainImpl extends Drivetrain {
     private final SwerveDrivePoseEstimator poseEstimator;
 
     // This is left intentionally public
-    public final Module[] modules;
+    private final Module[] modules;
 
     private final WPI_Pigeon2 pigeon;
 
@@ -54,15 +54,9 @@ public class DrivetrainImpl extends Drivetrain {
     private final PIDController xController;
     private final PIDController yController;
     private final PIDController rotationController;
-    private final PIDController balanceController = new PIDController(DriveConstants.kBalanceP, DriveConstants.kBalanceI, DriveConstants.kBalanceD);
 
     // Displays the field with the robots estimated pose on it
     private final Field2d fieldDisplay;
-
-    private final PIDController pathplannerXController;
-    private final PIDController pathplannerYController;
-    private final PIDController pathplannerRotationController;
-
 
     //Shuffleboard
     private GenericEntry
@@ -152,11 +146,6 @@ public class DrivetrainImpl extends Drivetrain {
         rotationController.enableContinuousInput(-Math.PI, Math.PI);
         rotationController.setTolerance(Units.degreesToRadians(0.25), Units.degreesToRadians(0.25));
 
-        pathplannerXController = new PIDController(DriveConstants.kPathplannerTranslationalP, 0, DriveConstants.kPathplannerTranslationalD);
-        pathplannerYController = new PIDController(DriveConstants.kPathplannerTranslationalP, 0, DriveConstants.kPathplannerTranslationalD);
-        pathplannerRotationController = new PIDController(DriveConstants.kPathplannerHeadingP, 0, DriveConstants.kPathplannerHeadingD);
-        pathplannerRotationController.enableContinuousInput(-Math.PI, Math.PI);
-
         fieldDisplay = new Field2d();
         fieldDisplay.setRobotPose(getPose());
 
@@ -174,6 +163,7 @@ public class DrivetrainImpl extends Drivetrain {
         fieldDisplay.setRobotPose(getPose());
 
         if (Constants.DO_LOGGING) updateLogs();
+
     }
     // PIDs for Chassis movement
 
@@ -187,24 +177,6 @@ public class DrivetrainImpl extends Drivetrain {
 
     public PIDController getRotationController() {
         return rotationController;
-    }
-
-    public PIDController getBalanceController() {
-        return balanceController;
-    }
-
-    // PIDs for Pathplanner
-
-    public PIDController getPathplannerXController() {
-        return pathplannerXController;
-    }
-
-    public PIDController getPathplannerYController() {
-        return pathplannerYController;
-    }
-
-    public PIDController getPathplannerRotationController() {
-        return pathplannerRotationController;
     }
 
     /**
@@ -314,6 +286,10 @@ public class DrivetrainImpl extends Drivetrain {
      */
     public Pose2d getPose() {
         return poseEstimator.getEstimatedPosition();
+    }
+
+    public Module[] getModules() {
+        return modules;
     }
 
     /**
@@ -568,10 +544,6 @@ public class DrivetrainImpl extends Drivetrain {
         drivetrainTab.add("xController", getXController());
         drivetrainTab.add("yController", getYController());
         drivetrainTab.add("rotationController", getRotationController());
-
-        drivetrainTab.add("PP xController", getPathplannerXController());
-        drivetrainTab.add("PP yController", getPathplannerYController());
-        drivetrainTab.add("PP rotationController", getPathplannerRotationController());
 
         // add angles
         drivetrainTab.addNumber("Yaw (deg)", () -> getYaw().getDegrees());

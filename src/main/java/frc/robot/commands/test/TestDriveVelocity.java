@@ -29,7 +29,7 @@ public class TestDriveVelocity extends CommandBase {
     public void initialize() {
         drive.setAllOptimize(false);
         for (int i = 0; i < 4; i++) {
-            Module module = drive.modules[i];
+            Module module = drive.getModules()[i];
             timeAccuracyTests[i] = new TimeAccuracyTest(
                     () -> module.getState().speedMetersPerSecond,
                     () -> drive.getRequestedSteerVelocity(0),
