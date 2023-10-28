@@ -231,5 +231,14 @@ public class Vision {
 
       return pose;
     }
+    
+    /**
+     * Gets the pose using manual calculations
+     * @return estimated pose as a Pose2d
+     */
+    @SuppressWarnings("unused")
+    public Pose2d getEstimatedPose(){
+      return null;
+    }
   }
 }
