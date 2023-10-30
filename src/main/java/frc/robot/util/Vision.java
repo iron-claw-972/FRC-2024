@@ -195,13 +195,12 @@ public class Vision {
       camera = new PhotonCamera(cameraName);
       photonPoseEstimator = new PhotonPoseEstimator(
         m_aprilTagFieldLayout, 
-        PoseStrategy.MULTI_TAG_PNP, 
+        PoseStrategy.LOWEST_AMBIGUITY, 
         camera, 
         robotToCam
       );
       photonPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
       photonPoseEstimator.setReferencePose(new Pose2d());
-      camera.setLED(VisionLEDMode.kOn);
     }
   
     /**
