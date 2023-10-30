@@ -230,5 +230,37 @@ public class Vision {
 
       return pose;
     }
+    
+    /**
+     * Gets the pose using manual calculations
+     * @param yaw The yaw of the robot to use in the calculation
+     * @return estimated pose as a Pose2d
+     */
+    @SuppressWarnings("unused")
+    public Pose2d getEstimatedPose(double yaw){
+      PhotonTrackedTarget target = camera.getLatestResult().getBestTarget();
+      if(target==null){
+        return null;
+      }
+      int id = target.getFiducialId();
+      if(id<=0||id>FieldConstants.kAprilTags.size()){
+        return null;
+      }
+      Pose3d targetPose = FieldConstants.kAprilTags.get(id).pose;
+      Transform3d robotToCamera = photonPoseEstimator.getRobotToCameraTransform();
+      double fieldRelativeAngle = yaw+robotToCamera.getRotation().getZ()-target.getYaw();
+      double verticalAngle = robotToCamera.getRotation().getY()+target.getPitch();
+      double dist = (targetPose.getZ()-robotToCamera.getZ())/Math.tan(verticalAngle);
+      double x = targetPose.getX()-Math.cos(fieldRelativeAngle)*dist;
+      double y = targetPose.getY()-Math.sin(fieldRelativeAngle)*dist;
+      x -= robotToCamera.getX()*Math.cos(yaw) + robotToCamera.getY()*Math.sin(yaw);
+      y -= robotToCamera.getX()*Math.sin(yaw) + robotToCamera.getY()*Math.cos(yaw);
+      Pose2d pose = new Pose2d(x, y, new Rotation2d(yaw));
+      if(Constants.kLogging){
+        LogManager.addDouble("Vision/tag dist", dist);
+        LogManager.addDoubleArray("Vision/pose", new double[]{pose.getX(), pose.getY(), yaw});
+      }
+      return pose;
+    }
   }
 }
