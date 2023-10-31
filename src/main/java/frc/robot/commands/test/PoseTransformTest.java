@@ -1,14 +1,11 @@
 package frc.robot.commands.test;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.miscConstants.TestConstants;
-import frc.robot.subsystems.DrivetrainImpl;
+import frc.robot.subsystems.drive.DrivetrainImpl;
 
 /**
  * Tests the odometry of the robot by driving a certain distance and calculating the error.

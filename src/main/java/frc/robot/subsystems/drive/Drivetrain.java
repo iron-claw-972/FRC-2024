@@ -1,7 +1,7 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.drive;
 
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.SubsystemImpl;
 
 /**
  * This class should include methods that will be overridden by {@link DrivetrainImpl} to be used on an actual robot
