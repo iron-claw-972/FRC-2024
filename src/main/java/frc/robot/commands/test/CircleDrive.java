@@ -29,13 +29,13 @@ public class CircleDrive extends CommandBase {
     @Override
     public void execute() {
         double currentTime = WPIUtilJNI.now() * 1e-6;
-        steerPosition = MathUtil.angleModulus(steerPosition + (currentTime - prevTime) * drive.getRequestedSteerVelocity(0));
-        drive.setModuleStates(new SwerveModuleState[]{
-                new SwerveModuleState(drive.getRequestedDriveVelocity(0), new Rotation2d(steerPosition)),
-                new SwerveModuleState(drive.getRequestedDriveVelocity(0), new Rotation2d(steerPosition)),
-                new SwerveModuleState(drive.getRequestedDriveVelocity(0), new Rotation2d(steerPosition)),
-                new SwerveModuleState(drive.getRequestedDriveVelocity(0), new Rotation2d(steerPosition))
-        }, false);
+//        steerPosition = MathUtil.angleModulus(steerPosition + (currentTime - prevTime) * drive.getRequestedSteerVelocity(0));
+//        drive.setModuleStates(new SwerveModuleState[]{
+//                new SwerveModuleState(drive.getRequestedDriveVelocity(0), new Rotation2d(steerPosition)),
+//                new SwerveModuleState(drive.getRequestedDriveVelocity(0), new Rotation2d(steerPosition)),
+//                new SwerveModuleState(    drive.getRequestedDriveVelocity(0), new Rotation2d(steerPosition)),
+//                new SwerveModuleState(drive.getRequestedDriveVelocity(0), new Rotation2d(steerPosition))
+//        }, false);
         prevTime = currentTime;
     }
 

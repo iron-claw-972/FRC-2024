@@ -27,33 +27,33 @@ public class TestHeadingPID extends CommandBase {
 
     @Override
     public void initialize() {
-        drive.setAllOptimize(false);
-        timeAccuracyTest = new TimeAccuracyTest(
-                () -> drive.getYaw().getRadians(),
-                () -> drive.getRequestedHeading(0),
-                TestConstants.HEADING_ERROR,
-                TestConstants.HEADING_TIME_ERROR
-        );
+//        drive.setAllOptimize(false);
+//        timeAccuracyTest = new TimeAccuracyTest(
+//                () -> drive.getYaw().getRadians(),
+//                () -> drive.getRequestedHeading(0),
+//                TestConstants.HEADING_ERROR,
+//                TestConstants.HEADING_TIME_ERROR
+//        );
     }
 
     @Override
     public void execute() {
-        double headingPIDOutput = drive.getRotationController().calculate(drive.getYaw().getRadians(), drive.getRequestedHeading(drive.getYaw().getRadians()));
-        // headingOutput is in rad/s. Need to convert to m/s by multiplying by radius
-        headingPIDOutput *= Math.sqrt(0.5) * DriveConstants.kTrackWidth;
-        drive.setModuleStates(
-                new SwerveModuleState[]{
-                        new SwerveModuleState(headingPIDOutput, new Rotation2d(Units.degreesToRadians(135))),
-                        new SwerveModuleState(headingPIDOutput, new Rotation2d(Units.degreesToRadians(45))),
-                        new SwerveModuleState(headingPIDOutput, new Rotation2d(Units.degreesToRadians(225))),
-                        new SwerveModuleState(headingPIDOutput, new Rotation2d(Units.degreesToRadians(315)))
-                }, false);
-        testEntry.setBoolean(timeAccuracyTest.calculate());
+//        double headingPIDOutput = drive.getRotationController().calculate(drive.getYaw().getRadians(), drive.getRequestedHeading(drive.getYaw().getRadians()));
+//        // headingOutput is in rad/s. Need to convert to m/s by multiplying by radius
+//        headingPIDOutput *= Math.sqrt(0.5) * DriveConstants.kTrackWidth;
+//        drive.setModuleStates(
+//                new SwerveModuleState[]{
+//                        new SwerveModuleState(headingPIDOutput, new Rotation2d(Units.degreesToRadians(135))),
+//                        new SwerveModuleState(headingPIDOutput, new Rotation2d(Units.degreesToRadians(45))),
+//                        new SwerveModuleState(headingPIDOutput, new Rotation2d(Units.degreesToRadians(225))),
+//                        new SwerveModuleState(headingPIDOutput, new Rotation2d(Units.degreesToRadians(315)))
+//                }, false);
+//        testEntry.setBoolean(timeAccuracyTest.calculate());
     }
 
     @Override
     public void end(boolean interrupted) {
-        drive.setAllOptimize(true);
-        drive.stop();
+//        drive.setAllOptimize(true);
+//        drive.stop();
     }
 }

@@ -31,10 +31,10 @@ public class PoseTransformTest extends CommandBase {
     @Override
     public void initialize() {
         startTime = Timer.getFPGATimestamp();
-        finalPose = drive.getPose().transformBy(new Transform2d(
-                new Translation2d(drive.getRequestedXPos(0), drive.getRequestedYPos(0)),
-                new Rotation2d(drive.getRequestedHeading(0))
-        ));
+//        finalPose = drive.getPose().transformBy(new Transform2d(
+//                new Translation2d(drive.getRequestedXPos(0), drive.getRequestedYPos(0)),
+//                new Rotation2d(drive.getRequestedHeading(0))
+//        ));
     }
 
     @Override

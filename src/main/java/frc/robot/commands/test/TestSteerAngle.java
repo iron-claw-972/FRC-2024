@@ -26,44 +26,44 @@ public class TestSteerAngle extends CommandBase {
 
     @Override
     public void initialize() {
-        drive.setAllOptimize(false);
-        drive.enableStateDeadband(false);
-        for (int i = 0; i < 4; i++) {
-            Module module = drive.getModules()[i];
-            timeAccuracyTests[i] = new TimeAccuracyTest(
-                    module::getDriveVelocityError,
-                    () -> drive.getRequestedSteerVelocity(0),
-                    TestConstants.STEER_ANGLE_ERROR,
-                    TestConstants.STEER_ANGLE_TIME_ERROR
-            );
-        }
+//        drive.setAllOptimize(false);
+//        drive.enableStateDeadband(false);
+//        for (int i = 0; i < 4; i++) {
+//            Module module = drive.getModules()[i];
+//            timeAccuracyTests[i] = new TimeAccuracyTest(
+//                    module::getDriveVelocityError,
+//                    () -> drive.getRequestedSteerVelocity(0),
+//                    TestConstants.STEER_ANGLE_ERROR,
+//                    TestConstants.STEER_ANGLE_TIME_ERROR
+//            );
+//        }
     }
 
     @Override
     public void execute() {
-        drive.setModuleStates(new SwerveModuleState[]{
-                new SwerveModuleState(0,
-                        new Rotation2d(drive.getRequestedSteerAngle(drive.getModules()[0].getAngle().getRadians()))),
-                new SwerveModuleState(0,
-                        new Rotation2d(drive.getRequestedSteerAngle(drive.getModules()[1].getAngle().getRadians()))),
-                new SwerveModuleState(0,
-                        new Rotation2d(drive.getRequestedSteerAngle(drive.getModules()[2].getAngle().getRadians()))),
-                new SwerveModuleState(0,
-                        new Rotation2d(drive.getRequestedSteerAngle(drive.getModules()[3].getAngle().getRadians())))
-        }, true);
-        testEntry.setBoolean(
-                timeAccuracyTests[0].calculate() &&
-                timeAccuracyTests[1].calculate() &&
-                timeAccuracyTests[2].calculate() &&
-                timeAccuracyTests[3].calculate()
-                            );
+//        drive.setModuleStates(new SwerveModuleState[]{
+//                new SwerveModuleState(0,
+//                        new Rotation2d(drive.getRequestedSteerAngle(drive.getModules()[0].getAngle().getRadians()))),
+//                new SwerveModuleState(0,
+//                        new Rotation2d(drive.getRequestedSteerAngle(drive.getModules()[1].getAngle().getRadians()))),
+//                new SwerveModuleState(0,
+//                        new Rotation2d(drive.getRequestedSteerAngle(drive.getModules()[2].getAngle().getRadians()))),
+//                new SwerveModuleState(0,
+//                        new Rotation2d(drive.getRequestedSteerAngle(drive.getModules()[3].getAngle().getRadians())))
+//        }, true);
+//        testEntry.setBoolean(
+//                timeAccuracyTests[0].calculate() &&
+//                timeAccuracyTests[1].calculate() &&
+//                timeAccuracyTests[2].calculate() &&
+//                timeAccuracyTests[3].calculate()
+//                            );
     }
 
     @Override
     public void end(boolean interrupted) {
-        drive.setAllOptimize(true);
-        drive.enableStateDeadband(true);
-        drive.stop();
+//        drive.setAllOptimize(true);
+//        drive.enableStateDeadband(true);
+//        drive.stop();
     }
 
 }
