@@ -14,7 +14,7 @@ public class SetFormationX extends SequentialCommandGroup {
     public SetFormationX(DrivetrainImpl drive) {
         addRequirements(drive);
         addCommands(
-                new InstantCommand(() -> drive.enableStateDeadband(false), drive),
+                new InstantCommand(() -> drive.setStateDeadband(false), drive),
                 new InstantCommand(() -> drive.setModuleStates(new SwerveModuleState[]{
                         new SwerveModuleState(0, new Rotation2d(Units.degreesToRadians(45))),
                         new SwerveModuleState(0, new Rotation2d(Units.degreesToRadians(-45))),

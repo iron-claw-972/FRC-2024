@@ -37,15 +37,15 @@ public class SimplePresetSteerAngles extends InstantCommand {
      */
     public SimplePresetSteerAngles(DrivetrainImpl drive, Rotation2d rotation) {
         super(() -> {
-            drive.enableStateDeadband(false);
+            drive.setStateDeadband(false);
             drive.setModuleStates(new SwerveModuleState[]{
                     new SwerveModuleState(0, rotation),
                     new SwerveModuleState(0, rotation),
                     new SwerveModuleState(0, rotation),
                     new SwerveModuleState(0, rotation)
             }, true);
-            drive.enableStateDeadband(true);
+            drive.setStateDeadband(true);
         }, drive);
-        drive.enableStateDeadband(true);
+        drive.setStateDeadband(true);
     }
 }

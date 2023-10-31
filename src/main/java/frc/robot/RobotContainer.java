@@ -45,7 +45,7 @@ public class RobotContainer {
      */
     public RobotContainer() {
 
-        drive = (Drivetrain) SubsystemFactory.get(Drivetrain.class);
+        drive = SubsystemFactory.get(Drivetrain.class);
 
 //        switch (robotId) {
 //            case SwerveCompetition:

@@ -24,7 +24,7 @@ public class TrajectoryPresetSteerAngles extends InstantCommand {
                     // Can be replaced for any small number, but it should be the same as the time between all uses
                     double time = 0.01;
 
-                    drive.enableStateDeadband(false);
+                    drive.setStateDeadband(false);
 
                     Pose2d initialPose = trajectory.getInitialPose();
                     State sample = trajectory.sample(time);
@@ -41,7 +41,7 @@ public class TrajectoryPresetSteerAngles extends InstantCommand {
                         swerveModuleState.speedMetersPerSecond = 0;
                     }
                     drive.setModuleStates(swerveModuleStates, true);
-                    drive.enableStateDeadband(true);
+                    drive.setStateDeadband(true);
                 },
                 drive
              );

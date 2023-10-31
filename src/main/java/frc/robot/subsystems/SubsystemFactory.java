@@ -8,14 +8,14 @@ import frc.robot.RobotId;
 
 public class SubsystemFactory {
 
-    public static SubsystemBase get(Class<?> clazz) {
+    public static <T> T get(Class<T> clazz, Object... args) {
         RobotId robotId = Robot.getRobotId();
         try {
             if (robotId.getSubsystems().contains(clazz) && RobotBase.isReal()) {
                 Class<? extends SubsystemBase> impl = clazz.getAnnotation(SubsystemImpl.class).value();
-                return impl.getDeclaredConstructor().newInstance();
+                return (T) impl.getDeclaredConstructor().newInstance(args);
             }
-            return (SubsystemBase) clazz.getDeclaredConstructor().newInstance();
+            return clazz.getDeclaredConstructor().newInstance(args);
         } catch (Exception e) {
             DriverStation.reportError("Could not create subsystem " + clazz.getSimpleName(), e.getStackTrace());
         }

@@ -25,7 +25,7 @@ public class DefaultDriveCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        swerve.enableStateDeadband(true);
+        swerve.setStateDeadband(true);
     }
 
     @Override

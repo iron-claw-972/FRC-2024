@@ -18,6 +18,7 @@ import frc.robot.Robot;
 import frc.robot.constants.Constants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
+import frc.robot.subsystems.SubsystemFactory;
 
 import java.util.Arrays;
 
@@ -35,9 +36,6 @@ public class DrivetrainImpl extends Drivetrain {
     // Odometry
     private final SwerveDrivePoseEstimator poseEstimator;
 
-    // This is left intentionally public
-    private final Module[] modules;
-
     private final WPI_Pigeon2 pigeon;
 
     // PID Controllers for chassis movement
@@ -46,7 +44,6 @@ public class DrivetrainImpl extends Drivetrain {
     private final PIDController rotationController;
 
     // Displays the field with the robots estimated pose on it
-    // TODO: Simulation should be located in Drivetrain.java
     private final Field2d fieldDisplay;
 
     /**
@@ -58,22 +55,6 @@ public class DrivetrainImpl extends Drivetrain {
         pigeon.configFactoryDefault();
         // Our pigeon is mounted with y forward, and z upward
         pigeon.configMountPose(AxisDirection.PositiveY, AxisDirection.PositiveZ);
-
-        if (RobotBase.isReal()) {
-            modules = new Module[]{
-                    new Module(ModuleConstants.FRONT_LEFT),
-                    new Module(ModuleConstants.FRONT_RIGHT),
-                    new Module(ModuleConstants.BACK_LEFT),
-                    new Module(ModuleConstants.BACK_RIGHT),
-                    };
-        } else {
-            modules = new ModuleSim[]{
-                    new ModuleSim(ModuleConstants.FRONT_LEFT),
-                    new ModuleSim(ModuleConstants.FRONT_RIGHT),
-                    new ModuleSim(ModuleConstants.BACK_LEFT),
-                    new ModuleSim(ModuleConstants.BACK_RIGHT),
-                    };
-        }
 
         /*
          * By pausing init for a second before setting module offsets, we avoid a bug
@@ -240,8 +221,8 @@ public class DrivetrainImpl extends Drivetrain {
      * The state deadband determines if the robot will stop drive and steer motors when inputted drive velocity is low.
      * It should be enabled for all regular driving, to prevent releasing the controls from setting the angles.
      */
-    public void enableStateDeadband(boolean stateDeadBand) {
-        Arrays.stream(modules).forEach(module -> module.enableStateDeadband(stateDeadBand));
+    public void setStateDeadband(boolean stateDeadBand) {
+        Arrays.stream(modules).forEach(module -> module.setStateDeadband(stateDeadBand));
     }
 
 
@@ -329,10 +310,6 @@ public class DrivetrainImpl extends Drivetrain {
     }
 
 
-
-    public Module[] getModules() {
-        return modules;
-    }
 
     public PIDController getXController() {
         return xController;
