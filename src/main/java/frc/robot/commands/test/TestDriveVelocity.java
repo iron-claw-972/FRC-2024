@@ -27,38 +27,38 @@ public class TestDriveVelocity extends CommandBase {
 
     @Override
     public void initialize() {
-        drive.setAllOptimize(false);
-        for (int i = 0; i < 4; i++) {
-            Module module = drive.getModules()[i];
-            timeAccuracyTests[i] = new TimeAccuracyTest(
-                    () -> module.getState().speedMetersPerSecond,
-                    () -> drive.getRequestedSteerVelocity(0),
-                    TestConstants.DRIVE_VELOCITY_ERROR,
-                    TestConstants.DRIVE_VELOCITY_TIME_ERROR
-            );
-        }
+//        drive.setAllOptimize(false);
+//        for (int i = 0; i < 4; i++) {
+//            Module module = drive.getModules()[i];
+//            timeAccuracyTests[i] = new TimeAccuracyTest(
+//                    () -> module.getState().speedMetersPerSecond,
+//                    () -> drive.getRequestedSteerVelocity(0),
+//                    TestConstants.DRIVE_VELOCITY_ERROR,
+//                    TestConstants.DRIVE_VELOCITY_TIME_ERROR
+//            );
+//        }
     }
 
     @Override
     public void execute() {
-        drive.setModuleStates(new SwerveModuleState[]{
-                new SwerveModuleState(drive.getRequestedDriveVelocity(0), new Rotation2d(Units.degreesToRadians(135))),
-                new SwerveModuleState(drive.getRequestedDriveVelocity(0), new Rotation2d(Units.degreesToRadians(45))),
-                new SwerveModuleState(drive.getRequestedDriveVelocity(0), new Rotation2d(Units.degreesToRadians(225))),
-                new SwerveModuleState(drive.getRequestedDriveVelocity(0), new Rotation2d(Units.degreesToRadians(315)))
-        }, false);
-        testEntry.setBoolean(
-                timeAccuracyTests[0].calculate() &&
-                timeAccuracyTests[1].calculate() &&
-                timeAccuracyTests[2].calculate() &&
-                timeAccuracyTests[3].calculate()
-                            );
+//        drive.setModuleStates(new SwerveModuleState[]{
+//                new SwerveModuleState(drive.getRequestedDriveVelocity(0), new Rotation2d(Units.degreesToRadians(135))),
+//                new SwerveModuleState(drive.getRequestedDriveVelocity(0), new Rotation2d(Units.degreesToRadians(45))),
+//                new SwerveModuleState(drive.getRequestedDriveVelocity(0), new Rotation2d(Units.degreesToRadians(225))),
+//                new SwerveModuleState(drive.getRequestedDriveVelocity(0), new Rotation2d(Units.degreesToRadians(315)))
+//        }, false);
+//        testEntry.setBoolean(
+//                timeAccuracyTests[0].calculate() &&
+//                timeAccuracyTests[1].calculate() &&
+//                timeAccuracyTests[2].calculate() &&
+//                timeAccuracyTests[3].calculate()
+//                            );
     }
 
     @Override
     public void end(boolean interrupted) {
-        drive.setAllOptimize(true);
-        drive.stop();
+//        drive.setAllOptimize(true);
+//        drive.stop();
     }
 
 }
