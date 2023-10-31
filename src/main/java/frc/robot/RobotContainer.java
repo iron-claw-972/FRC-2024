@@ -46,7 +46,7 @@ public class RobotContainer {
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
-    public RobotContainer(RobotId robotId) {
+    public RobotContainer() {
 
         drive = (Drivetrain) SubsystemFactory.get(Drivetrain.class);
 

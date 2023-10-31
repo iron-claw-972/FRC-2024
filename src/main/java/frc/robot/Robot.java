@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
         // setRobotId(RobotId.SwerveTest);
 
         // build the RobotContainer with the robot id from preferences
-        robotContainer = new RobotContainer(getRobotId());
+        robotContainer = new RobotContainer();
     }
 
     /**
