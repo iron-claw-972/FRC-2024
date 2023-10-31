@@ -122,10 +122,6 @@ public class RobotContainer {
         LiveWindow.setEnabled(false);
 
         autoTab.add("Auto Chooser", autoCommand);
-
-        if (Constants.USE_TELEMETRY) loadCommandSchedulerShuffleboard();
-
-        addTestCommands();
     }
 
     /**
@@ -137,35 +133,7 @@ public class RobotContainer {
         return autoCommand.getSelected();
     }
 
-    /**
-     * Adds the test commands to shuffleboard, so they can be run that way.
-     */
-    public void addTestCommands() {
-//        GenericEntry testEntry = testTab.add("Test Results", false).getEntry();
-//        testTab.add("Blinkin Id", 0.65).getEntry();
-//        testTab.add("Cancel Command", new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));
-//
-//        if (drive != null) {
-//            drive.addTestCommands(testTab, testEntry);
-//        }
-//
-//        if (vision != null) {
-//            vision.addTestCommands(testTab, testEntry, drive);
-//        }
-    }
-
-
-    /**
-     * Loads the command scheduler shuffleboard which will add event markers whenever a command finishes, ends, or is interrupted.
-     */
-    public void loadCommandSchedulerShuffleboard() {
-        // Set the scheduler to log Shuffleboard events for command initialize, interrupt, finish
-        CommandScheduler.getInstance().onCommandInitialize(command -> Shuffleboard.addEventMarker("Command initialized", command.getName(), EventImportance.kNormal));
-        CommandScheduler.getInstance().onCommandInterrupt(command -> Shuffleboard.addEventMarker("Command interrupted", command.getName(), EventImportance.kNormal));
-        CommandScheduler.getInstance().onCommandFinish(command -> Shuffleboard.addEventMarker("Command finished", command.getName(), EventImportance.kNormal));
-    }
-
-
+    // TODO
     /**
      * Resets the swerve modules to their absolute positions.
      */
@@ -173,11 +141,5 @@ public class RobotContainer {
 //        drive.resetModulesToAbsolute();
 //    }
 
-    /**
-     * Sets whether the drivetrain uses vision to update odometry
-     */
-//    public void setVisionEnabled(boolean enabled) {
-//        drive.enableVision(enabled);
-//    }
 
 }
