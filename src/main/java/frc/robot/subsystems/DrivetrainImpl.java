@@ -170,48 +170,6 @@ public class DrivetrainImpl extends Drivetrain {
     public void updateOdometry() {
         // Updates pose based on encoders and gyro. NOTE: must use yaw directly from gyro!
         poseEstimator.update(Rotation2d.fromDegrees(pigeon.getYaw()), getModulePositions());
-        // Updates pose based on vision
-//        if (RobotBase.isReal() && visionEnabled && VisionConstants.ENABLED) {
-//
-//            // An array list of poses returned by different cameras
-//            ArrayList<EstimatedRobotPose> estimatedPoses = vision.getEstimatedPoses(poseEstimator.getEstimatedPosition());
-//            // The current position as a translation
-//            Translation2d currentEstimatedPoseTranslation = poseEstimator.getEstimatedPosition().getTranslation();
-//            for (EstimatedRobotPose estimatedPose : estimatedPoses) {
-//                // The position of the closest april tag as a translation
-//                Translation2d closestTagPoseTranslation = null;
-//                for (int j = 0; j < estimatedPose.targetsUsed.size(); j++) {
-//                    // The position of the current april tag
-//                    Pose3d currentTagPose = vision.getTagPose(estimatedPose.targetsUsed.get(j).getFiducialId());
-//                    // If it can't find the april tag's pose, don't run the rest of the for loop for this tag
-//                    if (currentTagPose == null) {
-//                        continue;
-//                    }
-//                    Translation2d currentTagPoseTranslation = currentTagPose.toPose2d().getTranslation();
-//
-//                    // If the current april tag position is closer than the closest one, this makes makes it the closest
-//                    if (closestTagPoseTranslation == null || currentEstimatedPoseTranslation.getDistance(currentTagPoseTranslation) < currentEstimatedPoseTranslation.getDistance(closestTagPoseTranslation)) {
-//                        closestTagPoseTranslation = currentTagPoseTranslation;
-//                    }
-//                }
-//
-//                double visionFactor = (currentEstimatedPoseTranslation.getDistance(closestTagPoseTranslation) * VisionConstants.kVisionPoseStdDevFactor);
-//
-//                // Adds the vision measurement for this camera
-//                poseEstimator.addVisionMeasurement(
-//                        estimatedPose.estimatedPose.toPose2d(),
-//                        estimatedPose.timestampSeconds,
-//                        VisionConstants.kBaseVisionPoseStdDevs.plus(
-//                                visionFactor
-//                                                                   )
-//                                                  );
-//                if (Constants.DO_LOGGING) {
-//                    LogManager.addDouble("Vision/ClosestTag Distance",
-//                                         currentEstimatedPoseTranslation.getDistance(closestTagPoseTranslation)
-//                                        );
-//                }
-//            }
-//        }
     }
 
     /**
