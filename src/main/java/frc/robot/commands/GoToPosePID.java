@@ -27,7 +27,7 @@ public class GoToPosePID extends CommandBase {
 
     @Override
     public void execute() {
-        drive.runChassisPID(pose.get().getX(), pose.get().getY(), pose.get().getRotation().getRadians());
+        drive.driveWithPID(pose.get().getX(), pose.get().getY(), pose.get().getRotation().getRadians());
     }
 
     @Override

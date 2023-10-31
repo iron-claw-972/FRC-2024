@@ -9,10 +9,13 @@ import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import frc.robot.commands.SetFormationX;
 import frc.robot.constants.miscConstants.OIConstants;
 import frc.robot.subsystems.DrivetrainImpl;
+import frc.robot.subsystems.Module;
 import frc.robot.util.MathUtils;
 import lib.controllers.PS5Controller;
 import lib.controllers.PS5Controller.PS5Axis;
 import lib.controllers.PS5Controller.PS5Button;
+
+import java.util.Arrays;
 
 /**
  * Driver controls for the PS5 controller
@@ -43,7 +46,9 @@ public class PS5ControllerDriverConfig extends BaseDriverConfig {
 
 
         // Resets the modules to absolute if they are having the unresolved zeroing error
-        kDriver.get(PS5Button.CROSS).onTrue(new InstantCommand(() -> getDrivetrain().resetModulesToAbsolute()));
+        kDriver.get(PS5Button.CROSS).onTrue(new InstantCommand(() ->
+                getDrivetrain().resetModulesToAbsolute()
+        ));
     }
 
 

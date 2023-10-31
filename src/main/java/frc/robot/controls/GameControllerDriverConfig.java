@@ -8,10 +8,13 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.SetFormationX;
 import frc.robot.constants.miscConstants.OIConstants;
 import frc.robot.subsystems.DrivetrainImpl;
+import frc.robot.subsystems.Module;
 import frc.robot.util.MathUtils;
 import lib.controllers.GameController;
 import lib.controllers.GameController.Axis;
 import lib.controllers.GameController.Button;
+
+import java.util.Arrays;
 
 /**
  * Driver controls for the generic game controller.
@@ -36,7 +39,9 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
         kDriver.get(Button.X).onTrue(new SetFormationX(super.getDrivetrain()));
 
         // Resets the modules to absolute if they are having the unresolved zeroing error
-        kDriver.get(Button.A).onTrue(new InstantCommand(() -> getDrivetrain().resetModulesToAbsolute()));
+        kDriver.get(Button.A).onTrue(new InstantCommand(() ->
+                getDrivetrain().resetModulesToAbsolute()
+        ));
     }
 
 

@@ -37,7 +37,7 @@ public class GoToPoseTest extends CommandBase {
 
     @Override
     public void execute() {
-        drive.runChassisPID(finalPose.getX(), finalPose.getY(), finalPose.getRotation().getRadians());
+        drive.driveWithPID(finalPose.getX(), finalPose.getY(), finalPose.getRotation().getRadians());
     }
 
     @Override

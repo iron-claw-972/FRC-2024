@@ -18,8 +18,8 @@ public class ModuleSim extends Module {
     private double currentDrivePositionMeters = 0;
     private double currentSpeed = 0;
 
-    public ModuleSim(ModuleConstants moduleConstants, ShuffleboardTab swerveTab) {
-        super(moduleConstants, swerveTab);
+    public ModuleSim(ModuleConstants moduleConstants) {
+        super(moduleConstants);
     }
 
     /**

@@ -24,7 +24,6 @@ import frc.robot.util.LogManager;
 import lib.CTREModuleState;
 
 public class Module extends SubsystemBase {
-    private final ShuffleboardTab swerveTab;
     private final ModuleType type;
 
     private final Rotation2d angleOffset;
@@ -40,8 +39,7 @@ public class Module extends SubsystemBase {
 
     private boolean optimizeStates = true;
 
-    public Module(ModuleConstants moduleConstants, ShuffleboardTab swerveTab) {
-        this.swerveTab = swerveTab;
+    public Module(ModuleConstants moduleConstants) {
 
         type = moduleConstants.getType();
 
@@ -62,8 +60,6 @@ public class Module extends SubsystemBase {
         configDriveMotor();
 
         setDesiredState(new SwerveModuleState(0, getAngle()), false);
-
-        setupShuffleboard();
     }
 
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
@@ -190,27 +186,6 @@ public class Module extends SubsystemBase {
         resetToAbsolute();
     }
 
-    public void setDriveCharacterizationVoltage(double voltage) {
-        angleMotor.set(ControlMode.Position, ConversionUtils.degreesToFalcon(0, DriveConstants.kAngleGearRatio));
-        driveMotor.set(ControlMode.PercentOutput, voltage / Constants.ROBOT_VOLTAGE);
-        if (Constants.DO_LOGGING) {
-            LogManager.addDouble("Swerve/Modules/DriveCharacterizationVoltage/" + type.name(),
-                                 voltage
-                                );
-        }
-    }
-
-    public void setAngleCharacterizationVoltage(double voltage) {
-        angleMotor.set(ControlMode.PercentOutput, voltage / Constants.ROBOT_VOLTAGE);
-        // Set the drive motor to just enough to overcome static friction
-        driveMotor.set(ControlMode.PercentOutput, 1.1 * DriveConstants.DRIVE_KS);
-        if (Constants.DO_LOGGING) {
-            LogManager.addDouble("Swerve/Modules/AngleCharacterizationVoltage/" + type.name(),
-                                 voltage
-                                );
-        }
-    }
-
     public double getSteerVelocity() {
         return ConversionUtils.falconToRPM(angleMotor.getSelectedSensorVelocity(), DriveConstants.kAngleGearRatio) * 2 * Math.PI / 60;
     }
@@ -250,72 +225,17 @@ public class Module extends SubsystemBase {
                 getAngle());
     }
 
-    private void setupShuffleboard() {
-        if (Constants.USE_TELEMETRY && RobotBase.isReal()) {
-            swerveTab.addDouble(type.name() + " CANcoder Angle (deg)", getCANcoder()::getDegrees);
-            swerveTab.addDouble(type.name() + " FX Angle (deg)", getPosition().angle::getDegrees);
-            swerveTab.addDouble(type.name() + " Velocity (m/s)", () -> getState().speedMetersPerSecond);
-            swerveTab.addDouble(type.name() + " Desired Velocity (m/s)", () -> getDesiredState().speedMetersPerSecond);
-            swerveTab.addDouble(type.name() + " Desired Angle (deg)", () -> getDesiredState().angle.getDegrees());
-            swerveTab.addBoolean(type.name() + " Jitter prevention enabled", () -> stateDeadband);
-            swerveTab.addDouble(type.name() + " Drive Current (A)", driveMotor::getSupplyCurrent);
-            swerveTab.addDouble(type.name() + " Angle Current (A)", angleMotor::getSupplyCurrent);
-        }
-    }
-
-    @Override
-    public void periodic() {
-
-    }
-
     public SwerveModuleState getDesiredState() {
         return desiredState;
     }
 
-    public double getDesiredVelocity() {
-        return getDesiredState().speedMetersPerSecond;
-    }
-
-    public Rotation2d getDesiredAngle() {
-        return getDesiredState().angle;
-    }
 
     public double getDriveVelocityError() {
         return getDesiredState().speedMetersPerSecond - getState().speedMetersPerSecond;
     }
 
-    public double getDriveFeedForwardKV() {
-        return DriveConstants.DRIVE_KV;
-    }
-
-    public double getDriveFeedForwardKS() {
-        return DriveConstants.DRIVE_KS;
-    }
-
     public void stop() {
         driveMotor.set(0);
         angleMotor.set(0);
-    }
-
-    public void setDriveVoltage(double volts) {
-        //with voltage compensation enabled do not use setVoltage
-    }
-
-    public void setSteerVoltage(double voltage) {
-        //with voltage compensation enabled do not use setVoltage
-    }
-
-    public void setDriveFeedForwardValues(double kS, double kV) {
-    }
-
-    public double getSteerFeedForwardKV() {
-        return 0;
-    }
-
-    public double getSteerFeedForwardKS() {
-        return 0;
-    }
-
-    public void setAngle(Rotation2d rotation2d) {
     }
 }
