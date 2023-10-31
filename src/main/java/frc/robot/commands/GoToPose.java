@@ -5,7 +5,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.auto.PathPlannerCommand;
+//import frc.robot.commands.auto.PathPlannerCommand;
 import frc.robot.constants.miscConstants.AutoConstants;
 import frc.robot.subsystems.DrivetrainImpl;
 
