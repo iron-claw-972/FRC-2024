@@ -50,7 +50,8 @@ public class DrivetrainImpl extends Drivetrain {
      * Creates a new Swerve Style Drivetrain.
      */
     public DrivetrainImpl() {
-
+        
+        // The Pigeon is a gyroscope and implements WPILib's Gyro interface
         pigeon = new WPI_Pigeon2(DriveConstants.kPigeon, DriveConstants.kPigeonCAN);
         pigeon.configFactoryDefault();
         // Our pigeon is mounted with y forward, and z upward
@@ -63,16 +64,18 @@ public class DrivetrainImpl extends Drivetrain {
          */
         Timer.delay(1.0);
         resetModulesToAbsolute();
-
+        
+        // initial Odometry Location
         pigeon.setYaw(DriveConstants.kStartingHeading.getDegrees());
         poseEstimator = new SwerveDrivePoseEstimator(
                 DriveConstants.KINEMATICS,
                 Rotation2d.fromDegrees(pigeon.getYaw()),
                 getModulePositions(),
-                new Pose2d() // initial Odometry Location
+                new Pose2d() 
         );
 //        poseEstimator.setVisionMeasurementStdDevs(VisionConstants.kBaseVisionPoseStdDevs);
-
+        
+        // initialize PID controllers
         xController = new PIDController(DriveConstants.kTranslationalP, 0, DriveConstants.kTranslationalD);
         yController = new PIDController(DriveConstants.kTranslationalP, 0, DriveConstants.kTranslationalD);
         rotationController = new PIDController(DriveConstants.kHeadingP, 0, DriveConstants.kHeadingD);
@@ -86,7 +89,6 @@ public class DrivetrainImpl extends Drivetrain {
     @Override
     public void periodic() {
         updateOdometry();
-
         fieldDisplay.setRobotPose(getPose());
     }
 
@@ -171,7 +173,9 @@ public class DrivetrainImpl extends Drivetrain {
      * @param swerveModuleStates an array of module states to set swerve modules to. Order of the array matters here!
      */
     public void setModuleStates(SwerveModuleState[] swerveModuleStates, boolean isOpenLoop) {
+        // makes sure speeds of modules don't exceed maximum allowed
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeed);
+        
         for (int i = 0; i < 4; i++) {
             modules[i].setDesiredState(swerveModuleStates[i], isOpenLoop);
         }
