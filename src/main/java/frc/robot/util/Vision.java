@@ -194,7 +194,7 @@ public class Vision {
       camera = new PhotonCamera(cameraName);
       photonPoseEstimator = new PhotonPoseEstimator(
         m_aprilTagFieldLayout, 
-        PoseStrategy.LOWEST_AMBIGUITY, 
+        PoseStrategy.AVERAGE_BEST_TARGETS, 
         camera, 
         robotToCam
       );
