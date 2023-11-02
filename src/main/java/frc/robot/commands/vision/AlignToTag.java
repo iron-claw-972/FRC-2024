@@ -19,7 +19,7 @@ public class AlignToTag extends SequentialCommandGroup {
      */
     public AlignToTag(Drivetrain drive) {
         m_drive = drive;
-        addCommands(new GoToPose(()->getPose(), drive));
+        addCommands(new GoToPose(()->getPose(), drive).withTimeout(2));
     }
 
     /**
@@ -39,7 +39,7 @@ public class AlignToTag extends SequentialCommandGroup {
                 closest = tag;
             }
         }
-        return new Pose2d(m_drive.getPose().getX(), closest.getY(),
-            new Rotation2d(2*Math.PI-closest.getRotation().getRadians()));
+        double angle = Math.PI - closest.getRotation().getRadians();
+        return new Pose2d(m_drive.getPose().getX(), closest.getY(), new Rotation2d(angle));
     }
 }
