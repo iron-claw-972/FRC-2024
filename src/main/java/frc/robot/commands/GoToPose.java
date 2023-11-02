@@ -91,11 +91,11 @@ public class GoToPose extends SequentialCommandGroup {
     // get the distance to the pose.
     double dist = m_drive.getPose().minus(pose).getTranslation().getNorm();
 
-    // if greater than 4m or less than 20 cm, don't run it. If the path is too small pathplanner makes weird paths.
-    if (dist > 4) {
+    // if greater than 6m or less than 10 cm, don't run it. If the path is too small pathplanner makes weird paths.
+    if (dist > 6) {
       command = new DoNothing();
       DriverStation.reportWarning("Alignment Path too long, doing nothing, GoToPose.java", false);
-    } else if (dist < 0.2) {
+    } else if (dist < 0.1) {
       command = new DoNothing();
       DriverStation.reportWarning("Alignment Path too short, doing nothing, GoToPose.java", false);
     }

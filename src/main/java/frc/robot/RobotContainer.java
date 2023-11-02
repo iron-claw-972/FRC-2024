@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Robot.RobotId;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.constants.Constants;
+import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
@@ -62,7 +63,7 @@ public class RobotContainer {
         // Update drive constants based off of robot type
         DriveConstants.update(robotId);
         
-        m_vision = new Vision(m_visionTab);
+        m_vision = new Vision(m_visionTab, VisionConstants.kCameras);
 
         // Create Drivetrain
         m_drive = new Drivetrain(m_drivetrainTab, m_swerveModulesTab, m_vision);
@@ -86,7 +87,7 @@ public class RobotContainer {
         // Update drive constants based off of robot type
         DriveConstants.update(robotId);
 
-        m_vision = new Vision(m_visionTab);
+        m_vision = new Vision(m_visionTab, VisionConstants.kCameras);
 
         // Create Drivetrain, because every robot will have a drivetrain
         m_drive = new Drivetrain(m_drivetrainTab, m_swerveModulesTab, m_vision);
