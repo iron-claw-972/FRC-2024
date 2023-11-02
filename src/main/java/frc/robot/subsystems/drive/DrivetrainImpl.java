@@ -175,7 +175,7 @@ public class DrivetrainImpl extends Drivetrain {
     public void setModuleStates(SwerveModuleState[] swerveModuleStates, boolean isOpenLoop) {
         // makes sure speeds of modules don't exceed maximum allowed
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeed);
-        
+
         for (int i = 0; i < 4; i++) {
             modules[i].setDesiredState(swerveModuleStates[i], isOpenLoop);
         }
@@ -231,8 +231,9 @@ public class DrivetrainImpl extends Drivetrain {
 
 
     /**
-     * TODO: Comment
-     * @return chassis speed of swerve drive
+     * Calculates chassis speed of drivetrain using the current SwerveModuleStates
+     * @return ChassisSpeeds object
+     * This is often used as an input for other methods
      */
     public ChassisSpeeds getChassisSpeeds() {
         return DriveConstants.KINEMATICS.toChassisSpeeds(
@@ -241,8 +242,9 @@ public class DrivetrainImpl extends Drivetrain {
     }
 
     /**
-     * TODO: Comment
-     * @return
+     * Gets ChassisSpeed relative to the field, using the current rotation relative to the
+     * driver station, where 0 degrees is pointing away from the alliance wall
+     * @return ChassisSpeeds object relative to the field
      */
     public ChassisSpeeds getFieldRelativeChassisSpeeds() {
         return ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -252,8 +254,8 @@ public class DrivetrainImpl extends Drivetrain {
     }
 
     /**
-     * TODO: Comment
-     * @return
+     * Uses Pythagorean Theorem to calculate the Chassis speed based on the x and y components
+     * @return the magnitude of the Chassis Speed
      */
     public double getChassisSpeedsMagnitude() {
         return Math.hypot(
@@ -314,7 +316,7 @@ public class DrivetrainImpl extends Drivetrain {
     }
 
 
-
+    // getters for the PID Controllers
     public PIDController getXController() {
         return xController;
     }
