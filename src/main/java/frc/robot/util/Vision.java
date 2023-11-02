@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.vision.AimAtTag;
+import frc.robot.commands.vision.AlignToTag;
 import frc.robot.commands.vision.CalculateStdDevs;
 import frc.robot.commands.vision.TestVisionDistance;
 import frc.robot.constants.Constants;
@@ -77,6 +78,8 @@ public class Vision {
     m_shuffleboardTab.add("Distance test (forward)", new TestVisionDistance(0.1, drive, this));
     SmartDashboard.putData("Vision distance test (backward)", new TestVisionDistance(-0.1, drive, this));
     m_shuffleboardTab.add("Distance test (backward)", new TestVisionDistance(-0.1, drive, this));
+    SmartDashboard.putData("Vision align to tag", new AlignToTag(drive));
+    m_shuffleboardTab.add("Align to tag", new AlignToTag(drive));
   }
 
   /**
