@@ -34,8 +34,8 @@ public class VisionConstants {
   // The highest ambiguity to use
   public static final double kHighestAmbiguity = 1;
 
-  // The sitance the robot should be from the grid to score
-  public static final double kGridDistance = 1;
+  // The distance the robot should be from the grid to score in inches
+  public static final double kGridDistance = 15;
 
   // The limelight pose
   public static final ArrayList<Pair<String, Transform3d>> kCameras = new ArrayList<Pair<String, Transform3d>>(List.of(
