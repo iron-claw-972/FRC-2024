@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.constants.miscConstants.FieldConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 /**
  * Class to store data about scoring locations
@@ -43,12 +44,11 @@ public class Node {
   
   /**
   * Creates a new Node object
-  * @param vision The vision, for april tag positions
   * @param alliance The node's color
   * @param row Which row it's in (1 = bottom, 2 = middle, 3 = top)
   * @param column Grid column from left to right (1-9)
   */
-  public Node(Vision vision, Alliance alliance, int row, int column){
+  public Node(Alliance alliance, int row, int column){
     // Sets the alliance, row, and column to the parameters
     this.alliance = alliance;
     this.row = row;
@@ -59,8 +59,8 @@ public class Node {
     type = row==1?Types.HYBRID : column%3==2?Types.CUBE : Types.CONE;
     
     // Which April tag this node is closest to
-    // Uses integer division to return 0-2, then adds 1 for red or 6 for blue to get 1-8
-    Pose3d tag = vision.getTagPose((column-1)/3+(alliance==Alliance.Red?1:6));
+    // Uses integer division to return 0-2, then adds 1 for red or 6 for blue to get 1-8, subtracts 1 for index
+    Pose3d tag = FieldConstants.kAprilTags.get((column-1)/3+(alliance==Alliance.Red?1:6)-1).pose;
     // The x coordinate in meters
     double x;
     // Vertical distance in meters
