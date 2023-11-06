@@ -66,13 +66,13 @@ public class Module extends SubsystemBase {
         setupShuffleboard();
     }
 
-    public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
+    public void setDesiredState(SwerveModuleState _desiredState, boolean isOpenLoop) {
 
         /*
          * This is a custom optimize function, since default WPILib optimize assumes
          * continuous controller which CTRE and Rev onboard is not
          */
-        desiredState = optimizeStates ? CTREModuleState.optimize(desiredState, getState().angle) : desiredState;
+        desiredState = optimizeStates ? CTREModuleState.optimize(_desiredState, getState().angle) : desiredState;
         setAngle(desiredState);
         setSpeed(desiredState, isOpenLoop);
     }

@@ -173,7 +173,10 @@ public class DrivetrainImpl extends Drivetrain {
 
         fieldDisplay.setRobotPose(getPose());
 
-        if (Constants.DO_LOGGING) updateLogs();
+        if (Constants.DO_LOGGING) try {
+            updateLogs();
+        } catch (Exception e) {
+        }
     }
     // PIDs for Chassis movement
 

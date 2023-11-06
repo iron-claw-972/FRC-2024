@@ -41,7 +41,7 @@ public class DriveConstants {
     // TODO: tune this better.
     public static double kMaxAngularAccel = 8 * 2 * Math.PI; // 8 rotations per second per second
 
-    public static int kPigeon = 0;
+    public static int kPigeon = 13;
 
     public static Rotation2d kStartingHeading = new Rotation2d();
 
@@ -52,24 +52,24 @@ public class DriveConstants {
             new Translation2d(-DriveConstants.kTrackWidth / 2, -DriveConstants.kTrackWidth / 2)
     );
 
-    public static int kDriveFrontLeft = 20;
-    public static int kSteerFrontLeft = 15;
-    public static int kEncoderFrontLeft = 40;
+    public static int kDriveFrontLeft = 1;
+    public static int kSteerFrontLeft = 2;
+    public static int kEncoderFrontLeft = 3;
     public static double kSteerOffsetFrontLeft = 0.058291152119637;//-3.060285486280918+Math.PI;
 
-    public static int kDriveFrontRight = 11;
-    public static int kSteerFrontRight = 30;
-    public static int kEncoderFrontRight = 41;
+    public static int kDriveFrontRight = 4;
+    public static int kSteerFrontRight = 5;
+    public static int kEncoderFrontRight = 6;
     public static double kSteerOffsetFrontRight = -2.994324445724487;//-3.001994334161282;
 
-    public static int kDriveBackLeft = 16;
-    public static int kSteerBackLeft = 18;
-    public static int kEncoderBackLeft = 42;
+    public static int kDriveBackLeft = 7;
+    public static int kSteerBackLeft = 8;
+    public static int kEncoderBackLeft = 9;
     public static double kSteerOffsetBackLeft = -2.540267050266266;//0.650406539440155+Math.PI;
 
-    public static int kDriveBackRight = 32;
-    public static int kSteerBackRight = 35;
-    public static int kEncoderBackRight = 43;
+    public static int kDriveBackRight = 10;
+    public static int kSteerBackRight = 11;
+    public static int kEncoderBackRight = 12;
     public static double kSteerOffsetBackRight = 2.626169800758362;//2.771897681057453;
 
     // heading PID

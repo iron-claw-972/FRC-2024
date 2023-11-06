@@ -8,8 +8,12 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.constants.Constants;
+import frc.robot.controls.BaseDriverConfig;
+import frc.robot.controls.GameControllerDriverConfig;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DrivetrainImpl;
 import frc.robot.subsystems.SubsystemFactory;
 
 /**
@@ -37,18 +41,25 @@ public class RobotContainer {
 //    private final Vision vision;
 
     // The robot's subsystems are defined here...
-    private final Drivetrain drive;
+    private final DrivetrainImpl drive;
 
 
     // Controllers are defined here
-//    private final BaseDriverConfig driver;
+    private final BaseDriverConfig driver;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer(RobotId robotId) {
 
-        drive = (Drivetrain) SubsystemFactory.get(Drivetrain.class);
+        drive = new DrivetrainImpl(drivetrainTab, swerveModulesTab);
+        driver = new GameControllerDriverConfig(drive, controllerTab, false);
+
+        drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
+
+        driver.configureControls();
+
+        driver.setupShuffleboard();
 
 //        switch (robotId) {
 //            case SwerveCompetition:
