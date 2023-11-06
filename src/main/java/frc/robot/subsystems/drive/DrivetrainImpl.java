@@ -242,40 +242,6 @@ public class DrivetrainImpl extends Drivetrain {
     }
 
     /**
-     * Gets ChassisSpeed relative to the field, using the current rotation relative to the
-     * driver station, where 0 degrees is pointing away from the alliance wall
-     * @return ChassisSpeeds object relative to the field
-     */
-    public ChassisSpeeds getFieldRelativeChassisSpeeds() {
-        return ChassisSpeeds.fromFieldRelativeSpeeds(
-                getChassisSpeeds(),
-                getPose().getRotation()
-        );
-    }
-
-    /**
-     * Uses Pythagorean Theorem to calculate the Chassis speed based on the x and y components
-     * @return the magnitude of the Chassis Speed
-     */
-    public double getChassisSpeedsMagnitude() {
-        return Math.hypot(
-                getFieldRelativeChassisSpeeds().vxMetersPerSecond,
-                getFieldRelativeChassisSpeeds().vyMetersPerSecond
-        );
-    }
-
-    /**
-     * TODO: Comment
-     * @return
-     */
-    public Rotation2d getFieldRelativeHeading() {
-        return Rotation2d.fromRadians(Math.atan2(
-                getFieldRelativeChassisSpeeds().vxMetersPerSecond,
-                getFieldRelativeChassisSpeeds().vyMetersPerSecond
-        ));
-    }
-
-    /**
      * @return the yaw of the robot, aka heading, the direction it is facing
      */
     public Rotation2d getYaw() {
