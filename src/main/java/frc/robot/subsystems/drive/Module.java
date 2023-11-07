@@ -13,7 +13,7 @@ import frc.robot.util.ConversionUtils;
 /**
  * Swerve module for drivetrain to be used inside of simulation.
  */
-@SubsystemImpl(Module.class)
+@SubsystemImpl(ModuleImpl.class)
 public class Module extends SubsystemBase {
 
     private double currentSteerPositionRad = 0;

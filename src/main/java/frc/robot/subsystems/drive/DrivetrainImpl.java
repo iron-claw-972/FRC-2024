@@ -11,6 +11,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -50,7 +51,8 @@ public class DrivetrainImpl extends Drivetrain {
      * Creates a new Swerve Style Drivetrain.
      */
     public DrivetrainImpl() {
-        
+        super();
+
         // The Pigeon is a gyroscope and implements WPILib's Gyro interface
         pigeon = new WPI_Pigeon2(DriveConstants.kPigeon, DriveConstants.kPigeonCAN);
         pigeon.configFactoryDefault();

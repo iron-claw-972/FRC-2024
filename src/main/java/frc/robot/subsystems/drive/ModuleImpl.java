@@ -12,6 +12,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.swerve.DriveConstants;
@@ -24,7 +25,8 @@ import lib.CTREModuleState;
 public class ModuleImpl extends Module {
     private final ModuleType type;
 
-    private final Rotation2d angleOffset;
+    // Motor ticks
+    private final double angleOffset;
 
     private final WPI_TalonFX angleMotor;
     private final WPI_TalonFX driveMotor;
@@ -35,26 +37,35 @@ public class ModuleImpl extends Module {
 
     private boolean optimizeStates = true;
 
-    public ModuleImpl(ModuleConstants moduleConstants) {
-        super(moduleConstants);
+    public ModuleImpl(Object moduleConstants) {
+        super((ModuleConstants) moduleConstants);
 
-        type = moduleConstants.getType();
+        var constants = (ModuleConstants) moduleConstants;
 
-        angleOffset = new Rotation2d(moduleConstants.getSteerOffset());
+        type = constants.getType();
+
+//        angleOffset = new Rotation2d(constants.getSteerOffset());
+        angleOffset = constants.getSteerOffset()
 
         /* Angle Encoder Config */
-        CANcoder = new WPI_CANCoder(moduleConstants.getEncoderPort(), DriveConstants.kSteerEncoderCAN);
+        CANcoder = new WPI_CANCoder(constants.getEncoderPort(), DriveConstants.kSteerEncoderCAN);
         configCANcoder();
 
         /* Angle Motor Config */
-        angleMotor = new WPI_TalonFX(moduleConstants.getSteerPort(), DriveConstants.kSteerEncoderCAN);
+        angleMotor = new WPI_TalonFX(constants.getSteerPort(), DriveConstants.kSteerEncoderCAN);
         configAngleMotor();
 
         /* Drive Motor Config */
-        driveMotor = new WPI_TalonFX(moduleConstants.getDrivePort(), DriveConstants.kDriveMotorCAN);
+        driveMotor = new WPI_TalonFX(constants.getDrivePort(), DriveConstants.kDriveMotorCAN);
         configDriveMotor();
 
         setDesiredState(new SwerveModuleState(0, getAngle()), false);
+    }
+
+    @Override
+    public void periodic() {
+        DriverStation.reportError(type.name() + " Encoder offset: " + angleMotor.getSelectedSensorPosition()
+                , false);
     }
 
     @Override
@@ -64,7 +75,7 @@ public class ModuleImpl extends Module {
          * This is a custom optimize function, since default WPILib optimize assumes
          * continuous controller which CTRE and Rev onboard is not
          */
-        desiredState = optimizeStates ? CTREModuleState.optimize(desiredState, getState().angle) : desiredState;
+        this.desiredState = optimizeStates ? CTREModuleState.optimize(desiredState, getState().angle) : desiredState;
         setAngle(desiredState);
         setSpeed(desiredState, isOpenLoop);
     }
@@ -125,9 +136,11 @@ public class ModuleImpl extends Module {
 
     @Override
     public void resetToAbsolute() {
-        double absolutePosition = ConversionUtils.degreesToFalcon(getCANcoder().getDegrees() - angleOffset.getDegrees(),
-                                                                  DriveConstants.kAngleGearRatio);
-        angleMotor.setSelectedSensorPosition(absolutePosition);
+        // Sensor ticks
+        // TODO: Convert sensor ticks in driveconstants to radians
+//        double absolutePosition = ConversionUtils.degreesToFalcon(getCANcoder().getDegrees() - angleOffset.getDegrees(),
+//                                                                  DriveConstants.kAngleGearRatio);
+        angleMotor.setSelectedSensorPosition();
     }
 
     private void configCANcoder() {
@@ -154,6 +167,7 @@ public class ModuleImpl extends Module {
         angleMotor.setNeutralMode(DriveConstants.kAngleNeutralMode);
         angleMotor.configVoltageCompSaturation(Constants.ROBOT_VOLTAGE);
         angleMotor.enableVoltageCompensation(true);
+        angleMotor.setSelectedSensorPosition(0);
         resetToAbsolute();
     }
 
@@ -179,7 +193,6 @@ public class ModuleImpl extends Module {
         driveMotor.setNeutralMode(DriveConstants.kDriveNeutralMode);
         driveMotor.configVoltageCompSaturation(Constants.ROBOT_VOLTAGE);
         driveMotor.enableVoltageCompensation(true);
-        driveMotor.setSelectedSensorPosition(0);
     }
 
     @Override

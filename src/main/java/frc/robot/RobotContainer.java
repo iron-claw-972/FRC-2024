@@ -6,8 +6,13 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.controls.BaseDriverConfig;
+import frc.robot.controls.GameControllerDriverConfig;
+import frc.robot.controls.PS5ControllerDriverConfig;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.subsystems.SubsystemFactory;
+import frc.robot.subsystems.drive.DrivetrainImpl;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -34,18 +39,24 @@ public class RobotContainer {
 //    private final Vision vision;
 
     // The robot's subsystems are defined here...
-    private final Drivetrain drive;
+    private final DrivetrainImpl drive;
 
 
     // Controllers are defined here
-//    private final BaseDriverConfig driver;
+    private final BaseDriverConfig driver;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
 
-        drive = SubsystemFactory.get(Drivetrain.class);
+        drive = new DrivetrainImpl();
+        driver = new GameControllerDriverConfig(drive, controllerTab, false);
+
+        driver.configureControls();
+
+        drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
+
 
 //        switch (robotId) {
 //            case SwerveCompetition:

@@ -16,11 +16,17 @@ public class Drivetrain extends SubsystemBase {
     protected final Module[] modules;
 
     public Drivetrain() {
+//        modules = new Module[]{
+//                SubsystemFactory.get(Module.class, ModuleConstants.FRONT_LEFT),
+//                SubsystemFactory.get(Module.class, ModuleConstants.FRONT_RIGHT),
+//                SubsystemFactory.get(Module.class, ModuleConstants.BACK_LEFT),
+//                SubsystemFactory.get(Module.class, ModuleConstants.BACK_RIGHT)
+//        };
         modules = new Module[]{
-                SubsystemFactory.get(Module.class, ModuleConstants.FRONT_LEFT),
-                SubsystemFactory.get(Module.class, ModuleConstants.FRONT_RIGHT),
-                SubsystemFactory.get(Module.class, ModuleConstants.BACK_LEFT),
-                SubsystemFactory.get(Module.class, ModuleConstants.BACK_RIGHT)
+                new ModuleImpl(ModuleConstants.FRONT_LEFT),
+                new ModuleImpl(ModuleConstants.FRONT_RIGHT),
+                new ModuleImpl(ModuleConstants.BACK_LEFT),
+                new ModuleImpl(ModuleConstants.BACK_RIGHT)
         };
     }
 
