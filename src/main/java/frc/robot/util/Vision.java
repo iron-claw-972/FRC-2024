@@ -20,6 +20,7 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -149,17 +150,36 @@ public class Vision {
   public ArrayList<EstimatedRobotPose> getEstimatedPoses(Pose2d referencePose) {
     ArrayList<EstimatedRobotPose> estimatedPoses = new ArrayList<>();
     for (int i = 0; i < m_cameras.size(); i++) {
-      Optional<EstimatedRobotPose> estimatedPose = m_cameras.get(i).getEstimatedPose(referencePose);
-      // If the camera can see an april tag that exists, add it to the array list
-      // April tags that don't exist might return a result that is present but doesn't have a pose
-      if (estimatedPose.isPresent() && estimatedPose.get().estimatedPose != null) {
-        estimatedPoses.add(estimatedPose.get());
-        if(Constants.kLogging){
-          LogManager.addDoubleArray("Vision/camera " + i + "/estimated pose2d", new double[] {
-            estimatedPose.get().estimatedPose.getX(),
-            estimatedPose.get().estimatedPose.getY(),
-            estimatedPose.get().estimatedPose.getRotation().getZ()
-          });
+      if(VisionConstants.kUseManualCalculations){
+        Pose2d pose = m_cameras.get(i).getEstimatedPose(referencePose.getRotation().getRadians());
+        if(pose != null){
+          EstimatedRobotPose estimatedPose = new EstimatedRobotPose(
+            new Pose3d(pose.getX(), pose.getY(), 0, new Rotation3d(0, 0, pose.getRotation().getRadians())), 
+            m_cameras.get(i).getTimeStamp(), 
+            List.of(m_cameras.get(i).getBestTarget())
+          );
+          estimatedPoses.add(estimatedPose);
+          if(Constants.kLogging){
+            LogManager.addDoubleArray("Vision/camera " + i + "/estimated pose2d", new double[] {
+              pose.getX(),
+              pose.getY(),
+              pose.getRotation().getRadians()
+            });
+          }
+        }
+      }else{
+        Optional<EstimatedRobotPose> estimatedPose = m_cameras.get(i).getEstimatedPose(referencePose);
+        // If the camera can see an april tag that exists, add it to the array list
+        // April tags that don't exist might return a result that is present but doesn't have a pose
+        if (estimatedPose.isPresent() && estimatedPose.get().estimatedPose != null) {
+          estimatedPoses.add(estimatedPose.get());
+          if(Constants.kLogging){
+            LogManager.addDoubleArray("Vision/camera " + i + "/estimated pose2d", new double[] {
+              estimatedPose.get().estimatedPose.getX(),
+              estimatedPose.get().estimatedPose.getY(),
+              estimatedPose.get().estimatedPose.getRotation().getZ()
+            });
+          }
         }
       }
     }
@@ -187,6 +207,7 @@ public class Vision {
   private class VisionCamera {
     PhotonCamera camera;
     PhotonPoseEstimator photonPoseEstimator;
+    Pose2d lastPose;
   
     /**
      * Stores information about a camera
@@ -203,6 +224,7 @@ public class Vision {
       );
       photonPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
       photonPoseEstimator.setReferencePose(new Pose2d());
+      lastPose = null;
     }
   
     /**
@@ -229,6 +251,14 @@ public class Vision {
       }
 
       Optional<EstimatedRobotPose> pose = photonPoseEstimator.update(cameraResult);
+      
+      if(pose.isPresent() && pose.get()!=null && pose.get().estimatedPose!=null){
+        if(lastPose==null || lastPose.getTranslation().getDistance(pose.get().estimatedPose.toPose2d().getTranslation())>0.5){
+          lastPose = pose.get().estimatedPose.toPose2d();
+          return Optional.empty();
+        }
+        lastPose = pose.get().estimatedPose.toPose2d();
+      }
 
       return pose;
     }
@@ -238,7 +268,6 @@ public class Vision {
      * @param yaw The yaw of the robot to use in the calculation
      * @return estimated pose as a Pose2d
      */
-    @SuppressWarnings("unused")
     public Pose2d getEstimatedPose(double yaw){
       PhotonTrackedTarget target = camera.getLatestResult().getBestTarget();
       if(target==null){
@@ -263,6 +292,20 @@ public class Vision {
         LogManager.addDoubleArray("Vision/pose", new double[]{pose.getX(), pose.getY(), yaw});
       }
       return pose;
+    }
+    /**
+     * Gets the last timestamp in seconds
+     * @return The timestamp in seconds
+     */
+    public double getTimeStamp(){
+      return camera.getLatestResult().getTimestampSeconds();
+    }
+    /**
+     * Gets the best target
+     * @return A PhotonTrackedTarget
+     */
+    public PhotonTrackedTarget getBestTarget(){
+      return camera.getLatestResult().getBestTarget();
     }
   }
 }

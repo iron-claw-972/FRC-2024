@@ -32,6 +32,9 @@ public class GoToPose extends SequentialCommandGroup {
   public GoToPose(Supplier<Pose2d> poseSupplier, Drivetrain drive) {
     this(poseSupplier, AutoConstants.kMaxAutoSpeed, AutoConstants.kMaxAutoAccel, drive);
   }
+  public GoToPose(Pose2d pose, Drivetrain drive){
+    this(()->pose, drive);
+  }
 
   /**
    * Uses PathPlanner to go to a pose

@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.GoToPose;
 import frc.robot.commands.SetFormationX;
 import frc.robot.constants.miscConstants.OIConstants;
+import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.MathUtils;
 import frc.robot.util.Node;
@@ -48,11 +49,19 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     // Resets the modules to absolute if they are having the unresolved zeroing error
     kDriver.get(Button.A).onTrue(new InstantCommand(() -> getDrivetrain().resetModulesToAbsolute()));
 
+    // Alignment controls
     kDriver.get(DPad.LEFT).onTrue(new InstantCommand(() -> select(1)));
     kDriver.get(DPad.UP).onTrue(new InstantCommand(() -> select(2)));
     kDriver.get(DPad.RIGHT).onTrue(new InstantCommand(() -> select(3)));
     kDriver.get(DPad.DOWN).onTrue(new InstantCommand(() -> select(0)));
+    // Grid alignment
     kDriver.get(Button.RB).whileTrue(new GoToPose(() -> getSelectedPose(), getDrivetrain()));
+    // Single substation x and angle alignment
+    kDriver.get(Button.LB).whileTrue(new GoToPose(() -> new Pose2d(
+      DriverStation.getAlliance()==Alliance.Blue?VisionConstants.kBlueSingleSubstationX:VisionConstants.kRedSingleSubstationX,
+      getDrivetrain().getPose().getY(),
+      new Rotation2d(Math.PI/2)
+    ), getDrivetrain()));
   }
 
   private void select(int value){

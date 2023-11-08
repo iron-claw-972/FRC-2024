@@ -15,12 +15,15 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 
 public class VisionConstants {
   /**
    * If the vision is enabled on the robot
    */
   public static final boolean kEnabled = true;
+
+  public static final boolean kUseManualCalculations = false;
 
   /*
    * The standard deviations to use for the vision
@@ -37,9 +40,37 @@ public class VisionConstants {
   // The distance the robot should be from the grid to score in inches
   public static final double kGridDistance = 15;
 
-  // The limelight pose
+  // Distance from the April tag to the single substation in the x direction
+  public static final double kSingleSubstationDistance = Units.inchesToMeters(79.395);
+
+  // X in m of the single substations
+  public static final double kBlueSingleSubstationX = FieldConstants.kAprilTags.get(3).pose.getX() - kSingleSubstationDistance;
+  public static final double kRedSingleSubstationX = FieldConstants.kAprilTags.get(4).pose.getX() + kSingleSubstationDistance;
+
+  /** The Blue Shelf April Tag X position */
+  public static double kBlueShelfX = FieldConstants.kAprilTags.get(3).pose.getX();
+  /** The Red Shelf April Tag X position */
+  public static double kRedShelfX = FieldConstants.kAprilTags.get(4).pose.getX();
+
+  /** The Y position of the bottom double substation shelf, the one closer to the grids */
+  // 15 from april tag to edge of portal (where cones are accessible). That area is 34.21 inches wide, just aim for the center
+  public static double kShelfY = FieldConstants.kAprilTags.get(3).pose.getY() - Units.inchesToMeters(15 + (34.21 / 2));
+
+  // The camera poses
   public static final ArrayList<Pair<String, Transform3d>> kCameras = new ArrayList<Pair<String, Transform3d>>(List.of(
-    new Pair<String, Transform3d>("Camera1",
-    new Transform3d(new Translation3d(0.5, 0, 0.1), new Rotation3d(0, 0, 0)))
+    new Pair<String, Transform3d>(
+      "Camera1",
+      new Transform3d(
+        new Translation3d(Units.inchesToMeters(8.996), Units.inchesToMeters(6.48), Units.inchesToMeters(37.44)),
+        new Rotation3d(0, Units.degreesToRadians(18), 0)
+      ))
+    // ,
+    // new Pair<String, Transform3d>(
+    //   "Camera2",
+    //   new Transform3d(
+    //     new Translation3d(Units.inchesToMeters(-0.75), Units.inchesToMeters(-7.125), Units.inchesToMeters(21)),
+    //     new Rotation3d(0, 0, Math.PI)
+    //   )
+    // )
   ));
 }
