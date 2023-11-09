@@ -32,6 +32,7 @@ import frc.robot.commands.vision.TestVisionDistance;
 import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.FieldConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
+import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.subsystems.Drivetrain;
 
 // Vision and it's commands are adapted from Iron Claw's FRC2022, FRC2023, and: https://www.youtube.com/watch?v=TG9KAa2EGzQ&t=1439s
@@ -208,6 +209,7 @@ public class Vision {
     PhotonCamera camera;
     PhotonPoseEstimator photonPoseEstimator;
     Pose2d lastPose;
+    double lastTimestamp = 0;
   
     /**
      * Stores information about a camera
@@ -253,11 +255,14 @@ public class Vision {
       Optional<EstimatedRobotPose> pose = photonPoseEstimator.update(cameraResult);
       
       if(pose.isPresent() && pose.get()!=null && pose.get().estimatedPose!=null){
-        if(lastPose==null || lastPose.getTranslation().getDistance(pose.get().estimatedPose.toPose2d().getTranslation())>0.5){
+        double timestamp = getTimeStamp();
+        if(lastPose==null || lastPose.getTranslation().getDistance(pose.get().estimatedPose.toPose2d().getTranslation())>DriveConstants.kMaxSpeed*(timestamp-lastTimestamp)){
           lastPose = pose.get().estimatedPose.toPose2d();
+          lastTimestamp = timestamp;
           return Optional.empty();
         }
         lastPose = pose.get().estimatedPose.toPose2d();
+        lastTimestamp = timestamp;
       }
 
       return pose;

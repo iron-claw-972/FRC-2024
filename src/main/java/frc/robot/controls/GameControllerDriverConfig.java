@@ -62,6 +62,18 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
       getDrivetrain().getPose().getY(),
       new Rotation2d(Math.PI/2)
     ), getDrivetrain()));
+    // Double substation alignment
+    kDriver.get(Button.Y).whileTrue(new GoToPose(() -> new Pose2d(
+      DriverStation.getAlliance()==Alliance.Blue?VisionConstants.kBlueShelfX:VisionConstants.kRedShelfX,
+      VisionConstants.kTopShelfY,
+      new Rotation2d(Math.PI/2)
+    ), getDrivetrain()));
+    // Double substation alignment
+    kDriver.get(Button.Y).whileTrue(new GoToPose(() -> new Pose2d(
+      DriverStation.getAlliance()==Alliance.Blue?VisionConstants.kBlueShelfX:VisionConstants.kRedShelfX,
+      VisionConstants.kBottomShelfY,
+      new Rotation2d(Math.PI/2)
+    ), getDrivetrain()));
   }
 
   private void select(int value){

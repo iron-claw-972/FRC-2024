@@ -47,14 +47,20 @@ public class VisionConstants {
   public static final double kBlueSingleSubstationX = FieldConstants.kAprilTags.get(3).pose.getX() - kSingleSubstationDistance;
   public static final double kRedSingleSubstationX = FieldConstants.kAprilTags.get(4).pose.getX() + kSingleSubstationDistance;
 
-  /** The Blue Shelf April Tag X position */
-  public static double kBlueShelfX = FieldConstants.kAprilTags.get(3).pose.getX();
-  /** The Red Shelf April Tag X position */
-  public static double kRedShelfX = FieldConstants.kAprilTags.get(4).pose.getX();
+  // How far the robot should be from the shelf when aligning
+  public static final double kShelfDistance = 1;
 
+  /** The Blue Shelf X position to align to */
+  public static final double kBlueShelfX = FieldConstants.kAprilTags.get(3).pose.getX() - kShelfDistance;
+  /** The Red Shelf X position to align to */
+  public static final double kRedShelfX = FieldConstants.kAprilTags.get(4).pose.getX() + kShelfDistance;
+
+  /** The Y position of the top double substation shelf, the one closer to the wall */
+  // 15 from april tag to edge of portal (where cones are accessible). That area is 34.21 inches wide, just aim for the center
+  public static double kTopShelfY = FieldConstants.kAprilTags.get(3).pose.getY() + Units.inchesToMeters(15 + (34.21 / 2));
   /** The Y position of the bottom double substation shelf, the one closer to the grids */
   // 15 from april tag to edge of portal (where cones are accessible). That area is 34.21 inches wide, just aim for the center
-  public static double kShelfY = FieldConstants.kAprilTags.get(3).pose.getY() - Units.inchesToMeters(15 + (34.21 / 2));
+  public static double kBottomShelfY = FieldConstants.kAprilTags.get(3).pose.getY() - Units.inchesToMeters(15 + (34.21 / 2));
 
   // The camera poses
   public static final ArrayList<Pair<String, Transform3d>> kCameras = new ArrayList<Pair<String, Transform3d>>(List.of(
