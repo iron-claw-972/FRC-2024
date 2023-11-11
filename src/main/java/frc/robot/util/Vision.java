@@ -38,6 +38,7 @@ public class Vision {
 
     //set up the vision commands on SmartDashboard so we can turn them on/off for testing
     setUpSmartDashboardCommandButtons();
+    NetworkTableInstance.getDefault().startServer();
   }
 
   public Vision(){} //empty constructor for use of vision without shuffleboard/smartdashboard
