@@ -23,4 +23,15 @@ public class VisionConstants {
     0.03034, // y in meters (default=0.9)
     1000  // heading in radians. The gyroscope is very accurate, so as long as it is reset correctly it is unnecessary to correct it with vision
   );
+
+  //for aiming at game pieces
+  public static final double kRotationP = 1.0; 
+  public static final double kRotationI = 0; 
+  public static final double kRotationD = 0; 
+
+  //for going toward game pieces for intaking
+  public static final double kDistanceP = 1.0; 
+  public static final double kDistanceI = 0; 
+  public static final double kDistanceD = 0; 
+
 }
