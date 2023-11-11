@@ -6,6 +6,8 @@ import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.vision.ReturnData;
 
 // Vision and it's commands are adapted from Iron Claw's FRC2022, FRC2023, and: https://www.youtube.com/watch?v=TG9KAa2EGzQ&t=1439s
 public class Vision {
@@ -105,6 +107,7 @@ public class Vision {
    */
   public void setUpSmartDashboardCommandButtons(){
     //TODO: Add this
+    SmartDashboard.putData("ReturnData", new ReturnData(this));
   }
 
   /**
