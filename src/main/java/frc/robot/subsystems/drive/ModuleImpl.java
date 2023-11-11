@@ -45,7 +45,7 @@ public class ModuleImpl extends Module {
         type = constants.getType();
 
 //        angleOffset = new Rotation2d(constants.getSteerOffset());
-        angleOffset = constants.getSteerOffset()
+        angleOffset = constants.getSteerOffset();
 
         /* Angle Encoder Config */
         CANcoder = new WPI_CANCoder(constants.getEncoderPort(), DriveConstants.kSteerEncoderCAN);
@@ -64,8 +64,7 @@ public class ModuleImpl extends Module {
 
     @Override
     public void periodic() {
-        DriverStation.reportError(type.name() + " Encoder offset: " + angleMotor.getSelectedSensorPosition()
-                , false);
+        
     }
 
     @Override
@@ -138,9 +137,9 @@ public class ModuleImpl extends Module {
     public void resetToAbsolute() {
         // Sensor ticks
         // TODO: Convert sensor ticks in driveconstants to radians
-//        double absolutePosition = ConversionUtils.degreesToFalcon(getCANcoder().getDegrees() - angleOffset.getDegrees(),
-//                                                                  DriveConstants.kAngleGearRatio);
-        angleMotor.setSelectedSensorPosition();
+        double absolutePosition = ConversionUtils.degreesToFalcon(getCANcoder().getDegrees() - angleOffset,
+                                                                  DriveConstants.kAngleGearRatio);
+        angleMotor.setSelectedSensorPosition(absolutePosition);                                                         
     }
 
     private void configCANcoder() {

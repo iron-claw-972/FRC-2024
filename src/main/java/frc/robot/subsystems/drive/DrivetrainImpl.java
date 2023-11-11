@@ -294,5 +294,8 @@ public class DrivetrainImpl extends Drivetrain {
     public PIDController getRotationController() {
         return rotationController;
     }
+    public Field2d getFeild(){
+        return fieldDisplay;
+    }
 
 }
