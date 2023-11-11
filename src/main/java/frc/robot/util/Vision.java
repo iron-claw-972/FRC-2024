@@ -40,10 +40,11 @@ public class Vision {
     NetworkTableInstance.getDefault().startServer();
   }
 
+  public Vision(){} //empty constructor for use of vision without shuffleboard/smartdashboard
 
   /**
    * Get the horizontal offset from the crosshair to the target
-   * @return offset in ________(degrees or radians)
+   * @return offset in degrees
    */
   public double getHorizontalOffset(){
     //TODO: Add this
@@ -53,7 +54,7 @@ public class Vision {
 
   /**
    * Get the vertical offset from the crosshair to the target
-   * @return offset in ________(degrees or radians)
+   * @return offset in degrees
    */
   public double getVerticalOffset(){
     //TODO: Add this
@@ -82,10 +83,24 @@ public class Vision {
    * Returns whether or not a valid object is detected
    * @return true or false
    */
-  public boolean objectDetected(){
+  public boolean validObjectDetected(){
     //TODO: Add this
     return m_objectDetected.get();
   }
+
+  /**
+   * Returns whether or not a valid object is detected
+   * @return true or false 
+   */
+  public String returnDetectedObjectClass(){
+    //TODO: Add this
+
+    if(validObjectDetected()){
+      return "hello";
+    }
+    return null; 
+  }
+
 
   /**
    * Set up the vision commands on SmartDashboard so we can turn them on/off for testing
