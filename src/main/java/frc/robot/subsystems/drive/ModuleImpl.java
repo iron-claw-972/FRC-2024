@@ -24,7 +24,7 @@ import lib.CTREModuleState;
 
 public class ModuleImpl extends Module {
     private final ModuleType type;
-
+    
     // Motor ticks
     private final double angleOffset;
 

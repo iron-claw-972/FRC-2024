@@ -51,7 +51,7 @@ public class RobotContainer {
     public RobotContainer() {
 
         drive = new DrivetrainImpl();
-        driver = new GameControllerDriverConfig(drive, controllerTab, false);
+        driver = new PS5ControllerDriverConfig(drive, controllerTab, false);
 
         driver.configureControls();
 
