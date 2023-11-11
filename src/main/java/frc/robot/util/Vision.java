@@ -16,18 +16,27 @@ public class Vision {
 
   private NetworkTable m_objectDetectionTable;
 
-  // DoubleSubscribers for the subscribing to the topics with data
+  // DoubleSubscribers for the subscribing to the topics
   private DoubleSubscriber m_tx;
   private DoubleSubscriber m_ty;
   private DoubleSubscriber m_objectDistance;
   private BooleanSubscriber m_objectDetected;
 
   /**
-   * Creates a new instance of Vision and sets up the limelight NetworkTable and the SmartDashboard
+   * Creates a new instance of Vision with a ShuffleboardTab and sets up the object detection NetworkTable and the SmartDashboard
+   * @param shuffleboardTab Vision ShuffleboardTab
    */
   public Vision(ShuffleboardTab shuffleboardTab) {
+    this();
     m_shuffleboardTab = shuffleboardTab;
+  }
 
+  /**
+   * Creates a new instance of Vision and sets up the object detection NetworkTable and the SmartDashboard
+   */
+  public Vision() {
+
+    // Get the object_detection NetworkTable
     m_objectDetectionTable = NetworkTableInstance.getDefault().getTable("object_detection");
 
     // From the object_detection NetworkTable, subscribe to the various topics with data
@@ -36,12 +45,12 @@ public class Vision {
     m_tx = m_objectDetectionTable.getDoubleTopic("tx").subscribe(0.0);
     m_ty = m_objectDetectionTable.getDoubleTopic("ty").subscribe(0.0);
 
-    //set up the vision commands on SmartDashboard so we can turn them on/off for testing
+    // Set up the vision commands on SmartDashboard so we can turn them on/off for testing
     setUpSmartDashboardCommandButtons();
+
+    // Start the NetworkTables server
     NetworkTableInstance.getDefault().startServer();
   }
-
-  public Vision(){} //empty constructor for use of vision without shuffleboard/smartdashboard
 
   /**
    * Get the horizontal offset from the crosshair to the target
@@ -49,7 +58,7 @@ public class Vision {
    */
   public double getHorizontalOffset(){
     //TODO: Add this
-    // It might be better to return this (and almost everything else) as an array, depending on how the dtection works
+    // Note: It might be better to return this (and almost everything else) as an array, depending on how the detection works
     return m_tx.get();
   }
 
