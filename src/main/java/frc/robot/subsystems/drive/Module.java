@@ -26,7 +26,7 @@ public class Module extends SubsystemBase {
     }
 
     /**
-     * Updates the simulation.
+     * Updates the simulation
      */
     @Override
     public void periodic() {

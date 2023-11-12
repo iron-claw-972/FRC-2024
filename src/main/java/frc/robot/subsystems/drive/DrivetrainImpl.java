@@ -161,9 +161,7 @@ public class DrivetrainImpl extends Drivetrain {
      * Stops all swerve modules.
      */
     public void stop() {
-        for (int i = 0; i < 4; i++) {
-            modules[i].stop();
-        }
+        Arrays.stream(modules).forEach(module -> module.stop());
     }
 
 
@@ -297,5 +295,6 @@ public class DrivetrainImpl extends Drivetrain {
     public Field2d getFeild(){
         return fieldDisplay;
     }
+    
 
 }

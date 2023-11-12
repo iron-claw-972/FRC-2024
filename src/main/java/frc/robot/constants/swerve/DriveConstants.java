@@ -81,22 +81,22 @@ public class DriveConstants {
     public static int kDriveFrontLeft = 1;
     public static int kSteerFrontLeft = 2;
     public static int kEncoderFrontLeft = 3;
-    public static double kSteerOffsetFrontLeft = 0;//0.058291152119637;//-3.060285486280918+Math.PI;
+    public static double kSteerOffsetFrontLeft = 268.9453125-180;//0.058291152119637;//-3.060285486280918+Math.PI;
 
     public static int kDriveFrontRight = 4;
     public static int kSteerFrontRight = 5;
     public static int kEncoderFrontRight = 6;
-    public static double kSteerOffsetFrontRight = 0;//-2.994324445724487;//-3.001994334161282;
+    public static double kSteerOffsetFrontRight = 292.0605468;//-2.994324445724487;//-3.001994334161282;
 
     public static int kDriveBackLeft = 7;
     public static int kSteerBackLeft = 8;
     public static int kEncoderBackLeft = 9;
-    public static double kSteerOffsetBackLeft = 0;//-2.540267050266266;//0.650406539440155+Math.PI;
+    public static double kSteerOffsetBackLeft = 173.7597+180;//-2.540267050266266;//0.650406539440155+Math.PI;
 
     public static int kDriveBackRight = 10;
     public static int kSteerBackRight = 11;
     public static int kEncoderBackRight = 12;
-    public static double kSteerOffsetBackRight = 0;//2.626169800758362;//2.771897681057453;
+    public static double kSteerOffsetBackRight = 157.148;//2.626169800758362;//2.771897681057453;
 
     // heading PID
     public static double kHeadingP = 4.6;

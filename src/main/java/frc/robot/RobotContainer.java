@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.controls.BaseDriverConfig;
@@ -49,13 +50,17 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-
         drive = new DrivetrainImpl();
-        driver = new PS5ControllerDriverConfig(drive, controllerTab, false);
+        driver = new GameControllerDriverConfig(drive, controllerTab, false);
 
         driver.configureControls();
 
         drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
+        drivetrainTab.add("feild", drive.getFeild());
+        drivetrainTab.addDouble("module1", ()->drive.getModules()[0].getAngle().getDegrees());
+        drivetrainTab.addDouble("module2", ()->drive.getModules()[1].getAngle().getDegrees());
+        drivetrainTab.addDouble("module3", ()->drive.getModules()[2].getAngle().getDegrees());
+        drivetrainTab.addDouble("module4", ()->drive.getModules()[3].getAngle().getDegrees());
 
 
 //        switch (robotId) {

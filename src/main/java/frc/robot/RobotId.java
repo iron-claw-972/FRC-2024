@@ -38,5 +38,6 @@ public enum RobotId {
     public boolean isSwerveBot() {
         return this == SwerveCompetition || this == SwerveTest;
     }
+    
 
 }

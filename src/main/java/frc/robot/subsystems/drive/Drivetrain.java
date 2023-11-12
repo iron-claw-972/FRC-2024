@@ -14,14 +14,22 @@ import frc.robot.subsystems.SubsystemImpl;
 @SubsystemImpl(DrivetrainImpl.class)
 public class Drivetrain extends SubsystemBase {
 
-    protected final Module[] modules;
+    protected final ModuleImpl[] modules;
 
     public Drivetrain() {
+        /* 
         modules = new Module[]{
                 SubsystemFactory.get(Module.class, ModuleConstants.FRONT_LEFT),
                 SubsystemFactory.get(Module.class, ModuleConstants.FRONT_RIGHT),
                 SubsystemFactory.get(Module.class, ModuleConstants.BACK_LEFT),
                 SubsystemFactory.get(Module.class, ModuleConstants.BACK_RIGHT)
+        };
+        */
+        modules = new ModuleImpl[]{
+            new ModuleImpl(ModuleConstants.FRONT_LEFT),
+            new ModuleImpl(ModuleConstants.FRONT_RIGHT),
+            new ModuleImpl(ModuleConstants.BACK_LEFT),
+            new ModuleImpl(ModuleConstants.BACK_RIGHT)
         };
     }
     
@@ -39,7 +47,7 @@ public class Drivetrain extends SubsystemBase {
         // TODO: Implement what this method should do as a placeholder
     }
 
-    public Module[] getModules() {
+    public ModuleImpl[] getModules() {
         return modules;
     }
 
