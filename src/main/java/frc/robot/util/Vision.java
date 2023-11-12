@@ -28,6 +28,7 @@ public class Vision {
   public Vision(ShuffleboardTab shuffleboardTab) {
     m_shuffleboardTab = shuffleboardTab;
 
+    // Initialize object_detection NetworkTable
     m_objectDetectionTable = NetworkTableInstance.getDefault().getTable("object_detection");
 
     // From the object_detection NetworkTable, subscribe to the various topics with data
@@ -36,12 +37,12 @@ public class Vision {
     m_tx = m_objectDetectionTable.getDoubleTopic("tx").subscribe(0.0);
     m_ty = m_objectDetectionTable.getDoubleTopic("ty").subscribe(0.0);
 
-    //set up the vision commands on SmartDashboard so we can turn them on/off for testing
+    // Set up the vision commands on SmartDashboard so we can turn them on/off for testing
     setUpSmartDashboardCommandButtons();
+    
+    // Start NetworkTables server
     NetworkTableInstance.getDefault().startServer();
   }
-
-  public Vision(){} //empty constructor for use of vision without shuffleboard/smartdashboard
 
   /**
    * Get the horizontal offset from the crosshair to the target
@@ -107,7 +108,7 @@ public class Vision {
    * Set up the vision commands on SmartDashboard so we can turn them on/off for testing
    */
   public void setUpSmartDashboardCommandButtons(){
-    //TODO: Add this
+    //TODO: See if we want to convert this to a Shuffleboard entry
     SmartDashboard.putData("ReturnData", new ReturnData(this));
   }
 
