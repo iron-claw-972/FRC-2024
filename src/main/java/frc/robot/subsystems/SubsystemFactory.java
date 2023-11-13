@@ -13,6 +13,8 @@ public class SubsystemFactory {
 
     public static <T> T get(Class<T> clazz, Object... args) {
         RobotId robotId = Robot.getRobotId();
+        // TODO: I don't think this will work. The stream is mapping all of the objects in the array to an
+        //  Object::class, so getting parameter types from that will just return Object.class
         Class<?>[] paramterTypes = Arrays.stream(args).map(Object::getClass).toArray(Class<?>[]::new);
         try {
             if (robotId.getSubsystems().contains(clazz) && RobotBase.isReal()) {
