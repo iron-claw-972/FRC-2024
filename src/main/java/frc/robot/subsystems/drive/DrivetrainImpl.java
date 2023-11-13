@@ -11,15 +11,11 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import frc.robot.Robot;
 import frc.robot.constants.Constants;
 import frc.robot.constants.swerve.DriveConstants;
-import frc.robot.constants.swerve.ModuleConstants;
-import frc.robot.subsystems.SubsystemFactory;
 
 import java.util.Arrays;
 
@@ -161,7 +157,7 @@ public class DrivetrainImpl extends Drivetrain {
      * Stops all swerve modules.
      */
     public void stop() {
-        Arrays.stream(modules).forEach(module -> module.stop());
+        Arrays.stream(modules).forEach(Module::stop);
     }
 
 
