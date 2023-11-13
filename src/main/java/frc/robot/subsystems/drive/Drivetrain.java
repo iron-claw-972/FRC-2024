@@ -1,10 +1,13 @@
 package frc.robot.subsystems.drive;
 
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.swerve.ModuleConstants;
 import frc.robot.subsystems.SubsystemFactory;
 import frc.robot.subsystems.SubsystemImpl;
+
+import java.util.Arrays;
 
 /**
  * This class should include methods that will be overridden by {@link DrivetrainImpl} to be used on an actual robot
@@ -14,23 +17,20 @@ import frc.robot.subsystems.SubsystemImpl;
 @SubsystemImpl(DrivetrainImpl.class)
 public class Drivetrain extends SubsystemBase {
 
-    protected final ModuleImpl[] modules;
+    protected final Module[] modules;
+//    protected final ModuleImpl[] modules;
 
     public Drivetrain() {
-        /* 
-        modules = new Module[]{
-                SubsystemFactory.get(Module.class, ModuleConstants.FRONT_LEFT),
-                SubsystemFactory.get(Module.class, ModuleConstants.FRONT_RIGHT),
-                SubsystemFactory.get(Module.class, ModuleConstants.BACK_LEFT),
-                SubsystemFactory.get(Module.class, ModuleConstants.BACK_RIGHT)
-        };
-        */
-        modules = new ModuleImpl[]{
-            new ModuleImpl(ModuleConstants.FRONT_LEFT),
-            new ModuleImpl(ModuleConstants.FRONT_RIGHT),
-            new ModuleImpl(ModuleConstants.BACK_LEFT),
-            new ModuleImpl(ModuleConstants.BACK_RIGHT)
-        };
+        modules = new Module[4];
+        Arrays.stream(ModuleConstants.values()).forEach(moduleConstants -> {
+            modules[moduleConstants.ordinal()] = SubsystemFactory.get(Module.class, new Pair<>(ModuleConstants.class, moduleConstants));
+        });
+//        modules = new ModuleImpl[]{
+//            new ModuleImpl(ModuleConstants.FRONT_LEFT),
+//            new ModuleImpl(ModuleConstants.FRONT_RIGHT),
+//            new ModuleImpl(ModuleConstants.BACK_LEFT),
+//            new ModuleImpl(ModuleConstants.BACK_RIGHT)
+//        };
     }
     
 
@@ -47,7 +47,7 @@ public class Drivetrain extends SubsystemBase {
         // TODO: Implement what this method should do as a placeholder
     }
 
-    public ModuleImpl[] getModules() {
+    public Module[] getModules() {
         return modules;
     }
 

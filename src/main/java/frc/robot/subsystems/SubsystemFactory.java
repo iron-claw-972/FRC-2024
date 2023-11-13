@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -11,17 +12,18 @@ import frc.robot.RobotId;
 
 public class SubsystemFactory {
 
-    public static <T> T get(Class<T> clazz, Object... args) {
+    @SafeVarargs
+    @SuppressWarnings("unchecked")
+    public static <T> T get(Class<T> clazz, Pair<Class<?>, Object>... args) {
         RobotId robotId = Robot.getRobotId();
-        // TODO: I don't think this will work. The stream is mapping all of the objects in the array to an
-        //  Object::class, so getting parameter types from that will just return Object.class
-        Class<?>[] paramterTypes = Arrays.stream(args).map(Object::getClass).toArray(Class<?>[]::new);
+        Class<?>[] parameterTypes = Arrays.stream(args).map(Pair::getFirst).toArray(Class<?>[]::new);
+        Object[] argValues = Arrays.stream(args).map(Pair::getSecond).toArray(Object[]::new);
         try {
             if (robotId.getSubsystems().contains(clazz) && RobotBase.isReal()) {
                 Class<? extends SubsystemBase> impl = clazz.getAnnotation(SubsystemImpl.class).value();
-                return (T) impl.getDeclaredConstructor(paramterTypes).newInstance(args);
+                return (T) impl.getDeclaredConstructor(parameterTypes).newInstance(argValues);
             }
-            return clazz.getDeclaredConstructor(paramterTypes).newInstance(args);
+            return clazz.getDeclaredConstructor(parameterTypes).newInstance(argValues);
         } catch (Exception e) {
             DriverStation.reportError("Could not create subsystem " + clazz.getSimpleName(), e.getStackTrace());
         }
