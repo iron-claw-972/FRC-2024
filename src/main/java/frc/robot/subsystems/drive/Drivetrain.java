@@ -22,7 +22,8 @@ public class Drivetrain extends SubsystemBase {
 
     public Drivetrain() {
         modules = new Module[4];
-        Arrays.stream(ModuleConstants.values()).forEach(moduleConstants -> {
+        ModuleConstants[] constants = Arrays.copyOfRange(ModuleConstants.values(), 0, 4);
+        Arrays.stream(constants).forEach(moduleConstants -> {
             modules[moduleConstants.ordinal()] = SubsystemFactory.get(Module.class, new Pair<>(ModuleConstants.class, moduleConstants));
         });
 //        modules = new ModuleImpl[]{
