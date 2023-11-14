@@ -161,34 +161,34 @@ public class DriveConstants {
      * Updates the constants if the RobotId is not the competition robot.
      */
     public static void update(RobotId robotId) {
-        if (robotId == RobotId.SwerveTest) {
-
-            kTrackWidth = Units.inchesToMeters(22.75); //22.75 swerve bot, 20.75 comp bot
-
-            kPigeon = 13;
-
-            kDriveFrontLeft = 1;
-            kSteerFrontLeft = 2;
-            kEncoderFrontLeft = 3;
-            kSteerOffsetFrontLeft = -1.58;
-
-            kDriveFrontRight = 4;
-            kSteerFrontRight = 5;
-            kEncoderFrontRight = 6;
-            kSteerOffsetFrontRight = 1.935;
-
-            kDriveBackLeft = 7;
-            kSteerBackLeft = 8;
-            kEncoderBackLeft = 9;
-            kSteerOffsetBackLeft = -3.1415;
-
-            kDriveBackRight = 10;
-            kSteerBackRight = 11;
-            kEncoderBackRight = 12;
-            kSteerOffsetBackRight = -0.383494421839714;
-
-            // CAN
-            kDriveMotorCAN = Constants.RIO_CAN;
-        }
+//        if (robotId == RobotId.SwerveTest) {
+//
+//            kTrackWidth = Units.inchesToMeters(22.75); //22.75 swerve bot, 20.75 comp bot
+//
+//            kPigeon = 13;
+//
+//            kDriveFrontLeft = 1;
+//            kSteerFrontLeft = 2;
+//            kEncoderFrontLeft = 3;
+//            kSteerOffsetFrontLeft = -1.58;
+//
+//            kDriveFrontRight = 4;
+//            kSteerFrontRight = 5;
+//            kEncoderFrontRight = 6;
+//            kSteerOffsetFrontRight = 1.935;
+//
+//            kDriveBackLeft = 7;
+//            kSteerBackLeft = 8;
+//            kEncoderBackLeft = 9;
+//            kSteerOffsetBackLeft = -3.1415;
+//
+//            kDriveBackRight = 10;
+//            kSteerBackRight = 11;
+//            kEncoderBackRight = 12;
+//            kSteerOffsetBackRight = -0.383494421839714;
+//
+//            // CAN
+//            kDriveMotorCAN = Constants.RIO_CAN;
+//        }
     }
 }
