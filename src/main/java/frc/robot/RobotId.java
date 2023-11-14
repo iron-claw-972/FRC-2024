@@ -13,8 +13,8 @@ import java.util.List;
  */
 public enum RobotId {
     Default,
-    SwerveCompetition(Drivetrain.class), SwerveTest(Drivetrain.class),
-    ClassBot1, ClassBot2, ClassBot3, ClassBot4;
+    Competition(Drivetrain.class), Test(),
+    ;
 
     /**
      * List of subsystems to create when the robot is instantiated.
@@ -28,14 +28,6 @@ public enum RobotId {
 
     public List<Class<? extends SubsystemBase>> getSubsystems() {
         return subsystems;
-    }
-
-    public boolean isClassBot() {
-        return this == ClassBot1 || this == ClassBot2 || this == ClassBot3 || this == ClassBot4;
-    }
-
-    public boolean isSwerveBot() {
-        return this == SwerveCompetition || this == SwerveTest;
     }
 
 }
