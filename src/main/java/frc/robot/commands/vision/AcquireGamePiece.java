@@ -1,14 +1,10 @@
 package frc.robot.commands.vision;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
-import frc.robot.constants.miscConstants.TestConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
+import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.Vision;
 
@@ -18,52 +14,51 @@ import frc.robot.util.Vision;
 public class AcquireGamePiece extends CommandBase {
 
   private Drivetrain m_drive; 
-  private double x_offset_rads; 
-  private double distance; 
-  private double rotation_pid_output; 
-  private double distance_pid_output; 
+  private Vision m_vision;
 
-
-  private PIDController m_rotation_controller; 
-  private PIDController m_distance_controller; 
-
-  private Vision m_vision = new Vision();  
+  private PIDController m_rotationPID; 
+  private PIDController m_distancePID; 
   
-  public AcquireGamePiece(Drivetrain drive) {
+  public AcquireGamePiece(Drivetrain drive, Vision vision) {
     m_drive = drive;
+    m_vision = vision;
 
-    m_rotation_controller = new PIDController(VisionConstants.kRotationP, VisionConstants.kRotationI, VisionConstants.kRotationD);
-    m_rotation_controller.setTolerance(1); //1 degree of tolerance
+    m_rotationPID = new PIDController(DriveConstants.kHeadingP, 0, DriveConstants.kHeadingD);
+    m_rotationPID.setTolerance(Units.degreesToRadians(3)); //3 degree of tolerance
+    m_rotationPID.setSetpoint(0);
 
-    m_distance_controller = new PIDController(VisionConstants.kDistanceP, VisionConstants.kDistanceI, VisionConstants.kDistanceD); 
-    m_distance_controller.setTolerance(5); //5 cm of tolerance
+    m_distancePID = new PIDController(VisionConstants.kDistanceP, VisionConstants.kDistanceI, VisionConstants.kDistanceD); 
+    m_distancePID.setTolerance(0.02); //2 cm of tolerance
+    m_distancePID.setSetpoint(0);
 
     addRequirements(drive);
   }
 
   @Override
-  public void execute() {
-    x_offset_rads = m_vision.getHorizontalOffset()*(Math.PI/180);
-    distance = m_vision.getDistance();
-     
-    rotation_pid_output = m_rotation_controller.calculate(x_offset_rads); 
-    distance_pid_output = m_distance_controller.calculate(distance); 
+  public void initialize(){
+    m_rotationPID.reset();
+    m_distancePID.reset();
+  }
 
-    //TODO: this may need to go in xSpeed, not ySpeed
-    m_drive.driveHeading(0, distance_pid_output, rotation_pid_output, false);
+  @Override
+  public void execute() {
+    double xOffset = Units.degreesToRadians(m_vision.getHorizontalOffset());
+    double angle = m_drive.getPose().getRotation().getRadians()-xOffset;
+    double distance = m_vision.getDistance();
     
-    
+    double rotationOutput = m_rotationPID.calculate(xOffset); 
+    rotationOutput = Math.max(Math.min(rotationOutput, DriveConstants.kMaxAngularSpeed), -DriveConstants.kMaxAngularSpeed);
+    double distanceOutput = m_distancePID.calculate(distance); 
+    distanceOutput = Math.max(Math.min(distanceOutput, DriveConstants.kMaxSpeed), -DriveConstants.kMaxSpeed);
+    double xSpeed = distanceOutput*Math.cos(angle);
+    double ySpeed = distanceOutput*Math.sin(angle);
+
+    m_drive.drive(xSpeed, ySpeed, rotationOutput, true, false);
   }
 
   @Override
   public boolean isFinished() { 
-    if(m_rotation_controller.atSetpoint() && m_distance_controller.atSetpoint()){
-      return true; 
-    }
-
-    //otherwise, return false 
-    return false; 
-
+    return m_rotationPID.atSetpoint() && m_distancePID.atSetpoint();
   }
 
   @Override

@@ -7,7 +7,9 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.vision.AcquireGamePiece;
 import frc.robot.commands.vision.ReturnData;
+import frc.robot.subsystems.Drivetrain;
 
 // Vision and it's commands are adapted from Iron Claw's FRC2022, FRC2023, and: https://www.youtube.com/watch?v=TG9KAa2EGzQ&t=1439s
 public class Vision {
@@ -37,9 +39,6 @@ public class Vision {
     m_tx = m_objectDetectionTable.getDoubleTopic("tx").subscribe(0.0);
     m_ty = m_objectDetectionTable.getDoubleTopic("ty").subscribe(0.0);
 
-    // Set up the vision commands on SmartDashboard so we can turn them on/off for testing
-    setUpSmartDashboardCommandButtons();
-    
     // Start NetworkTables server
     NetworkTableInstance.getDefault().startServer();
   }
@@ -49,7 +48,6 @@ public class Vision {
    * @return offset in degrees
    */
   public double getHorizontalOffset(){
-    //TODO: Add this
     // It might be better to return this (and almost everything else) as an array, depending on how the dtection works
     return m_tx.get();
   }
@@ -59,7 +57,6 @@ public class Vision {
    * @return offset in degrees
    */
   public double getVerticalOffset(){
-    //TODO: Add this
     return m_ty.get();
   }
 
@@ -68,7 +65,6 @@ public class Vision {
    * @return Distance in meters
    */
   public double getDistance(){
-    //TODO: Add this
     return m_objectDistance.get();
   }
 
@@ -86,13 +82,12 @@ public class Vision {
    * @return true or false
    */
   public boolean validObjectDetected(){
-    //TODO: Add this
     return m_objectDetected.get();
   }
 
   /**
-   * Returns whether or not a valid object is detected
-   * @return true or false 
+   * Returns what type of object is detected
+   * @return Nothing yet (TODO: return something)
    */
   public String returnDetectedObjectClass(){
     //TODO: Add this
@@ -100,16 +95,18 @@ public class Vision {
     if(validObjectDetected()){
       return "hello";
     }
-    return null; 
+    return null;
   }
 
 
   /**
    * Set up the vision commands on SmartDashboard so we can turn them on/off for testing
    */
-  public void setUpSmartDashboardCommandButtons(){
-    //TODO: See if we want to convert this to a Shuffleboard entry
-    SmartDashboard.putData("ReturnData", new ReturnData(this));
+  public void setUpSmartDashboardCommandButtons(Drivetrain drive){
+    m_shuffleboardTab.add("Return Data", new ReturnData(this));
+    SmartDashboard.putData("Vision Return Data", new ReturnData(this));
+    m_shuffleboardTab.add("Acquire Game Piece", new AcquireGamePiece(drive, this));
+    SmartDashboard.putData("Acquire Game Piece", new AcquireGamePiece(drive, this));
   }
 
   /**

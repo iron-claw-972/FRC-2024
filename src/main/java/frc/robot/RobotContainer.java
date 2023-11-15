@@ -67,6 +67,8 @@ public class RobotContainer {
         // Create Drivetrain
         m_drive = new Drivetrain(m_drivetrainTab, m_swerveModulesTab, m_vision);
 
+        m_vision.setUpSmartDashboardCommandButtons(m_drive);
+
         m_driver = new GameControllerDriverConfig(m_drive, m_controllerTab, false);
   
         // load paths before auto starts
@@ -88,6 +90,7 @@ public class RobotContainer {
 
         // Create Drivetrain, because every robot will have a drivetrain
         m_drive = new Drivetrain(m_drivetrainTab, m_swerveModulesTab, m_vision);
+        m_vision.setUpSmartDashboardCommandButtons(m_drive);
         m_driver = new GameControllerDriverConfig(m_drive, m_controllerTab, false);
 
         DriverStation.reportWarning("Not registering subsystems and controls due to incorrect robot", false);
