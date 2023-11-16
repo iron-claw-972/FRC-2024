@@ -1,5 +1,6 @@
 package frc.robot.commands.vision;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -43,13 +44,17 @@ public class AcquireGamePiece extends CommandBase {
   public void execute() {
     double xOffset = Units.degreesToRadians(m_vision.getHorizontalOffset());
     double distance = m_vision.getDistance();
+    distance = -3;  //temporary
     
+    //power to send the 
     double rotationOutput = m_rotationPID.calculate(xOffset); 
-    rotationOutput = Math.max(Math.min(rotationOutput, DriveConstants.kMaxAngularSpeed), -DriveConstants.kMaxAngularSpeed);
+    rotationOutput = MathUtil.clamp(rotationOutput,-DriveConstants.kMaxAngularSpeed, DriveConstants.kMaxAngularSpeed); 
+    
     double distanceOutput = m_distancePID.calculate(distance); 
-    distanceOutput = Math.max(Math.min(distanceOutput, DriveConstants.kMaxSpeed), -DriveConstants.kMaxSpeed);
-    double xSpeed = distanceOutput*Math.cos(-xOffset);
-    double ySpeed = distanceOutput*Math.sin(-xOffset);
+    distanceOutput = MathUtil.clamp(distanceOutput, -DriveConstants.kMaxSpeed, DriveConstants.kMaxSpeed)/5; 
+    
+    double xSpeed = distanceOutput*Math.cos(xOffset);
+    double ySpeed = distanceOutput*Math.sin(xOffset);
 
     m_drive.drive(xSpeed, ySpeed, rotationOutput, false, false);
   }
