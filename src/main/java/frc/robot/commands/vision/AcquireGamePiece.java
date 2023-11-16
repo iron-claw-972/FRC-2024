@@ -53,8 +53,8 @@ public class AcquireGamePiece extends CommandBase {
     double distanceOutput = m_distancePID.calculate(distance); 
     distanceOutput = MathUtil.clamp(distanceOutput, -DriveConstants.kMaxSpeed, DriveConstants.kMaxSpeed)/5; 
     
-    double xSpeed = distanceOutput*Math.cos(xOffset);
-    double ySpeed = distanceOutput*Math.sin(xOffset);
+    double xSpeed = distanceOutput*Math.cos(-xOffset);
+    double ySpeed = distanceOutput*Math.sin(-xOffset);
 
     m_drive.drive(xSpeed, ySpeed, rotationOutput, false, false);
   }
@@ -66,6 +66,6 @@ public class AcquireGamePiece extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-
+    m_drive.stop();
   }
 }
