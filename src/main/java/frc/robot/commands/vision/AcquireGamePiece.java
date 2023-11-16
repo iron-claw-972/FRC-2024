@@ -44,14 +44,13 @@ public class AcquireGamePiece extends CommandBase {
   public void execute() {
     double xOffset = Units.degreesToRadians(m_vision.getHorizontalOffset());
     double distance = m_vision.getDistance();
-    distance = -3;  //temporary
     
     //power to send the 
     double rotationOutput = m_rotationPID.calculate(xOffset); 
     rotationOutput = MathUtil.clamp(rotationOutput,-DriveConstants.kMaxAngularSpeed, DriveConstants.kMaxAngularSpeed); 
     
-    double distanceOutput = m_distancePID.calculate(distance); 
-    distanceOutput = MathUtil.clamp(distanceOutput, -DriveConstants.kMaxSpeed, DriveConstants.kMaxSpeed)/5; 
+    double distanceOutput = -m_distancePID.calculate(distance, 0); 
+    distanceOutput = MathUtil.clamp(distanceOutput, -DriveConstants.kMaxSpeed, DriveConstants.kMaxSpeed); 
     
     double xSpeed = distanceOutput*Math.cos(-xOffset);
     double ySpeed = distanceOutput*Math.sin(-xOffset);
