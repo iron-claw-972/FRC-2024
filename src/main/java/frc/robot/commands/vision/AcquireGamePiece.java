@@ -3,7 +3,6 @@ package frc.robot.commands.vision;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.Vision;
@@ -27,7 +26,7 @@ public class AcquireGamePiece extends CommandBase {
     m_rotationPID.setTolerance(Units.degreesToRadians(3)); //3 degree of tolerance
     m_rotationPID.setSetpoint(0);
 
-    m_distancePID = new PIDController(VisionConstants.kDistanceP, VisionConstants.kDistanceI, VisionConstants.kDistanceD); 
+    m_distancePID = new PIDController(DriveConstants.kTranslationalP, 0, DriveConstants.kTranslationalD); 
     m_distancePID.setTolerance(0.02); //2 cm of tolerance
     m_distancePID.setSetpoint(0);
 
@@ -43,17 +42,16 @@ public class AcquireGamePiece extends CommandBase {
   @Override
   public void execute() {
     double xOffset = Units.degreesToRadians(m_vision.getHorizontalOffset());
-    double angle = m_drive.getPose().getRotation().getRadians()-xOffset;
     double distance = m_vision.getDistance();
     
     double rotationOutput = m_rotationPID.calculate(xOffset); 
     rotationOutput = Math.max(Math.min(rotationOutput, DriveConstants.kMaxAngularSpeed), -DriveConstants.kMaxAngularSpeed);
     double distanceOutput = m_distancePID.calculate(distance); 
     distanceOutput = Math.max(Math.min(distanceOutput, DriveConstants.kMaxSpeed), -DriveConstants.kMaxSpeed);
-    double xSpeed = distanceOutput*Math.cos(angle);
-    double ySpeed = distanceOutput*Math.sin(angle);
+    double xSpeed = distanceOutput*Math.cos(-xOffset);
+    double ySpeed = distanceOutput*Math.sin(-xOffset);
 
-    m_drive.drive(xSpeed, ySpeed, rotationOutput, true, false);
+    m_drive.drive(xSpeed, ySpeed, rotationOutput, false, false);
   }
 
   @Override
