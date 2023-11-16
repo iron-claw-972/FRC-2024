@@ -15,6 +15,7 @@ import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.util.DetectedObject;
 import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 
@@ -118,6 +119,9 @@ public class RobotContainer {
 
         break;
     }
+
+    // Detected objects need access to the drivetrain
+    DetectedObject.setDrive(m_drive);
 
     // This is really annoying so it's disabled
     DriverStation.silenceJoystickConnectionWarning(true);
