@@ -43,17 +43,20 @@ public class AcquireGamePiece extends CommandBase {
 
   @Override
   public void execute() {
+    //get horizontal offset from cam to center of game piece + distance from cam to game piece from networktables
     double xOffset = Units.degreesToRadians(m_vision.getHorizontalOffset());
     double distance = m_vision.getDistance();
     distance = -3;  //temporary
     
-    //power to send the 
+    //power to send to the rotation parameter of the drive command
     double rotationOutput = m_rotationPID.calculate(xOffset); 
     rotationOutput = MathUtil.clamp(rotationOutput,-DriveConstants.kMaxAngularSpeed, DriveConstants.kMaxAngularSpeed); 
     
+    //calculate the output speed we need to move the robot to the target
     double distanceOutput = m_distancePID.calculate(distance); 
     distanceOutput = MathUtil.clamp(distanceOutput, -DriveConstants.kMaxSpeed, DriveConstants.kMaxSpeed)/5; 
     
+    //split the distanceOutput speed into a x and y speed to send to the drive command
     double xSpeed = distanceOutput*Math.cos(xOffset);
     double ySpeed = distanceOutput*Math.sin(xOffset);
 
