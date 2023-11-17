@@ -3,11 +3,19 @@ package frc.robot.constants.miscConstants;
  * Container class for vision constants.
  */
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.Pair;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 
 public class VisionConstants {
   /**
@@ -23,4 +31,22 @@ public class VisionConstants {
     0.03034, // y in meters (default=0.9)
     1000  // heading in radians. The gyroscope is very accurate, so as long as it is reset correctly it is unnecessary to correct it with vision
   );
+
+  // The camera poses
+  public static final ArrayList<Pair<String, Transform3d>> kCameras = new ArrayList<Pair<String, Transform3d>>(List.of(
+    new Pair<String, Transform3d>(
+      "Camera1",
+      new Transform3d(
+        new Translation3d(Units.inchesToMeters(8.996), Units.inchesToMeters(6.48), Units.inchesToMeters(37.44)),
+        new Rotation3d(0, Units.degreesToRadians(18), 0)
+      ))
+    ,
+    new Pair<String, Transform3d>(
+      "Camera2",
+      new Transform3d(
+        new Translation3d(Units.inchesToMeters(-0.75), Units.inchesToMeters(-7.125), Units.inchesToMeters(21)),
+        new Rotation3d(0, 0, Math.PI)
+      )
+    )
+  ));
 }
