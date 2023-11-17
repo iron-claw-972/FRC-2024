@@ -108,4 +108,11 @@ public class DetectedObject {
     public double getDistance(){
         return drive.getPose().getTranslation().getDistance(pose.getTranslation());
     }
+    /**
+     * Gets the field relative angle from the robot to the object
+     * @return The angle in radians
+     */
+    public double getAngle(){
+        return Math.atan2(pose.getY()-drive.getPose().getY(), pose.getX()-drive.getPose().getX());
+    }
 }
