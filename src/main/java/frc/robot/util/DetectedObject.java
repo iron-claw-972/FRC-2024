@@ -100,4 +100,12 @@ public class DetectedObject {
     public boolean isOtherAllianceRobot(){
         return type == (DriverStation.getAlliance()==Alliance.Red?ObjectType.BLUE_ROBOT:ObjectType.RED_ROBOT);
     }
+
+    /**
+     * Gets the distance from the center of the robot to the object
+     * @return The distance in meters
+     */
+    public double getDistance(){
+        return drive.getPose().getTranslation().getDistance(pose.getTranslation());
+    }
 }
