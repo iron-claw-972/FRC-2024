@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.GoToPose;
+import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.DetectedObject;
 
@@ -25,10 +26,16 @@ public class AcquireGamePiece extends SequentialCommandGroup{
      * @return A Pose2d
      */
     public Pose2d getPose(Supplier<DetectedObject> gamePiece){
+        double dist = DriveConstants.kRobotWidthWithBumpers/2;
+        // If the game piece is inside the robot, do nothing
+        if(gamePiece.get().getDistance()<dist){
+            return null;
+        }
+        double angle = gamePiece.get().getAngle();
         return new Pose2d(
-            gamePiece.get().pose.getX(),
-            gamePiece.get().pose.getY(),
-            new Rotation2d(gamePiece.get().getAngle())
+            gamePiece.get().pose.getX()-dist*Math.cos(angle),
+            gamePiece.get().pose.getY()-dist*Math.sin(angle),
+            new Rotation2d(angle)
         );
     }
 }
