@@ -1,6 +1,7 @@
 package frc.robot.util;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
@@ -8,7 +9,9 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.vision.AcquireGamePiece;
+import frc.robot.commands.vision.AcquireGamePiecePID;
 import frc.robot.commands.vision.ReturnData;
+import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
 
 // Vision and it's commands are adapted from Iron Claw's FRC2022, FRC2023, and: https://www.youtube.com/watch?v=TG9KAa2EGzQ&t=1439s
@@ -98,6 +101,16 @@ public class Vision {
     return null;
   }
 
+  public DetectedObject getDetectedObject(){
+    return new DetectedObject(
+      Units.degreesToRadians(getHorizontalOffset()),
+      Units.degreesToRadians(getVerticalOffset()),
+      getDistance(),
+      returnDetectedObjectClass(),
+      //TODO: This should be whatever camera detects the object, not always 0
+      VisionConstants.kCameras.get(0).getSecond()
+    );
+  }
 
   /**
    * Set up the vision commands on SmartDashboard so we can turn them on/off for testing
@@ -105,8 +118,10 @@ public class Vision {
   public void setUpSmartDashboardCommandButtons(Drivetrain drive){
     m_shuffleboardTab.add("Return Data", new ReturnData(this));
     SmartDashboard.putData("Vision Return Data", new ReturnData(this));
-    m_shuffleboardTab.add("Acquire Game Piece", new AcquireGamePiece(drive, this));
-    SmartDashboard.putData("Acquire Game Piece", new AcquireGamePiece(drive, this));
+    m_shuffleboardTab.add("Acquire Game Piece PID", new AcquireGamePiecePID(drive, this));
+    SmartDashboard.putData("Acquire Game Piece PID", new AcquireGamePiecePID(drive, this));
+    m_shuffleboardTab.add("Acquire Game Piece", new AcquireGamePiece(()->getDetectedObject(), drive));
+    SmartDashboard.putData("Acquire Game Piece", new AcquireGamePiece(()->getDetectedObject(), drive));
   }
 
   /**
