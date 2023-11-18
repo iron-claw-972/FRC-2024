@@ -12,8 +12,6 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
@@ -37,26 +35,24 @@ public class ModuleImpl extends Module {
 
     private boolean optimizeStates = true;
 
-    public ModuleImpl(Object moduleConstants) {
-        super((ModuleConstants) moduleConstants);
+    public ModuleImpl(ModuleConstants moduleConstants) {
+        super(moduleConstants);
 
-        var constants = (ModuleConstants) moduleConstants;
-
-        type = constants.getType();
+        type = moduleConstants.getType();
 
 //        angleOffset = new Rotation2d(constants.getSteerOffset());
-        angleOffset = constants.getSteerOffset();
+        angleOffset = moduleConstants.getSteerOffset();
 
         /* Angle Encoder Config */
-        CANcoder = new WPI_CANCoder(constants.getEncoderPort(), DriveConstants.kSteerEncoderCAN);
+        CANcoder = new WPI_CANCoder(moduleConstants.getEncoderPort(), DriveConstants.kSteerEncoderCAN);
         configCANcoder();
 
         /* Angle Motor Config */
-        angleMotor = new WPI_TalonFX(constants.getSteerPort(), DriveConstants.kSteerEncoderCAN);
+        angleMotor = new WPI_TalonFX(moduleConstants.getSteerPort(), DriveConstants.kSteerEncoderCAN);
         configAngleMotor();
 
         /* Drive Motor Config */
-        driveMotor = new WPI_TalonFX(constants.getDrivePort(), DriveConstants.kDriveMotorCAN);
+        driveMotor = new WPI_TalonFX(moduleConstants.getDrivePort(), DriveConstants.kDriveMotorCAN);
         configDriveMotor();
 
         setDesiredState(new SwerveModuleState(0, getAngle()), false);
