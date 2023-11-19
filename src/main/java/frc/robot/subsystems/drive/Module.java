@@ -7,13 +7,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
-import frc.robot.subsystems.SubsystemImpl;
 import frc.robot.util.ConversionUtils;
 
 /**
  * Swerve module for drivetrain to be used inside of simulation.
  */
-@SubsystemImpl(ModuleImpl.class)
 public class Module extends SubsystemBase {
 
     private double currentSteerPositionRad = 0;

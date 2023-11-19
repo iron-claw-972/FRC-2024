@@ -5,20 +5,20 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.miscConstants.TestConstants;
-import frc.robot.subsystems.drive.DrivetrainImpl;
+import frc.robot.subsystems.drive.Drivetrain;
 
 /**
  * Tests the odometry of the robot by driving a certain distance and calculating the error.
  */
 public class GoToPoseTest extends CommandBase {
 
-    private final DrivetrainImpl drive;
+    private final Drivetrain drive;
 
     private double startTime;
     private Pose2d finalPose;
     private Pose2d error;
 
-    public GoToPoseTest(DrivetrainImpl drive) {
+    public GoToPoseTest(Drivetrain drive) {
         this.drive = drive;
 
         addRequirements(drive);

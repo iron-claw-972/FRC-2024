@@ -2,7 +2,7 @@ package frc.robot.commands.test;
 
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.drive.DrivetrainImpl;
+import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.TimeAccuracyTest;
 
 /**
@@ -10,11 +10,11 @@ import frc.robot.util.TimeAccuracyTest;
  */
 public class TestDriveVelocity extends CommandBase {
 
-    private final DrivetrainImpl drive;
+    private final Drivetrain drive;
     private final GenericEntry testEntry;
     private final TimeAccuracyTest[] timeAccuracyTests = new TimeAccuracyTest[4];
 
-    public TestDriveVelocity(DrivetrainImpl drive, GenericEntry testEntry) {
+    public TestDriveVelocity(Drivetrain drive, GenericEntry testEntry) {
         this.drive = drive;
         this.testEntry = testEntry;
         addRequirements(drive);

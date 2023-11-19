@@ -12,8 +12,6 @@ import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
 import frc.robot.controls.PS5ControllerDriverConfig;
 import frc.robot.subsystems.drive.Drivetrain;
-import frc.robot.subsystems.SubsystemFactory;
-import frc.robot.subsystems.drive.DrivetrainImpl;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -40,7 +38,7 @@ public class RobotContainer {
 //    private final Vision vision;
 
     // The robot's subsystems are defined here...
-    private final DrivetrainImpl drive;
+    private final Drivetrain drive;
 
 
     // Controllers are defined here
@@ -50,7 +48,7 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        drive = new DrivetrainImpl();
+        drive = new Drivetrain();
         driver = new GameControllerDriverConfig(drive, controllerTab, false);
 
         driver.configureControls();
@@ -61,6 +59,7 @@ public class RobotContainer {
         drivetrainTab.addDouble("module2", ()->drive.getModules()[1].getAngle().getDegrees());
         drivetrainTab.addDouble("module3", ()->drive.getModules()[2].getAngle().getDegrees());
         drivetrainTab.addDouble("module4", ()->drive.getModules()[3].getAngle().getDegrees());
+
 
 
 //        switch (robotId) {

@@ -5,7 +5,7 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.constants.miscConstants.OIConstants;
 import frc.robot.constants.swerve.DriveConstants;
-import frc.robot.subsystems.drive.DrivetrainImpl;
+import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.DynamicSlewRateLimiter;
 import frc.robot.util.MathUtils;
 
@@ -14,7 +14,7 @@ import frc.robot.util.MathUtils;
  */
 public abstract class BaseDriverConfig {
 
-    private final DrivetrainImpl drive;
+    private final Drivetrain drive;
 
     private final boolean shuffleboardUpdates;
 
@@ -58,7 +58,7 @@ public abstract class BaseDriverConfig {
      * @param controllerTab       the shuffleboard controller tab
      * @param shuffleboardUpdates whether to update the shuffleboard
      */
-    public BaseDriverConfig(DrivetrainImpl drive, ShuffleboardTab controllerTab, boolean shuffleboardUpdates) {
+    public BaseDriverConfig(Drivetrain drive, ShuffleboardTab controllerTab, boolean shuffleboardUpdates) {
         headingLimiter.setContinuousLimits(-Math.PI, Math.PI);
         headingLimiter.enableContinuous(true);
         this.controllerTab = controllerTab;
@@ -67,15 +67,15 @@ public abstract class BaseDriverConfig {
     }
 
     public double getForwardTranslation() {
-        return -MathUtils.expoMS(MathUtil.applyDeadband(getRawForwardTranslation(), OIConstants.DEADBAND), 2) * DriveConstants.kMaxSpeed * 1;
+        return MathUtils.expoMS(MathUtil.applyDeadband(getRawForwardTranslation(), OIConstants.DEADBAND), 2) * DriveConstants.kMaxSpeed * 1;
     }
 
     public double getSideTranslation() {
-        return -MathUtils.expoMS(MathUtil.applyDeadband(getRawSideTranslation(), OIConstants.DEADBAND), 2) * DriveConstants.kMaxSpeed * 1;
+        return MathUtils.expoMS(MathUtil.applyDeadband(getRawSideTranslation(), OIConstants.DEADBAND), 2) * DriveConstants.kMaxSpeed * 1;
     }
 
     public double getRotation() {
-        return -MathUtils.expoMS(MathUtil.applyDeadband(getRawRotation(), OIConstants.DEADBAND), 2) * DriveConstants.kMaxAngularSpeed * 1;
+        return MathUtils.expoMS(MathUtil.applyDeadband(getRawRotation(), OIConstants.DEADBAND), 2) * DriveConstants.kMaxAngularSpeed * 1;
     }
 
     public double getHeading() {
@@ -84,7 +84,7 @@ public abstract class BaseDriverConfig {
         return previousHeading;
     }
 
-    protected DrivetrainImpl getDrivetrain() {
+    protected Drivetrain getDrivetrain() {
         return drive;
     }
 
