@@ -45,7 +45,7 @@ public class DetectedObject {
         double horizontalDist = distance*Math.cos(yOffset+robotToCamera.getRotation().getY());
         double angle = robotToCamera.getRotation().getZ()-xOffset;
         double robotToCameraDist = robotToCamera.getTranslation().toTranslation2d().getNorm();
-        double angle2 = 270-Math.atan2(robotToCamera.getX(), robotToCamera.getY())-angle;
+        double angle2 = 3*Math.PI/2-Math.atan2(robotToCamera.getX(), robotToCamera.getY())-angle;
         double robotToObjectDist = Math.sqrt(Math.pow(robotToCameraDist, 2)+Math.pow(horizontalDist, 2)-2*robotToCameraDist*horizontalDist*Math.cos(angle2));
         double angle3 = Math.atan2(robotToCamera.getY(), robotToCamera.getX())+Math.asin(horizontalDist*Math.sin(angle2)/robotToObjectDist);
         Translation2d translation = new Translation2d(robotToObjectDist*Math.cos(angle3), robotToObjectDist*Math.sin(angle3));
@@ -63,6 +63,7 @@ public class DetectedObject {
      */
     public DetectedObject(double xOffset, double yOffset, double distance, String type, Transform3d robotToCamera){
         this(xOffset, yOffset, distance, 
+            type==null?ObjectType.NONE:
             type.toLowerCase().equals("cone")?ObjectType.CONE:
             type.toLowerCase().equals("cube")?ObjectType.CUBE:
             type.toLowerCase().equals("red robot")?ObjectType.RED_ROBOT:

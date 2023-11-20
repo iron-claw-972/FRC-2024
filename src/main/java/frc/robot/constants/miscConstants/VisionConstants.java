@@ -38,7 +38,7 @@ public class VisionConstants {
       "Camera1",
       new Transform3d(
         new Translation3d(Units.inchesToMeters(8.996), Units.inchesToMeters(6.48), Units.inchesToMeters(37.44)),
-        new Rotation3d(0, Units.degreesToRadians(18), 0)
+        new Rotation3d(0, Units.degreesToRadians(-18), 0)
       ))
     ,
     new Pair<String, Transform3d>(
