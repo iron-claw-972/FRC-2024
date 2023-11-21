@@ -23,6 +23,9 @@ public class VisionConstants {
    */
   public static final boolean kEnabled = true;
 
+  // If odometry should be updated using vision while using PathPlanner, both for auto and alignment
+  public static final boolean kEnabledPathPlanner = false;
+
   public static final boolean kUseManualCalculations = false;
 
   /*
@@ -68,15 +71,15 @@ public class VisionConstants {
       "Camera1",
       new Transform3d(
         new Translation3d(Units.inchesToMeters(8.996), Units.inchesToMeters(6.48), Units.inchesToMeters(37.44)),
-        new Rotation3d(0, Units.degreesToRadians(18), 0)
+        new Rotation3d(0, Units.degreesToRadians(-18), 0)
       ))
-    // ,
-    // new Pair<String, Transform3d>(
-    //   "Camera2",
-    //   new Transform3d(
-    //     new Translation3d(Units.inchesToMeters(-0.75), Units.inchesToMeters(-7.125), Units.inchesToMeters(21)),
-    //     new Rotation3d(0, 0, Math.PI)
-    //   )
-    // )
+    ,
+    new Pair<String, Transform3d>(
+      "Camera2",
+      new Transform3d(
+        new Translation3d(Units.inchesToMeters(-0.75), Units.inchesToMeters(-7.125), Units.inchesToMeters(21)),
+        new Rotation3d(0, 0, Math.PI)
+      )
+    )
   ));
 }
