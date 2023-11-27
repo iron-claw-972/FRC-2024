@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.constants.miscConstants.AutoConstants;
-import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.ConversionUtils;
 import frc.robot.util.PathGroupLoader;
@@ -67,7 +66,6 @@ public class PathPlannerCommand extends SequentialCommandGroup {
     }
     
     addCommands(
-      new InstantCommand(()->drive.enableVision(VisionConstants.kEnabledPathPlanner)),
       new InstantCommand( () -> {
         PathPlannerTrajectory path = PathPlannerTrajectory.transformTrajectoryForAlliance(
           pathGroup.get(pathIndex), DriverStation.getAlliance());
@@ -87,8 +85,7 @@ public class PathPlannerCommand extends SequentialCommandGroup {
         useAllianceColor,  // use Alliance color
         drive, // Requires this drive subsystem
         isPerpetual
-      ),
-      new InstantCommand(()->drive.enableVision(true))
+      )
     );
   }
   

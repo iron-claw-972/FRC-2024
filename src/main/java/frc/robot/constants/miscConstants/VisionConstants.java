@@ -19,12 +19,15 @@ import edu.wpi.first.math.util.Units;
 
 public class VisionConstants {
   /**
-   * If the vision is enabled on the robot
+   * If April tag vision is enabled on the robot
    */
   public static final boolean kEnabled = true;
 
-  // If odometry should be updated using vision while using PathPlanner, both for auto and alignment
-  public static final boolean kEnabledPathPlanner = false;
+  // If odometry should be updated using vision during auto
+  public static final boolean kEnabledAuto = false;
+
+  // If odometry should be updated using vision while running the GoToPose and GoToPosePID commands in teleop
+  public static final boolean kEnabledGoToPose = false;
 
   public static final boolean kUseManualCalculations = false;
 
