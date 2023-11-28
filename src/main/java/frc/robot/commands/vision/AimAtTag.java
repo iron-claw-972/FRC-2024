@@ -8,27 +8,37 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.miscConstants.FieldConstants;
 import frc.robot.subsystems.Drivetrain;
 
+/**
+ * Aims the robot at the closest April tag
+ */
 public class AimAtTag extends CommandBase {
-  Drivetrain m_swerve;
+  Drivetrain m_drive;
   PIDController m_pid;
 
-  public AimAtTag(Drivetrain swerve){
-    m_swerve = swerve;
-    // Copy drive PID
+  /**
+   * Aims the robot at the closest April tag
+   * @param drive The drivetrain
+   */
+  public AimAtTag(Drivetrain drive){
+    m_drive = drive;
+    // Copy drive PID and changetolerance
     m_pid = new PIDController(
-      m_swerve.getRotationController().getP(),
-      m_swerve.getRotationController().getI(),
-      m_swerve.getRotationController().getD()
+      m_drive.getRotationController().getP(),
+      m_drive.getRotationController().getI(),
+      m_drive.getRotationController().getD()
     );
     m_pid.setTolerance(Units.degreesToRadians(1));
-    addRequirements(swerve);
+    addRequirements(drive);
   }
 
+  /**
+   * Gets the closest tag and sets the setpoint to aim at it
+   */
   @Override
   public void initialize(){
     double dist = Double.POSITIVE_INFINITY;
     Translation2d closest = new Translation2d();
-    Translation2d driveTranslation = m_swerve.getPose().getTranslation();
+    Translation2d driveTranslation = m_drive.getPose().getTranslation();
     for(AprilTag tag : FieldConstants.kAprilTags){
       Translation2d translation = tag.pose.toPose2d().getTranslation();
       double dist2 = driveTranslation.getDistance(translation);
@@ -41,17 +51,35 @@ public class AimAtTag extends CommandBase {
     m_pid.setSetpoint(Math.atan2(closest.getY() - driveTranslation.getY(), closest.getX() - driveTranslation.getX()));
   }
   
+  /**
+   * Runs the PID
+   */
   @Override
   public void execute() {
-    double speed = m_pid.calculate(m_swerve.getPose().getRotation().getRadians());
-    m_swerve.drive(0, 0, speed, true, false);
+    double angle = m_drive.getPose().getRotation().getRadians();
+    // If the distance between the angles is more than 180 degrees, use an identical angle ±360 degrees
+    if(angle - m_pid.getSetpoint() > Math.PI){
+      angle -= 2*Math.PI;
+    }else if(angle - m_pid.getSetpoint() < -Math.PI){
+      angle += 2*Math.PI;
+    }
+    double speed = m_pid.calculate(angle);
+    m_drive.drive(0, 0, speed, true, false);
   }
 
+  /**
+   * Stops the drivetrain
+   * @param interrupted If the command is interrupted
+   */
   @Override
   public void end(boolean interrupted) {
-    m_swerve.stop();
+    m_drive.stop();
   }
 
+  /**
+   * Returns if the command is finished
+   * @return If the PID is at the setpoint
+   */
   @Override
   public boolean isFinished() {
     return m_pid.atSetpoint();
