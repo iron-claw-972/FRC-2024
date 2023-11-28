@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.subsystems.Drivetrain;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -6,8 +6,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.constants.swerve.DriveConstants;
-import frc.robot.subsystems.DrivetrainImpl;
 
 /**
  * Sets all module angles to a given trajectory's initial angle.

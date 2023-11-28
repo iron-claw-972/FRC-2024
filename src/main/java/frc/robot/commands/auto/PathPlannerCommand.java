@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.constants.miscConstants.AutoConstants;
-import frc.robot.subsystems.DrivetrainImpl;
+import frc.robot.subsystems.Drivetrain.DrivetrainImpl;
 import frc.robot.util.ConversionUtils;
 import frc.robot.util.PathGroupLoader;
 

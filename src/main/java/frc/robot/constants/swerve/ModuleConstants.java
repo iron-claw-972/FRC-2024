@@ -1,5 +1,7 @@
 package frc.robot.constants.swerve;
 
+import frc.robot.subsystems.Drivetrain.DriveConstants;
+
 /**
  * Container class for module constants, defined using constants from {@link DriveConstants}
  * .

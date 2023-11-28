@@ -1,7 +1,8 @@
 package frc.robot.constants;
 
 import edu.wpi.first.math.util.Units;
-import frc.robot.constants.swerve.DriveConstants;
+import frc.robot.subsystems.Drivetrain.DriveConstants;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
