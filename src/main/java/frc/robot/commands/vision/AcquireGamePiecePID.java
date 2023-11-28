@@ -9,7 +9,8 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.Vision;
 
 /**
- * Tests the odometry of the robot by driving a certain distance and calculating the error.
+ * Moves toward the detected object
+ * <p>Only works with the front camera
  */
 public class AcquireGamePiecePID extends CommandBase {
 
@@ -19,10 +20,17 @@ public class AcquireGamePiecePID extends CommandBase {
   private PIDController m_rotationPID; 
   private PIDController m_distancePID; 
   
+/**
+ * Moves toward the detected object
+ * <p>Only works with the front camera
+   * @param drive The drivetrain
+   * @param vision The vision
+   */
   public AcquireGamePiecePID(Drivetrain drive, Vision vision) {
     m_drive = drive;
     m_vision = vision;
 
+    // Use similar PIDs to the drivetrain
     m_rotationPID = new PIDController(DriveConstants.kHeadingP, 0, DriveConstants.kHeadingD);
     m_rotationPID.setTolerance(Units.degreesToRadians(3)); //3 degree of tolerance
     m_rotationPID.setSetpoint(0);
@@ -34,12 +42,18 @@ public class AcquireGamePiecePID extends CommandBase {
     addRequirements(drive);
   }
 
+  /**
+   * Resets PIDs
+   */
   @Override
   public void initialize(){
     m_rotationPID.reset();
     m_distancePID.reset();
   }
 
+  /**
+   * Gets the x offset and distance and drives toward the object
+   */
   @Override
   public void execute() {
     //get horizontal offset from cam to center of game piece + distance from cam to game piece from networktables
@@ -60,11 +74,19 @@ public class AcquireGamePiecePID extends CommandBase {
     m_drive.drive(xSpeed, ySpeed, rotationOutput, false, false);
   }
 
+  /**
+   * If the command is finished
+   * @return If both PIDs are at the setpoints
+   */
   @Override
   public boolean isFinished() { 
     return m_rotationPID.atSetpoint() && m_distancePID.atSetpoint();
   }
 
+  /**
+   * Stops the drivetrain
+   * @param interrupted If the command is interrupted
+   */
   @Override
   public void end(boolean interrupted) {
     m_drive.stop();
