@@ -6,8 +6,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.miscConstants.TestConstants;
-import frc.robot.subsystems.DrivetrainImpl;
-import frc.robot.subsystems.Module;
+import frc.robot.subsystems.Drivetrain.Module.Module;
+import frc.robot.subsystems.Drivetrain.SwerveDrive.DrivetrainImpl;
 import frc.robot.util.TimeAccuracyTest;
 
 /**

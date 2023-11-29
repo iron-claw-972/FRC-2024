@@ -7,7 +7,7 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.miscConstants.TestConstants;
 import frc.robot.constants.swerve.DriveConstants;
-import frc.robot.subsystems.DrivetrainImpl;
+import frc.robot.subsystems.Drivetrain.SwerveDrive.DrivetrainImpl;
 import frc.robot.util.TimeAccuracyTest;
 
 /**

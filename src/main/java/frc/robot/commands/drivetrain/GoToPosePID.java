@@ -1,8 +1,8 @@
-package frc.robot.commands;
+package frc.robot.commands.drivetrain;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DrivetrainImpl;
+import frc.robot.subsystems.Drivetrain.SwerveDrive.DrivetrainImpl;
 
 import java.util.function.Supplier;
 
