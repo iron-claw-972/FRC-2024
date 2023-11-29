@@ -8,6 +8,7 @@ import frc.robot.constants.Constants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
 import frc.robot.util.ConversionUtils;
+import lib.CTREModuleState;
 
 /**
  * Swerve module for drivetrain to be used inside of simulation.
@@ -46,7 +47,7 @@ public class Module extends SubsystemBase {
             return;
         }
         // Optimize the reference state to avoid spinning further than 90 degrees
-        desiredState = SwerveModuleState.optimize(desiredState, new Rotation2d(currentSteerPositionRad));
+        desiredState = CTREModuleState.optimize(desiredState, new Rotation2d(currentSteerPositionRad));
 
         currentSpeed = desiredState.speedMetersPerSecond;
         currentSteerPositionRad = desiredState.angle.getRadians();
