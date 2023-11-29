@@ -116,4 +116,18 @@ public class DetectedObject {
     public double getAngle(){
         return Math.atan2(pose.getY()-drive.getPose().getY(), pose.getX()-drive.getPose().getX());
     }
+
+    /**
+     * Gets the angle relative to the robot (0 is in front, positive counterclockwise)
+     * @return The relative angle in radians
+     */
+    public double getRelativeAngle(){
+        double angle = getAngle()-drive.getYaw().getRadians();
+        if(angle > Math.PI){
+            angle -= Math.PI*2;
+        }else if(angle < -Math.PI){
+            angle += Math.PI*2;
+        }
+        return angle;
+    }
 }

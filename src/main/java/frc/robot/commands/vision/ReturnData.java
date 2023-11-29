@@ -25,8 +25,8 @@ public class ReturnData extends CommandBase{
   public void execute() {
 
     //put the offsets and area on SmartDashboard for testing 
-    SmartDashboard.putNumber("X offset degrees", m_vision.getHorizontalOffset()); 
-    SmartDashboard.putNumber("Distance", m_vision.getDistance()); 
+    SmartDashboard.putNumberArray("Object X offsets degrees", m_vision.getHorizontalOffset()); 
+    SmartDashboard.putNumberArray("Object Distances", m_vision.getDistance()); 
 
     
   }

@@ -2,9 +2,8 @@ package frc.robot.util;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.BooleanSubscriber;
-import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,10 +21,12 @@ public class Vision {
   private NetworkTable m_objectDetectionTable;
 
   // DoubleSubscribers for the subscribing to the topics with data
-  private DoubleSubscriber m_tx;
-  private DoubleSubscriber m_ty;
-  private DoubleSubscriber m_objectDistance;
-  private BooleanSubscriber m_objectDetected;
+  private NetworkTableEntry m_xOffset;
+  private NetworkTableEntry m_yOffset;
+  private NetworkTableEntry m_objectDistance;
+  private NetworkTableEntry m_objectClass;
+  private NetworkTableEntry m_cameraIndex;
+  private NetworkTableEntry m_objectDetected;
 
   /**
    * Creates a new instance of Vision and sets up the limelight NetworkTable and the SmartDashboard
@@ -36,48 +37,41 @@ public class Vision {
     // Initialize object_detection NetworkTable
     m_objectDetectionTable = NetworkTableInstance.getDefault().getTable("object_detection");
 
-    // From the object_detection NetworkTable, subscribe to the various topics with data
-    m_objectDetected = m_objectDetectionTable.getBooleanTopic("object_detected").subscribe(false);
-    m_objectDistance = m_objectDetectionTable.getDoubleTopic("object_distance").subscribe(0.0);
-    m_tx = m_objectDetectionTable.getDoubleTopic("tx").subscribe(0.0);
-    m_ty = m_objectDetectionTable.getDoubleTopic("ty").subscribe(0.0);
+    // From the object_detection NetworkTable, get the entries
+    m_objectDetected = m_objectDetectionTable.getEntry("object_detected");
+    m_objectDistance = m_objectDetectionTable.getEntry("object_distance");
+    m_xOffset = m_objectDetectionTable.getEntry("tx");
+    m_yOffset = m_objectDetectionTable.getEntry("ty");
+    //TODO: Change these to whatever the actual entry names are
+    m_objectClass = m_objectDetectionTable.getEntry("class");
+    m_cameraIndex = m_objectDetectionTable.getEntry("camera_index");
 
     // Start NetworkTables server
     NetworkTableInstance.getDefault().startServer();
   }
 
   /**
-   * Get the horizontal offset from the crosshair to the target
-   * @return offset in degrees
+   * Get the horizontal offsets from the crosshair to the targets
+   * @return An array of offsets in degrees
    */
-  public double getHorizontalOffset(){
-    // It might be better to return this (and almost everything else) as an array, depending on how the dtection works
-    return m_tx.get();
+  public double[] getHorizontalOffset(){
+    return m_xOffset.getDoubleArray(new double[0]);
   }
 
   /**
-   * Get the vertical offset from the crosshair to the target
-   * @return offset in degrees
+   * Get the vertical offsets from the crosshair to the targets
+   * @return An array of offsets in degrees
    */
-  public double getVerticalOffset(){
-    return m_ty.get();
+  public double[] getVerticalOffset(){
+    return m_yOffset.getDoubleArray(new double[0]);
   }
 
   /**
-   * Get the target distance
+   * Get the target distances
    * @return Distance in meters
    */
-  public double getDistance(){
-    return m_objectDistance.get();
-  }
-
-  /**
-   * Returns the total latency in ms
-   * @return the latency as a double
-   */
-  public double getLatency(){
-    //TODO: Add this, or delete it if it's unnecessary
-    return 0;
+  public double[] getDistance(){
+    return m_objectDistance.getDoubleArray(new double[0]);
   }
 
   /**
@@ -85,31 +79,65 @@ public class Vision {
    * @return true or false
    */
   public boolean validObjectDetected(){
-    return m_objectDetected.get();
+    return m_objectDetected.getBoolean(false);
   }
 
   /**
-   * Returns what type of object is detected
-   * @return Nothing yet (TODO: return something)
+   * Returns what types of object are detected
+   * @return The object types as a String array
    */
-  public String returnDetectedObjectClass(){
-    //TODO: Add this
-
-    if(validObjectDetected()){
-      return "hello";
-    }
-    return null;
+  public String[] getDetectedObjectClass(){
+    return m_objectClass.getStringArray(new String[0]);
   }
 
-  public DetectedObject getDetectedObject(){
-    return new DetectedObject(
-      Units.degreesToRadians(getHorizontalOffset()),
-      Units.degreesToRadians(getVerticalOffset()),
-      getDistance(),
-      returnDetectedObjectClass(),
-      //TODO: This should be whatever camera detects the object, not always 0
-      VisionConstants.kCameras.get(0).getSecond()
-    );
+  /**
+   * Gets the camera indices (which camera sees the object)
+   * @return The indices as a long array (method returns long array instead of int array)
+   */
+  public long[] getCameraIndex(){
+    return m_cameraIndex.getIntegerArray(new long[0]);
+  }
+
+  /**
+   * Stores all of the detected objects in an array
+   * @return The array of DetectedObjects
+   */
+  public DetectedObject[] getDetectedObjects(){
+    double[] xOffset = getHorizontalOffset();
+    double[] yOffset = getVerticalOffset();
+    double[] distance = getDistance();
+    String[] objectClass = getDetectedObjectClass();
+    long[] cameraIndex = getCameraIndex();
+    DetectedObject[] objects = new DetectedObject[xOffset.length];
+    for(int i = 0; i < objects.length; i++){
+      objects[i] = new DetectedObject(
+        Units.degreesToRadians(xOffset[i]),
+        Units.degreesToRadians(yOffset[i]),
+        distance[i],
+        objectClass[i],
+        VisionConstants.kCameras.get((int)cameraIndex[i]).getSecond()
+      );
+    }
+    return objects;
+  }
+
+  /**
+   * Returns the closest object in front of the robot
+   * @param maxAngle The maximum angle from the front of the robot to use
+   * @return The best DetectedObject
+   */
+  public DetectedObject getBestObject(double maxAngle){
+    DetectedObject[] objects = getDetectedObjects();
+    DetectedObject best = null;
+    double closest = Double.POSITIVE_INFINITY;
+    for(DetectedObject object : objects){
+      double dist = object.getDistance();
+      if(Math.abs(object.getRelativeAngle()) < maxAngle && dist < closest){
+        closest = dist;
+        best = object;
+      }
+    }
+    return best;
   }
 
   /**
@@ -120,8 +148,8 @@ public class Vision {
     SmartDashboard.putData("Vision Return Data", new ReturnData(this));
     m_shuffleboardTab.add("Acquire Game Piece PID", new AcquireGamePiecePID(drive, this));
     SmartDashboard.putData("Acquire Game Piece PID", new AcquireGamePiecePID(drive, this));
-    m_shuffleboardTab.add("Acquire Game Piece", new AcquireGamePiece(()->getDetectedObject(), drive));
-    SmartDashboard.putData("Acquire Game Piece", new AcquireGamePiece(()->getDetectedObject(), drive));
+    m_shuffleboardTab.add("Acquire Game Piece", new AcquireGamePiece(()->getBestObject(60), drive));
+    SmartDashboard.putData("Acquire Game Piece", new AcquireGamePiece(()->getBestObject(60), drive));
   }
 
   /**
