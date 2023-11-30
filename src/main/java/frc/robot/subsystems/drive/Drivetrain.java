@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.drive;
 
 import com.ctre.phoenix.sensors.Pigeon2.AxisDirection;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
@@ -18,7 +18,6 @@ import frc.robot.Robot;
 import frc.robot.constants.Constants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
-import frc.robot.util.LogManager;
 
 import java.util.Arrays;
 
@@ -306,55 +305,6 @@ public class Drivetrain extends SubsystemBase {
     public Field2d getFeild(){
         return fieldDisplay;
     }
-    int loggerStep = 0;
-    public void updateLogs() {
-
-        loggerStep++;
-        if (loggerStep < 4) return;
-        loggerStep = 0;
-
-        double[] pose = {
-          getPose().getX(),
-          getPose().getY(),
-          getPose().getRotation().getRadians()
-        };
-        LogManager.addDoubleArray("Swerve/Pose2d", pose);
     
-        double[] actualStates = {
-          modules[0].getAngle().getRadians(),
-          modules[0].getState().speedMetersPerSecond,
-          modules[1].getAngle().getRadians(),
-          modules[1].getState().speedMetersPerSecond,
-          modules[2].getAngle().getRadians(),
-          modules[2].getState().speedMetersPerSecond,
-          modules[3].getAngle().getRadians(),
-          modules[3].getState().speedMetersPerSecond
-        };
-        LogManager.addDoubleArray("Swerve/actual swerve states", actualStates);
-    
-        double[] desiredStates = {
-          modules[0].getDesiredAngle().getRadians(),
-          modules[0].getDesiredVelocity(),
-          modules[1].getDesiredAngle().getRadians(),
-          modules[1].getDesiredVelocity(),
-          modules[2].getDesiredAngle().getRadians(),
-          modules[2].getDesiredVelocity(),
-          modules[3].getDesiredAngle().getRadians(),
-          modules[3].getDesiredVelocity()
-        };
-        LogManager.addDoubleArray("Swerve/desired swerve states", desiredStates);
-    
-        // double[] errorStates = {
-        //   desiredStates[0] - actualStates[0],
-        //   desiredStates[1] - actualStates[1],
-        //   desiredStates[2] - actualStates[2],
-        //   desiredStates[3] - actualStates[3],
-        //   desiredStates[4] - actualStates[4],
-        //   desiredStates[5] - actualStates[5],
-        //   desiredStates[6] - actualStates[6],
-        //   desiredStates[7] - actualStates[7]
-        // };
-        // LogManager.addDoubleArray("Swerve/error swerve states", errorStates);
-      }
 
 }

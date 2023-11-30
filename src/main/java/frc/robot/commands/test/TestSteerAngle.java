@@ -2,7 +2,7 @@ package frc.robot.commands.test;
 
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.TimeAccuracyTest;
 
 /**

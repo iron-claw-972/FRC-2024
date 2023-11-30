@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.drive;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -17,9 +17,6 @@ public class Module extends SubsystemBase {
     private double currentSteerPositionRad = 0;
     private double currentDrivePositionMeters = 0;
     private double currentSpeed = 0;
-
-    private SwerveModuleState desiredState;
-
 
     protected boolean stateDeadband = true;
 
@@ -55,18 +52,6 @@ public class Module extends SubsystemBase {
     public void resetToAbsolute() {
         // does nothing when robot does not have a swerve drivetrain
     }
-
-    public SwerveModuleState getDesiredState() {
-        return desiredState;
-      }
-
-    public double getDesiredVelocity() {
-        return getDesiredState().speedMetersPerSecond;
-      }
-    
-      public Rotation2d getDesiredAngle() {
-        return getDesiredState().angle;
-      }
 
     // TODO: Comment
     public void stop() {
