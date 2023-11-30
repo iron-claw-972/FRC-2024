@@ -22,19 +22,20 @@ public class AcquireGamePiece extends SequentialCommandGroup{
     }
     /**
      * Gets the pose to move to, which is the game piece's pose with the angle between the robot and game piece
-     * @param gamePiece The supplier for the game piece to move to
+     * @param gamePieceSupplier The supplier for the game piece to move to
      * @return A Pose2d
      */
-    public Pose2d getPose(Supplier<DetectedObject> gamePiece){
+    public Pose2d getPose(Supplier<DetectedObject> gamePieceSupplier){
         double dist = DriveConstants.kRobotWidthWithBumpers/2;
-        // If the game piece is inside the robot, do nothing
-        if(gamePiece.get().getDistance()<dist){
+        DetectedObject gamePiece = gamePieceSupplier.get();
+        // If the game piece does not exist or is inside the robot, do nothing
+        if(gamePiece==null || gamePiece.getDistance()<dist){
             return null;
         }
-        double angle = gamePiece.get().getAngle();
+        double angle = gamePiece.getAngle();
         return new Pose2d(
-            gamePiece.get().pose.getX()-dist*Math.cos(angle),
-            gamePiece.get().pose.getY()-dist*Math.sin(angle),
+            gamePiece.pose.getX()-dist*Math.cos(angle),
+            gamePiece.pose.getY()-dist*Math.sin(angle),
             new Rotation2d(angle)
         );
     }
