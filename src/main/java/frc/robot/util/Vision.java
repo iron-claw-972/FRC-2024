@@ -122,17 +122,17 @@ public class Vision {
   }
 
   /**
-   * Returns the closest object in front of the robot
+   * Returns the closest game piece in front of the robot
    * @param maxAngle The maximum angle from the front of the robot to use
    * @return The best DetectedObject
    */
-  public DetectedObject getBestObject(double maxAngle){
+  public DetectedObject getBestGamePiece(double maxAngle){
     DetectedObject[] objects = getDetectedObjects();
     DetectedObject best = null;
     double closest = Double.POSITIVE_INFINITY;
     for(DetectedObject object : objects){
       double dist = object.getDistance();
-      if(Math.abs(object.getRelativeAngle()) < maxAngle && dist < closest){
+      if(object.isGamePiece() && Math.abs(object.getRelativeAngle()) < maxAngle && dist < closest){
         closest = dist;
         best = object;
       }
@@ -148,8 +148,8 @@ public class Vision {
     SmartDashboard.putData("Vision Return Data", new ReturnData(this));
     m_shuffleboardTab.add("Acquire Game Piece PID", new AcquireGamePiecePID(drive, this));
     SmartDashboard.putData("Acquire Game Piece PID", new AcquireGamePiecePID(drive, this));
-    m_shuffleboardTab.add("Acquire Game Piece", new AcquireGamePiece(()->getBestObject(60), drive));
-    SmartDashboard.putData("Acquire Game Piece", new AcquireGamePiece(()->getBestObject(60), drive));
+    m_shuffleboardTab.add("Acquire Game Piece", new AcquireGamePiece(()->getBestGamePiece(60), drive));
+    SmartDashboard.putData("Acquire Game Piece", new AcquireGamePiece(()->getBestGamePiece(60), drive));
   }
 
   /**
