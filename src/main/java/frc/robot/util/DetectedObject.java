@@ -88,8 +88,8 @@ public class DetectedObject {
         Translation3d translation = new Translation3d(1, new Rotation3d(0, yOffset, -xOffset));
         // Rotate it to get the position relative to the rotated camera
         translation = translation.rotateBy(robotToCamera.getRotation());
-        // Scale it so that the object will be on the ground
-        translation = translation.times(robotToCamera.getZ()/translation.getZ());
+        // Scale it so that the object will be on the ground (- because translation's z will be negative)
+        translation = translation.times(-robotToCamera.getZ()/translation.getZ());
         // Translate it to make it relative to the robot
         translation = translation.plus(robotToCamera.getTranslation());
         // If the drivetrain exists, rotate and translate it to be field relative
