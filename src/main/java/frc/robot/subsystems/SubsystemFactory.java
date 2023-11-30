@@ -5,8 +5,8 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.RobotId;
-import frc.robot.subsystems.Drivetrain.SwerveDrive.Drivetrain;
-import frc.robot.subsystems.Drivetrain.SwerveDrive.DrivetrainImpl;
+import frc.robot.subsystems.Drivetrain.swerveDrive.swerveDrive;
+import frc.robot.subsystems.Drivetrain.swerveDrive.swerveDriveImpl;
 
 public class SubsystemFactory {
 
@@ -17,7 +17,7 @@ public class SubsystemFactory {
      * <br>
      * <br>
      * Parameters of this method should be the class of the subsystem to create, not the class of the implementation.
-     * For example, {@link Drivetrain} would be used as the parameter, not {@link DrivetrainImpl}.
+     * For example, {@link swerveDrive} would be used as the parameter, not {@link swerveDriveImpl}.
      *
      * @param clazz the class of the subsystem to create
      * @return the created subsystem
