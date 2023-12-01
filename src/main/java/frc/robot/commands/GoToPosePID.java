@@ -2,7 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DrivetrainImpl;
+import frc.robot.subsystems.drive.Drivetrain;
 
 import java.util.function.Supplier;
 
@@ -11,14 +11,14 @@ import java.util.function.Supplier;
  */
 public class GoToPosePID extends CommandBase {
 
-    private final DrivetrainImpl drive;
+    private final Drivetrain drive;
 
     private final Supplier<Pose2d> pose;
 
     /**
      * Runs the chassis PIDs to move the robot to a specific pose.
      */
-    public GoToPosePID(Supplier<Pose2d> pose, DrivetrainImpl drive) {
+    public GoToPosePID(Supplier<Pose2d> pose, Drivetrain drive) {
         this.drive = drive;
         this.pose = pose;
 
@@ -27,12 +27,13 @@ public class GoToPosePID extends CommandBase {
 
     @Override
     public void execute() {
-        drive.runChassisPID(pose.get().getX(), pose.get().getY(), pose.get().getRotation().getRadians());
+        drive.driveWithPID(pose.get().getX(), pose.get().getY(), pose.get().getRotation().getRadians());
     }
 
     @Override
     public boolean isFinished() {
-        // TODO: the current PID values don't allow the command to finish
+        // TODO: 2024, create instances of the PID controllers in this class
+        // TODO: the current PID values don't allow the command to finish 2023
         return drive.getXController().atSetpoint() && drive.getYController().atSetpoint() && drive.getRotationController().atSetpoint();
     }
 
