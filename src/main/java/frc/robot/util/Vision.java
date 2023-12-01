@@ -58,6 +58,7 @@ public class Vision {
       // If it can't find it, use the layout in the constants
       m_aprilTagFieldLayout = new AprilTagFieldLayout(FieldConstants.kAprilTags, FieldConstants.kFieldLength, FieldConstants.kFieldWidth);
       DriverStation.reportWarning("Could not find k2023ChargedUp.m_resourceFile, check that GradleRIO is updated to at least 2023.2.1 in build.gradle",  e.getStackTrace());
+      System.out.println("Could not find k2023ChargedUp.m_resourceFile, check that GradleRIO is updated to at least 2023.2.1 in build.gradle");
     }
     // Sets the origin to the right side of the blue alliance wall
     m_aprilTagFieldLayout.setOrigin(OriginPosition.kBlueAllianceWallRightSide);
@@ -136,7 +137,7 @@ public class Vision {
    * @return Pose3d of the AprilTag
    */
   public Pose3d getTagPose(int id){
-    if(id < 1 || id > 8){
+    if(id < 1 || id > getAprilTagFieldLayout().getTags().size()){
       System.out.println("Tried to find the pose of april tag "+id);
       return null;
     }
