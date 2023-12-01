@@ -196,6 +196,10 @@ public class Vision {
     ArrayList<EstimatedRobotPose> estimatedPoses = getEstimatedPoses(poseEstimator.getEstimatedPosition());
     for (int i = 0; i < estimatedPoses.size(); i++) {
       EstimatedRobotPose estimatedPose = estimatedPoses.get(i);
+      // Continue if this pose doesn't exist
+      if(estimatedPose==null || estimatedPose.estimatedPose==null || estimatedPose.timestampSeconds < 0){
+        continue;
+      }
       // Adds the vision measurement for this camera
       poseEstimator.addVisionMeasurement(
         estimatedPose.estimatedPose.toPose2d(),

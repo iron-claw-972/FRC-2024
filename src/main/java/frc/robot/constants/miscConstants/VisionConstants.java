@@ -41,7 +41,7 @@ public class VisionConstants {
   );
 
   // The highest ambiguity to use. Ambiguities higher than this will be ignored.
-  public static final double kHighestAmbiguity = 0.2;
+  public static final double kHighestAmbiguity = 0.02;
 
   // The distance the robot should be from the grid to score in inches
   public static final double kGridDistance = 15;
