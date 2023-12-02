@@ -5,7 +5,7 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-import frc.robot.constants.miscConstants.AutoConstants;
+import frc.robot.constants.AutoConstants;
 
 import java.io.File;
 import java.util.HashMap;
