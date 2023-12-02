@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.constants.globalConst;
+import frc.robot.constants.GlobalConst;
 import frc.robot.subsystems.SubsystemFactory;
 import frc.robot.subsystems.drivetrain.swerve.SwerveDrive;
 
@@ -123,7 +123,7 @@ public class RobotContainer {
 
         autoTab.add("Auto Chooser", autoCommand);
 
-        if (globalConst.USE_TELEMETRY) loadCommandSchedulerShuffleboard();
+        if (GlobalConst.USE_TELEMETRY) loadCommandSchedulerShuffleboard();
 
         addTestCommands();
     }

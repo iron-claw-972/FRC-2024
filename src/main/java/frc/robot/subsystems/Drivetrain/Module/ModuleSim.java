@@ -4,7 +4,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import frc.robot.constants.globalConst;
+import frc.robot.constants.GlobalConst;
 import frc.robot.constants.swerve.ModuleConstants;
 
 /**
@@ -37,7 +37,7 @@ public class ModuleSim extends Module {
      */
     @Override
     public void periodic() {
-        currentDrivePositionMeters += currentSpeed * globalConst.LOOP_TIME;
+        currentDrivePositionMeters += currentSpeed * GlobalConst.LOOP_TIME;
     }
 
     /**

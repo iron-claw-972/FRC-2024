@@ -22,7 +22,7 @@ import frc.robot.commands.test_comm.CircleDrive;
 import frc.robot.commands.test_comm.TestDriveVelocity;
 import frc.robot.commands.test_comm.TestHeadingPID;
 import frc.robot.commands.test_comm.TestSteerAngle;
-import frc.robot.constants.globalConst;
+import frc.robot.constants.GlobalConst;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
 import frc.robot.subsystems.drivetrain.module.Module;
@@ -174,7 +174,7 @@ public class SwerveDriveImpl extends SwerveDrive {
 
         fieldDisplay.setRobotPose(getPose());
 
-        if (globalConst.DO_LOGGING) updateLogs();
+        if (GlobalConst.DO_LOGGING) updateLogs();
     }
     // PIDs for Chassis movement
 
@@ -363,7 +363,7 @@ public class SwerveDriveImpl extends SwerveDrive {
     public void setChassisSpeeds(ChassisSpeeds chassisSpeeds, boolean isOpenLoop) {
         if (Robot.isSimulation()) {
             pigeon.getSimCollection().addHeading(
-                    +Units.radiansToDegrees(chassisSpeeds.omegaRadiansPerSecond * globalConst.LOOP_TIME));
+                    +Units.radiansToDegrees(chassisSpeeds.omegaRadiansPerSecond * GlobalConst.LOOP_TIME));
         }
         SwerveModuleState[] swerveModuleStates = DriveConstants.KINEMATICS.toSwerveModuleStates(chassisSpeeds);
         setModuleStates(swerveModuleStates, isOpenLoop);
@@ -555,7 +555,7 @@ public class SwerveDriveImpl extends SwerveDrive {
     private void setupDrivetrainShuffleboard() {
 
         drivetrainTab.add("Field", fieldDisplay);
-        if (!globalConst.USE_TELEMETRY) return;
+        if (!GlobalConst.USE_TELEMETRY) return;
 
 
         drivetrainTab.add("Balance PID", balanceController);
@@ -593,7 +593,7 @@ public class SwerveDriveImpl extends SwerveDrive {
      * Sets up the shuffleboard tab for the swerve modules.
      */
     private void setupModulesShuffleboard() {
-        if (globalConst.USE_TELEMETRY) {
+        if (GlobalConst.USE_TELEMETRY) {
 
             moduleChooser.setDefaultOption("Front Left", modules[0]);
             moduleChooser.addOption("Front Right", modules[1]);
@@ -630,52 +630,52 @@ public class SwerveDriveImpl extends SwerveDrive {
     }
 
     public double getRequestedHeading(double defaultValue) {
-        if (!globalConst.USE_TELEMETRY) return defaultValue;
+        if (!GlobalConst.USE_TELEMETRY) return defaultValue;
         return headingEntry.getDouble(defaultValue);
     }
 
     public double getRequestedDriveVelocity(double defaultValue) {
-        if (!globalConst.USE_TELEMETRY) return defaultValue;
+        if (!GlobalConst.USE_TELEMETRY) return defaultValue;
         return driveVelocityEntry.getDouble(defaultValue);
     }
 
     public double getRequestedSteerVelocity(double defaultValue) {
-        if (!globalConst.USE_TELEMETRY) return defaultValue;
+        if (!GlobalConst.USE_TELEMETRY) return defaultValue;
         return steerVelocityEntry.getDouble(defaultValue);
     }
 
     public double getRequestedSteerAngle(double defaultValue) {
-        if (!globalConst.USE_TELEMETRY) return defaultValue;
+        if (!GlobalConst.USE_TELEMETRY) return defaultValue;
         return steerAngleEntry.getDouble(defaultValue);
     }
 
     public double getRequestedXPos(double defaultValue) {
-        if (!globalConst.USE_TELEMETRY) return defaultValue;
+        if (!GlobalConst.USE_TELEMETRY) return defaultValue;
         return xPosEntry.getDouble(defaultValue);
     }
 
     public double getRequestedYPos(double defaultValue) {
-        if (!globalConst.USE_TELEMETRY) return defaultValue;
+        if (!GlobalConst.USE_TELEMETRY) return defaultValue;
         return yPosEntry.getDouble(defaultValue);
     }
 
     public void setDriveVelocityFeedforwardEntry(double value) {
-        if (!globalConst.USE_TELEMETRY) return;
+        if (!GlobalConst.USE_TELEMETRY) return;
         driveVelocityFeedforwardEntry.setDouble(value);
     }
 
     public void setDriveStaticFeedforwardEntry(double value) {
-        if (!globalConst.USE_TELEMETRY) return;
+        if (!GlobalConst.USE_TELEMETRY) return;
         driveStaticFeedforwardEntry.setDouble(value);
     }
 
     public void setSteerStaticFeedforwardEntry(double value) {
-        if (!globalConst.USE_TELEMETRY) return;
+        if (!GlobalConst.USE_TELEMETRY) return;
         steerStaticFeedforwardEntry.setDouble(value);
     }
 
     public void setSteerVelocityFeedforwardEntry(double value) {
-        if (!globalConst.USE_TELEMETRY) return;
+        if (!GlobalConst.USE_TELEMETRY) return;
         steerVelocityFeedforwardEntry.setDouble(value);
     }
 
@@ -683,7 +683,7 @@ public class SwerveDriveImpl extends SwerveDrive {
      * Updates the drive module feedforward values on shuffleboard.
      */
     public void updateDriveModuleFeedforwardShuffleboard() {
-        if (!globalConst.USE_TELEMETRY) return;
+        if (!GlobalConst.USE_TELEMETRY) return;
         // revert to previous saved feed forward data if changed
         if (prevModule != moduleChooser.getSelected()) {
             driveStaticFeedforwardEntry.setDouble(
@@ -719,7 +719,7 @@ public class SwerveDriveImpl extends SwerveDrive {
      * Updates the steer module feedforward values on shuffleboard.
      */
     public void updateSteerModuleFeedforwardShuffleboard() {
-        if (!globalConst.USE_TELEMETRY) return;
+        if (!GlobalConst.USE_TELEMETRY) return;
 
         //revert to previous saved feed forward data if changed
         if (prevModule != moduleChooser.getSelected()) {
@@ -753,7 +753,7 @@ public class SwerveDriveImpl extends SwerveDrive {
     }
 
     public Module getModuleChoosen() {
-        if (!globalConst.USE_TELEMETRY) return modules[0];
+        if (!GlobalConst.USE_TELEMETRY) return modules[0];
         return moduleChooser.getSelected();
     }
 
@@ -761,7 +761,7 @@ public class SwerveDriveImpl extends SwerveDrive {
      * Adds the test commands to shuffleboard so they can be run that way.
      */
     public void addTestCommands(ShuffleboardTab testTab, GenericEntry testEntry) {
-        if (globalConst.USE_TELEMETRY) {
+        if (GlobalConst.USE_TELEMETRY) {
             testTab.add("Circle Drive", new CircleDrive(this));
             testTab.add("Test Drive Velocity", new TestDriveVelocity(this, testEntry));
             testTab.add("Heading PID", new TestHeadingPID(this, testEntry));
