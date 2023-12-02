@@ -1,4 +1,4 @@
-package frc.robot.commands.testComm;
+package frc.robot.commands.test_comm;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -7,7 +7,7 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.TestConstants;
 import frc.robot.subsystems.drivetrain.module.Module;
-import frc.robot.subsystems.drivetrain.swerveDrive.swerveDriveImpl;
+import frc.robot.subsystems.drivetrain.swerve.SwerveDriveImpl;
 import frc.robot.util.TimeAccuracyTest;
 
 /**
@@ -15,11 +15,11 @@ import frc.robot.util.TimeAccuracyTest;
  */
 public class TestDriveVelocity extends CommandBase {
 
-    private final swerveDriveImpl drive;
+    private final SwerveDriveImpl drive;
     private final GenericEntry testEntry;
     private final TimeAccuracyTest[] timeAccuracyTests = new TimeAccuracyTest[4];
 
-    public TestDriveVelocity(swerveDriveImpl drive, GenericEntry testEntry) {
+    public TestDriveVelocity(SwerveDriveImpl drive, GenericEntry testEntry) {
         this.drive = drive;
         this.testEntry = testEntry;
         addRequirements(drive);

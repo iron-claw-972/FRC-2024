@@ -1,17 +1,17 @@
-package frc.robot.commands.driveComm;
+package frc.robot.commands.drive_comm;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.drivetrain.swerveDrive.swerveDriveImpl;
+import frc.robot.subsystems.drivetrain.swerve.SwerveDriveImpl;
 
 /**
  * Sets the robot's wheels to an X formation to prevent being pushed around by other bots.
  */
 public class SetFormationX extends SequentialCommandGroup {
-    public SetFormationX(swerveDriveImpl drive) {
+    public SetFormationX(SwerveDriveImpl drive) {
         addRequirements(drive);
         addCommands(
                 new InstantCommand(() -> drive.enableStateDeadband(false), drive),

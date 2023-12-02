@@ -1,4 +1,4 @@
-package frc.robot.commands.testComm;
+package frc.robot.commands.test_comm;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -6,21 +6,21 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.TestConstants;
-import frc.robot.subsystems.drivetrain.swerveDrive.swerveDriveImpl;
+import frc.robot.subsystems.drivetrain.swerve.SwerveDriveImpl;
 
 /**
  * Tests the odometry of the robot by driving a certain distance and calculating the error.
  */
 public class PoseTransform extends CommandBase {
 
-    private final swerveDriveImpl drive;
+    private final SwerveDriveImpl drive;
 
     private double startTime;
     private Pose2d finalPose;
     private final Transform2d distanceToMove;
     private Pose2d error;
 
-    public PoseTransform(swerveDriveImpl drive, Transform2d poseTransform) {
+    public PoseTransform(SwerveDriveImpl drive, Transform2d poseTransform) {
         this.drive = drive;
         // finalPose is position after robot moves from current position-- startPose-- by the values that are inputted-- distanceToMove
         distanceToMove = poseTransform;

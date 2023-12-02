@@ -1,6 +1,4 @@
-package frc.robot.subsystems.drivetrain.swerveDrive;
-    // 'programming is "the defintiion of insanity" -- einstein, probably' -- iliana, probably (edited by Ben)
-    // to clear our programming structure, it was deleted. redo
+package frc.robot.subsystems.drivetrain.swerve;
 import com.ctre.phoenix.sensors.Pigeon2.AxisDirection;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import edu.wpi.first.math.controller.PIDController;
@@ -20,10 +18,10 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Robot;
-import frc.robot.commands.testComm.CircleDrive;
-import frc.robot.commands.testComm.TestDriveVelocity;
-import frc.robot.commands.testComm.TestHeadingPID;
-import frc.robot.commands.testComm.TestSteerAngle;
+import frc.robot.commands.test_comm.CircleDrive;
+import frc.robot.commands.test_comm.TestDriveVelocity;
+import frc.robot.commands.test_comm.TestHeadingPID;
+import frc.robot.commands.test_comm.TestSteerAngle;
 import frc.robot.constants.globalConst;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
@@ -40,7 +38,7 @@ import frc.robot.util.LogManager;
  * 3: Back left
  * 4: Back right
  */
-public class swerveDriveImpl extends swerveDrive {
+public class SwerveDriveImpl extends SwerveDrive {
 
     private final ShuffleboardTab swerveModulesTab;
     private final ShuffleboardTab drivetrainTab;
@@ -104,7 +102,7 @@ public class swerveDriveImpl extends swerveDrive {
      * @param swerveModulesTab the shuffleboard tab to display module data on
 //     * @param vision           the vision
      */
-    public swerveDriveImpl(ShuffleboardTab drivetrainTab, ShuffleboardTab swerveModulesTab) {
+    public SwerveDriveImpl(ShuffleboardTab drivetrainTab, ShuffleboardTab swerveModulesTab) {
 
         this.drivetrainTab = drivetrainTab;
         this.swerveModulesTab = swerveModulesTab;

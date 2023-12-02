@@ -5,7 +5,7 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.constants.globalConst;
 import frc.robot.constants.swerve.DriveConstants;
-import frc.robot.subsystems.drivetrain.swerveDrive.swerveDriveImpl;
+import frc.robot.subsystems.drivetrain.swerve.SwerveDriveImpl;
 import frc.robot.util.DynamicSlewRateLimiter;
 import frc.robot.util.MathUtils;
 
@@ -14,7 +14,7 @@ import frc.robot.util.MathUtils;
  */
 public abstract class BaseDriverConfig {
 
-    private final swerveDriveImpl drive;
+    private final SwerveDriveImpl drive;
 
     private final boolean shuffleboardUpdates;
 
@@ -58,7 +58,7 @@ public abstract class BaseDriverConfig {
      * @param controllerTab       the shuffleboard controller tab
      * @param shuffleboardUpdates whether to update the shuffleboard
      */
-    public BaseDriverConfig(swerveDriveImpl drive, ShuffleboardTab controllerTab, boolean shuffleboardUpdates) {
+    public BaseDriverConfig(SwerveDriveImpl drive, ShuffleboardTab controllerTab, boolean shuffleboardUpdates) {
         headingLimiter.setContinuousLimits(-Math.PI, Math.PI);
         headingLimiter.enableContinuous(true);
         this.controllerTab = controllerTab;
@@ -84,7 +84,7 @@ public abstract class BaseDriverConfig {
         return previousHeading;
     }
 
-    protected swerveDriveImpl getDrivetrain() {
+    protected SwerveDriveImpl getDrivetrain() {
         return drive;
     }
 
