@@ -21,7 +21,30 @@ public class Module extends SubsystemBase {
 
     protected boolean stateDeadband = true;
 
-    public Module(ModuleConstants ignored) {
+    public Module(ModuleConstants moduleConstants, ShuffleboardTab swerveTab) {
+        this.swerveTab = swerveTab;
+
+        type = moduleConstants.getType();
+
+        angleOffset = new Rotation2d(moduleConstants.getSteerOffset());
+
+        stateDeadband = true;
+
+        /* Angle Encoder Config */
+        CANcoder = new WPI_CANCoder(moduleConstants.getEncoderPort(), DriveConstants.kSteerEncoderCAN);
+        configCANcoder();
+
+        /* Angle Motor Config */
+        angleMotor = new WPI_TalonFX(moduleConstants.getSteerPort(), DriveConstants.kSteerEncoderCAN);
+        configAngleMotor();
+
+        /* Drive Motor Config */
+        driveMotor = new WPI_TalonFX(moduleConstants.getDrivePort(), DriveConstants.kDriveMotorCAN);
+        configDriveMotor();
+
+        setDesiredState(new SwerveModuleState(0, getAngle()), false);
+
+        setupShuffleboard();
     }
 
     /**
