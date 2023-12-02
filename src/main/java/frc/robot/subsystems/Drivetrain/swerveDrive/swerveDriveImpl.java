@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Drivetrain.swerveDrive;
+package frc.robot.subsystems.drivetrain.swerveDrive;
     // 'programming is "the defintiion of insanity" -- einstein, probably' -- iliana, probably (edited by Ben)
     // to clear our programming structure, it was deleted. redo
 import com.ctre.phoenix.sensors.Pigeon2.AxisDirection;
@@ -27,8 +27,8 @@ import frc.robot.commands.testComm.TestSteerAngle;
 import frc.robot.constants.globalConst;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
-import frc.robot.subsystems.Drivetrain.Module.Module;
-import frc.robot.subsystems.Drivetrain.Module.ModuleSim;
+import frc.robot.subsystems.drivetrain.module.Module;
+import frc.robot.subsystems.drivetrain.module.ModuleSim;
 import frc.robot.util.LogManager;
 
 /**

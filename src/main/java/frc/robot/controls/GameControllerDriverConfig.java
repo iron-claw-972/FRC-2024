@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.driveComm.SetFormationX;
 import frc.robot.constants.globalConst;
-import frc.robot.subsystems.Drivetrain.swerveDrive.swerveDriveImpl;
+import frc.robot.subsystems.drivetrain.swerveDrive.swerveDriveImpl;
 import frc.robot.util.MathUtils;
 import lib.controllers.GameController;
 import lib.controllers.GameController.Axis;

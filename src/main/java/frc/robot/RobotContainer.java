@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.constants.globalConst;
 import frc.robot.subsystems.SubsystemFactory;
-import frc.robot.subsystems.Drivetrain.swerveDrive.swerveDrive;
+import frc.robot.subsystems.drivetrain.swerveDrive.swerveDrive;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a

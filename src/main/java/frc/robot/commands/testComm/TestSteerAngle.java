@@ -5,8 +5,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.TestConstants;
-import frc.robot.subsystems.Drivetrain.Module.Module;
-import frc.robot.subsystems.Drivetrain.swerveDrive.swerveDriveImpl;
+import frc.robot.subsystems.drivetrain.module.Module;
+import frc.robot.subsystems.drivetrain.swerveDrive.swerveDriveImpl;
 import frc.robot.util.TimeAccuracyTest;
 
 /**

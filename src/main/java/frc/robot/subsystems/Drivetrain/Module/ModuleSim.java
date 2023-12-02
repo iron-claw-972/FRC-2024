@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Drivetrain.Module;
+package frc.robot.subsystems.drivetrain.module;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -10,7 +10,7 @@ import frc.robot.constants.swerve.ModuleConstants;
 /**
  * Swerve module for drivetrain to be used inside of simulation.
  *
- * @see frc.robot.subsystems.Drivetrain.Module.Module
+ * @see frc.robot.subsystems.drivetrain.module.Module
  */
 public class ModuleSim extends Module {
 

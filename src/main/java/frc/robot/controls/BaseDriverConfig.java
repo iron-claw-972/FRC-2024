@@ -5,7 +5,7 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.constants.globalConst;
 import frc.robot.constants.swerve.DriveConstants;
-import frc.robot.subsystems.Drivetrain.swerveDrive.swerveDriveImpl;
+import frc.robot.subsystems.drivetrain.swerveDrive.swerveDriveImpl;
 import frc.robot.util.DynamicSlewRateLimiter;
 import frc.robot.util.MathUtils;
 

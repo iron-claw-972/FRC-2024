@@ -1,4 +1,4 @@
-package frc.robot.subsystems.gpmSubsystem.StorageIndex;
+package frc.robot.subsystems.gpmSubsystem.storageIndex;
 
 public class StorageIndex {
     

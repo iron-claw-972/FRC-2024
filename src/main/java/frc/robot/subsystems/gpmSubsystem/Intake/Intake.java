@@ -1,4 +1,4 @@
-package frc.robot.subsystems.gpmSubsystem.Intake;
+package frc.robot.subsystems.gpmSubsystem.intake;
 
 public class Intake {
     

@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Endgame;
+package frc.robot.subsystems.endgame;
 
 public class Endgame {
     

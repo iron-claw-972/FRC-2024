@@ -5,8 +5,8 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.RobotId;
-import frc.robot.subsystems.Drivetrain.swerveDrive.swerveDrive;
-import frc.robot.subsystems.Drivetrain.swerveDrive.swerveDriveImpl;
+import frc.robot.subsystems.drivetrain.swerveDrive.swerveDrive;
+import frc.robot.subsystems.drivetrain.swerveDrive.swerveDriveImpl;
 
 public class SubsystemFactory {
 

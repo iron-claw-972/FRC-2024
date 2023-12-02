@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Drivetrain.Module;
+package frc.robot.subsystems.drivetrain.module;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;

@@ -8,7 +8,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.TestConstants;
-import frc.robot.subsystems.Drivetrain.swerveDrive.swerveDriveImpl;
+import frc.robot.subsystems.drivetrain.swerveDrive.swerveDriveImpl;
 
 /**
  * Tests the odometry of the robot by driving a certain distance and calculating the error.
