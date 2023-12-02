@@ -48,7 +48,7 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        drive = new Drivetrain();
+        drive = new Drivetrain(drivetrainTab);
         driver = new GameControllerDriverConfig(drive, controllerTab, false);
 
         driver.configureControls();

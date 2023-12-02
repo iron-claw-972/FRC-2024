@@ -12,6 +12,8 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -47,16 +49,18 @@ public class Drivetrain extends SubsystemBase {
     // Displays the field with the robots estimated pose on it
     private final Field2d fieldDisplay;
 
+    private final ShuffleboardTab swerveTab;
     /**
      * Creates a new Swerve Style Drivetrain.
      */
-    public Drivetrain() {
+    public Drivetrain(ShuffleboardTab swerveTab) {
+        this.swerveTab = swerveTab;
         modules = new Module[4];
         
         ModuleConstants[] constants = Arrays.copyOfRange(ModuleConstants.values(), 0, 4);
         
         Arrays.stream(constants).forEach(moduleConstants -> {
-            modules[moduleConstants.ordinal()] = new ModuleImpl(moduleConstants);
+            modules[moduleConstants.ordinal()] = new Module(moduleConstants, swerveTab);
         });
 
         // The Pigeon is a gyroscope and implements WPILib's Gyro interface
