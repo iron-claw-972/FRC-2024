@@ -1,16 +1,16 @@
-package frc.robot.commands.test;
+package frc.robot.commands.test_comm;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.constants.miscConstants.TestConstants;
+import frc.robot.constants.TestConstants;
 import frc.robot.subsystems.drive.Drivetrain;
 
 /**
  * Tests the odometry of the robot by driving a certain distance and calculating the error.
  */
-public class PoseTransformTest extends CommandBase {
+public class GoToPoseTest extends CommandBase {
 
     private final Drivetrain drive;
 
@@ -18,9 +18,8 @@ public class PoseTransformTest extends CommandBase {
     private Pose2d finalPose;
     private Pose2d error;
 
-    public PoseTransformTest(Drivetrain drive) {
+    public GoToPoseTest(Drivetrain drive) {
         this.drive = drive;
-        // finalPose is position after robot moves from current position-- startPose-- by the values that are inputted-- distanceToMove
 
         addRequirements(drive);
     }
@@ -28,10 +27,11 @@ public class PoseTransformTest extends CommandBase {
     @Override
     public void initialize() {
         startTime = Timer.getFPGATimestamp();
-//        finalPose = drive.getPose().transformBy(new Transform2d(
-//                new Translation2d(drive.getRequestedXPos(0), drive.getRequestedYPos(0)),
-//                new Rotation2d(drive.getRequestedHeading(0))
-//        ));
+//        finalPose = new Pose2d(
+//                drive.getRequestedXPos(drive.getPose().getX()), drive.getRequestedYPos(drive.getPose().getY()),
+//                new Rotation2d(drive.getRequestedHeading(drive.getYaw().getRadians()))
+//        );
+
     }
 
     @Override

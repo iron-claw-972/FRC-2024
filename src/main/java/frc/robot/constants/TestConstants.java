@@ -1,4 +1,4 @@
-package frc.robot.constants.miscConstants;
+package frc.robot.constants;
 
 import edu.wpi.first.math.util.Units;
 

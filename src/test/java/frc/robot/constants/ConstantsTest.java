@@ -19,8 +19,6 @@ public class ConstantsTest {
         double widthFrame = Units.inchesToMeters(26.0);
         double widthFrameAndPlates = widthFrame + 2.0 * Units.inchesToMeters(3.0 / 16.0);
 
-        // At Port Hueneme, the frame perimeter was 105 inches
-        // frame perimeter is 105.5...
         assertEquals(105.0, 4 * Units.metersToInches(widthFrameAndPlates), 0.501);
 
         // Bumpers.

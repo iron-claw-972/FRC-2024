@@ -1,4 +1,4 @@
-package frc.robot.commands.test;
+package frc.robot.commands.test_comm;
 
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -6,15 +6,15 @@ import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.TimeAccuracyTest;
 
 /**
- * Attempts to set all four modules to a constant angle. Determines if the modules are able to reach the angle requested in a certain time.
+ * Attempts to run all four modules at constant velocity. Determines if the modules are able to reach the velocity requested in a certain time.
  */
-public class TestSteerAngle extends CommandBase {
+public class TestDriveVelocity extends CommandBase {
 
     private final Drivetrain drive;
     private final GenericEntry testEntry;
     private final TimeAccuracyTest[] timeAccuracyTests = new TimeAccuracyTest[4];
 
-    public TestSteerAngle(Drivetrain drive, GenericEntry testEntry) {
+    public TestDriveVelocity(Drivetrain drive, GenericEntry testEntry) {
         this.drive = drive;
         this.testEntry = testEntry;
         addRequirements(drive);
@@ -23,14 +23,13 @@ public class TestSteerAngle extends CommandBase {
     @Override
     public void initialize() {
 //        drive.setAllOptimize(false);
-//        drive.enableStateDeadband(false);
 //        for (int i = 0; i < 4; i++) {
 //            Module module = drive.getModules()[i];
 //            timeAccuracyTests[i] = new TimeAccuracyTest(
-//                    module::getDriveVelocityError,
+//                    () -> module.getState().speedMetersPerSecond,
 //                    () -> drive.getRequestedSteerVelocity(0),
-//                    TestConstants.STEER_ANGLE_ERROR,
-//                    TestConstants.STEER_ANGLE_TIME_ERROR
+//                    TestConstants.DRIVE_VELOCITY_ERROR,
+//                    TestConstants.DRIVE_VELOCITY_TIME_ERROR
 //            );
 //        }
     }
@@ -38,15 +37,11 @@ public class TestSteerAngle extends CommandBase {
     @Override
     public void execute() {
 //        drive.setModuleStates(new SwerveModuleState[]{
-//                new SwerveModuleState(0,
-//                        new Rotation2d(drive.getRequestedSteerAngle(drive.getModules()[0].getAngle().getRadians()))),
-//                new SwerveModuleState(0,
-//                        new Rotation2d(drive.getRequestedSteerAngle(drive.getModules()[1].getAngle().getRadians()))),
-//                new SwerveModuleState(0,
-//                        new Rotation2d(drive.getRequestedSteerAngle(drive.getModules()[2].getAngle().getRadians()))),
-//                new SwerveModuleState(0,
-//                        new Rotation2d(drive.getRequestedSteerAngle(drive.getModules()[3].getAngle().getRadians())))
-//        }, true);
+//                new SwerveModuleState(drive.getRequestedDriveVelocity(0), new Rotation2d(Units.degreesToRadians(135))),
+//                new SwerveModuleState(drive.getRequestedDriveVelocity(0), new Rotation2d(Units.degreesToRadians(45))),
+//                new SwerveModuleState(drive.getRequestedDriveVelocity(0), new Rotation2d(Units.degreesToRadians(225))),
+//                new SwerveModuleState(drive.getRequestedDriveVelocity(0), new Rotation2d(Units.degreesToRadians(315)))
+//        }, false);
 //        testEntry.setBoolean(
 //                timeAccuracyTests[0].calculate() &&
 //                timeAccuracyTests[1].calculate() &&
@@ -58,7 +53,6 @@ public class TestSteerAngle extends CommandBase {
     @Override
     public void end(boolean interrupted) {
 //        drive.setAllOptimize(true);
-//        drive.enableStateDeadband(true);
 //        drive.stop();
     }
 

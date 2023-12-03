@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.drive_comm;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;

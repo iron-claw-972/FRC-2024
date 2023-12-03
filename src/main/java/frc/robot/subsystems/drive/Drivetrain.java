@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
-import frc.robot.constants.Constants;
+import frc.robot.constants.GlobalConst;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
 
@@ -200,7 +200,7 @@ public class Drivetrain extends SubsystemBase {
     public void setChassisSpeeds(ChassisSpeeds chassisSpeeds, boolean isOpenLoop) {
         if (Robot.isSimulation()) {
             pigeon.getSimCollection().addHeading(
-                    +Units.radiansToDegrees(chassisSpeeds.omegaRadiansPerSecond * Constants.LOOP_TIME));
+                    +Units.radiansToDegrees(chassisSpeeds.omegaRadiansPerSecond * GlobalConst.LOOP_TIME));
         }
         SwerveModuleState[] swerveModuleStates = DriveConstants.KINEMATICS.toSwerveModuleStates(chassisSpeeds);
         setModuleStates(swerveModuleStates, isOpenLoop);

@@ -6,7 +6,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.Constants;
+import frc.robot.constants.GlobalConst;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
 import frc.robot.util.ConversionUtils;
@@ -78,7 +78,7 @@ public class Module extends SubsystemBase {
      */
     @Override
     public void periodic() {
-        currentDrivePositionMeters += currentSpeed * Constants.LOOP_TIME;
+        currentDrivePositionMeters += currentSpeed * GlobalConst.LOOP_TIME;
     }
 
     /**
@@ -139,7 +139,7 @@ public class Module extends SubsystemBase {
             driveMotor.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward,
                            feedforward.calculate(desiredState.speedMetersPerSecond));
         }
-        if (Constants.DO_LOGGING) {
+        if (GlobalConst.DO_LOGGING) {
             double motorSpeed = ConversionUtils.falconToMPS(driveMotor.getSelectedSensorVelocity(), DriveConstants.kWheelCircumference,
                                                             DriveConstants.kDriveGearRatio);
             LogManager.addDouble("Swerve/Modules/DriveSpeed/" + type.name(),
@@ -208,7 +208,7 @@ public class Module extends SubsystemBase {
         angleMotor.config_kF(0, DriveConstants.kModuleConstants.angleKF);
         angleMotor.setInverted(DriveConstants.kAngleMotorInvert);
         angleMotor.setNeutralMode(DriveConstants.kAngleNeutralMode);
-        angleMotor.configVoltageCompSaturation(Constants.ROBOT_VOLTAGE);
+        angleMotor.configVoltageCompSaturation(GlobalConst.ROBOT_VOLTAGE);
         angleMotor.enableVoltageCompensation(true);
         angleMotor.setSelectedSensorPosition(0);
         resetToAbsolute();
@@ -234,7 +234,7 @@ public class Module extends SubsystemBase {
         driveMotor.configClosedloopRamp(DriveConstants.kClosedLoopRamp);
         driveMotor.setInverted(DriveConstants.kDriveMotorInvert);
         driveMotor.setNeutralMode(DriveConstants.kDriveNeutralMode);
-        driveMotor.configVoltageCompSaturation(Constants.ROBOT_VOLTAGE);
+        driveMotor.configVoltageCompSaturation(GlobalConst.ROBOT_VOLTAGE);
         driveMotor.enableVoltageCompensation(true);
     }
 

@@ -1,4 +1,4 @@
-package frc.robot.commands.test;
+package frc.robot.commands.test_comm;
 
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj2.command.CommandBase;

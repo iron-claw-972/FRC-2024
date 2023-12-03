@@ -5,8 +5,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.commands.SetFormationX;
-import frc.robot.constants.miscConstants.OIConstants;
+import frc.robot.commands.drive_comm.SetFormationX;
+import frc.robot.constants.GlobalConst;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.MathUtils;
 import lib.controllers.GameController;
@@ -18,7 +18,7 @@ import lib.controllers.GameController.Button;
  */
 public class GameControllerDriverConfig extends BaseDriverConfig {
 
-    private final GameController kDriver = new GameController(OIConstants.DRIVER_JOY);
+    private final GameController kDriver = new GameController(GlobalConst.DRIVER_JOY);
 
     public GameControllerDriverConfig(Drivetrain drive, ShuffleboardTab controllerTab, boolean shuffleboardUpdates) {
         super(drive, controllerTab, shuffleboardUpdates);
