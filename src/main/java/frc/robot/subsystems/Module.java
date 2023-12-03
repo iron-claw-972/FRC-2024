@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -99,5 +101,11 @@ public class Module extends SubsystemBase {
     public void setStateDeadband(boolean enabled) {
         stateDeadband = enabled;
     }
+
+    public WPI_TalonFX getDriveMotor(){
+        return null;
+    }
+
+    
 
 }

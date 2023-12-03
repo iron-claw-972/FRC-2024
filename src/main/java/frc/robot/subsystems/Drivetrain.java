@@ -98,6 +98,7 @@ public class Drivetrain extends SubsystemBase {
     @Override
     public void periodic() {
         updateOdometry();
+        updateLogs();
         fieldDisplay.setRobotPose(getPose());
     }
 
@@ -343,7 +344,19 @@ public class Drivetrain extends SubsystemBase {
           modules[3].getDesiredVelocity()
         };
         LogManager.addDoubleArray("Swerve/desired swerve states", desiredStates);
-    
+
+        double[] moduleVoltage = {
+            modules[0].getDriveMotor().getBusVoltage(),
+            modules[0].getDriveMotor().getMotorOutputVoltage(),
+            modules[1].getDriveMotor().getBusVoltage(),
+            modules[1].getDriveMotor().getMotorOutputVoltage(),
+            modules[2].getDriveMotor().getBusVoltage(),
+            modules[2].getDriveMotor().getMotorOutputVoltage(),
+            modules[3].getDriveMotor().getBusVoltage(),
+            modules[3].getDriveMotor().getMotorOutputVoltage()
+          };
+          LogManager.addDoubleArray("Swerve Voltage", desiredStates);
+        
         // double[] errorStates = {
         //   desiredStates[0] - actualStates[0],
         //   desiredStates[1] - actualStates[1],

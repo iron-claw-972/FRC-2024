@@ -218,4 +218,8 @@ public class ModuleImpl extends Module {
         driveMotor.set(0);
         angleMotor.set(0);
     }
+
+    public WPI_TalonFX getDriveMotor(){
+        return driveMotor;
+    }
 }
