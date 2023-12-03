@@ -60,7 +60,7 @@ public class Drivetrain extends SubsystemBase {
         ModuleConst[] constants = Arrays.copyOfRange(ModuleConst.values(), 0, 4);
         
         Arrays.stream(constants).forEach(moduleConstants -> {
-            modules[moduleConstants.ordinal()] = new Module(moduleConstants, swerveTab);
+            modules[moduleConstants.ordinal()] = new Module(moduleConstants);
         });
 
         // The Pigeon is a gyroscope and implements WPILib's Gyro interface
