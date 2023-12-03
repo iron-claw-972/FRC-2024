@@ -1,39 +1,39 @@
 package frc.robot.constants.swerve;
 
 /**
- * Container class for module constants, defined using constants from {@link DriveConstants}
+ * Container class for module constants, defined using constants from {@link DriveConst}
  * .
  *
- * @see DriveConstants
+ * @see DriveConst
  */
-public enum ModuleConstants {
+public enum ModuleConst {
 
     FRONT_LEFT(
-            DriveConstants.kDriveFrontLeft,
-            DriveConstants.kSteerFrontLeft,
-            DriveConstants.kEncoderFrontLeft,
-            DriveConstants.kSteerOffsetFrontLeft,
+            DriveConst.kDriveFrontLeft,
+            DriveConst.kSteerFrontLeft,
+            DriveConst.kEncoderFrontLeft,
+            DriveConst.kSteerOffsetFrontLeft,
             ModuleType.FRONT_LEFT
     ),
     FRONT_RIGHT(
-            DriveConstants.kDriveFrontRight,
-            DriveConstants.kSteerFrontRight,
-            DriveConstants.kEncoderFrontRight,
-            DriveConstants.kSteerOffsetFrontRight,
+            DriveConst.kDriveFrontRight,
+            DriveConst.kSteerFrontRight,
+            DriveConst.kEncoderFrontRight,
+            DriveConst.kSteerOffsetFrontRight,
             ModuleType.FRONT_RIGHT
     ),
     BACK_LEFT(
-            DriveConstants.kDriveBackLeft,
-            DriveConstants.kSteerBackLeft,
-            DriveConstants.kEncoderBackLeft,
-            DriveConstants.kSteerOffsetBackLeft,
+            DriveConst.kDriveBackLeft,
+            DriveConst.kSteerBackLeft,
+            DriveConst.kEncoderBackLeft,
+            DriveConst.kSteerOffsetBackLeft,
             ModuleType.BACK_LEFT
     ),
     BACK_RIGHT(
-            DriveConstants.kDriveBackRight,
-            DriveConstants.kSteerBackRight,
-            DriveConstants.kEncoderBackRight,
-            DriveConstants.kSteerOffsetBackRight,
+            DriveConst.kDriveBackRight,
+            DriveConst.kSteerBackRight,
+            DriveConst.kEncoderBackRight,
+            DriveConst.kSteerOffsetBackRight,
             ModuleType.BACK_RIGHT
     ),
 
@@ -45,7 +45,7 @@ public enum ModuleConstants {
     private final double steerOffset;
     private final ModuleType type;
 
-    ModuleConstants(
+    ModuleConst(
             int drivePort,
             int steerPort,
             int encoderPort,

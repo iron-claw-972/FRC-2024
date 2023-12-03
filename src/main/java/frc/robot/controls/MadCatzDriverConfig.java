@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.drive_comm.SetFormationX;
 import frc.robot.constants.GlobalConst;
-import frc.robot.constants.swerve.DriveConstants;
+import frc.robot.constants.swerve.DriveConst;
 import frc.robot.subsystems.drive.Drivetrain;
 import lib.controllers.MadCatzController;
 import lib.controllers.MadCatzController.MadCatzAxis;
@@ -24,7 +24,7 @@ public class MadCatzDriverConfig extends BaseDriverConfig {
     @Override
     public void configureControls() {
         kDriver.get(MadCatzButton.B1).whileTrue(new SetFormationX(super.getDrivetrain()));
-        kDriver.get(MadCatzButton.B2).onTrue(new InstantCommand(() -> super.getDrivetrain().setYaw(DriveConstants.kStartingHeading)));
+        kDriver.get(MadCatzButton.B2).onTrue(new InstantCommand(() -> super.getDrivetrain().setYaw(DriveConst.kStartingHeading)));
     }
 
     @Override

@@ -13,7 +13,7 @@ import lib.COTSFalconSwerveConstants;
  * Constants are, by default, for the competition robot.
  * Constants get changed if the RobotId detected is not the competition robot.
  */
-public class DriveConstants {
+public class DriveConst {
 
     //TODO: Check that these values are correct. 
     public static double kRobotWidthWithBumpers = Units.inchesToMeters(26 + 3.75 * 2);
@@ -46,10 +46,10 @@ public class DriveConstants {
     public static Rotation2d kStartingHeading = new Rotation2d();
 
     public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(
-            new Translation2d(DriveConstants.kTrackWidth / 2, DriveConstants.kTrackWidth / 2),
-            new Translation2d(DriveConstants.kTrackWidth / 2, -DriveConstants.kTrackWidth / 2),
-            new Translation2d(-DriveConstants.kTrackWidth / 2, DriveConstants.kTrackWidth / 2),
-            new Translation2d(-DriveConstants.kTrackWidth / 2, -DriveConstants.kTrackWidth / 2)
+            new Translation2d(DriveConst.kTrackWidth / 2, DriveConst.kTrackWidth / 2),
+            new Translation2d(DriveConst.kTrackWidth / 2, -DriveConst.kTrackWidth / 2),
+            new Translation2d(-DriveConst.kTrackWidth / 2, DriveConst.kTrackWidth / 2),
+            new Translation2d(-DriveConst.kTrackWidth / 2, -DriveConst.kTrackWidth / 2)
     );
     
     //duleImpl.periodic(ModuleImpl.java:65): FRONT_RIGHT Encoder offset: -35614.0 

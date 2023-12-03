@@ -4,7 +4,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.constants.GlobalConst;
-import frc.robot.constants.swerve.DriveConstants;
+import frc.robot.constants.swerve.DriveConst;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.util.DynamicSlewRateLimiter;
 import frc.robot.util.MathUtils;
@@ -67,15 +67,15 @@ public abstract class BaseDriverConfig {
     }
 
     public double getForwardTranslation() {
-        return -MathUtils.expoMS(MathUtil.applyDeadband(getRawForwardTranslation(), GlobalConst.DEADBAND), 2) * DriveConstants.kMaxSpeed * 1;
+        return -MathUtils.expoMS(MathUtil.applyDeadband(getRawForwardTranslation(), GlobalConst.DEADBAND), 2) * DriveConst.kMaxSpeed * 1;
     }
 
     public double getSideTranslation() {
-        return -MathUtils.expoMS(MathUtil.applyDeadband(getRawSideTranslation(), GlobalConst.DEADBAND), 2) * DriveConstants.kMaxSpeed * 1;
+        return -MathUtils.expoMS(MathUtil.applyDeadband(getRawSideTranslation(), GlobalConst.DEADBAND), 2) * DriveConst.kMaxSpeed * 1;
     }
 
     public double getRotation() {
-        return -MathUtils.expoMS(MathUtil.applyDeadband(getRawRotation(), GlobalConst.DEADBAND), 2) * DriveConstants.kMaxAngularSpeed * 1;
+        return -MathUtils.expoMS(MathUtil.applyDeadband(getRawRotation(), GlobalConst.DEADBAND), 2) * DriveConst.kMaxAngularSpeed * 1;
     }
 
     public double getHeading() {

@@ -3,7 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.constants.swerve.DriveConstants;
+import frc.robot.constants.swerve.DriveConst;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.subsystems.drive.Drivetrain;
 
@@ -35,11 +35,11 @@ public class DefaultDriveCommand extends CommandBase {
         double sideTranslation = driver.getSideTranslation();
         double rotation = driver.getRotation();
 
-        double slowFactor = driver.getIsSlowMode() ? DriveConstants.kSlowDriveFactor : 1;
+        double slowFactor = driver.getIsSlowMode() ? DriveConst.kSlowDriveFactor : 1;
 
         forwardTranslation *= slowFactor;
         sideTranslation *= slowFactor;
-        rotation *= driver.getIsSlowMode() ? DriveConstants.kSlowRotFactor : 1;
+        rotation *= driver.getIsSlowMode() ? DriveConst.kSlowRotFactor : 1;
 
         int allianceReversal = DriverStation.getAlliance() == Alliance.Blue ? 1 : -1;
         forwardTranslation *= allianceReversal;

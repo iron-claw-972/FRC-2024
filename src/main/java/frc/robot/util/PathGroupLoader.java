@@ -5,7 +5,7 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-import frc.robot.constants.AutoConstants;
+import frc.robot.constants.AutoConst;
 
 import java.io.File;
 import java.util.HashMap;
@@ -25,13 +25,13 @@ public class PathGroupLoader {
      */
     public static void loadPathGroups() {
         double totalTime = 0;
-        File[] directoryListing = Filesystem.getDeployDirectory().toPath().resolve(AutoConstants.TRAJECTORY_DIRECTORY).toFile().listFiles();
+        File[] directoryListing = Filesystem.getDeployDirectory().toPath().resolve(AutoConst.TRAJECTORY_DIRECTORY).toFile().listFiles();
         if (directoryListing != null) {
             for (File file : directoryListing) {
                 if (file.isFile() && file.getName().contains(".")) {
                     long startTime = System.nanoTime();
                     String name = file.getName().substring(0, file.getName().indexOf("."));
-                    pathGroups.put(name, PathPlanner.loadPathGroup(name, new PathConstraints(AutoConstants.MAX_AUTO_SPEED, AutoConstants.MAX_AUTO_ACCEL)));
+                    pathGroups.put(name, PathPlanner.loadPathGroup(name, new PathConstraints(AutoConst.MAX_AUTO_SPEED, AutoConst.MAX_AUTO_ACCEL)));
                     double time = (System.nanoTime() - startTime) / 1000000.0;
                     totalTime += time;
                     System.out.println("Processed file: " + file.getName() + ", took " + time + " milliseconds.");

@@ -4,7 +4,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.constants.TestConstants;
+import frc.robot.constants.TestConst;
 import frc.robot.subsystems.drive.Drivetrain;
 
 /**
@@ -42,7 +42,7 @@ public class PoseTransformTest extends CommandBase {
     @Override
     public boolean isFinished() {
         // TODO: the current PID values don't allow the command to finish
-        double errorMarginMeters = TestConstants.TRANSLATION_ERROR;
+        double errorMarginMeters = TestConst.TRANSLATION_ERROR;
         double errorMarginRadians = Units.degreesToRadians(10);
         error = drive.getPose().relativeTo(finalPose);
         // if robot thinks its precision is < 0.1 to the target we inputted, it will stop, so then we can see how off it is

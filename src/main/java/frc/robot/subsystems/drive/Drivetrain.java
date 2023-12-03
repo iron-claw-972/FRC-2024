@@ -18,8 +18,8 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.constants.GlobalConst;
-import frc.robot.constants.swerve.DriveConstants;
-import frc.robot.constants.swerve.ModuleConstants;
+import frc.robot.constants.swerve.DriveConst;
+import frc.robot.constants.swerve.ModuleConst;
 
 import java.util.Arrays;
 
@@ -57,14 +57,14 @@ public class Drivetrain extends SubsystemBase {
         this.swerveTab = swerveTab;
         modules = new Module[4];
         
-        ModuleConstants[] constants = Arrays.copyOfRange(ModuleConstants.values(), 0, 4);
+        ModuleConst[] constants = Arrays.copyOfRange(ModuleConst.values(), 0, 4);
         
         Arrays.stream(constants).forEach(moduleConstants -> {
             modules[moduleConstants.ordinal()] = new Module(moduleConstants, swerveTab);
         });
 
         // The Pigeon is a gyroscope and implements WPILib's Gyro interface
-        pigeon = new WPI_Pigeon2(DriveConstants.kPigeon, DriveConstants.kPigeonCAN);
+        pigeon = new WPI_Pigeon2(DriveConst.kPigeon, DriveConst.kPigeonCAN);
         pigeon.configFactoryDefault();
         // Our pigeon is mounted with y forward, and z upward
         pigeon.configMountPose(AxisDirection.PositiveY, AxisDirection.PositiveZ);
@@ -78,9 +78,9 @@ public class Drivetrain extends SubsystemBase {
         resetModulesToAbsolute();
         
         // initial Odometry Location
-        pigeon.setYaw(DriveConstants.kStartingHeading.getDegrees());
+        pigeon.setYaw(DriveConst.kStartingHeading.getDegrees());
         poseEstimator = new SwerveDrivePoseEstimator(
-                DriveConstants.KINEMATICS,
+                DriveConst.KINEMATICS,
                 Rotation2d.fromDegrees(pigeon.getYaw()),
                 getModulePositions(),
                 new Pose2d() 
@@ -88,9 +88,9 @@ public class Drivetrain extends SubsystemBase {
 //        poseEstimator.setVisionMeasurementStdDevs(VisionConstants.kBaseVisionPoseStdDevs);
         
         // initialize PID controllers
-        xController = new PIDController(DriveConstants.kTranslationalP, 0, DriveConstants.kTranslationalD);
-        yController = new PIDController(DriveConstants.kTranslationalP, 0, DriveConstants.kTranslationalD);
-        rotationController = new PIDController(DriveConstants.kHeadingP, 0, DriveConstants.kHeadingD);
+        xController = new PIDController(DriveConst.kTranslationalP, 0, DriveConst.kTranslationalD);
+        yController = new PIDController(DriveConst.kTranslationalP, 0, DriveConst.kTranslationalD);
+        rotationController = new PIDController(DriveConst.kHeadingP, 0, DriveConst.kHeadingD);
         rotationController.enableContinuousInput(-Math.PI, Math.PI);
         rotationController.setTolerance(Units.degreesToRadians(0.25), Units.degreesToRadians(0.25));
 
@@ -184,7 +184,7 @@ public class Drivetrain extends SubsystemBase {
      */
     public void setModuleStates(SwerveModuleState[] swerveModuleStates, boolean isOpenLoop) {
         // makes sure speeds of modules don't exceed maximum allowed
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeed);
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConst.kMaxSpeed);
 
         for (int i = 0; i < 4; i++) {
             modules[i].setDesiredState(swerveModuleStates[i], isOpenLoop);
@@ -202,7 +202,7 @@ public class Drivetrain extends SubsystemBase {
             pigeon.getSimCollection().addHeading(
                     +Units.radiansToDegrees(chassisSpeeds.omegaRadiansPerSecond * GlobalConst.LOOP_TIME));
         }
-        SwerveModuleState[] swerveModuleStates = DriveConstants.KINEMATICS.toSwerveModuleStates(chassisSpeeds);
+        SwerveModuleState[] swerveModuleStates = DriveConst.KINEMATICS.toSwerveModuleStates(chassisSpeeds);
         setModuleStates(swerveModuleStates, isOpenLoop);
     }
 
@@ -246,7 +246,7 @@ public class Drivetrain extends SubsystemBase {
      * This is often used as an input for other methods
      */
     public ChassisSpeeds getChassisSpeeds() {
-        return DriveConstants.KINEMATICS.toChassisSpeeds(
+        return DriveConst.KINEMATICS.toChassisSpeeds(
                 Arrays.stream(modules).map(Module::getState).toArray(SwerveModuleState[]::new)
         );
     }

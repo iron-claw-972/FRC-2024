@@ -5,7 +5,7 @@ import edu.wpi.first.math.util.Units;
 /**
  * Container class for test constants.
  */
-public class TestConstants {
+public class TestConst {
 
     public static final double TRANSLATION_ERROR = 0.6;
 
@@ -28,7 +28,7 @@ public class TestConstants {
     public static final double STEER_FEED_FORWARD_ACCELERATION_TIME_BUFFER = 0.5;
     public static final double STEER_FEED_FORWARD_RECORDING_TIME = 2;
 
-    private TestConstants() {
+    private TestConst() {
     }
 
 }
