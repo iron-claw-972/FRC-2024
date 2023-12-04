@@ -103,7 +103,7 @@ public class Vision {
   public DetectedObject[] getDetectedObjects(){
     double[] xOffset = getHorizontalOffset();
     double[] yOffset = getVerticalOffset();
-    double[] distance = getDistance();
+    // double[] distance = getDistance();
     String[] objectClass = getDetectedObjectClass();
     long[] cameraIndex = getCameraIndex();
     DetectedObject[] objects = new DetectedObject[xOffset.length];
@@ -111,7 +111,7 @@ public class Vision {
       objects[i] = new DetectedObject(
         Units.degreesToRadians(xOffset[i]),
         Units.degreesToRadians(yOffset[i]),
-        distance[i],
+        // distance[i],
         objectClass[i],
         VisionConstants.kCameras.get((int)cameraIndex[i]).getSecond()
       );
