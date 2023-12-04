@@ -22,11 +22,6 @@ public class GlobalConst {
     public static final String CANIVORE_CAN = "CANivore";
     public static final String RIO_CAN = "rio";
 
-    /**
-     * The key used to access the RobotId name in the RoboRIO's persistent memory.
-     */
-    public static final String ROBOT_ID_KEY = "RobotId";
-
     public static final boolean DO_LOGGING = true;
     public static final boolean USE_TELEMETRY = false;
 

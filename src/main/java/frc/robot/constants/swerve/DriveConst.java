@@ -184,9 +184,9 @@ public class DriveConst {
     public static final double kSlowRotFactor = 0.1;
 
     /**
-     * Updates the constants if the RobotId is not the competition robot.
+     * Updates the constants depending on which robot the code is running on. 
      */
-    public static void update(RobotId robotId) {
+    public static void updateCANIDs(RobotId robotId) {
         if (robotId == RobotId.SwerveTest) {
 
             kTrackWidth = Units.inchesToMeters(22.75); //22.75 swerve bot, 20.75 comp bot
@@ -212,6 +212,35 @@ public class DriveConst {
             kSteerBackRight = 11;
             kEncoderBackRight = 12;
             kSteerOffsetBackRight = -0.383494421839714;
+
+            // CAN
+            kDriveMotorCAN = GlobalConst.RIO_CAN;
+        }
+        if (robotId == RobotId.Vertigo) {
+            System.out.print("TEST");
+            kTrackWidth = Units.inchesToMeters(22.75); //22.75 swerve bot, 20.75 comp bot
+
+            kPigeon = 0;
+
+           kDriveFrontLeft = 20;
+           kSteerFrontLeft = 15;
+           kEncoderFrontLeft = 40;
+           kSteerOffsetFrontLeft = 0.058291152119637;
+  
+           kDriveFrontRight = 11;
+           kSteerFrontRight = 30;
+           kEncoderFrontRight = 41;
+           kSteerOffsetFrontRight = -2.994324445724487;
+  
+           kDriveBackLeft = 16;
+           kSteerBackLeft = 18;
+           kEncoderBackLeft = 42;
+           kSteerOffsetBackLeft = -2.540267050266266;
+  
+           kDriveBackRight = 32;
+           kSteerBackRight = 35;
+           kEncoderBackRight = 43;
+           kSteerOffsetBackRight = 2.626169800758362;
 
             // CAN
             kDriveMotorCAN = GlobalConst.RIO_CAN;

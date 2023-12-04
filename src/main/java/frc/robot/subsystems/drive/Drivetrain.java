@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
+import frc.robot.RobotId;
 import frc.robot.constants.GlobalConst;
 import frc.robot.constants.swerve.DriveConst;
 import frc.robot.constants.swerve.ModuleConst;
@@ -102,6 +103,10 @@ public class Drivetrain extends SubsystemBase {
     public void periodic() {
         updateOdometry();
         fieldDisplay.setRobotPose(getPose());
+    }
+
+    public void updateCANIDs(RobotId robotId)  {
+        DriveConst.updateCANIDs(robotId);
     }
 
     // DRIVE

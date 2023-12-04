@@ -19,7 +19,7 @@ import frc.robot.constants.GlobalConst;
  */
 public class Robot extends TimedRobot {
 
-    private static RobotId ROBOT_ID = null;
+    private RobotId robotId = null;
 
     private Command autoCommand;
     private RobotContainer robotContainer;
@@ -34,10 +34,9 @@ public class Robot extends TimedRobot {
         //   SimGUI: Persistent Values, Preferences, RobotId, then restart Simulation
         //     changes networktables.json, networktables.json.bck (both Untracked)
         //   Uncomment the next line, set the desired RobotId, deploy, and then comment the line out
-         setRobotId(RobotId.SwerveCompetition);
-
         // build the RobotContainer with the robot id from preferences
-        robotContainer = new RobotContainer();
+        robotId = RobotId.getRobotId();
+        robotContainer = new RobotContainer(robotId);
     }
 
     /**
@@ -144,59 +143,4 @@ public class Robot extends TimedRobot {
     public void simulationPeriodic() {
     }
 
-    /**
-     * Determine the Robot Identity from the RoboRIO's onboard Preferences.
-     *
-     * <p>This method is private.
-     */
-    public static RobotId getRobotId() {
-
-        // Return cached value if available
-        if (ROBOT_ID != null) {
-            return ROBOT_ID;
-        }
-
-        // assume a default identity
-        RobotId robotId = RobotId.Default;
-
-        // check whether Preferences has an entry for the RobotId
-        if (!Preferences.containsKey(GlobalConst.ROBOT_ID_KEY)) {
-            // There is no such key. Set it to the default identity.
-            setRobotId(RobotId.Default);
-        }
-
-        // Remove the "Default" key if present
-        if (Preferences.containsKey("Default")) {
-            Preferences.remove("Default");
-        }
-
-        // get the RobotId string from the RoboRIO's Preferences
-        String strId = Preferences.getString(GlobalConst.ROBOT_ID_KEY, RobotId.Default.name());
-
-        // match that string to a RobotId by looking at all possible RobotId enums
-        for (RobotId rid : RobotId.values()) {
-            // does the preference string match the RobotId enum?
-            if (strId.equals(rid.name())) {
-                // yes, this instance is the desired RobotId
-                robotId = rid;
-            }
-        }
-
-        // report the RobotId to the SmartDashboard
-        SmartDashboard.putString("RobotID", robotId.name());
-
-        // return the robot identity
-        return robotId;
-    }
-
-    /**
-     * Set the RobotId in the RoboRIO's preferences.
-     * <p>
-     * This method is private. Calling it after the robot has been constructed does not affect the robot.
-     */
-    private static void setRobotId(RobotId robotId) {
-        // Set the robot identity in the RoboRIO Preferences
-        Preferences.setString(GlobalConst.ROBOT_ID_KEY, robotId.name());
-        ROBOT_ID = robotId;
-    }
 }
