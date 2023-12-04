@@ -64,6 +64,7 @@ public class LogManager {
     DoubleLogEntry myDoubleLog = new DoubleLogEntry(log, name);
     doubleLogs.add(myDoubleLog);
     doubleValues.add(logged);
+    
   }
 
   /**
@@ -91,6 +92,7 @@ public class LogManager {
     DoubleArrayLogEntry myDoubleLog = new DoubleArrayLogEntry(log, name);
     doubleArrayLogs.add(myDoubleLog);
     doubleArrayValues.add(logged);
+    
   }
 
   /**

@@ -97,8 +97,8 @@ public class Drivetrain extends SubsystemBase {
 
     @Override
     public void periodic() {
-        updateOdometry();
         updateLogs();
+        LogManager.log();
         fieldDisplay.setRobotPose(getPose());
     }
 
@@ -307,12 +307,7 @@ public class Drivetrain extends SubsystemBase {
     public Field2d getFeild(){
         return fieldDisplay;
     }
-    int loggerStep = 0;
     public void updateLogs() {
-
-        loggerStep++;
-        if (loggerStep < 4) return;
-        loggerStep = 0;
 
         double[] pose = {
           getPose().getX(),
