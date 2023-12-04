@@ -26,7 +26,6 @@ public class Vision {
   private NetworkTableEntry m_objectDistance;
   private NetworkTableEntry m_objectClass;
   private NetworkTableEntry m_cameraIndex;
-  private NetworkTableEntry m_objectDetected;
 
   /**
    * Creates a new instance of Vision and sets up the limelight NetworkTable and the SmartDashboard
@@ -38,13 +37,12 @@ public class Vision {
     m_objectDetectionTable = NetworkTableInstance.getDefault().getTable("object_detection");
 
     // From the object_detection NetworkTable, get the entries
-    m_objectDetected = m_objectDetectionTable.getEntry("object_detected");
-    m_objectDistance = m_objectDetectionTable.getEntry("object_distance");
-    m_xOffset = m_objectDetectionTable.getEntry("tx");
-    m_yOffset = m_objectDetectionTable.getEntry("ty");
+    m_objectDistance = m_objectDetectionTable.getEntry("distance");
+    m_xOffset = m_objectDetectionTable.getEntry("x_offset");
+    m_yOffset = m_objectDetectionTable.getEntry("y_offset");
     //TODO: Change these to whatever the actual entry names are
     m_objectClass = m_objectDetectionTable.getEntry("class");
-    m_cameraIndex = m_objectDetectionTable.getEntry("camera_index");
+    m_cameraIndex = m_objectDetectionTable.getEntry("index");
 
     // Start NetworkTables server
     NetworkTableInstance.getDefault().startServer();
@@ -79,7 +77,7 @@ public class Vision {
    * @return true or false
    */
   public boolean validObjectDetected(){
-    return m_objectDetected.getBoolean(false);
+    return getHorizontalOffset().length > 0;
   }
 
   /**
