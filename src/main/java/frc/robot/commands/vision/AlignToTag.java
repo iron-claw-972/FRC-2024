@@ -31,8 +31,8 @@ public class AlignToTag extends SequentialCommandGroup {
     public Pose2d getPose() {
         Pose2d closest = null;
         double dist = Double.POSITIVE_INFINITY;
-        for(int i = 0; i < FieldConstants.kAprilTags.size(); i++) {
-            Pose2d tag = FieldConstants.kAprilTags.get(i).pose.toPose2d();
+        for(int i = 0; i < FieldConstants.APRIL_TAGS.size(); i++) {
+            Pose2d tag = FieldConstants.APRIL_TAGS.get(i).pose.toPose2d();
             double d = tag.getTranslation().getDistance(m_drive.getPose().getTranslation());
             if(d < dist) {
                 dist = d;

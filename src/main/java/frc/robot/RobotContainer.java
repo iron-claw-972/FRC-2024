@@ -63,7 +63,7 @@ public class RobotContainer {
         // Update drive constants based off of robot type
         DriveConstants.update(robotId);
         
-        m_vision = new Vision(m_visionTab, VisionConstants.kCameras);
+        m_vision = new Vision(m_visionTab, VisionConstants.CAMERAS);
 
         // Create Drivetrain
         m_drive = new Drivetrain(m_drivetrainTab, m_swerveModulesTab, m_vision);
@@ -87,7 +87,7 @@ public class RobotContainer {
         // Update drive constants based off of robot type
         DriveConstants.update(robotId);
 
-        m_vision = new Vision(m_visionTab, VisionConstants.kCameras);
+        m_vision = new Vision(m_visionTab, VisionConstants.CAMERAS);
 
         // Create Drivetrain, because every robot will have a drivetrain
         m_drive = new Drivetrain(m_drivetrainTab, m_swerveModulesTab, m_vision);

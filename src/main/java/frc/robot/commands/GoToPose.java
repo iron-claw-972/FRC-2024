@@ -51,7 +51,7 @@ public class GoToPose extends SequentialCommandGroup {
     m_maxAccel = maxAccel;
     m_drive = drive;
     addCommands(
-      new InstantCommand(()->drive.enableVision(VisionConstants.kEnabledGoToPose)),
+      new InstantCommand(()->drive.enableVision(VisionConstants.ENABLED_GO_TO_POSE)),
       new SupplierCommand(() -> createCommand(), drive),
       new InstantCommand(()->drive.enableVision(true))
     );

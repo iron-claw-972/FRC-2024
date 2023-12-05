@@ -60,7 +60,7 @@ public class Node {
     
     // Which April tag this node is closest to
     // Uses integer division to return 0-2, then adds 1 for red or 6 for blue to get 1-8, subtracts 1 for index
-    Pose3d tag = FieldConstants.kAprilTags.get((column-1)/3+(alliance==Alliance.Red?1:6)-1).pose;
+    Pose3d tag = FieldConstants.APRIL_TAGS.get((column-1)/3+(alliance==Alliance.Red?1:6)-1).pose;
     // The x coordinate in meters
     double x;
     // Vertical distance in meters
@@ -89,6 +89,6 @@ public class Node {
     pose = new Pose3d(x, y, z, tag.getRotation());
     // Adds the grid distance to the edge of the grid to find where the robot should be
     // The robot should be at 180 degrees (facing left) if it's blue and 0 degrees (π radians) if it's red
-    scorePose = new Pose2d(tag.getX()+Units.inchesToMeters(14.25+VisionConstants.kGridDistance)*(alliance==Alliance.Red?-1:1), y, new Rotation2d(alliance==Alliance.Red?0:Math.PI));
+    scorePose = new Pose2d(tag.getX()+Units.inchesToMeters(14.25+VisionConstants.GRID_DISTANCE)*(alliance==Alliance.Red?-1:1), y, new Rotation2d(alliance==Alliance.Red?0:Math.PI));
   }
 }

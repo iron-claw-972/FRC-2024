@@ -98,7 +98,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.resetModules();
 
     // Disable vision if the constant is false
-    m_robotContainer.setVisionEnabled(VisionConstants.kEnabledAuto);
+    m_robotContainer.setVisionEnabled(VisionConstants.ENABLED_AUTO);
 
     // Get the autonomous command.
     // This access is fast (about 14 microseconds) because the value is already resident in the Network Tables.

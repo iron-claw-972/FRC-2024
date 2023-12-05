@@ -58,20 +58,20 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     kDriver.get(Button.RB).whileTrue(new GoToPose(() -> getSelectedPose(), getDrivetrain()));
     // Single substation x and angle alignment
     kDriver.get(Button.LB).whileTrue(new GoToPose(() -> new Pose2d(
-      DriverStation.getAlliance()==Alliance.Blue?VisionConstants.kBlueSingleSubstationX:VisionConstants.kRedSingleSubstationX,
+      DriverStation.getAlliance()==Alliance.Blue?VisionConstants.BLUE_SINGLE_SUBSTATION_X:VisionConstants.RED_SINGLE_SUBSTATION_X,
       getDrivetrain().getPose().getY(),
       new Rotation2d(Math.PI/2)
     ), getDrivetrain()));
     // Double substation alignment
     kDriver.get(Button.Y).whileTrue(new GoToPose(() -> new Pose2d(
-      DriverStation.getAlliance()==Alliance.Blue?VisionConstants.kBlueShelfX:VisionConstants.kRedShelfX,
-      VisionConstants.kTopShelfY,
+      DriverStation.getAlliance()==Alliance.Blue?VisionConstants.BLUE_SHELF_X:VisionConstants.RED_SHELF_X,
+      VisionConstants.TOP_SHELF_Y,
       new Rotation2d(Math.PI/2)
     ), getDrivetrain()));
     // Double substation alignment
     kDriver.get(Button.Y).whileTrue(new GoToPose(() -> new Pose2d(
-      DriverStation.getAlliance()==Alliance.Blue?VisionConstants.kBlueShelfX:VisionConstants.kRedShelfX,
-      VisionConstants.kBottomShelfY,
+      DriverStation.getAlliance()==Alliance.Blue?VisionConstants.BLUE_SHELF_X:VisionConstants.RED_SHELF_X,
+      VisionConstants.BOTTOM_SHELF_Y,
       new Rotation2d(Math.PI/2)
     ), getDrivetrain()));
   }

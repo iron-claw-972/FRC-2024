@@ -31,7 +31,7 @@ public class GoToPosePID extends CommandBase {
   @Override
   public void initialize() {
     m_pose = m_poseSupplier.get();
-    m_drive.enableVision(VisionConstants.kEnabledGoToPose);
+    m_drive.enableVision(VisionConstants.ENABLED_GO_TO_POSE);
   }
 
   @Override

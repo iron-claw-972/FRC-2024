@@ -39,7 +39,7 @@ public class AimAtTag extends CommandBase {
     double dist = Double.POSITIVE_INFINITY;
     Translation2d closest = new Translation2d();
     Translation2d driveTranslation = m_drive.getPose().getTranslation();
-    for(AprilTag tag : FieldConstants.kAprilTags){
+    for(AprilTag tag : FieldConstants.APRIL_TAGS){
       Translation2d translation = tag.pose.toPose2d().getTranslation();
       double dist2 = driveTranslation.getDistance(translation);
       if(dist2 < dist){

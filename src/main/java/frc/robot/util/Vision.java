@@ -56,7 +56,7 @@ public class Vision {
       m_aprilTagFieldLayout = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField();
     } catch (IOException e) {
       // If it can't find it, use the layout in the constants
-      m_aprilTagFieldLayout = new AprilTagFieldLayout(FieldConstants.kAprilTags, FieldConstants.kFieldLength, FieldConstants.kFieldWidth);
+      m_aprilTagFieldLayout = new AprilTagFieldLayout(FieldConstants.APRIL_TAGS, FieldConstants.kFieldLength, FieldConstants.kFieldWidth);
       DriverStation.reportWarning("Could not find k2023ChargedUp.m_resourceFile, check that GradleRIO is updated to at least 2023.2.1 in build.gradle",  e.getStackTrace());
       System.out.println("Could not find k2023ChargedUp.m_resourceFile, check that GradleRIO is updated to at least 2023.2.1 in build.gradle");
     }
@@ -152,7 +152,7 @@ public class Vision {
   public ArrayList<EstimatedRobotPose> getEstimatedPoses(Pose2d referencePose) {
     ArrayList<EstimatedRobotPose> estimatedPoses = new ArrayList<>();
     for (int i = 0; i < m_cameras.size(); i++) {
-      if(VisionConstants.kUseManualCalculations){
+      if(VisionConstants.USE_MANUAL_CALCULATIONS){
         Pose2d pose = m_cameras.get(i).getEstimatedPose(referencePose.getRotation().getRadians());
         if(pose != null){
           EstimatedRobotPose estimatedPose = new EstimatedRobotPose(
@@ -205,7 +205,7 @@ public class Vision {
       poseEstimator.addVisionMeasurement(
         estimatedPose.estimatedPose.toPose2d(),
         estimatedPose.timestampSeconds,
-        VisionConstants.kVisionStdDevs
+        VisionConstants.VISION_STD_DEVS
       );
     }
   }
@@ -251,7 +251,7 @@ public class Vision {
         List<PhotonTrackedTarget> targetsUsed = cameraResult.targets;
         for (int i = 0; i < targetsUsed.size(); i++) {
           // check their ambiguity, if it is above the highest wanted amount, return nothing
-          if (targetsUsed.get(i).getPoseAmbiguity() > VisionConstants.kHighestAmbiguity) {
+          if (targetsUsed.get(i).getPoseAmbiguity() > VisionConstants.HIGHEST_AMBIGUITY) {
             return Optional.empty();
           }
         }
@@ -284,10 +284,10 @@ public class Vision {
         return null;
       }
       int id = target.getFiducialId();
-      if(id<=0||id>FieldConstants.kAprilTags.size()){
+      if(id<=0||id>FieldConstants.APRIL_TAGS.size()){
         return null;
       }
-      Pose3d targetPose = FieldConstants.kAprilTags.get(id).pose;
+      Pose3d targetPose = FieldConstants.APRIL_TAGS.get(id).pose;
       Transform3d robotToCamera = photonPoseEstimator.getRobotToCameraTransform();
       double fieldRelativeAngle = yaw+robotToCamera.getRotation().getZ()-target.getYaw();
       double verticalAngle = robotToCamera.getRotation().getY()+target.getPitch();
