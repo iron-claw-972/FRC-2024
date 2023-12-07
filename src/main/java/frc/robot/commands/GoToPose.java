@@ -68,6 +68,11 @@ public class GoToPose extends SequentialCommandGroup {
     // get the desired score pose
     Pose2d pose = m_poseSupplier.get();
 
+    // Do nothing if the pose doesn't exist
+    if(pose == null){
+      return new DoNothing();
+    }
+
     // Uses the pose to find the end point for the path
     PathPoint point2 = new PathPoint(
       pose.getTranslation(),
