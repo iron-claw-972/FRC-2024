@@ -114,6 +114,7 @@ public class Vision {
         // distance[i],
         objectClass[i],
         VisionConstants.kCameras.get((int)cameraIndex[i]).getSecond()
+        // VisionConstants.kCameras.get(0).getSecond()
       );
     }
     return objects;

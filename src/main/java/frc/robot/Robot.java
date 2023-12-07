@@ -140,7 +140,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    System.out.println();
+    
   }
 
   /** This function is called once each time the robot enters Test mode. */

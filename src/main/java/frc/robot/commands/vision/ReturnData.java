@@ -28,7 +28,7 @@ public class ReturnData extends CommandBase{
     SmartDashboard.putNumberArray("Object X offsets degrees", m_vision.getHorizontalOffset()); 
     SmartDashboard.putNumberArray("Object Distances", m_vision.getDistance()); 
 
-    
+    System.out.println(m_vision.getBestGamePiece(40));
   }
 
   /**

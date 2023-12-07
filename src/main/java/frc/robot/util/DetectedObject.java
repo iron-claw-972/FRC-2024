@@ -191,4 +191,8 @@ public class DetectedObject {
         }
         return angle;
     }
+
+    public String toString(){
+        return type+" at ("+pose.getX()+", "+pose.getY()+", "+pose.getZ()+")";
+    }
 }
