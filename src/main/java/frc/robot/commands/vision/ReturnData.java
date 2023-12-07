@@ -1,7 +1,10 @@
 package frc.robot.commands.vision;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.constants.miscConstants.VisionConstants;
+import frc.robot.util.DetectedObject;
 import frc.robot.util.Vision;
 
 /**
@@ -23,12 +26,23 @@ public class ReturnData extends CommandBase{
    */
   @Override
   public void execute() {
+    double[] xOffset = m_vision.getHorizontalOffset();
+    double[] yOffset = m_vision.getVerticalOffset();
+    String[] objectClass = m_vision.getDetectedObjectClass();
 
     //put the offsets and area on SmartDashboard for testing 
-    SmartDashboard.putNumberArray("Object X offsets degrees", m_vision.getHorizontalOffset()); 
+    SmartDashboard.putNumberArray("Object X offsets degrees", xOffset); 
+    SmartDashboard.putNumberArray("Object Y offsets degrees", yOffset); 
     SmartDashboard.putNumberArray("Object Distances", m_vision.getDistance()); 
 
-    System.out.println(m_vision.getBestGamePiece(40));
+    DetectedObject bestGamePiece = m_vision.getBestGamePiece(40);
+    SmartDashboard.putString("Vision best game piece", bestGamePiece.toString());
+    System.out.println("Best game piece: "+bestGamePiece);
+    for(int i = 0; i < xOffset.length; i++){
+      System.out.printf("\nx: %.2f, y: %.2f, type: %s\n", xOffset[i], yOffset[i], objectClass[i]);
+      DetectedObject object = new DetectedObject(xOffset[i], yOffset[i], objectClass[i], VisionConstants.kCameras.get(0).getSecond());
+      System.out.printf("Object: %sDistance: %.2f, Angle: %.2f\n", object, object.getDistance(), Units.radiansToDegrees(object.getAngle()));
+    }
   }
 
   /**
