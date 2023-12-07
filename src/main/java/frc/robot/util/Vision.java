@@ -22,6 +22,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -289,20 +290,21 @@ public class Vision {
       }
       Pose3d targetPose = FieldConstants.APRIL_TAGS.get(id).pose;
       Transform3d robotToCamera = photonPoseEstimator.getRobotToCameraTransform();
-      double fieldRelativeAngle = yaw+robotToCamera.getRotation().getZ()-target.getYaw();
-      double verticalAngle = robotToCamera.getRotation().getY()+target.getPitch();
-      double dist = (targetPose.getZ()-robotToCamera.getZ())/Math.tan(verticalAngle);
-      double x = targetPose.getX()-Math.cos(fieldRelativeAngle)*dist;
-      double y = targetPose.getY()-Math.sin(fieldRelativeAngle)*dist;
-      x -= robotToCamera.getX()*Math.cos(yaw) + robotToCamera.getY()*Math.sin(yaw);
-      y -= robotToCamera.getX()*Math.sin(yaw) + robotToCamera.getY()*Math.cos(yaw);
-      Pose2d pose = new Pose2d(x, y, new Rotation2d(yaw));
-      if(Constants.kLogging){
-        LogManager.addDouble("Vision/tag dist", dist);
-        LogManager.addDoubleArray("Vision/pose", new double[]{pose.getX(), pose.getY(), yaw});
-      }
-      return pose;
+      // Get the tag position relative to the robot, assuming the robot is on the ground
+      Translation3d translation = new Translation3d(1, new Rotation3d(0, target.getPitch(), target.getYaw()));
+      translation = translation.rotateBy(robotToCamera.getRotation());
+      translation = translation.times(translation.getZ()/(targetPose.getZ()-robotToCamera.getZ()));
+      translation = translation.plus(robotToCamera.getTranslation());
+      translation = translation.rotateBy(new Rotation3d(
+        0, 0, yaw
+      ));
+      // Invert it to get the robot position relative to the camera
+      translation = translation.times(-1);
+      // Get the field relative pose
+      translation = translation.plus(targetPose.getTranslation());
+      return new Pose2d(translation.toTranslation2d(), new Rotation2d(yaw));
     }
+
     /**
      * Gets the last timestamp in seconds
      * @return The timestamp in seconds
@@ -310,6 +312,7 @@ public class Vision {
     public double getTimeStamp(){
       return camera.getLatestResult().getTimestampSeconds();
     }
+    
     /**
      * Gets the best target
      * @return A PhotonTrackedTarget
