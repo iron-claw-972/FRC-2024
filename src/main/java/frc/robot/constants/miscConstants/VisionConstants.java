@@ -30,7 +30,7 @@ public class VisionConstants {
   public static final boolean ENABLED_GO_TO_POSE = false;
 
   // If vision should use manual calculations, not fully tested, leave as false
-  public static final boolean USE_MANUAL_CALCULATIONS = false;
+  public static final boolean USE_MANUAL_CALCULATIONS = true;
 
   /*
    * The standard deviations to use for the vision

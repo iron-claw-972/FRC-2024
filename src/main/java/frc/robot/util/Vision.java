@@ -245,24 +245,28 @@ public class Vision {
 
       PhotonPipelineResult cameraResult = camera.getLatestResult();
       
-      // if there is a target detected and not in the past, 
+      // if there is a target detected and the timestamp exists, 
       // check the ambiguity isn't too high
+      boolean foundGoodTarget = false;
       if (cameraResult.hasTargets() && cameraResult.getTimestampSeconds() > 0) {
         // go through all the targets
         List<PhotonTrackedTarget> targetsUsed = cameraResult.targets;
         for (int i = 0; i < targetsUsed.size(); i++) {
-          // check their ambiguity, if it is above the highest wanted amount, return nothing
-          if (targetsUsed.get(i).getPoseAmbiguity() > VisionConstants.HIGHEST_AMBIGUITY) {
-            return Optional.empty();
+          // check their ambiguity, if it is below the highest wanted amount, use this camera's result
+          if (targetsUsed.get(i).getPoseAmbiguity() <= VisionConstants.HIGHEST_AMBIGUITY) {
+            foundGoodTarget = true;
           }
+        }
+        if(!foundGoodTarget){
+          return Optional.empty();
         }
       }
 
       Optional<EstimatedRobotPose> pose = photonPoseEstimator.update(cameraResult);
       
-      if(pose.isPresent() && pose.get()!=null && pose.get().estimatedPose!=null){
+      if(pose.isPresent() && pose.get()!=null && pose.get().estimatedPose!=null && Double.isFinite(pose.get().estimatedPose.getX())){
         double timestamp = getTimeStamp();
-        if(lastPose==null || lastPose.getTranslation().getDistance(pose.get().estimatedPose.toPose2d().getTranslation())>DriveConstants.kMaxSpeed*(timestamp-lastTimestamp)){
+        if(lastPose==null || lastPose.getTranslation().getDistance(pose.get().estimatedPose.toPose2d().getTranslation()) > DriveConstants.kMaxSpeed*(timestamp-lastTimestamp)){
           lastPose = pose.get().estimatedPose.toPose2d();
           lastTimestamp = timestamp;
           return Optional.empty();
@@ -280,28 +284,32 @@ public class Vision {
      * @return estimated pose as a Pose2d
      */
     public Pose2d getEstimatedPose(double yaw){
+      // Gets the best target to use for the calculations
       PhotonTrackedTarget target = camera.getLatestResult().getBestTarget();
+      // Return null if the target doesn't exist
       if(target==null){
         return null;
       }
+      // Return null if the id is too high or too low
       int id = target.getFiducialId();
-      if(id<=0||id>FieldConstants.APRIL_TAGS.size()){
+      if(id <= 0 || id > FieldConstants.APRIL_TAGS.size()){
         return null;
       }
+      // Stores target pose and robot to camera transformation for easy access later
       Pose3d targetPose = FieldConstants.APRIL_TAGS.get(id).pose;
       Transform3d robotToCamera = photonPoseEstimator.getRobotToCameraTransform();
+
       // Get the tag position relative to the robot, assuming the robot is on the ground
       Translation3d translation = new Translation3d(1, new Rotation3d(0, target.getPitch(), target.getYaw()));
       translation = translation.rotateBy(robotToCamera.getRotation());
       translation = translation.times(translation.getZ()/(targetPose.getZ()-robotToCamera.getZ()));
       translation = translation.plus(robotToCamera.getTranslation());
-      translation = translation.rotateBy(new Rotation3d(
-        0, 0, yaw
-      ));
-      // Invert it to get the robot position relative to the camera
+      translation = translation.rotateBy(new Rotation3d(0, 0, yaw));
+      // Invert it to get the robot position relative to the April tag
       translation = translation.times(-1);
-      // Get the field relative pose
+      // Get the field relative robot pose
       translation = translation.plus(targetPose.getTranslation());
+      // Return as a Pose2d
       return new Pose2d(translation.toTranslation2d(), new Rotation2d(yaw));
     }
 
