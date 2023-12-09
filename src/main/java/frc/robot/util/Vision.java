@@ -23,6 +23,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -296,17 +297,19 @@ public class Vision {
         return null;
       }
       // Stores target pose and robot to camera transformation for easy access later
-      Pose3d targetPose = FieldConstants.APRIL_TAGS.get(id).pose;
+      Pose3d targetPose = FieldConstants.APRIL_TAGS.get(id-1).pose;
       Transform3d robotToCamera = photonPoseEstimator.getRobotToCameraTransform();
 
       // Get the tag position relative to the robot, assuming the robot is on the ground
-      Translation3d translation = new Translation3d(1, new Rotation3d(0, target.getPitch(), target.getYaw()));
+      Translation3d translation = new Translation3d(1, new Rotation3d(0, -Units.degreesToRadians(target.getPitch()), -Units.degreesToRadians(target.getYaw())));
       translation = translation.rotateBy(robotToCamera.getRotation());
-      translation = translation.times(translation.getZ()/(targetPose.getZ()-robotToCamera.getZ()));
+      translation = translation.times((targetPose.getZ()-robotToCamera.getZ())/translation.getZ());
       translation = translation.plus(robotToCamera.getTranslation());
       translation = translation.rotateBy(new Rotation3d(0, 0, yaw));
       // Invert it to get the robot position relative to the April tag
       translation = translation.times(-1);
+      // Multiply by a constant. I don't know why this works, but it was consistently 10% off in 2023 Fall Semester
+      translation = translation.times(VisionConstants.DISTANCE_SCALE);
       // Get the field relative robot pose
       translation = translation.plus(targetPose.getTranslation());
       // Return as a Pose2d

@@ -29,8 +29,13 @@ public class VisionConstants {
   // If odometry should be updated using vision while running the GoToPose and GoToPosePID commands in teleop
   public static final boolean ENABLED_GO_TO_POSE = false;
 
-  // If vision should use manual calculations, not fully tested, leave as false
+  // If vision should use manual calculations
   public static final boolean USE_MANUAL_CALCULATIONS = true;
+
+  // The number to multiply the distance to the April tag by
+  // Only affects manual calculations
+  // To find this, set it to 1 and measure the actual distance and the calculated distance
+  public static final double DISTANCE_SCALE = 1.1;
 
   /*
    * The standard deviations to use for the vision
@@ -75,7 +80,7 @@ public class VisionConstants {
       "Camera1",
       new Transform3d(
         new Translation3d(Units.inchesToMeters(8.996), Units.inchesToMeters(6.48), Units.inchesToMeters(37.44)),
-        new Rotation3d(0, Units.degreesToRadians(-18), 0)
+        new Rotation3d(0, Units.degreesToRadians(18), 0)
       ))
     ,
     new Pair<String, Transform3d>(
