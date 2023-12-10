@@ -70,7 +70,7 @@ public class ModuleImpl extends Module {
          * This is a custom optimize function, since default WPILib optimize assumes
          * continuous controller which CTRE and Rev onboard is not
          */
-        this.desiredState = optimizeStates ? CTREModuleState.optimize(desiredState, getState().angle) : desiredState;
+        desiredState = optimizeStates ? CTREModuleState.optimize(desiredState, getState().angle) : desiredState;
         setAngle(desiredState);
         setSpeed(desiredState, isOpenLoop);
     }
