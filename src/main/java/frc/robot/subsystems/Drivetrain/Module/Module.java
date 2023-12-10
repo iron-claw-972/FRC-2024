@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.drivetrain.module;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
@@ -15,7 +15,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.Constants;
+import frc.robot.constants.globalConst;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
 import frc.robot.constants.swerve.ModuleType;
@@ -87,7 +87,7 @@ public class Module extends SubsystemBase {
             driveMotor.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward,
                            feedforward.calculate(desiredState.speedMetersPerSecond));
         }
-        if (Constants.DO_LOGGING) {
+        if (globalConst.DO_LOGGING) {
             double motorSpeed = ConversionUtils.falconToMPS(driveMotor.getSelectedSensorVelocity(), DriveConstants.kWheelCircumference,
                                                             DriveConstants.kDriveGearRatio);
             LogManager.addDouble("Swerve/Modules/DriveSpeed/" + type.name(),
@@ -112,7 +112,7 @@ public class Module extends SubsystemBase {
             return;
         }
         angleMotor.set(ControlMode.Position, ConversionUtils.degreesToFalcon(desiredState.angle.getDegrees(), DriveConstants.kAngleGearRatio));
-        if (Constants.DO_LOGGING) {
+        if (globalConst.DO_LOGGING) {
             double position = ConversionUtils.falconToDegrees(angleMotor.getSelectedSensorPosition(),
                                                               DriveConstants.kAngleGearRatio);
             LogManager.addDouble("Swerve/Modules/SteerPosition/" + type.name(),
@@ -185,15 +185,15 @@ public class Module extends SubsystemBase {
         angleMotor.config_kF(0, DriveConstants.kModuleConstants.angleKF);
         angleMotor.setInverted(DriveConstants.kAngleMotorInvert);
         angleMotor.setNeutralMode(DriveConstants.kAngleNeutralMode);
-        angleMotor.configVoltageCompSaturation(Constants.ROBOT_VOLTAGE);
+        angleMotor.configVoltageCompSaturation(globalConst.ROBOT_VOLTAGE);
         angleMotor.enableVoltageCompensation(true);
         resetToAbsolute();
     }
 
     public void setDriveCharacterizationVoltage(double voltage) {
         angleMotor.set(ControlMode.Position, ConversionUtils.degreesToFalcon(0, DriveConstants.kAngleGearRatio));
-        driveMotor.set(ControlMode.PercentOutput, voltage / Constants.ROBOT_VOLTAGE);
-        if (Constants.DO_LOGGING) {
+        driveMotor.set(ControlMode.PercentOutput, voltage / globalConst.ROBOT_VOLTAGE);
+        if (globalConst.DO_LOGGING) {
             LogManager.addDouble("Swerve/Modules/DriveCharacterizationVoltage/" + type.name(),
                                  voltage
                                 );
@@ -201,10 +201,10 @@ public class Module extends SubsystemBase {
     }
 
     public void setAngleCharacterizationVoltage(double voltage) {
-        angleMotor.set(ControlMode.PercentOutput, voltage / Constants.ROBOT_VOLTAGE);
+        angleMotor.set(ControlMode.PercentOutput, voltage / globalConst.ROBOT_VOLTAGE);
         // Set the drive motor to just enough to overcome static friction
         driveMotor.set(ControlMode.PercentOutput, 1.1 * DriveConstants.DRIVE_KS);
-        if (Constants.DO_LOGGING) {
+        if (globalConst.DO_LOGGING) {
             LogManager.addDouble("Swerve/Modules/AngleCharacterizationVoltage/" + type.name(),
                                  voltage
                                 );
@@ -231,7 +231,7 @@ public class Module extends SubsystemBase {
         driveMotor.configClosedloopRamp(DriveConstants.kClosedLoopRamp);
         driveMotor.setInverted(DriveConstants.kDriveMotorInvert);
         driveMotor.setNeutralMode(DriveConstants.kDriveNeutralMode);
-        driveMotor.configVoltageCompSaturation(Constants.ROBOT_VOLTAGE);
+        driveMotor.configVoltageCompSaturation(globalConst.ROBOT_VOLTAGE);
         driveMotor.enableVoltageCompensation(true);
         driveMotor.setSelectedSensorPosition(0);
     }
@@ -251,7 +251,7 @@ public class Module extends SubsystemBase {
     }
 
     private void setupShuffleboard() {
-        if (Constants.USE_TELEMETRY && RobotBase.isReal()) {
+        if (RobotBase.isReal() && globalConst.USE_TELEMETRY) {
             swerveTab.addDouble(type.name() + " CANcoder Angle (deg)", getCANcoder()::getDegrees);
             swerveTab.addDouble(type.name() + " FX Angle (deg)", getPosition().angle::getDegrees);
             swerveTab.addDouble(type.name() + " Velocity (m/s)", () -> getState().speedMetersPerSecond);

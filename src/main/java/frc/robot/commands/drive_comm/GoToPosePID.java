@@ -1,8 +1,8 @@
-package frc.robot.commands;
+package frc.robot.commands.drive_comm;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DrivetrainImpl;
+import frc.robot.subsystems.drivetrain.swerve.SwerveDriveImpl;
 
 import java.util.function.Supplier;
 
@@ -11,14 +11,14 @@ import java.util.function.Supplier;
  */
 public class GoToPosePID extends CommandBase {
 
-    private final DrivetrainImpl drive;
+    private final SwerveDriveImpl drive;
 
     private final Supplier<Pose2d> pose;
 
     /**
      * Runs the chassis PIDs to move the robot to a specific pose.
      */
-    public GoToPosePID(Supplier<Pose2d> pose, DrivetrainImpl drive) {
+    public GoToPosePID(Supplier<Pose2d> pose, SwerveDriveImpl drive) {
         this.drive = drive;
         this.pose = pose;
 

@@ -1,13 +1,15 @@
-package frc.robot.commands;
+package frc.robot.commands.drive_comm;
 
 import com.pathplanner.lib.PathPoint;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.auto.PathPlannerCommand;
-import frc.robot.constants.miscConstants.AutoConstants;
-import frc.robot.subsystems.DrivetrainImpl;
+import frc.robot.commands.DoNothing;
+import frc.robot.commands.SupplierCommand;
+import frc.robot.commands.auto_comm.PathPlannerCommand;
+import frc.robot.constants.AutoConstants;
+import frc.robot.subsystems.drivetrain.swerve.SwerveDriveImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +20,7 @@ import java.util.function.Supplier;
  */
 public class GoToPose extends SequentialCommandGroup {
 
-    private final DrivetrainImpl drive;
+    private final SwerveDriveImpl drive;
     private final Supplier<Pose2d> poseSupplier;
     private final double maxSpeed;
     private final double maxAccel;
@@ -29,7 +31,7 @@ public class GoToPose extends SequentialCommandGroup {
      * @param poseSupplier The supplier for the pose to use
      * @param drive        The drivetrain
      */
-    public GoToPose(Supplier<Pose2d> poseSupplier, DrivetrainImpl drive) {
+    public GoToPose(Supplier<Pose2d> poseSupplier, SwerveDriveImpl drive) {
         this(poseSupplier, AutoConstants.MAX_AUTO_SPEED, AutoConstants.MAX_AUTO_ACCEL, drive);
     }
 
@@ -41,7 +43,7 @@ public class GoToPose extends SequentialCommandGroup {
      * @param maxAccel     The maximum acceleration to use
      * @param drive        The drivetrain
      */
-    public GoToPose(Supplier<Pose2d> poseSupplier, double maxSpeed, double maxAccel, DrivetrainImpl drive) {
+    public GoToPose(Supplier<Pose2d> poseSupplier, double maxSpeed, double maxAccel, SwerveDriveImpl drive) {
         this.poseSupplier = poseSupplier;
         this.maxSpeed = maxSpeed;
         this.maxAccel = maxAccel;

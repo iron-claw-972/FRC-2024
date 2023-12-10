@@ -1,5 +1,4 @@
-package frc.robot.subsystems;
-
+package frc.robot.subsystems.drivetrain.swerve;
 import com.ctre.phoenix.sensors.Pigeon2.AxisDirection;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import edu.wpi.first.math.controller.PIDController;
@@ -19,13 +18,15 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Robot;
-import frc.robot.commands.test.CircleDrive;
-import frc.robot.commands.test.TestDriveVelocity;
-import frc.robot.commands.test.TestHeadingPID;
-import frc.robot.commands.test.TestSteerAngle;
-import frc.robot.constants.Constants;
+import frc.robot.commands.test_comm.CircleDrive;
+import frc.robot.commands.test_comm.TestDriveVelocity;
+import frc.robot.commands.test_comm.TestHeadingPID;
+import frc.robot.commands.test_comm.TestSteerAngle;
+import frc.robot.constants.globalConst;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
+import frc.robot.subsystems.drivetrain.module.Module;
+import frc.robot.subsystems.drivetrain.module.ModuleSim;
 import frc.robot.util.LogManager;
 
 /**
@@ -37,7 +38,7 @@ import frc.robot.util.LogManager;
  * 3: Back left
  * 4: Back right
  */
-public class DrivetrainImpl extends Drivetrain {
+public class SwerveDriveImpl extends SwerveDrive {
 
     private final ShuffleboardTab swerveModulesTab;
     private final ShuffleboardTab drivetrainTab;
@@ -101,7 +102,7 @@ public class DrivetrainImpl extends Drivetrain {
      * @param swerveModulesTab the shuffleboard tab to display module data on
 //     * @param vision           the vision
      */
-    public DrivetrainImpl(ShuffleboardTab drivetrainTab, ShuffleboardTab swerveModulesTab) {
+    public SwerveDriveImpl(ShuffleboardTab drivetrainTab, ShuffleboardTab swerveModulesTab) {
 
         this.drivetrainTab = drivetrainTab;
         this.swerveModulesTab = swerveModulesTab;
@@ -173,7 +174,7 @@ public class DrivetrainImpl extends Drivetrain {
 
         fieldDisplay.setRobotPose(getPose());
 
-        if (Constants.DO_LOGGING) updateLogs();
+        if (globalConst.DO_LOGGING) updateLogs();
     }
     // PIDs for Chassis movement
 
@@ -362,7 +363,7 @@ public class DrivetrainImpl extends Drivetrain {
     public void setChassisSpeeds(ChassisSpeeds chassisSpeeds, boolean isOpenLoop) {
         if (Robot.isSimulation()) {
             pigeon.getSimCollection().addHeading(
-                    +Units.radiansToDegrees(chassisSpeeds.omegaRadiansPerSecond * Constants.LOOP_TIME));
+                    +Units.radiansToDegrees(chassisSpeeds.omegaRadiansPerSecond * globalConst.LOOP_TIME));
         }
         SwerveModuleState[] swerveModuleStates = DriveConstants.KINEMATICS.toSwerveModuleStates(chassisSpeeds);
         setModuleStates(swerveModuleStates, isOpenLoop);
@@ -554,7 +555,7 @@ public class DrivetrainImpl extends Drivetrain {
     private void setupDrivetrainShuffleboard() {
 
         drivetrainTab.add("Field", fieldDisplay);
-        if (!Constants.USE_TELEMETRY) return;
+        if (!globalConst.USE_TELEMETRY) return;
 
 
         drivetrainTab.add("Balance PID", balanceController);
@@ -592,7 +593,7 @@ public class DrivetrainImpl extends Drivetrain {
      * Sets up the shuffleboard tab for the swerve modules.
      */
     private void setupModulesShuffleboard() {
-        if (Constants.USE_TELEMETRY) {
+        if (globalConst.USE_TELEMETRY) {
 
             moduleChooser.setDefaultOption("Front Left", modules[0]);
             moduleChooser.addOption("Front Right", modules[1]);
@@ -629,52 +630,52 @@ public class DrivetrainImpl extends Drivetrain {
     }
 
     public double getRequestedHeading(double defaultValue) {
-        if (!Constants.USE_TELEMETRY) return defaultValue;
+        if (!globalConst.USE_TELEMETRY) return defaultValue;
         return headingEntry.getDouble(defaultValue);
     }
 
     public double getRequestedDriveVelocity(double defaultValue) {
-        if (!Constants.USE_TELEMETRY) return defaultValue;
+        if (!globalConst.USE_TELEMETRY) return defaultValue;
         return driveVelocityEntry.getDouble(defaultValue);
     }
 
     public double getRequestedSteerVelocity(double defaultValue) {
-        if (!Constants.USE_TELEMETRY) return defaultValue;
+        if (!globalConst.USE_TELEMETRY) return defaultValue;
         return steerVelocityEntry.getDouble(defaultValue);
     }
 
     public double getRequestedSteerAngle(double defaultValue) {
-        if (!Constants.USE_TELEMETRY) return defaultValue;
+        if (!globalConst.USE_TELEMETRY) return defaultValue;
         return steerAngleEntry.getDouble(defaultValue);
     }
 
     public double getRequestedXPos(double defaultValue) {
-        if (!Constants.USE_TELEMETRY) return defaultValue;
+        if (!globalConst.USE_TELEMETRY) return defaultValue;
         return xPosEntry.getDouble(defaultValue);
     }
 
     public double getRequestedYPos(double defaultValue) {
-        if (!Constants.USE_TELEMETRY) return defaultValue;
+        if (!globalConst.USE_TELEMETRY) return defaultValue;
         return yPosEntry.getDouble(defaultValue);
     }
 
     public void setDriveVelocityFeedforwardEntry(double value) {
-        if (!Constants.USE_TELEMETRY) return;
+        if (!globalConst.USE_TELEMETRY) return;
         driveVelocityFeedforwardEntry.setDouble(value);
     }
 
     public void setDriveStaticFeedforwardEntry(double value) {
-        if (!Constants.USE_TELEMETRY) return;
+        if (!globalConst.USE_TELEMETRY) return;
         driveStaticFeedforwardEntry.setDouble(value);
     }
 
     public void setSteerStaticFeedforwardEntry(double value) {
-        if (!Constants.USE_TELEMETRY) return;
+        if (!globalConst.USE_TELEMETRY) return;
         steerStaticFeedforwardEntry.setDouble(value);
     }
 
     public void setSteerVelocityFeedforwardEntry(double value) {
-        if (!Constants.USE_TELEMETRY) return;
+        if (!globalConst.USE_TELEMETRY) return;
         steerVelocityFeedforwardEntry.setDouble(value);
     }
 
@@ -682,7 +683,7 @@ public class DrivetrainImpl extends Drivetrain {
      * Updates the drive module feedforward values on shuffleboard.
      */
     public void updateDriveModuleFeedforwardShuffleboard() {
-        if (!Constants.USE_TELEMETRY) return;
+        if (!globalConst.USE_TELEMETRY) return;
         // revert to previous saved feed forward data if changed
         if (prevModule != moduleChooser.getSelected()) {
             driveStaticFeedforwardEntry.setDouble(
@@ -718,7 +719,7 @@ public class DrivetrainImpl extends Drivetrain {
      * Updates the steer module feedforward values on shuffleboard.
      */
     public void updateSteerModuleFeedforwardShuffleboard() {
-        if (!Constants.USE_TELEMETRY) return;
+        if (!globalConst.USE_TELEMETRY) return;
 
         //revert to previous saved feed forward data if changed
         if (prevModule != moduleChooser.getSelected()) {
@@ -752,7 +753,7 @@ public class DrivetrainImpl extends Drivetrain {
     }
 
     public Module getModuleChoosen() {
-        if (!Constants.USE_TELEMETRY) return modules[0];
+        if (!globalConst.USE_TELEMETRY) return modules[0];
         return moduleChooser.getSelected();
     }
 
@@ -760,7 +761,7 @@ public class DrivetrainImpl extends Drivetrain {
      * Adds the test commands to shuffleboard so they can be run that way.
      */
     public void addTestCommands(ShuffleboardTab testTab, GenericEntry testEntry) {
-        if (Constants.USE_TELEMETRY) {
+        if (globalConst.USE_TELEMETRY) {
             testTab.add("Circle Drive", new CircleDrive(this));
             testTab.add("Test Drive Velocity", new TestDriveVelocity(this, testEntry));
             testTab.add("Heading PID", new TestHeadingPID(this, testEntry));

@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.drive_comm;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -7,7 +7,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.constants.swerve.DriveConstants;
-import frc.robot.subsystems.DrivetrainImpl;
+import frc.robot.subsystems.drivetrain.swerve.SwerveDriveImpl;
 
 /**
  * Sets all module angles to a given trajectory's initial angle.
@@ -16,7 +16,7 @@ public class TrajectoryPresetSteerAngles extends InstantCommand {
     /*
      * make sure to add wait command after called to give time to correct
      */
-    public TrajectoryPresetSteerAngles(DrivetrainImpl drive, Trajectory trajectory) {
+    public TrajectoryPresetSteerAngles(SwerveDriveImpl drive, Trajectory trajectory) {
         super(
                 () -> {
 

@@ -1,13 +1,13 @@
-package frc.robot.commands.test;
+package frc.robot.commands.test_comm;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.constants.miscConstants.TestConstants;
+import frc.robot.constants.TestConstants;
 import frc.robot.constants.swerve.DriveConstants;
-import frc.robot.subsystems.DrivetrainImpl;
+import frc.robot.subsystems.drivetrain.swerve.SwerveDriveImpl;
 import frc.robot.util.TimeAccuracyTest;
 
 /**
@@ -15,11 +15,11 @@ import frc.robot.util.TimeAccuracyTest;
  */
 public class TestHeadingPID extends CommandBase {
 
-    private final DrivetrainImpl drive;
+    private final SwerveDriveImpl drive;
     private final GenericEntry testEntry;
     private TimeAccuracyTest timeAccuracyTest;
 
-    public TestHeadingPID(DrivetrainImpl drive, GenericEntry testEntry) {
+    public TestHeadingPID(SwerveDriveImpl drive, GenericEntry testEntry) {
         this.drive = drive;
         this.testEntry = testEntry;
         addRequirements(drive);

@@ -1,16 +1,16 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.drivetrain.module;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import frc.robot.constants.Constants;
+import frc.robot.constants.globalConst;
 import frc.robot.constants.swerve.ModuleConstants;
 
 /**
  * Swerve module for drivetrain to be used inside of simulation.
  *
- * @see frc.robot.subsystems.Module
+ * @see frc.robot.subsystems.drivetrain.module.Module
  */
 public class ModuleSim extends Module {
 
@@ -37,7 +37,7 @@ public class ModuleSim extends Module {
      */
     @Override
     public void periodic() {
-        currentDrivePositionMeters += currentSpeed * Constants.LOOP_TIME;
+        currentDrivePositionMeters += currentSpeed * globalConst.LOOP_TIME;
     }
 
     /**

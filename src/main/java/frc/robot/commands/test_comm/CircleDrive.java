@@ -1,21 +1,21 @@
-package frc.robot.commands.test;
+package frc.robot.commands.test_comm;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DrivetrainImpl;
+import frc.robot.subsystems.drivetrain.swerve.SwerveDriveImpl;
 
 /**
  * Drives robot in a circle. There is often drift due to inaccuracy.
  */
 public class CircleDrive extends CommandBase {
 
-    private final DrivetrainImpl drive;
+    private final SwerveDriveImpl drive;
     private double steerPosition = 0, prevTime;
 
-    public CircleDrive(DrivetrainImpl drive) {
+    public CircleDrive(SwerveDriveImpl drive) {
         this.drive = drive;
         addRequirements(drive);
     }
