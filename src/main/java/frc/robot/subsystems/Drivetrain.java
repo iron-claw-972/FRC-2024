@@ -33,7 +33,7 @@ import java.util.Arrays;
  */
 public class Drivetrain extends SubsystemBase {
 
-    protected final Module[] modules;
+    protected final ModuleSim[] modules;
 
     // Odometry
     private final SwerveDrivePoseEstimator poseEstimator;
@@ -57,7 +57,7 @@ public class Drivetrain extends SubsystemBase {
         ModuleConstants[] constants = Arrays.copyOfRange(ModuleConstants.values(), 0, 4);
         
         Arrays.stream(constants).forEach(moduleConstants -> {
-            modules[moduleConstants.ordinal()] = new ModuleImpl(moduleConstants);
+            modules[moduleConstants.ordinal()] = new Module(moduleConstants);
         });
 
         // The Pigeon is a gyroscope and implements WPILib's Gyro interface
@@ -169,7 +169,7 @@ public class Drivetrain extends SubsystemBase {
      * Stops all swerve modules.
      */
     public void stop() {
-        Arrays.stream(modules).forEach(Module::stop);
+        Arrays.stream(modules).forEach(ModuleSim::stop);
     }
 
 
@@ -225,7 +225,7 @@ public class Drivetrain extends SubsystemBase {
      * @return an array of all swerve module positions
      */
     public SwerveModulePosition[] getModulePositions() {
-        return Arrays.stream(modules).map(Module::getPosition).toArray(SwerveModulePosition[]::new);
+        return Arrays.stream(modules).map(ModuleSim::getPosition).toArray(SwerveModulePosition[]::new);
     }
 
     /**
@@ -245,7 +245,7 @@ public class Drivetrain extends SubsystemBase {
      */
     public ChassisSpeeds getChassisSpeeds() {
         return DriveConstants.KINEMATICS.toChassisSpeeds(
-                Arrays.stream(modules).map(Module::getState).toArray(SwerveModuleState[]::new)
+                Arrays.stream(modules).map(ModuleSim::getState).toArray(SwerveModuleState[]::new)
         );
     }
 
@@ -256,7 +256,7 @@ public class Drivetrain extends SubsystemBase {
         return poseEstimator.getEstimatedPosition().getRotation();
     }
 
-    public Module[] getModules(){
+    public ModuleSim[] getModules(){
         return modules;
     }
 
@@ -290,7 +290,7 @@ public class Drivetrain extends SubsystemBase {
      * TODO: Comment
      */
     public void resetModulesToAbsolute() {
-        Arrays.stream(modules).forEach(Module::resetToAbsolute);
+        Arrays.stream(modules).forEach(ModuleSim::resetToAbsolute);
     }
 
 
