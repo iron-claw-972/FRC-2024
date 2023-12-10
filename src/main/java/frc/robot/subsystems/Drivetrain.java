@@ -52,8 +52,8 @@ public class Drivetrain extends SubsystemBase {
      * Creates a new Swerve Style Drivetrain.
      */
     public Drivetrain() {
-        modules = new ModuleImpl[4];
-        
+        modules = new ModuleSim[4];
+
         ModuleConstants[] constants = Arrays.copyOfRange(ModuleConstants.values(), 0, 4);
         
         Arrays.stream(constants).forEach(moduleConstants -> {

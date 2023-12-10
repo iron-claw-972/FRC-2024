@@ -29,7 +29,7 @@ public class Module extends ModuleSim {
     private final WPI_TalonFX angleMotor;
     private final WPI_TalonFX driveMotor;
     private final WPI_CANCoder CANcoder;
-    private SwerveModuleState desiredState;
+    private SwerveModuleState desireState;
 
     SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(DriveConstants.DRIVE_KS, DriveConstants.DRIVE_KV, DriveConstants.DRIVE_KA);
 
@@ -70,7 +70,7 @@ public class Module extends ModuleSim {
          * This is a custom optimize function, since default WPILib optimize assumes
          * continuous controller which CTRE and Rev onboard is not
          */
-        this.desiredState = optimizeStates ? CTREModuleState.optimize(desiredState, getState().angle) : desiredState;
+        desireState = optimizeStates ? CTREModuleState.optimize(desiredState, getState().angle) : desiredState;
         setAngle(desiredState);
         setSpeed(desiredState, isOpenLoop);
     }
@@ -135,7 +135,7 @@ public class Module extends ModuleSim {
         // TODO: Convert sensor ticks in driveconstants to radians
         double absolutePosition = ConversionUtils.degreesToFalcon(getCANcoder().getDegrees() - angleOffset,
                                                                   DriveConstants.kAngleGearRatio);
-        angleMotor.setSelectedSensorPosition(absolutePosition);                                                         
+        angleMotor.setSelectedSensorPosition(absolutePosition);                    
     }
 
     private void configCANcoder() {
@@ -206,7 +206,7 @@ public class Module extends ModuleSim {
     }
 
     public SwerveModuleState getDesiredState() {
-        return desiredState;
+        return desireState;
     }
 
 
