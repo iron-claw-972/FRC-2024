@@ -3,7 +3,7 @@ package frc.robot.subsystems.drivetrain.module;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import lib.drivers.LazyTalonFX;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.ctre.phoenix.sensors.SensorTimeBase;
@@ -29,8 +29,8 @@ public class Module extends SubsystemBase {
 
     private final Rotation2d angleOffset;
 
-    private final WPI_TalonFX angleMotor;
-    private final WPI_TalonFX driveMotor;
+    private final LazyTalonFX angleMotor;
+    private final LazyTalonFX driveMotor;
     private final WPI_CANCoder CANcoder;
     private SwerveModuleState desiredState;
 
@@ -54,11 +54,11 @@ public class Module extends SubsystemBase {
         configCANcoder();
 
         /* Angle Motor Config */
-        angleMotor = new WPI_TalonFX(moduleConstants.getSteerPort(), DriveConstants.kSteerEncoderCAN);
+        angleMotor = new LazyTalonFX(moduleConstants.getSteerPort(), DriveConstants.kSteerEncoderCAN);
         configAngleMotor();
 
         /* Drive Motor Config */
-        driveMotor = new WPI_TalonFX(moduleConstants.getDrivePort(), DriveConstants.kDriveMotorCAN);
+        driveMotor = new LazyTalonFX(moduleConstants.getDrivePort(), DriveConstants.kDriveMotorCAN);
         configDriveMotor();
 
         setDesiredState(new SwerveModuleState(0, getAngle()), false);
