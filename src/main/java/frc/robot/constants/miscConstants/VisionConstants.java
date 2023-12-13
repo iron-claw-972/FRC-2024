@@ -16,6 +16,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import frc.robot.constants.swerve.DriveConstants;
 
 public class VisionConstants {
   /**
@@ -35,7 +36,7 @@ public class VisionConstants {
   // The number to multiply the distance to the April tag by
   // Only affects manual calculations
   // To find this, set it to 1 and measure the actual distance and the calculated distance
-  public static final double DISTANCE_SCALE = 1;
+  public static final double DISTANCE_SCALE = 0.9;
 
   /*
    * The standard deviations to use for the vision
@@ -47,10 +48,11 @@ public class VisionConstants {
   );
 
   // The highest ambiguity to use. Ambiguities higher than this will be ignored.
+  // Only affects calculations using PhotonVision, not manual calculations
   public static final double HIGHEST_AMBIGUITY = 0.02;
 
   // The distance the robot should be from the grid to score in inches
-  public static final double GRID_DISTANCE = 15;
+  public static final double GRID_DISTANCE = Units.metersToInches(DriveConstants.kRobotWidthWithBumpers)/2+1;
 
   // Distance from the April tag to the single substation in the x direction
   public static final double SINGLE_SUBSTATION_DISTANCE = Units.inchesToMeters(79.395);
