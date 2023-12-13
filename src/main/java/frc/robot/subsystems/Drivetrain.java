@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.sensors.Pigeon2.AxisDirection;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
-import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -361,22 +360,10 @@ public class Drivetrain extends SubsystemBase {
   public void updateOdometry() {
     // Updates pose based on encoders and gyro. NOTE: must use yaw directly from gyro!
     m_poseEstimator.update(Rotation2d.fromDegrees(m_pigeon.getYaw()), getModulePositions());
-
+    
     // Updates pose based on vision
-    if (RobotBase.isReal() && m_visionEnabled && VisionConstants.kEnabled) {
-
-      // The pose and timestamp returned by the limelight
-      Pair<Pose2d, Double> visionPose = m_vision.getPose2dWithTimeStamp();
-
-      // If the limelight can see an april tag
-      if(visionPose.getFirst()!=null){
-        // Adds the vision measurement
-        m_poseEstimator.addVisionMeasurement(
-          visionPose.getFirst(),
-          visionPose.getSecond(),
-          VisionConstants.kVisionStdDevs
-        );
-      }
+    if (RobotBase.isReal() && m_visionEnabled && VisionConstants.ENABLED) {
+      m_vision.updateOdometry(m_poseEstimator);
     }
   }
 

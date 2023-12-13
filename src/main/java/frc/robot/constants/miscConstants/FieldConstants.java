@@ -13,7 +13,7 @@ public class FieldConstants {
   public static final double kFieldWidth = Units.inchesToMeters(26*12 + 3.5); // meters
 
   // Array to use if it can't find the April tag field layout
-  public static final ArrayList<AprilTag> kAprilTags = new ArrayList<AprilTag>(List.of(
+  public static final ArrayList<AprilTag> APRIL_TAGS = new ArrayList<AprilTag>(List.of(
     new AprilTag(1, new Pose3d(Units.inchesToMeters(610.77), Units.inchesToMeters( 42.19), Units.inchesToMeters(18.22), new Rotation3d(0.0, 0.0, Math.PI))),
     new AprilTag(2, new Pose3d(Units.inchesToMeters(610.77), Units.inchesToMeters(108.19), Units.inchesToMeters(18.22), new Rotation3d(0.0, 0.0, Math.PI))),
     new AprilTag(3, new Pose3d(Units.inchesToMeters(610.77), Units.inchesToMeters(174.19), Units.inchesToMeters(18.22), new Rotation3d(0.0, 0.0, Math.PI))),
