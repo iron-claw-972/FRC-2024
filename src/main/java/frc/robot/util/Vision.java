@@ -157,18 +157,23 @@ public class Vision {
       if(VisionConstants.USE_MANUAL_CALCULATIONS){
         Pose2d pose = m_cameras.get(i).getEstimatedPose(referencePose.getRotation().getRadians());
         if(pose != null){
-          EstimatedRobotPose estimatedPose = new EstimatedRobotPose(
-            new Pose3d(pose.getX(), pose.getY(), 0, new Rotation3d(0, 0, pose.getRotation().getRadians())), 
-            m_cameras.get(i).getTimeStamp(), 
-            List.of(m_cameras.get(i).getBestTarget())
-          );
-          estimatedPoses.add(estimatedPose);
-          if(Constants.kLogging){
-            LogManager.addDoubleArray("Vision/camera " + i + "/estimated pose2d", new double[] {
-              pose.getX(),
-              pose.getY(),
-              pose.getRotation().getRadians()
-            });
+          try{
+            EstimatedRobotPose estimatedPose = new EstimatedRobotPose(
+              new Pose3d(pose.getX(), pose.getY(), 0, new Rotation3d(0, 0, pose.getRotation().getRadians())), 
+              m_cameras.get(i).getTimeStamp(), 
+              List.of(m_cameras.get(i).getBestTarget())
+            );
+            estimatedPoses.add(estimatedPose);
+            if(Constants.kLogging){
+              LogManager.addDoubleArray("Vision/camera " + i + "/estimated pose2d", new double[] {
+                pose.getX(),
+                pose.getY(),
+                pose.getRotation().getRadians()
+              });
+            }
+          }catch(Exception e){
+            System.out.println(e.getStackTrace());
+            DriverStation.reportWarning("EXCEPTION THROWN:", true);
           }
         }
       }else{

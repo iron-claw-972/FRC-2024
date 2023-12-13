@@ -25,10 +25,10 @@ public class VisionConstants {
   public static final boolean ENABLED = true;
 
   // If odometry should be updated using vision during auto
-  public static final boolean ENABLED_AUTO = false;
+  public static final boolean ENABLED_AUTO = true;
 
   // If odometry should be updated using vision while running the GoToPose and GoToPosePID commands in teleop
-  public static final boolean ENABLED_GO_TO_POSE = false;
+  public static final boolean ENABLED_GO_TO_POSE = true;
 
   // If vision should use manual calculations
   public static final boolean USE_MANUAL_CALCULATIONS = true;
@@ -52,7 +52,7 @@ public class VisionConstants {
   public static final double HIGHEST_AMBIGUITY = 0.02;
 
   // The distance the robot should be from the grid to score in inches
-  public static final double GRID_DISTANCE = Units.metersToInches(DriveConstants.kRobotWidthWithBumpers)/2+1;
+  public static final double GRID_DISTANCE = Units.metersToInches(DriveConstants.kRobotWidthWithBumpers/2)+1;
 
   // Distance from the April tag to the single substation in the x direction
   public static final double SINGLE_SUBSTATION_DISTANCE = Units.inchesToMeters(79.395);
