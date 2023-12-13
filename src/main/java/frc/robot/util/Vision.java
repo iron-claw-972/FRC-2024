@@ -456,5 +456,5 @@ public class Vision {
     public PhotonTrackedTarget getBestTarget(){
       return camera.getLatestResult().getBestTarget();
     }
-  }  
+  }
 }
