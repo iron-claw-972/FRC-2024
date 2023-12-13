@@ -40,7 +40,7 @@ public class ReturnData extends CommandBase{
     System.out.println("Best game piece: "+bestGamePiece);
     for(int i = 0; i < xOffset.length; i++){
       System.out.printf("\nx: %.2f, y: %.2f, type: %s\n", xOffset[i], yOffset[i], objectClass[i]);
-      DetectedObject object = new DetectedObject(xOffset[i], yOffset[i], objectClass[i], VisionConstants.kCameras.get(0).getSecond());
+      DetectedObject object = new DetectedObject(xOffset[i], yOffset[i], objectClass[i], VisionConstants.CAMERAS.get(0).getSecond());
       System.out.printf("Object: %sDistance: %.2f, Angle: %.2f\n", object, object.getDistance(), Units.radiansToDegrees(object.getAngle()));
     }
   }

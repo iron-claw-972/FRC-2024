@@ -30,8 +30,13 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.vision.AcquireGamePiece;
 import frc.robot.commands.vision.AcquireGamePiecePID;
+import frc.robot.commands.vision.AimAtTag;
+import frc.robot.commands.vision.AlignToTag;
+import frc.robot.commands.vision.CalculateStdDevs;
 import frc.robot.commands.vision.ReturnData;
+import frc.robot.commands.vision.TestVisionDistance;
 import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.FieldConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
@@ -159,7 +164,7 @@ public class Vision {
         Units.degreesToRadians(yOffset[i]),
         // distance[i],
         objectClass[i],
-        VisionConstants.kCameras.get((int)cameraIndex[i]).getSecond()
+        VisionConstants.CAMERAS.get((int)cameraIndex[i]).getSecond()
         // VisionConstants.kCameras.get(0).getSecond()
       );
     }
