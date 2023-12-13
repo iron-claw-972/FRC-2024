@@ -1,22 +1,34 @@
 package frc.robot.controls;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.commands.GoToPose;
 import frc.robot.commands.SetFormationX;
 import frc.robot.constants.miscConstants.OIConstants;
+import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.MathUtils;
+import frc.robot.util.Node;
 import lib.controllers.GameController;
 import lib.controllers.GameController.Axis;
 import lib.controllers.GameController.Button;
+import lib.controllers.GameController.DPad;
 
 /**
  * Driver controls for the generic game controller.
  */
 public class GameControllerDriverConfig extends BaseDriverConfig {
+  // Stores the values for the Node the driver selects
+  private int[] selectionValues = new int[3];
+  // The selected node
+  private Node selectedNode = new Node();
+  // The timestamp of when the driver last pressed a selection button
+  private double selectTimestamp = 0;
   
   private final GameController kDriver = new GameController(OIConstants.kDriverJoy);
   public GameControllerDriverConfig(Drivetrain drive, ShuffleboardTab controllerTab, boolean shuffleboardUpdates) {
@@ -36,9 +48,55 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     
     // Resets the modules to absolute if they are having the unresolved zeroing error
     kDriver.get(Button.A).onTrue(new InstantCommand(() -> getDrivetrain().resetModulesToAbsolute()));
+
+    // Alignment controls
+    kDriver.get(DPad.LEFT).onTrue(new InstantCommand(() -> select(1)));
+    kDriver.get(DPad.UP).onTrue(new InstantCommand(() -> select(2)));
+    kDriver.get(DPad.RIGHT).onTrue(new InstantCommand(() -> select(3)));
+    kDriver.get(DPad.DOWN).onTrue(new InstantCommand(() -> select(0)));
+    // Grid alignment
+    kDriver.get(Button.RB).whileTrue(new GoToPose(() -> getSelectedPose(), getDrivetrain()));
+    // Single substation x and angle alignment
+    kDriver.get(Button.LB).whileTrue(new GoToPose(() -> new Pose2d(
+      DriverStation.getAlliance()==Alliance.Blue?VisionConstants.BLUE_SINGLE_SUBSTATION_X:VisionConstants.RED_SINGLE_SUBSTATION_X,
+      getDrivetrain().getPose().getY(),
+      new Rotation2d(Math.PI/2)
+    ), getDrivetrain()));
+    // Double substation alignment
+    kDriver.get(Button.Y).whileTrue(new GoToPose(() -> new Pose2d(
+      DriverStation.getAlliance()==Alliance.Blue?VisionConstants.BLUE_SHELF_X:VisionConstants.RED_SHELF_X,
+      VisionConstants.TOP_SHELF_Y,
+      new Rotation2d(Math.PI/2)
+    ), getDrivetrain()));
+    // Double substation alignment
+    kDriver.get(Button.Y).whileTrue(new GoToPose(() -> new Pose2d(
+      DriverStation.getAlliance()==Alliance.Blue?VisionConstants.BLUE_SHELF_X:VisionConstants.RED_SHELF_X,
+      VisionConstants.BOTTOM_SHELF_Y,
+      new Rotation2d(Math.PI/2)
+    ), getDrivetrain()));
   }
 
+  private void select(int value){
+    double timestamp = Timer.getFPGATimestamp();
+    if(value == 0 || timestamp-selectTimestamp > 5){
+      selectionValues = new int[3];
+    }
+    selectTimestamp = timestamp;
+    for(int i = 0; i < selectionValues.length; i++){
+      if(selectionValues[i] == 0){
+        selectionValues[i] = value;
+        if(i == 2){
+          selectTimestamp = 0;
+          selectedNode = new Node(DriverStation.getAlliance(), selectionValues[2], 3*selectionValues[0]+selectionValues[1]-3);
+        }
+        break;
+      }
+    }
+  }
 
+  public Pose2d getSelectedPose(){
+    return selectedNode.scorePose;
+  }
   
   @Override
   public double getRawSideTranslation() { 

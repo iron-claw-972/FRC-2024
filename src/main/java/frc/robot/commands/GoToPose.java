@@ -9,9 +9,11 @@ import com.pathplanner.lib.PathPoint;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.auto.PathPlannerCommand;
 import frc.robot.constants.miscConstants.AutoConstants;
+import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
 
 /**
@@ -32,6 +34,9 @@ public class GoToPose extends SequentialCommandGroup {
   public GoToPose(Supplier<Pose2d> poseSupplier, Drivetrain drive) {
     this(poseSupplier, AutoConstants.kMaxAutoSpeed, AutoConstants.kMaxAutoAccel, drive);
   }
+  public GoToPose(Pose2d pose, Drivetrain drive){
+    this(()->pose, drive);
+  }
 
   /**
    * Uses PathPlanner to go to a pose
@@ -46,7 +51,9 @@ public class GoToPose extends SequentialCommandGroup {
     m_maxAccel = maxAccel;
     m_drive = drive;
     addCommands(
-      new SupplierCommand(() -> createCommand(), drive)
+      new InstantCommand(()->drive.enableVision(VisionConstants.ENABLED_GO_TO_POSE)),
+      new SupplierCommand(() -> createCommand(), drive),
+      new InstantCommand(()->drive.enableVision(true))
     );
   }
 
@@ -96,15 +103,15 @@ public class GoToPose extends SequentialCommandGroup {
     // get the distance to the pose.
     double dist = m_drive.getPose().minus(pose).getTranslation().getNorm();
 
-    // if greater than 4m or less than 20 cm, don't run it. If the path is too small pathplanner makes weird paths.
-    if (dist > 4) {
+    // if greater than 6m or less than 10 cm, don't run it. If the path is too small pathplanner makes weird paths.
+    if (dist > 6) {
       command = new DoNothing();
       DriverStation.reportWarning("Alignment Path too long, doing nothing, GoToPose.java", false);
-    } else if (dist < 0.2) {
+    } else if (dist < 0.1) {
       command = new DoNothing();
       DriverStation.reportWarning("Alignment Path too short, doing nothing, GoToPose.java", false);
     }
 
-    return command;
+    return command.handleInterrupt(()->m_drive.enableVision(true));
   }
 }

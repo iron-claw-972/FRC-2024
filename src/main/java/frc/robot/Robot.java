@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.constants.Constants;
+import frc.robot.constants.miscConstants.VisionConstants;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -96,8 +97,8 @@ public class Robot extends TimedRobot {
 
     m_robotContainer.resetModules();
 
-    // In auto, only use odometry.
-    m_robotContainer.setVisionEnabled(false);
+    // Disable vision if the constant is false
+    m_robotContainer.setVisionEnabled(VisionConstants.ENABLED_AUTO);
 
     // Get the autonomous command.
     // This access is fast (about 14 microseconds) because the value is already resident in the Network Tables.
@@ -123,7 +124,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     m_robotContainer.resetModules();
     
-    // In teleop, may enable vision for use for grid/shelf alignment
+    // In teleop, enable vision
     m_robotContainer.setVisionEnabled(true);
 
     // This makes sure that the autonomous stops running when

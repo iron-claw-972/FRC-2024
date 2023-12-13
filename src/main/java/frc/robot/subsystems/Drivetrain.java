@@ -360,10 +360,10 @@ public class Drivetrain extends SubsystemBase {
   public void updateOdometry() {
     // Updates pose based on encoders and gyro. NOTE: must use yaw directly from gyro!
     m_poseEstimator.update(Rotation2d.fromDegrees(m_pigeon.getYaw()), getModulePositions());
-
+    
     // Updates pose based on vision
-    if (RobotBase.isReal() && m_visionEnabled && VisionConstants.kEnabled) {
-      //TODO: merge with April tags later
+    if (RobotBase.isReal() && m_visionEnabled && VisionConstants.ENABLED) {
+      m_vision.updateOdometry(m_poseEstimator);
     }
   }
 

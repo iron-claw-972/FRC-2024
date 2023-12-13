@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Robot.RobotId;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.constants.Constants;
+import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
@@ -62,11 +63,13 @@ public class RobotContainer {
       case SwerveCompetition:
         // Update drive constants based off of robot type
         DriveConstants.update(robotId);
-
-        m_vision = new Vision(m_visionTab);
+        
+        m_vision = new Vision(m_visionTab, VisionConstants.CAMERAS);
 
         // Create Drivetrain
         m_drive = new Drivetrain(m_drivetrainTab, m_swerveModulesTab, m_vision);
+        
+        m_vision.setUpSmartDashboardCommandButtons(m_drive);
 
         m_vision.setUpSmartDashboardCommandButtons(m_drive);
 
@@ -87,11 +90,13 @@ public class RobotContainer {
         // Update drive constants based off of robot type
         DriveConstants.update(robotId);
 
-        m_vision = new Vision(m_visionTab);
+        m_vision = new Vision(m_visionTab, VisionConstants.CAMERAS);
 
         // Create Drivetrain, because every robot will have a drivetrain
         m_drive = new Drivetrain(m_drivetrainTab, m_swerveModulesTab, m_vision);
+
         m_vision.setUpSmartDashboardCommandButtons(m_drive);
+
         m_driver = new GameControllerDriverConfig(m_drive, m_controllerTab, false);
 
         DriverStation.reportWarning("Not registering subsystems and controls due to incorrect robot", false);

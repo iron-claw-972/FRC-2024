@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
 
 /**
@@ -14,26 +15,29 @@ public class GoToPosePID extends CommandBase {
 
   private Drivetrain m_drive; 
   
-  private Supplier<Pose2d> m_pose;
+  private Supplier<Pose2d> m_poseSupplier;
+  private Pose2d m_pose;
   
   /**
    * Runs the chassis PIDs to move the robot to a specific pose. 
    */
   public GoToPosePID(Supplier<Pose2d> pose, Drivetrain drive) {
     m_drive = drive; 
-    m_pose = pose;
+    m_poseSupplier = pose;
     
     addRequirements(drive);
   }
     
   @Override
   public void initialize() {
+    m_pose = m_poseSupplier.get();
+    m_drive.enableVision(VisionConstants.ENABLED_GO_TO_POSE);
   }
 
   @Override
   public void execute() {
-    if(m_pose.get() != null){
-      m_drive.runChassisPID(m_pose.get().getX(), m_pose.get().getY(), m_pose.get().getRotation().getRadians()); 
+    if(m_pose != null){
+      m_drive.runChassisPID(m_pose.getX(), m_pose.getY(), m_pose.getRotation().getRadians()); 
     }else{
       m_drive.stop();
     }
@@ -48,5 +52,6 @@ public class GoToPosePID extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_drive.stop();
+    m_drive.enableVision(true);
   }
 }
