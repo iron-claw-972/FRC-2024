@@ -3,15 +3,15 @@ package frc.robot.controls;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.GoToPose;
-import frc.robot.commands.SetFormationX;
-import frc.robot.constants.miscConstants.OIConstants;
+import frc.robot.commands.drive_comm.SetFormationX;
+import frc.robot.constants.globalConst;
 import frc.robot.constants.miscConstants.VisionConstants;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Drivetrain.swerve.SwerveDriveImpl;
 import frc.robot.util.MathUtils;
 import frc.robot.util.Node;
 import lib.controllers.GameController;
@@ -30,18 +30,10 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
   // The timestamp of when the driver last pressed a selection button
   private double selectTimestamp = 0;
   
-  private final GameController kDriver = new GameController(OIConstants.kDriverJoy);
-  public GameControllerDriverConfig(Drivetrain drive, ShuffleboardTab controllerTab, boolean shuffleboardUpdates) {
-    super(drive, controllerTab, shuffleboardUpdates);
-  }
-  
   @Override
   public void configureControls() { 
 
-    // reset the yaw forward if it hasn't been. Mainly useful for testing/driver practice 
-    kDriver.get(Button.START).onTrue(new InstantCommand(() -> super.getDrivetrain().setYaw(
-      new Rotation2d(DriverStation.getAlliance() == Alliance.Blue ? 0 : Math.PI)
-    )));
+    private final GameController kDriver = new GameController(globalConst.DRIVER_JOY);
 
     // set the wheels to X
     kDriver.get(Button.X).onTrue(new SetFormationX(super.getDrivetrain()));
@@ -75,6 +67,10 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     ), getDrivetrain()));
   }
 
+    public GameControllerDriverConfig(SwerveDriveImpl drive, ShuffleboardTab controllerTab, boolean shuffleboardUpdates) {
+        super(drive, controllerTab, shuffleboardUpdates);
+    }
+
   private void select(int value){
     double timestamp = Timer.getFPGATimestamp();
     if(value == 0 || timestamp-selectTimestamp > 5){
@@ -97,38 +93,33 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     return selectedNode.scorePose;
   }
   
-  @Override
-  public double getRawSideTranslation() { 
-    return kDriver.get(Axis.LEFT_X);
-  }
-  
-  @Override
-  public double getRawForwardTranslation() {
-    return kDriver.get(Axis.LEFT_Y);
-  }
-  
-  @Override
-  public double getRawRotation() { 
-    return kDriver.get(Axis.RIGHT_X);
-  }
-  
-  @Override
-  public double getRawHeadingAngle() { 
-    return Math.atan2(kDriver.get(Axis.RIGHT_X), -kDriver.get(Axis.RIGHT_Y)) - Math.PI/2;
-  }
-  
-  @Override
-  public double getRawHeadingMagnitude() { 
-    return MathUtils.calculateHypotenuse(kDriver.get(Axis.RIGHT_X), kDriver.get(Axis.RIGHT_Y));
-  }
+    @Override
+    public double getRawForwardTranslation() {
+        return kDriver.get(Axis.LEFT_Y);
+    }
 
-  @Override
-  public boolean getIsSlowMode() {
-    return kDriver.RIGHT_TRIGGER_BUTTON.getAsBoolean();
-  }
+    @Override
+    public double getRawRotation() {
+        return kDriver.get(Axis.RIGHT_X);
+    }
 
-  @Override
-  public boolean getIsAlign() {
-    return kDriver.LEFT_TRIGGER_BUTTON.getAsBoolean();
-  }
+    @Override
+    public double getRawHeadingAngle() {
+        return Math.atan2(kDriver.get(Axis.RIGHT_X), -kDriver.get(Axis.RIGHT_Y)) - Math.PI / 2;
+    }
+
+    @Override
+    public double getRawHeadingMagnitude() {
+        return MathUtils.calculateHypotenuse(kDriver.get(Axis.RIGHT_X), kDriver.get(Axis.RIGHT_Y));
+    }
+
+    @Override
+    public boolean getIsSlowMode() {
+        return kDriver.RIGHT_TRIGGER_BUTTON.getAsBoolean();
+    }
+
+    @Override
+    public boolean getIsAlign() {
+        return kDriver.LEFT_TRIGGER_BUTTON.getAsBoolean();
+    }
 }
