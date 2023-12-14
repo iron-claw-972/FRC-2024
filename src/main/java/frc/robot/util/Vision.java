@@ -31,6 +31,7 @@ import frc.robot.commands.vision.AimAtTag;
 import frc.robot.commands.vision.AlignToTag;
 import frc.robot.commands.vision.CalculateStdDevs;
 import frc.robot.commands.vision.TestVisionDistance;
+import frc.robot.constants.GlobalConst;
 import frc.robot.constants.miscConstants.FieldConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
@@ -163,7 +164,7 @@ public class Vision {
               List.of(m_cameras.get(i).getBestTarget())
             );
             estimatedPoses.add(estimatedPose);
-            if(Constants.kLogging){
+            if(GlobalConst.DO_LOGGING){
               LogManager.addDoubleArray("Vision/camera " + i + "/estimated pose2d", new double[] {
                 pose.getX(),
                 pose.getY(),
@@ -181,7 +182,7 @@ public class Vision {
         // April tags that don't exist might return a result that is present but doesn't have a pose
         if (estimatedPose.isPresent() && estimatedPose.get().estimatedPose != null) {
           estimatedPoses.add(estimatedPose.get());
-          if(Constants.kLogging){
+          if(GlobalConst.DO_LOGGING){
             LogManager.addDoubleArray("Vision/camera " + i + "/estimated pose2d", new double[] {
               estimatedPose.get().estimatedPose.getX(),
               estimatedPose.get().estimatedPose.getY(),

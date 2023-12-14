@@ -3,7 +3,7 @@ package frc.robot.controls;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import frc.robot.constants.globalConst;
+import frc.robot.constants.GlobalConst;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.subsystems.drivetrain.swerve.SwerveDriveImpl;
 import frc.robot.util.DynamicSlewRateLimiter;
@@ -25,24 +25,24 @@ public abstract class BaseDriverConfig {
 
     // Some of these are not currently used, but we might want them later
     @SuppressWarnings("unused")
-    private double translationalSensitivity = globalConst.TRANSLATIONAL_SENSITIVITY;
+    private double translationalSensitivity = GlobalConst.TRANSLATIONAL_SENSITIVITY;
     @SuppressWarnings("unused")
-    private double translationalExpo = globalConst.TRANSLATIONAL_EXPO;
+    private double translationalExpo = GlobalConst.TRANSLATIONAL_EXPO;
     @SuppressWarnings("unused")
-    private double translationalDeadband = globalConst.TRANSLATIONAL_DEADBAND;
-    private double translationalSlewrate = globalConst.TRANSLATIONAL_SLEWRATE;
+    private double translationalDeadband = GlobalConst.TRANSLATIONAL_DEADBAND;
+    private double translationalSlewrate = GlobalConst.TRANSLATIONAL_SLEWRATE;
 
     @SuppressWarnings("unused")
-    private double rotationSensitivity = globalConst.ROTATION_SENSITIVITY;
+    private double rotationSensitivity = GlobalConst.ROTATION_SENSITIVITY;
     @SuppressWarnings("unused")
-    private double rotationExpo = globalConst.ROTATION_EXPO;
+    private double rotationExpo = GlobalConst.ROTATION_EXPO;
     @SuppressWarnings("unused")
-    private double rotationDeadband = globalConst.ROTATION_DEADBAND;
-    private double rotationSlewrate = globalConst.ROTATION_SLEWRATE;
+    private double rotationDeadband = GlobalConst.ROTATION_DEADBAND;
+    private double rotationSlewrate = GlobalConst.ROTATION_SLEWRATE;
 
-    private double headingSensitivity = globalConst.HEADING_SENSITIVITY;
-    private double headingExpo = globalConst.HEADING_EXPO;
-    private double headingDeadband = globalConst.HEADING_DEADBAND;
+    private double headingSensitivity = GlobalConst.HEADING_SENSITIVITY;
+    private double headingExpo = GlobalConst.HEADING_EXPO;
+    private double headingDeadband = GlobalConst.HEADING_DEADBAND;
     private double previousHeading = 0;
 
     @SuppressWarnings("unused")
@@ -67,15 +67,15 @@ public abstract class BaseDriverConfig {
     }
 
     public double getForwardTranslation() {
-        return -MathUtils.expoMS(MathUtil.applyDeadband(getRawForwardTranslation(), globalConst.DEADBAND), 2) * DriveConstants.kMaxSpeed * 1;
+        return -MathUtils.expoMS(MathUtil.applyDeadband(getRawForwardTranslation(), GlobalConst.DEADBAND), 2) * DriveConstants.kMaxSpeed * 1;
     }
 
     public double getSideTranslation() {
-        return -MathUtils.expoMS(MathUtil.applyDeadband(getRawSideTranslation(), globalConst.DEADBAND), 2) * DriveConstants.kMaxSpeed * 1;
+        return -MathUtils.expoMS(MathUtil.applyDeadband(getRawSideTranslation(), GlobalConst.DEADBAND), 2) * DriveConstants.kMaxSpeed * 1;
     }
 
     public double getRotation() {
-        return -MathUtils.expoMS(MathUtil.applyDeadband(getRawRotation(), globalConst.DEADBAND), 2) * DriveConstants.kMaxAngularSpeed * 1;
+        return -MathUtils.expoMS(MathUtil.applyDeadband(getRawRotation(), GlobalConst.DEADBAND), 2) * DriveConstants.kMaxAngularSpeed * 1;
     }
 
     public double getHeading() {
@@ -95,17 +95,17 @@ public abstract class BaseDriverConfig {
     public void setupShuffleboard() {
         if (!shuffleboardUpdates) return;
 
-        translationalSensitivityEntry = controllerTab.add("translationalSensitivity", globalConst.TRANSLATIONAL_SENSITIVITY).getEntry();
-        translationalExpoEntry = controllerTab.add("translationalExpo", globalConst.TRANSLATIONAL_EXPO).getEntry();
-        translationalDeadbandEntry = controllerTab.add("translationalDeadband", globalConst.TRANSLATIONAL_DEADBAND).getEntry();
-        translationalSlewrateEntry = controllerTab.add("translationalSlewrate", globalConst.TRANSLATIONAL_SLEWRATE).getEntry();
-        rotationSensitivityEntry = controllerTab.add("rotationSensitivity", globalConst.ROTATION_SENSITIVITY).getEntry();
-        rotationExpoEntry = controllerTab.add("rotationExpo", globalConst.ROTATION_EXPO).getEntry();
-        rotationDeadbandEntry = controllerTab.add("rotationDeadband", globalConst.ROTATION_DEADBAND).getEntry();
-        rotationSlewrateEntry = controllerTab.add("rotationSlewrate", globalConst.ROTATION_SLEWRATE).getEntry();
-        headingSensitivityEntry = controllerTab.add("headingSensitivity", globalConst.HEADING_SENSITIVITY).getEntry();
-        headingExpoEntry = controllerTab.add("headingExpo", globalConst.HEADING_EXPO).getEntry();
-        headingDeadbandEntry = controllerTab.add("headingDeadband", globalConst.HEADING_DEADBAND).getEntry();
+        translationalSensitivityEntry = controllerTab.add("translationalSensitivity", GlobalConst.TRANSLATIONAL_SENSITIVITY).getEntry();
+        translationalExpoEntry = controllerTab.add("translationalExpo", GlobalConst.TRANSLATIONAL_EXPO).getEntry();
+        translationalDeadbandEntry = controllerTab.add("translationalDeadband", GlobalConst.TRANSLATIONAL_DEADBAND).getEntry();
+        translationalSlewrateEntry = controllerTab.add("translationalSlewrate", GlobalConst.TRANSLATIONAL_SLEWRATE).getEntry();
+        rotationSensitivityEntry = controllerTab.add("rotationSensitivity", GlobalConst.ROTATION_SENSITIVITY).getEntry();
+        rotationExpoEntry = controllerTab.add("rotationExpo", GlobalConst.ROTATION_EXPO).getEntry();
+        rotationDeadbandEntry = controllerTab.add("rotationDeadband", GlobalConst.ROTATION_DEADBAND).getEntry();
+        rotationSlewrateEntry = controllerTab.add("rotationSlewrate", GlobalConst.ROTATION_SLEWRATE).getEntry();
+        headingSensitivityEntry = controllerTab.add("headingSensitivity", GlobalConst.HEADING_SENSITIVITY).getEntry();
+        headingExpoEntry = controllerTab.add("headingExpo", GlobalConst.HEADING_EXPO).getEntry();
+        headingDeadbandEntry = controllerTab.add("headingDeadband", GlobalConst.HEADING_DEADBAND).getEntry();
     }
 
     /**
@@ -114,19 +114,19 @@ public abstract class BaseDriverConfig {
     public void updateSettings() { //updates the shuffleboard data
         if (!shuffleboardUpdates) return;
 
-        translationalSensitivity = translationalSensitivityEntry.getDouble(globalConst.TRANSLATIONAL_SENSITIVITY);
-        translationalExpo = translationalExpoEntry.getDouble(globalConst.TRANSLATIONAL_EXPO);
-        translationalDeadband = translationalDeadbandEntry.getDouble(globalConst.TRANSLATIONAL_DEADBAND);
-        translationalSlewrate = translationalSlewrateEntry.getDouble(globalConst.TRANSLATIONAL_SLEWRATE);
+        translationalSensitivity = translationalSensitivityEntry.getDouble(GlobalConst.TRANSLATIONAL_SENSITIVITY);
+        translationalExpo = translationalExpoEntry.getDouble(GlobalConst.TRANSLATIONAL_EXPO);
+        translationalDeadband = translationalDeadbandEntry.getDouble(GlobalConst.TRANSLATIONAL_DEADBAND);
+        translationalSlewrate = translationalSlewrateEntry.getDouble(GlobalConst.TRANSLATIONAL_SLEWRATE);
 
-        rotationSensitivity = rotationSensitivityEntry.getDouble(globalConst.ROTATION_SENSITIVITY);
-        rotationExpo = rotationExpoEntry.getDouble(globalConst.ROTATION_EXPO);
-        rotationDeadband = rotationDeadbandEntry.getDouble(globalConst.ROTATION_DEADBAND);
-        rotationSlewrate = rotationSlewrateEntry.getDouble(globalConst.ROTATION_SLEWRATE);
+        rotationSensitivity = rotationSensitivityEntry.getDouble(GlobalConst.ROTATION_SENSITIVITY);
+        rotationExpo = rotationExpoEntry.getDouble(GlobalConst.ROTATION_EXPO);
+        rotationDeadband = rotationDeadbandEntry.getDouble(GlobalConst.ROTATION_DEADBAND);
+        rotationSlewrate = rotationSlewrateEntry.getDouble(GlobalConst.ROTATION_SLEWRATE);
 
-        headingSensitivity = headingSensitivityEntry.getDouble(globalConst.HEADING_SENSITIVITY);
-        headingExpo = headingExpoEntry.getDouble(globalConst.HEADING_EXPO);
-        headingDeadband = headingDeadbandEntry.getDouble(globalConst.HEADING_DEADBAND);
+        headingSensitivity = headingSensitivityEntry.getDouble(GlobalConst.HEADING_SENSITIVITY);
+        headingExpo = headingExpoEntry.getDouble(GlobalConst.HEADING_EXPO);
+        headingDeadband = headingDeadbandEntry.getDouble(GlobalConst.HEADING_DEADBAND);
     }
 
     /**

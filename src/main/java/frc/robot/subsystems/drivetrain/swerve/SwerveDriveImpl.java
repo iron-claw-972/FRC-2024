@@ -22,12 +22,14 @@ import frc.robot.commands.test_comm.CircleDrive;
 import frc.robot.commands.test_comm.TestDriveVelocity;
 import frc.robot.commands.test_comm.TestHeadingPID;
 import frc.robot.commands.test_comm.TestSteerAngle;
-import frc.robot.constants.globalConst;
+import frc.robot.constants.GlobalConst;
+import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
 import frc.robot.subsystems.drivetrain.module.Module;
 import frc.robot.subsystems.drivetrain.module.ModuleSim;
 import frc.robot.util.LogManager;
+import frc.robot.util.Vision;
 
 /**
  * Represents a swerve drive style drivetrain.
@@ -45,6 +47,9 @@ public class SwerveDriveImpl extends SwerveDrive {
 
     // Odometry
     private final SwerveDrivePoseEstimator poseEstimator;
+
+    // Vision
+    private final Vision vision;
 
     // This is left intentionally public
     public final Module[] modules;
@@ -102,10 +107,11 @@ public class SwerveDriveImpl extends SwerveDrive {
      * @param swerveModulesTab the shuffleboard tab to display module data on
 //     * @param vision           the vision
      */
-    public SwerveDriveImpl(ShuffleboardTab drivetrainTab, ShuffleboardTab swerveModulesTab) {
+    public SwerveDriveImpl(ShuffleboardTab drivetrainTab, ShuffleboardTab swerveModulesTab, Vision vision) {
 
         this.drivetrainTab = drivetrainTab;
         this.swerveModulesTab = swerveModulesTab;
+        this.vision = vision;
 
         pigeon = new WPI_Pigeon2(DriveConstants.kPigeon, DriveConstants.kPigeonCAN);
         pigeon.configFactoryDefault();
@@ -145,7 +151,7 @@ public class SwerveDriveImpl extends SwerveDrive {
                 getModulePositions(),
                 new Pose2d() // initial Odometry Location
         );
-//        poseEstimator.setVisionMeasurementStdDevs(VisionConstants.kBaseVisionPoseStdDevs);
+       poseEstimator.setVisionMeasurementStdDevs(VisionConstants.VISION_STD_DEVS);
 
         xController = new PIDController(DriveConstants.kTranslationalP, 0, DriveConstants.kTranslationalD);
         yController = new PIDController(DriveConstants.kTranslationalP, 0, DriveConstants.kTranslationalD);
@@ -174,7 +180,7 @@ public class SwerveDriveImpl extends SwerveDrive {
 
         fieldDisplay.setRobotPose(getPose());
 
-        if (globalConst.DO_LOGGING) updateLogs();
+        if (GlobalConst.DO_LOGGING) updateLogs();
     }
     // PIDs for Chassis movement
 
@@ -363,7 +369,7 @@ public class SwerveDriveImpl extends SwerveDrive {
     public void setChassisSpeeds(ChassisSpeeds chassisSpeeds, boolean isOpenLoop) {
         if (Robot.isSimulation()) {
             pigeon.getSimCollection().addHeading(
-                    +Units.radiansToDegrees(chassisSpeeds.omegaRadiansPerSecond * globalConst.LOOP_TIME));
+                    +Units.radiansToDegrees(chassisSpeeds.omegaRadiansPerSecond * GlobalConst.LOOP_TIME));
         }
         SwerveModuleState[] swerveModuleStates = DriveConstants.KINEMATICS.toSwerveModuleStates(chassisSpeeds);
         setModuleStates(swerveModuleStates, isOpenLoop);
@@ -382,47 +388,9 @@ public class SwerveDriveImpl extends SwerveDrive {
         // Updates pose based on encoders and gyro. NOTE: must use yaw directly from gyro!
         poseEstimator.update(Rotation2d.fromDegrees(pigeon.getYaw()), getModulePositions());
         // Updates pose based on vision
-//        if (RobotBase.isReal() && visionEnabled && VisionConstants.ENABLED) {
-//
-//            // An array list of poses returned by different cameras
-//            ArrayList<EstimatedRobotPose> estimatedPoses = vision.getEstimatedPoses(poseEstimator.getEstimatedPosition());
-//            // The current position as a translation
-//            Translation2d currentEstimatedPoseTranslation = poseEstimator.getEstimatedPosition().getTranslation();
-//            for (EstimatedRobotPose estimatedPose : estimatedPoses) {
-//                // The position of the closest april tag as a translation
-//                Translation2d closestTagPoseTranslation = null;
-//                for (int j = 0; j < estimatedPose.targetsUsed.size(); j++) {
-//                    // The position of the current april tag
-//                    Pose3d currentTagPose = vision.getTagPose(estimatedPose.targetsUsed.get(j).getFiducialId());
-//                    // If it can't find the april tag's pose, don't run the rest of the for loop for this tag
-//                    if (currentTagPose == null) {
-//                        continue;
-//                    }
-//                    Translation2d currentTagPoseTranslation = currentTagPose.toPose2d().getTranslation();
-//
-//                    // If the current april tag position is closer than the closest one, this makes makes it the closest
-//                    if (closestTagPoseTranslation == null || currentEstimatedPoseTranslation.getDistance(currentTagPoseTranslation) < currentEstimatedPoseTranslation.getDistance(closestTagPoseTranslation)) {
-//                        closestTagPoseTranslation = currentTagPoseTranslation;
-//                    }
-//                }
-//
-//                double visionFactor = (currentEstimatedPoseTranslation.getDistance(closestTagPoseTranslation) * VisionConstants.kVisionPoseStdDevFactor);
-//
-//                // Adds the vision measurement for this camera
-//                poseEstimator.addVisionMeasurement(
-//                        estimatedPose.estimatedPose.toPose2d(),
-//                        estimatedPose.timestampSeconds,
-//                        VisionConstants.kBaseVisionPoseStdDevs.plus(
-//                                visionFactor
-//                                                                   )
-//                                                  );
-//                if (Constants.DO_LOGGING) {
-//                    LogManager.addDouble("Vision/ClosestTag Distance",
-//                                         currentEstimatedPoseTranslation.getDistance(closestTagPoseTranslation)
-//                                        );
-//                }
-//            }
-//        }
+       if (RobotBase.isReal() && visionEnabled && VisionConstants.ENABLED) {
+        vision.updateOdometry(poseEstimator);
+       }
     }
 
     /**
@@ -555,7 +523,7 @@ public class SwerveDriveImpl extends SwerveDrive {
     private void setupDrivetrainShuffleboard() {
 
         drivetrainTab.add("Field", fieldDisplay);
-        if (!globalConst.USE_TELEMETRY) return;
+        if (!GlobalConst.USE_TELEMETRY) return;
 
 
         drivetrainTab.add("Balance PID", balanceController);
@@ -593,7 +561,7 @@ public class SwerveDriveImpl extends SwerveDrive {
      * Sets up the shuffleboard tab for the swerve modules.
      */
     private void setupModulesShuffleboard() {
-        if (globalConst.USE_TELEMETRY) {
+        if (GlobalConst.USE_TELEMETRY) {
 
             moduleChooser.setDefaultOption("Front Left", modules[0]);
             moduleChooser.addOption("Front Right", modules[1]);
@@ -630,52 +598,52 @@ public class SwerveDriveImpl extends SwerveDrive {
     }
 
     public double getRequestedHeading(double defaultValue) {
-        if (!globalConst.USE_TELEMETRY) return defaultValue;
+        if (!GlobalConst.USE_TELEMETRY) return defaultValue;
         return headingEntry.getDouble(defaultValue);
     }
 
     public double getRequestedDriveVelocity(double defaultValue) {
-        if (!globalConst.USE_TELEMETRY) return defaultValue;
+        if (!GlobalConst.USE_TELEMETRY) return defaultValue;
         return driveVelocityEntry.getDouble(defaultValue);
     }
 
     public double getRequestedSteerVelocity(double defaultValue) {
-        if (!globalConst.USE_TELEMETRY) return defaultValue;
+        if (!GlobalConst.USE_TELEMETRY) return defaultValue;
         return steerVelocityEntry.getDouble(defaultValue);
     }
 
     public double getRequestedSteerAngle(double defaultValue) {
-        if (!globalConst.USE_TELEMETRY) return defaultValue;
+        if (!GlobalConst.USE_TELEMETRY) return defaultValue;
         return steerAngleEntry.getDouble(defaultValue);
     }
 
     public double getRequestedXPos(double defaultValue) {
-        if (!globalConst.USE_TELEMETRY) return defaultValue;
+        if (!GlobalConst.USE_TELEMETRY) return defaultValue;
         return xPosEntry.getDouble(defaultValue);
     }
 
     public double getRequestedYPos(double defaultValue) {
-        if (!globalConst.USE_TELEMETRY) return defaultValue;
+        if (!GlobalConst.USE_TELEMETRY) return defaultValue;
         return yPosEntry.getDouble(defaultValue);
     }
 
     public void setDriveVelocityFeedforwardEntry(double value) {
-        if (!globalConst.USE_TELEMETRY) return;
+        if (!GlobalConst.USE_TELEMETRY) return;
         driveVelocityFeedforwardEntry.setDouble(value);
     }
 
     public void setDriveStaticFeedforwardEntry(double value) {
-        if (!globalConst.USE_TELEMETRY) return;
+        if (!GlobalConst.USE_TELEMETRY) return;
         driveStaticFeedforwardEntry.setDouble(value);
     }
 
     public void setSteerStaticFeedforwardEntry(double value) {
-        if (!globalConst.USE_TELEMETRY) return;
+        if (!GlobalConst.USE_TELEMETRY) return;
         steerStaticFeedforwardEntry.setDouble(value);
     }
 
     public void setSteerVelocityFeedforwardEntry(double value) {
-        if (!globalConst.USE_TELEMETRY) return;
+        if (!GlobalConst.USE_TELEMETRY) return;
         steerVelocityFeedforwardEntry.setDouble(value);
     }
 
@@ -683,7 +651,7 @@ public class SwerveDriveImpl extends SwerveDrive {
      * Updates the drive module feedforward values on shuffleboard.
      */
     public void updateDriveModuleFeedforwardShuffleboard() {
-        if (!globalConst.USE_TELEMETRY) return;
+        if (!GlobalConst.USE_TELEMETRY) return;
         // revert to previous saved feed forward data if changed
         if (prevModule != moduleChooser.getSelected()) {
             driveStaticFeedforwardEntry.setDouble(
@@ -719,7 +687,7 @@ public class SwerveDriveImpl extends SwerveDrive {
      * Updates the steer module feedforward values on shuffleboard.
      */
     public void updateSteerModuleFeedforwardShuffleboard() {
-        if (!globalConst.USE_TELEMETRY) return;
+        if (!GlobalConst.USE_TELEMETRY) return;
 
         //revert to previous saved feed forward data if changed
         if (prevModule != moduleChooser.getSelected()) {
@@ -753,7 +721,7 @@ public class SwerveDriveImpl extends SwerveDrive {
     }
 
     public Module getModuleChoosen() {
-        if (!globalConst.USE_TELEMETRY) return modules[0];
+        if (!GlobalConst.USE_TELEMETRY) return modules[0];
         return moduleChooser.getSelected();
     }
 
@@ -761,7 +729,7 @@ public class SwerveDriveImpl extends SwerveDrive {
      * Adds the test commands to shuffleboard so they can be run that way.
      */
     public void addTestCommands(ShuffleboardTab testTab, GenericEntry testEntry) {
-        if (globalConst.USE_TELEMETRY) {
+        if (GlobalConst.USE_TELEMETRY) {
             testTab.add("Circle Drive", new CircleDrive(this));
             testTab.add("Test Drive Velocity", new TestDriveVelocity(this, testEntry));
             testTab.add("Heading PID", new TestHeadingPID(this, testEntry));

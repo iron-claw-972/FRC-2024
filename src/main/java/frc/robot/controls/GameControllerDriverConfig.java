@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.GoToPose;
 import frc.robot.commands.drive_comm.SetFormationX;
-import frc.robot.constants.globalConst;
+import frc.robot.constants.GlobalConst;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.drivetrain.swerve.SwerveDriveImpl;
 import frc.robot.util.MathUtils;
@@ -30,11 +30,10 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
   // The timestamp of when the driver last pressed a selection button
   private double selectTimestamp = 0;
   
+  private final GameController kDriver = new GameController(GlobalConst.DRIVER_JOY);
+
   @Override
   public void configureControls() { 
-
-    private final GameController kDriver = new GameController(globalConst.DRIVER_JOY);
-
     // set the wheels to X
     kDriver.get(Button.X).onTrue(new SetFormationX(super.getDrivetrain()));
     
@@ -93,10 +92,15 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     return selectedNode.scorePose;
   }
   
-    @Override
-    public double getRawForwardTranslation() {
-        return kDriver.get(Axis.LEFT_Y);
-    }
+  @Override
+  public double getRawForwardTranslation() {
+      return kDriver.get(Axis.LEFT_Y);
+  }
+
+  @Override
+  public double getRawSideTranslation() {
+      return kDriver.get(Axis.LEFT_X);
+  }
 
     @Override
     public double getRawRotation() {
