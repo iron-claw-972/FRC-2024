@@ -51,32 +51,6 @@ public class DriveConstants {
             new Translation2d(-DriveConstants.kTrackWidth / 2, DriveConstants.kTrackWidth / 2),
             new Translation2d(-DriveConstants.kTrackWidth / 2, -DriveConstants.kTrackWidth / 2)
     );
-    
-    //duleImpl.periodic(ModuleImpl.java:65): FRONT_RIGHT Encoder offset: -35614.0 
-    //ERROR  1  BACK_RIGHT Encoder offset: 19350.0  frc.robot.subsystems.drive.ModuleImpl.periodic(ModuleImpl.java:65) 
-    // Error at frc.robot.subsystems.drive.ModuleImpl.periodic(ModuleImpl.java:65): BACK_RIGHT Encoder offset: 19350.0 
-    //ERROR  1  BACK_LEFT Encoder offset: 21900.0  frc.robot.subsystems.drive.ModuleImpl.periodic(ModuleImpl.java:65) 
-    // Error at frc.robot.subsystems.drive.ModuleImpl.periodic(ModuleImpl.java:65): BACK_LEFT Encoder offset: 21900.0 
-    //ERROR  1  FRONT_LEFT Encoder offset: 33181.0  frc.robot.subsystems.drive.ModuleImpl.periodic(ModuleImpl.java:65) 
-    // Error at frc.robot.subsystems.drive.ModuleImpl.periodic(ModuleImpl.java:65): FRONT_LEFT Encoder offset: 33181.0 
-    //ERROR  1  FRONT_RIGHT Encoder offset: -35614.0  frc.robot.subsystems.drive.ModuleImpl.periodic(ModuleImpl.java:65) 
-    // Error at frc.robot.subsystems.drive.ModuleImpl.periodic(ModuleImpl.java:65): FRONT_RIGHT Encoder offset: -35614.0 
-    //ERROR  1  BACK_RIGHT Encoder offset: 19350.0  frc.robot.subsystems.drive.ModuleImpl.periodic(ModuleImpl.java:65) 
-    // Error at frc.robot.subsystems.drive.ModuleImpl.periodic(ModuleImpl.java:65): BACK_RIGHT Encoder offset: 19350.0 
-    //ERROR  1  BACK_LEFT Encoder offset: 21900.0  frc.robot.subsystems.drive.ModuleImpl.periodic(ModuleImpl.java:65) 
-    // Error at frc.robot.subsystems.drive.ModuleImpl.periodic(ModuleImpl.java:65): BACK_LEFT Encoder offset: 21900.0 
-    //ERROR  1  FRONT_RIGHT Encoder offset: -35614.0  frc.robot.subsystems.drive.ModuleImpl.periodic(ModuleImpl.java:65) 
-    // Error at frc.robot.subsystems.drive.ModuleImpl.periodic(ModuleImpl.java:65): FRONT_RIGHT Encoder offset: -35614.0 
-    //ERROR  1  FRONT_LEFT Encoder offset: 33181.0  frc.robot.subsystems.drive.ModuleImpl.periodic(ModuleImpl.java:65) 
-    // Error at frc.robot.subsystems.drive.ModuleImpl.periodic(ModuleImpl.java:65): FRONT_LEFT Encoder offset: 33181.0 
-    //ERROR  1  BACK_RIGHT Encoder offset: 19350.0  frc.robot.subsystems.drive.ModuleImpl.periodic(ModuleImpl.java:65) 
-    // Error at frc.robot.subsystems.drive.ModuleImpl.periodic(ModuleImpl.java:65): BACK_RIGHT Encoder offset: 19350.0 
-    //ERROR  1  BACK_LEFT Encoder offset: 21900.0  frc.robot.subsystems.drive.ModuleImpl.periodic(ModuleImpl.java:65) 
-    // Error at frc.robot.subsystems.drive.ModuleImpl.periodic(ModuleImpl.java:65): BACK_LEFT Encoder offset: 21900.0 
-    //ERROR  1  FRONT_LEFT Encoder offset: 33181.0  frc.robot.subsystems.drive.ModuleImpl.periodic(ModuleImpl.java:65) 
-    // Error at frc.robot.subsystems.drive.ModuleImpl.periodic(ModuleImpl.java:65): FRONT_LEFT Encoder offset: 33181.0 
-    //ERROR  1  FRONT_RIGHT Encoder offset: -35614.0  frc.robot.subsystems.drive.ModuleImpl.periodic(ModuleImpl.java:65) 
-    // Error a
 
     public static int kDriveFrontLeft = 1;
     public static int kSteerFrontLeft = 2;
@@ -101,25 +75,6 @@ public class DriveConstants {
     // heading PID
     public static double kHeadingP = 4.6;
     public static double kHeadingD = 0;
-
-    //balance PID
-    public static double kBalanceP = 0.05;
-    public static double kBalanceI = 0;
-    public static double kBalanceD = 0;
-    // max output in m/s
-    public static final double kBalanceMaxOutput = 1.5; // 0.7
-
-    //balance timer
-    // when the balance command starts, it will run the pid normally until
-    // the angle decreases by at least kMaxAngleDiffDegrees or until kBalanceNoStopPeriod elapses.
-    // Then, every kBalanceStopInterval seconds, it will stop the motors
-    // for kBalanceStopDuration seconds to help give the charge station some time to balance.
-    // "A non-linear system requires non-linear control" - jerry
-    // "If it's stupid but it works..." - Richie
-    public static double kBalanceNoStopPeriod = 1.2;
-    public static double kBalanceStopInterval = 0.3; // 0.5
-    public static double kBalanceStopDuration = 0.15;
-    public static double kMaxAngleDiffDegrees = 1.0;
 
     //translational PID
     public static double kTranslationalP = 0.25;

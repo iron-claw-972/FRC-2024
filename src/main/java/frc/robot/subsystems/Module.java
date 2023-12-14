@@ -29,7 +29,7 @@ public class Module extends ModuleSim {
     private final WPI_TalonFX angleMotor;
     private final WPI_TalonFX driveMotor;
     private final WPI_CANCoder CANcoder;
-    private SwerveModuleState desireState;
+    private SwerveModuleState desiredState;
 
     SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(DriveConstants.DRIVE_KS, DriveConstants.DRIVE_KV, DriveConstants.DRIVE_KA);
 
@@ -64,15 +64,15 @@ public class Module extends ModuleSim {
     }
 
     @Override
-    public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
+    public void setDesiredState(SwerveModuleState wantedState, boolean isOpenLoop) {
 
         /*
          * This is a custom optimize function, since default WPILib optimize assumes
          * continuous controller which CTRE and Rev onboard is not
          */
-        desireState = optimizeStates ? CTREModuleState.optimize(desiredState, getState().angle) : desiredState;
-        setAngle(desiredState);
-        setSpeed(desiredState, isOpenLoop);
+        desiredState = optimizeStates ? CTREModuleState.optimize(wantedState, getState().angle) : wantedState;
+        setAngle(wantedState);
+        setSpeed(wantedState, isOpenLoop);
     }
 
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop) {
@@ -206,7 +206,7 @@ public class Module extends ModuleSim {
     }
 
     public SwerveModuleState getDesiredState() {
-        return desireState;
+        return desiredState;
     }
 
 
