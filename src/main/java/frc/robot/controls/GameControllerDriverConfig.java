@@ -68,8 +68,7 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
       VisionConstants.TOP_SHELF_Y,
       new Rotation2d(Math.PI/2)
     ), getDrivetrain()));
-    // Double substation alignment
-    kDriver.get(Button.Y).whileTrue(new GoToPose(() -> new Pose2d(
+    kDriver.get(Button.B).whileTrue(new GoToPose(() -> new Pose2d(
       DriverStation.getAlliance()==Alliance.Blue?VisionConstants.BLUE_SHELF_X:VisionConstants.RED_SHELF_X,
       VisionConstants.BOTTOM_SHELF_Y,
       new Rotation2d(Math.PI/2)
