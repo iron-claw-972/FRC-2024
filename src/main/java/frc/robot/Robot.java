@@ -81,7 +81,7 @@ public class Robot extends TimedRobot {
 //        robotContainer.resetModules();
 
         // Disable vision if the constant is false.
-       robotContainer.setVisionEnabled(VisionConstants.ENABLED_AUTO);
+       robotContainer.enableVision(VisionConstants.ENABLED_AUTO);
 
         // Get the autonomous command.
         // This access is fast (about 14 microseconds) because the value is already resident in the Network Tables.
@@ -109,7 +109,7 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
 //        robotContainer.resetModules();
 
-        robotContainer.setVisionEnabled(true);
+        robotContainer.enableVision(true);
 
         // This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to

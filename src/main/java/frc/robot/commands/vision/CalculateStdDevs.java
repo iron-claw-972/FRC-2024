@@ -6,7 +6,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.drivetrain.swerve.SwerveDrive;;
 import frc.robot.util.LogManager;
 import frc.robot.util.MathUtils;
 import frc.robot.util.Vision;
@@ -19,14 +19,14 @@ public class CalculateStdDevs extends CommandBase {
   private ArrayList<Pose2d> m_poses;
   private int m_arrayLength;
   private Timer m_endTimer;
-  private Drivetrain m_drive;
+  private SwerveDrive m_drive;
 
   /**
    * Constructor for CalculateStdDevs
    * @param posesToUse the amount of poses to take the standard deviation of. More poses will take more time.
    * @param vision The vision
    */
-  public CalculateStdDevs(int posesToUse, Vision vision, Drivetrain drive) {
+  public CalculateStdDevs(int posesToUse, Vision vision, SwerveDrive drive) {
     m_vision = vision;
     m_drive = drive;
     m_arrayLength = posesToUse;

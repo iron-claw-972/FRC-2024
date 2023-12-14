@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.drivetrain.swerve.SwerveDrive;
 import frc.robot.util.LogManager;
 import frc.robot.util.Vision;
 
@@ -14,7 +14,7 @@ import frc.robot.util.Vision;
  * Gathers data on the distance limits of the camera used for vision.
  */
 public class TestVisionDistance extends CommandBase {
-  private final Drivetrain m_drive;
+  private final SwerveDrive m_drive;
   private final Vision m_vision;
   private Translation2d m_visionStartTranslation, m_driveStartTranslation;
   private Pose2d m_currentPose = null;
@@ -38,7 +38,7 @@ public class TestVisionDistance extends CommandBase {
    * @param drive The drivetrain
    * @param vision The vision
    */
-  public TestVisionDistance(double speed, Drivetrain drive, Vision vision){
+  public TestVisionDistance(double speed, SwerveDrive drive, Vision vision){
     addRequirements(drive);
     m_drive = drive;
     m_speed = speed;

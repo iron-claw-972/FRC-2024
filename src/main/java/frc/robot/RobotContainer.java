@@ -178,7 +178,7 @@ public class RobotContainer {
     /**
      * Sets whether the drivetrain uses vision to update odometry
      */
-   public void setVisionEnabled(boolean enabled) {
+   public void enableVision(boolean enabled) {
        drive.enableVision(enabled);
    }
 

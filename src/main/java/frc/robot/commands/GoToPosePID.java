@@ -6,14 +6,14 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.miscConstants.VisionConstants;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.drivetrain.swerve.SwerveDrive;
 
 /**
  * Runs the chassis PIDs to move the robot to a specific pose. 
  */
 public class GoToPosePID extends CommandBase {
 
-  private Drivetrain m_drive; 
+  private SwerveDrive m_drive; 
   
   private Supplier<Pose2d> m_poseSupplier;
   private Pose2d m_pose;
@@ -21,7 +21,7 @@ public class GoToPosePID extends CommandBase {
   /**
    * Runs the chassis PIDs to move the robot to a specific pose. 
    */
-  public GoToPosePID(Supplier<Pose2d> pose, Drivetrain drive) {
+  public GoToPosePID(Supplier<Pose2d> pose, SwerveDrive drive) {
     m_drive = drive; 
     m_poseSupplier = pose;
     

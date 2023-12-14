@@ -6,20 +6,20 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.miscConstants.FieldConstants;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.drivetrain.swerve.SwerveDrive;
 
 /**
  * Aims the robot at the closest April tag
  */
 public class AimAtTag extends CommandBase {
-  Drivetrain m_drive;
+  SwerveDrive m_drive;
   PIDController m_pid;
 
   /**
    * Aims the robot at the closest April tag
    * @param drive The drivetrain
    */
-  public AimAtTag(Drivetrain drive){
+  public AimAtTag(SwerveDrive drive){
     m_drive = drive;
     // Copy drive PID and changetolerance
     m_pid = new PIDController(

@@ -11,17 +11,17 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.auto.PathPlannerCommand;
-import frc.robot.constants.miscConstants.AutoConstants;
+import frc.robot.commands.auto_comm.PathPlannerCommand;
+import frc.robot.constants.AutoConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.drivetrain.swerve.SwerveDrive;
 
 /**
  * Moves the robot to a pose using PathPlanner
  */
 public class GoToPose extends SequentialCommandGroup {
 
-  private Drivetrain m_drive;
+  private SwerveDrive m_drive;
   private Supplier<Pose2d> m_poseSupplier;
   private double m_maxSpeed;
   private double m_maxAccel;
@@ -31,10 +31,10 @@ public class GoToPose extends SequentialCommandGroup {
    * @param poseSupplier The supplier for the pose to use
    * @param drive The drivetrain
    */
-  public GoToPose(Supplier<Pose2d> poseSupplier, Drivetrain drive) {
+  public GoToPose(Supplier<Pose2d> poseSupplier, SwerveDrive drive) {
     this(poseSupplier, AutoConstants.kMaxAutoSpeed, AutoConstants.kMaxAutoAccel, drive);
   }
-  public GoToPose(Pose2d pose, Drivetrain drive){
+  public GoToPose(Pose2d pose, SwerveDrive drive){
     this(()->pose, drive);
   }
 
@@ -45,7 +45,7 @@ public class GoToPose extends SequentialCommandGroup {
    * @param maxAccel The maximum acceleration to use
    * @param drive The drivetrain
    */
-  public GoToPose(Supplier<Pose2d> poseSupplier, double maxSpeed, double maxAccel, Drivetrain drive) {
+  public GoToPose(Supplier<Pose2d> poseSupplier, double maxSpeed, double maxAccel, SwerveDrive drive) {
     m_poseSupplier = poseSupplier;
     m_maxSpeed = maxSpeed;
     m_maxAccel = maxAccel;
