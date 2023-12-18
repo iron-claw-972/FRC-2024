@@ -5,7 +5,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.constants.Constants;
+import frc.robot.constants.GlobalConst;
 import frc.robot.subsystems.drivetrain.swerve.SwerveDrive;
 import frc.robot.util.LogManager;
 import frc.robot.util.Vision;
@@ -90,7 +90,7 @@ public class TestVisionDistance extends CommandBase {
           m_visionDistance-m_driveDistance, (m_visionDistance-m_driveDistance) / m_driveDistance * 100
         );
       }
-      if(Constants.kLogging){
+      if(GlobalConst.kLogging){
         LogManager.addDouble("Vision/Distance Test Drive Distance", m_driveDistance);
         LogManager.addDouble("Vision/Distance Test Vision Distance", m_visionDistance);
         LogManager.addDouble("Vision/Distance Test Vision Error Value", m_visionDistance - m_driveDistance);

@@ -10,8 +10,8 @@ import frc.robot.constants.GlobalConst;
 import lib.COTSFalconSwerveConstants;
 
 /**
- * Constants are, by default, for the competition robot.
- * Constants get changed if the RobotId detected is not the competition robot.
+ * GlobalConst are, by default, for the competition robot.
+ * GlobalConst get changed if the RobotId detected is not the competition robot.
  */
 public class DriveConstants {
 

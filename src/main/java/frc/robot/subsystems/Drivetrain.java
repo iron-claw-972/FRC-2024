@@ -15,10 +15,13 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
-import frc.robot.constants.Constants;
+import frc.robot.constants.GlobalConst;
+import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
+import frc.robot.subsystems.drivetrain.module.ModuleSim;
 import frc.robot.util.LogManager;
+import frc.robot.util.Vision;
 
 import java.util.Arrays;
 
@@ -38,6 +41,9 @@ public class Drivetrain extends SubsystemBase {
     // Odometry
     private final SwerveDrivePoseEstimator poseEstimator;
 
+    // Vision
+    private final Vision vision;
+
     private final WPI_Pigeon2 pigeon;
 
     // PID Controllers for chassis movement
@@ -48,10 +54,16 @@ public class Drivetrain extends SubsystemBase {
     // Displays the field with the robots estimated pose on it
     private final Field2d fieldDisplay;
 
+    // If vision is enabled for drivetrain odometry updating
+    // DO NOT CHANGE THIS HERE, change VisionConstants.ENABLED instead
+    private boolean visionEnabled = true;
+
     /**
      * Creates a new Swerve Style Drivetrain.
      */
-    public Drivetrain() {
+    public Drivetrain(Vision vision) {
+        this.vision = vision;
+
         modules = new ModuleSim[4];
 
         ModuleConstants[] constants = Arrays.copyOfRange(ModuleConstants.values(), 0, 4);
@@ -82,7 +94,7 @@ public class Drivetrain extends SubsystemBase {
                 getModulePositions(),
                 new Pose2d() 
         );
-//        poseEstimator.setVisionMeasurementStdDevs(VisionConstants.kBaseVisionPoseStdDevs);
+       poseEstimator.setVisionMeasurementStdDevs(VisionConstants.VISION_STD_DEVS);
         
         // initialize PID controllers
         xController = new PIDController(DriveConstants.kTranslationalP, 0, DriveConstants.kTranslationalD);
@@ -97,6 +109,7 @@ public class Drivetrain extends SubsystemBase {
 
     @Override
     public void periodic() {
+        updateOdometry();
         updateLogs();
         LogManager.log();
         fieldDisplay.setRobotPose(getPose());
@@ -163,6 +176,10 @@ public class Drivetrain extends SubsystemBase {
     public void updateOdometry() {
         // Updates pose based on encoders and gyro. NOTE: must use yaw directly from gyro!
         poseEstimator.update(Rotation2d.fromDegrees(pigeon.getYaw()), getModulePositions());
+
+        if(VisionConstants.ENABLED && visionEnabled){
+            vision.updateOdometry(poseEstimator);
+        }
     }
 
     /**
@@ -198,7 +215,7 @@ public class Drivetrain extends SubsystemBase {
     public void setChassisSpeeds(ChassisSpeeds chassisSpeeds, boolean isOpenLoop) {
         if (Robot.isSimulation()) {
             pigeon.getSimCollection().addHeading(
-                    +Units.radiansToDegrees(chassisSpeeds.omegaRadiansPerSecond * Constants.LOOP_TIME));
+                    +Units.radiansToDegrees(chassisSpeeds.omegaRadiansPerSecond * GlobalConst.LOOP_TIME));
         }
         SwerveModuleState[] swerveModuleStates = DriveConstants.KINEMATICS.toSwerveModuleStates(chassisSpeeds);
         setModuleStates(swerveModuleStates, isOpenLoop);
