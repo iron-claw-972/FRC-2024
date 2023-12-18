@@ -11,7 +11,9 @@ import frc.robot.commands.GoToPose;
 import frc.robot.commands.drive_comm.SetFormationX;
 import frc.robot.constants.GlobalConst;
 import frc.robot.constants.miscConstants.VisionConstants;
-import frc.robot.subsystems.drivetrain.swerve.SwerveDriveImpl;
+import frc.robot.commands.SetFormationX;
+import frc.robot.constants.miscConstants.OIConstants;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.MathUtils;
 import frc.robot.util.Node;
 import lib.controllers.GameController;
@@ -31,10 +33,18 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
   private double selectTimestamp = 0;
   
   private final GameController kDriver = new GameController(GlobalConst.DRIVER_JOY);
+  
+  public GameControllerDriverConfig(Drivetrain drive, ShuffleboardTab controllerTab, boolean shuffleboardUpdates) {
+    super(drive, controllerTab, shuffleboardUpdates);
+  }
 
   @Override
-  public void configureControls() { 
-    // set the wheels to X
+  public void configureControls() {
+    // Reset yaw to be away from driver
+    kDriver.get(Button.START).onTrue(new InstantCommand(() -> super.getDrivetrain().setYaw(
+      new Rotation2d(DriverStation.getAlliance() == Alliance.Blue ? 0 : Math.PI)
+      
+      // set the wheels to X
     kDriver.get(Button.X).onTrue(new SetFormationX(super.getDrivetrain()));
     
     // Resets the modules to absolute if they are having the unresolved zeroing error
@@ -66,10 +76,10 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     ), getDrivetrain()));
   }
 
-    public GameControllerDriverConfig(SwerveDriveImpl drive, ShuffleboardTab controllerTab, boolean shuffleboardUpdates) {
-        super(drive, controllerTab, shuffleboardUpdates);
-    }
-
+  /**
+   * Selects a grid, column, or row
+   * @param value 1 for left/bottom, 2 for middl, 3 for right/top
+   */
   private void select(int value){
     double timestamp = Timer.getFPGATimestamp();
     if(value == 0 || timestamp-selectTimestamp > 5){

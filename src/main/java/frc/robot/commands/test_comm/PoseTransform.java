@@ -5,22 +5,22 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.constants.TestConstants;
-import frc.robot.subsystems.drivetrain.swerve.SwerveDriveImpl;
+import frc.robot.constants.miscConstants.TestConstants;
+import frc.robot.subsystems.Drivetrain;
 
 /**
  * Tests the odometry of the robot by driving a certain distance and calculating the error.
  */
 public class PoseTransform extends CommandBase {
 
-    private final SwerveDriveImpl drive;
+    private final Drivetrain drive;
 
     private double startTime;
     private Pose2d finalPose;
     private final Transform2d distanceToMove;
     private Pose2d error;
 
-    public PoseTransform(SwerveDriveImpl drive, Transform2d poseTransform) {
+    public PoseTransform(Drivetrain drive, Transform2d poseTransform) {
         this.drive = drive;
         // finalPose is position after robot moves from current position-- startPose-- by the values that are inputted-- distanceToMove
         distanceToMove = poseTransform;
@@ -36,7 +36,7 @@ public class PoseTransform extends CommandBase {
 
     @Override
     public void execute() {
-        drive.runChassisPID(finalPose.getX(), finalPose.getY(), finalPose.getRotation().getRadians());
+        drive.driveWithPID(finalPose.getX(), finalPose.getY(), finalPose.getRotation().getRadians());
     }
 
     @Override

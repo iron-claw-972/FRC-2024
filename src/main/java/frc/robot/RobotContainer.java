@@ -2,15 +2,20 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.constants.GlobalConst;
 import frc.robot.subsystems.SubsystemFactory;
 import frc.robot.subsystems.drivetrain.swerve.SwerveDrive;
+import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.controls.BaseDriverConfig;
+import frc.robot.controls.GameControllerDriverConfig;
+import frc.robot.controls.PS5ControllerDriverConfig;
+import frc.robot.subsystems.Drivetrain;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -41,14 +46,25 @@ public class RobotContainer {
 
 
     // Controllers are defined here
-//    private final BaseDriverConfig driver;
+    private final BaseDriverConfig driver;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
-    public RobotContainer(RobotId robotId) {
+    public RobotContainer() {
+        drive = new Drivetrain();
+        driver = new GameControllerDriverConfig(drive, controllerTab, false);
 
-        drive = (SwerveDrive) SubsystemFactory.get(SwerveDrive.class);
+        driver.configureControls();
+
+        drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
+        drivetrainTab.add("feild", drive.getFeild());
+        drivetrainTab.addDouble("module1", ()->drive.getModules()[0].getAngle().getDegrees()%360);
+        drivetrainTab.addDouble("module2", ()->drive.getModules()[1].getAngle().getDegrees()%360);
+        drivetrainTab.addDouble("module3", ()->drive.getModules()[2].getAngle().getDegrees()%360);
+        drivetrainTab.addDouble("module4", ()->drive.getModules()[3].getAngle().getDegrees()%360);
+
+
 
 //        switch (robotId) {
 //            case SwerveCompetition:
@@ -124,10 +140,6 @@ public class RobotContainer {
         LiveWindow.setEnabled(false);
 
         autoTab.add("Auto Chooser", autoCommand);
-
-        if (GlobalConst.USE_TELEMETRY) loadCommandSchedulerShuffleboard();
-
-        addTestCommands();
     }
 
     /**
@@ -139,35 +151,7 @@ public class RobotContainer {
         return autoCommand.getSelected();
     }
 
-    /**
-     * Adds the test commands to shuffleboard, so they can be run that way.
-     */
-    public void addTestCommands() {
-//        GenericEntry testEntry = testTab.add("Test Results", false).getEntry();
-//        testTab.add("Blinkin Id", 0.65).getEntry();
-//        testTab.add("Cancel Command", new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));
-//
-//        if (drive != null) {
-//            drive.addTestCommands(testTab, testEntry);
-//        }
-//
-//        if (vision != null) {
-//            vision.addTestCommands(testTab, testEntry, drive);
-//        }
-    }
-
-
-    /**
-     * Loads the command scheduler shuffleboard which will add event markers whenever a command finishes, ends, or is interrupted.
-     */
-    public void loadCommandSchedulerShuffleboard() {
-        // Set the scheduler to log Shuffleboard events for command initialize, interrupt, finish
-        CommandScheduler.getInstance().onCommandInitialize(command -> Shuffleboard.addEventMarker("Command initialized", command.getName(), EventImportance.kNormal));
-        CommandScheduler.getInstance().onCommandInterrupt(command -> Shuffleboard.addEventMarker("Command interrupted", command.getName(), EventImportance.kNormal));
-        CommandScheduler.getInstance().onCommandFinish(command -> Shuffleboard.addEventMarker("Command finished", command.getName(), EventImportance.kNormal));
-    }
-
-
+    // TODO
     /**
      * Resets the swerve modules to their absolute positions.
      */

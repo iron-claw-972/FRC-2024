@@ -1,5 +1,11 @@
 package frc.robot.commands;
 
+import com.pathplanner.lib.PathPoint;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -17,14 +23,14 @@ import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.drivetrain.swerve.SwerveDrive;
 
 /**
- * Moves the robot to a pose using PathPlanner
- */
+* Moves the robot to a pose using PathPlanner
+*/
 public class GoToPose extends SequentialCommandGroup {
 
-  private SwerveDrive m_drive;
-  private Supplier<Pose2d> m_poseSupplier;
-  private double m_maxSpeed;
-  private double m_maxAccel;
+  private SwerveDrive drive;
+  private Supplier<Pose2d> poseSupplier;
+  private double maxSpeed;
+  private double maxAccel;
 
   /**
    * Uses PathPlanner to go to a pose
@@ -32,7 +38,7 @@ public class GoToPose extends SequentialCommandGroup {
    * @param drive The drivetrain
    */
   public GoToPose(Supplier<Pose2d> poseSupplier, SwerveDrive drive) {
-    this(poseSupplier, AutoConstants.kMaxAutoSpeed, AutoConstants.kMaxAutoAccel, drive);
+    this(poseSupplier, AutoConstants.MAX_AUTO_SPEED, AutoConstants.MAX_AUTO_ACCEL, drive);
   }
   public GoToPose(Pose2d pose, SwerveDrive drive){
     this(()->pose, drive);
@@ -46,10 +52,10 @@ public class GoToPose extends SequentialCommandGroup {
    * @param drive The drivetrain
    */
   public GoToPose(Supplier<Pose2d> poseSupplier, double maxSpeed, double maxAccel, SwerveDrive drive) {
-    m_poseSupplier = poseSupplier;
-    m_maxSpeed = maxSpeed;
-    m_maxAccel = maxAccel;
-    m_drive = drive;
+    this.poseSupplier = poseSupplier;
+    this.maxSpeed = maxSpeed;
+    this.maxAccel = maxAccel;
+    this.drive = drive;
     addCommands(
       new InstantCommand(()->drive.enableVision(VisionConstants.ENABLED_GO_TO_POSE)),
       new SupplierCommand(() -> createCommand(), drive),
@@ -64,8 +70,8 @@ public class GoToPose extends SequentialCommandGroup {
     Command command;
     // Gets the current position of the robot for the start of the path
     PathPoint point1 = PathPoint.fromCurrentHolonomicState(
-      m_drive.getPose(),
-      m_drive.getChassisSpeeds()
+      drive.getPose(),
+      drive.getChassisSpeeds()
     
       // set the control lengths. This controls how strong the heading is
       // aka how much the robot will curve to get to the point. 
@@ -73,7 +79,7 @@ public class GoToPose extends SequentialCommandGroup {
     ).withControlLengths(0.001, 0.001);
 
     // get the desired score pose
-    Pose2d pose = m_poseSupplier.get();
+    Pose2d pose = poseSupplier.get();
 
     // Uses the pose to find the end point for the path
     PathPoint point2 = new PathPoint(
@@ -89,14 +95,14 @@ public class GoToPose extends SequentialCommandGroup {
     // Creates the command using the two points
     command = new PathPlannerCommand(
       new ArrayList<PathPoint>(List.of(point1, point2)),
-      m_drive,
+      drive,
       false,
-      m_maxSpeed,
-      m_maxAccel
+      maxSpeed,
+      maxAccel
     );
 
     // get the distance to the pose.
-    double dist = m_drive.getPose().minus(pose).getTranslation().getNorm();
+    double dist = drive.getPose().minus(pose).getTranslation().getNorm();
 
     // if greater than 6m or less than 10 cm, don't run it. If the path is too small pathplanner makes weird paths.
     if (dist > 6) {

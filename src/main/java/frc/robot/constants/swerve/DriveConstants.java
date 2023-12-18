@@ -15,7 +15,7 @@ import lib.COTSFalconSwerveConstants;
  */
 public class DriveConstants {
 
-    public static double kRobotWidthWithBumpers = Units.inchesToMeters(26 + 3.75 * 2);
+    public static double kRobotWidthWithBumpers = Units.inchesToMeters(26.5 + 3.25 * 2);
 
     public static double kWheelRadius = Units.inchesToMeters(2);
 
@@ -40,7 +40,7 @@ public class DriveConstants {
     // TODO: tune this better.
     public static double kMaxAngularAccel = 8 * 2 * Math.PI; // 8 rotations per second per second
 
-    public static int kPigeon = 0;
+    public static int kPigeon = 13;
 
     public static Rotation2d kStartingHeading = new Rotation2d();
 
@@ -51,48 +51,29 @@ public class DriveConstants {
             new Translation2d(-DriveConstants.kTrackWidth / 2, -DriveConstants.kTrackWidth / 2)
     );
 
-    public static int kDriveFrontLeft = 20;
-    public static int kSteerFrontLeft = 15;
-    public static int kEncoderFrontLeft = 40;
-    public static double kSteerOffsetFrontLeft = 0.058291152119637;//-3.060285486280918+Math.PI;
+    public static int kDriveFrontLeft = 1;
+    public static int kSteerFrontLeft = 2;
+    public static int kEncoderFrontLeft = 3;
+    public static double kSteerOffsetFrontLeft = 89.5453;//0.058291152119637;//-3.060285486280918+Math.PI;
 
-    public static int kDriveFrontRight = 11;
-    public static int kSteerFrontRight = 30;
-    public static int kEncoderFrontRight = 41;
-    public static double kSteerOffsetFrontRight = -2.994324445724487;//-3.001994334161282;
+    public static int kDriveFrontRight = 10;
+    public static int kSteerFrontRight = 11;
+    public static int kEncoderFrontRight = 12;
+    public static double kSteerOffsetFrontRight = 292.0605;//-2.994324445724487;//-3.001994334161282;
 
-    public static int kDriveBackLeft = 16;
-    public static int kSteerBackLeft = 18;
-    public static int kEncoderBackLeft = 42;
-    public static double kSteerOffsetBackLeft = -2.540267050266266;//0.650406539440155+Math.PI;
+    public static int kDriveBackLeft = 7;
+    public static int kSteerBackLeft = 8;
+    public static int kEncoderBackLeft = 9;
+    public static double kSteerOffsetBackLeft = -10.2403;//-2.540267050266266;//0.650406539440155+Math.PI;
 
-    public static int kDriveBackRight = 32;
-    public static int kSteerBackRight = 35;
-    public static int kEncoderBackRight = 43;
-    public static double kSteerOffsetBackRight = 2.626169800758362;//2.771897681057453;
+    public static int kDriveBackRight = 4;
+    public static int kSteerBackRight = 5;
+    public static int kEncoderBackRight = 6;
+    public static double kSteerOffsetBackRight = 157.1482;//2.626169800758362;//2.771897681057453;
 
     // heading PID
     public static double kHeadingP = 4.6;
     public static double kHeadingD = 0;
-
-    //balance PID
-    public static double kBalanceP = 0.05;
-    public static double kBalanceI = 0;
-    public static double kBalanceD = 0;
-    // max output in m/s
-    public static final double kBalanceMaxOutput = 1.5; // 0.7
-
-    //balance timer
-    // when the balance command starts, it will run the pid normally until
-    // the angle decreases by at least kMaxAngleDiffDegrees or until kBalanceNoStopPeriod elapses.
-    // Then, every kBalanceStopInterval seconds, it will stop the motors
-    // for kBalanceStopDuration seconds to help give the charge station some time to balance.
-    // "A non-linear system requires non-linear control" - jerry
-    // "If it's stupid but it works..." - Richie
-    public static double kBalanceNoStopPeriod = 1.2;
-    public static double kBalanceStopInterval = 0.3; // 0.5
-    public static double kBalanceStopDuration = 0.15;
-    public static double kMaxAngleDiffDegrees = 1.0;
 
     //translational PID
     public static double kTranslationalP = 0.25;
@@ -171,19 +152,19 @@ public class DriveConstants {
             kEncoderFrontLeft = 3;
             kSteerOffsetFrontLeft = -1.58;
 
-            kDriveFrontRight = 4;
-            kSteerFrontRight = 5;
-            kEncoderFrontRight = 6;
+            kDriveFrontRight = 10;
+            kSteerFrontRight = 11;
+            kEncoderFrontRight = 12;
             kSteerOffsetFrontRight = 1.935;
 
             kDriveBackLeft = 7;
             kSteerBackLeft = 8;
             kEncoderBackLeft = 9;
-            kSteerOffsetBackLeft = -3.1415;
+            kSteerOffsetBackLeft = -8;
 
-            kDriveBackRight = 10;
-            kSteerBackRight = 11;
-            kEncoderBackRight = 12;
+            kDriveBackRight = 4;
+            kSteerBackRight = 5;
+            kEncoderBackRight = 6;
             kSteerOffsetBackRight = -0.383494421839714;
 
             // CAN
