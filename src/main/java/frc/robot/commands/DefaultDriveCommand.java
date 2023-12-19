@@ -41,7 +41,7 @@ public class DefaultDriveCommand extends CommandBase {
         sideTranslation *= slowFactor;
         rotation *= driver.getIsSlowMode() ? DriveConstants.kSlowRotFactor : 1;
 
-        int allianceReversal = DriverStation.getAlliance() == Alliance.Blue ? 1 : -1;
+        int allianceReversal = DriverStation.getAlliance() == Alliance.Red ? 1 : -1;
         forwardTranslation *= allianceReversal;
         sideTranslation *= allianceReversal;
 

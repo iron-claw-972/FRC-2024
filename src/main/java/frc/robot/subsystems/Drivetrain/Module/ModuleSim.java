@@ -19,7 +19,7 @@ public class ModuleSim extends SubsystemBase {
     private double currentDrivePositionMeters = 0;
     private double currentSpeed = 0;
 
-    private SwerveModuleState desiredState;
+    private SwerveModuleState desiredState = new SwerveModuleState();
 
 
     protected boolean stateDeadband = true;

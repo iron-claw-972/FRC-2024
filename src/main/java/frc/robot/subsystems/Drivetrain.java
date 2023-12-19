@@ -11,6 +11,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -69,9 +70,15 @@ public class Drivetrain extends SubsystemBase {
 
         ModuleConstants[] constants = Arrays.copyOfRange(ModuleConstants.values(), 0, 4);
         
-        Arrays.stream(constants).forEach(moduleConstants -> {
-            modules[moduleConstants.ordinal()] = new Module(moduleConstants);
-        });
+        if(RobotBase.isReal()){
+            Arrays.stream(constants).forEach(moduleConstants -> {
+                modules[moduleConstants.ordinal()] = new Module(moduleConstants);
+            });
+        }else{
+            Arrays.stream(constants).forEach(moduleConstants -> {
+                modules[moduleConstants.ordinal()] = new ModuleSim(moduleConstants);
+            });
+        }
 
         // The Pigeon is a gyroscope and implements WPILib's Gyro interface
         pigeon = new WPI_Pigeon2(DriveConstants.kPigeon, DriveConstants.kPigeonCAN);
@@ -111,7 +118,10 @@ public class Drivetrain extends SubsystemBase {
     @Override
     public void periodic() {
         updateOdometry();
-        updateLogs();
+        //TODO: This throws an exception in the simulator. Fix it.
+        if(RobotBase.isReal()){
+            updateLogs();
+        }
         LogManager.log();
         fieldDisplay.setRobotPose(getPose());
     }
@@ -178,7 +188,7 @@ public class Drivetrain extends SubsystemBase {
         // Updates pose based on encoders and gyro. NOTE: must use yaw directly from gyro!
         poseEstimator.update(Rotation2d.fromDegrees(pigeon.getYaw()), getModulePositions());
 
-        if(VisionConstants.ENABLED && visionEnabled){
+        if(RobotBase.isReal() && VisionConstants.ENABLED && visionEnabled){
             vision.updateOdometry(poseEstimator);
         }
     }
