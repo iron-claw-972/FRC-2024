@@ -88,7 +88,7 @@ public class Node {
     // Uses the April tag's rotation and the values previously calculated
     pose = new Pose3d(x, y, z, tag.getRotation());
     // Adds the grid distance to the edge of the grid to find where the robot should be
-    // The robot should be at 180 degrees (facing left) if it's blue and 0 degrees (π radians) if it's red
+    // The robot should be at 180 degrees (facing left) if it's blue and 0 degrees (pi radians) if it's red
     scorePose = new Pose2d(tag.getX()+Units.inchesToMeters(14.25+VisionConstants.GRID_DISTANCE)*(alliance==Alliance.Red?-1:1), y, new Rotation2d(alliance==Alliance.Red?0:Math.PI));
   }
 }
