@@ -67,15 +67,15 @@ public abstract class BaseDriverConfig {
     }
 
     public double getForwardTranslation() {
-        return MathUtils.expoMS(MathUtil.applyDeadband(getRawForwardTranslation(), OIConstants.DEADBAND), 2) * DriveConstants.kMaxSpeed * 1;
+        return MathUtils.expoMS(MathUtil.applyDeadband(getRawForwardTranslation(), GlobalConst.DEADBAND), 2) * DriveConstants.kMaxSpeed * 1;
     }
 
     public double getSideTranslation() {
-        return MathUtils.expoMS(MathUtil.applyDeadband(getRawSideTranslation(), OIConstants.DEADBAND), 2) * DriveConstants.kMaxSpeed * 1;
+        return MathUtils.expoMS(MathUtil.applyDeadband(getRawSideTranslation(), GlobalConst.DEADBAND), 2) * DriveConstants.kMaxSpeed * 1;
     }
 
     public double getRotation() {
-        return MathUtils.expoMS(MathUtil.applyDeadband(getRawRotation(), OIConstants.DEADBAND), 2) * DriveConstants.kMaxAngularSpeed * 1;
+        return MathUtils.expoMS(MathUtil.applyDeadband(getRawRotation(), GlobalConst.DEADBAND), 2) * DriveConstants.kMaxAngularSpeed * 1;
     }
 
     public double getHeading() {

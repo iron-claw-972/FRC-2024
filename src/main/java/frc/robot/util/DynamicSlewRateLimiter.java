@@ -37,8 +37,8 @@ public class DynamicSlewRateLimiter {
      * @param initialValue      The initial value of the input.
      */
     public DynamicSlewRateLimiter(double positiveRateLimit, double negativeRateLimit, double initialValue) {
-        positiveRateLimit = positiveRateLimit;
-        negativeRateLimit = negativeRateLimit;
+        this.positiveRateLimit = positiveRateLimit;
+        this.negativeRateLimit = negativeRateLimit;
         prevVal = initialValue;
         prevTime = WPIUtilJNI.now() * 1e-6;
     }

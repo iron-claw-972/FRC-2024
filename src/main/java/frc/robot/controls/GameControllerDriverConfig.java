@@ -11,8 +11,6 @@ import frc.robot.commands.GoToPose;
 import frc.robot.commands.drive_comm.SetFormationX;
 import frc.robot.constants.GlobalConst;
 import frc.robot.constants.miscConstants.VisionConstants;
-import frc.robot.commands.SetFormationX;
-import frc.robot.constants.miscConstants.OIConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.MathUtils;
 import frc.robot.util.Node;
@@ -42,7 +40,7 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
   public void configureControls() {
     // Reset yaw to be away from driver
     kDriver.get(Button.START).onTrue(new InstantCommand(() -> super.getDrivetrain().setYaw(
-      new Rotation2d(DriverStation.getAlliance() == Alliance.Blue ? 0 : Math.PI)
+      new Rotation2d(DriverStation.getAlliance() == Alliance.Blue ? 0 : Math.PI))));
       
       // set the wheels to X
     kDriver.get(Button.X).onTrue(new SetFormationX(super.getDrivetrain()));

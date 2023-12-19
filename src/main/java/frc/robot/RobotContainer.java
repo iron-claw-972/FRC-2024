@@ -5,17 +5,13 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.constants.GlobalConst;
-import frc.robot.subsystems.SubsystemFactory;
-import frc.robot.subsystems.drivetrain.swerve.SwerveDrive;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
-import frc.robot.controls.PS5ControllerDriverConfig;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.util.Vision;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -42,7 +38,8 @@ public class RobotContainer {
 //    private final Vision vision;
 
     // The robot's subsystems are defined here...
-    private final SwerveDrive drive;
+    private final Drivetrain drive;
+    private final Vision vision;
 
 
     // Controllers are defined here
@@ -52,7 +49,10 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        drive = new Drivetrain();
+        vision = new Vision(visionTab, VisionConstants.CAMERAS);
+
+        drive = new Drivetrain(vision);
+        vision.setUpSmartDashboardCommandButtons(drive);
         driver = new GameControllerDriverConfig(drive, controllerTab, false);
 
         driver.configureControls();
@@ -162,8 +162,8 @@ public class RobotContainer {
     /**
      * Sets whether the drivetrain uses vision to update odometry
      */
-   public void enableVision(boolean enabled) {
-       drive.enableVision(enabled);
+   public void setVisionEnabled(boolean enabled) {
+       drive.setVisionEnabled(enabled);
    }
 
 }

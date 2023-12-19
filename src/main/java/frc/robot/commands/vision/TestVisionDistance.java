@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.GlobalConst;
-import frc.robot.subsystems.drivetrain.swerve.SwerveDrive;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.LogManager;
 import frc.robot.util.Vision;
 
@@ -14,7 +14,7 @@ import frc.robot.util.Vision;
  * Gathers data on the distance limits of the camera used for vision.
  */
 public class TestVisionDistance extends CommandBase {
-  private final SwerveDrive m_drive;
+  private final Drivetrain m_drive;
   private final Vision m_vision;
   private Translation2d m_visionStartTranslation, m_driveStartTranslation;
   private Pose2d m_currentPose = null;
@@ -38,7 +38,7 @@ public class TestVisionDistance extends CommandBase {
    * @param drive The drivetrain
    * @param vision The vision
    */
-  public TestVisionDistance(double speed, SwerveDrive drive, Vision vision){
+  public TestVisionDistance(double speed, Drivetrain drive, Vision vision){
     addRequirements(drive);
     m_drive = drive;
     m_speed = speed;
@@ -54,7 +54,7 @@ public class TestVisionDistance extends CommandBase {
     m_endTimer.reset();
     m_printTimer.restart();
 
-    m_drive.enableVision(false);
+    m_drive.setVisionEnabled(false);
 
     m_currentPose = m_vision.getPose2d(m_drive.getPose());
     m_visionStartTranslation = m_currentPose.getTranslation();
@@ -90,7 +90,7 @@ public class TestVisionDistance extends CommandBase {
           m_visionDistance-m_driveDistance, (m_visionDistance-m_driveDistance) / m_driveDistance * 100
         );
       }
-      if(GlobalConst.kLogging){
+      if(GlobalConst.DO_LOGGING){
         LogManager.addDouble("Vision/Distance Test Drive Distance", m_driveDistance);
         LogManager.addDouble("Vision/Distance Test Vision Distance", m_visionDistance);
         LogManager.addDouble("Vision/Distance Test Vision Error Value", m_visionDistance - m_driveDistance);
@@ -106,7 +106,7 @@ public class TestVisionDistance extends CommandBase {
    */
   @Override
   public void end(boolean interrupted) {
-    m_drive.enableVision(true);
+    m_drive.setVisionEnabled(true);
     m_drive.stop();
   }
 

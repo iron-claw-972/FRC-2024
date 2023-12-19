@@ -6,7 +6,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.GlobalConst;
-import frc.robot.subsystems.drivetrain.swerve.SwerveDrive;;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.LogManager;
 import frc.robot.util.MathUtils;
 import frc.robot.util.Vision;
@@ -19,14 +19,14 @@ public class CalculateStdDevs extends CommandBase {
   private ArrayList<Pose2d> m_poses;
   private int m_arrayLength;
   private Timer m_endTimer;
-  private SwerveDrive m_drive;
+  private Drivetrain m_drive;
 
   /**
    * Constructor for CalculateStdDevs
    * @param posesToUse the amount of poses to take the standard deviation of. More poses will take more time.
    * @param vision The vision
    */
-  public CalculateStdDevs(int posesToUse, Vision vision, SwerveDrive drive) {
+  public CalculateStdDevs(int posesToUse, Vision vision, Drivetrain drive) {
     m_vision = vision;
     m_drive = drive;
     m_arrayLength = posesToUse;
@@ -42,7 +42,7 @@ public class CalculateStdDevs extends CommandBase {
     // an ArrayList prevents issues if the command ends early, and makes checking if the command has finished easy
     m_poses = new ArrayList<Pose2d>();
 
-    m_drive.enableVision(false);
+    m_drive.setVisionEnabled(false);
   }
 
   /**
@@ -76,7 +76,7 @@ public class CalculateStdDevs extends CommandBase {
    */
   @Override
   public void end(boolean interrupted) {
-    m_drive.enableVision(true);
+    m_drive.setVisionEnabled(true);
 
     // If the array is empty, don't try to calculate std devs
     if (m_poses.size() == 0) {
@@ -110,7 +110,7 @@ public class CalculateStdDevs extends CommandBase {
     // Print and log values
     System.out.printf("Standard deviation values:\nX: %.5f\nY: %.5f\nRotation: %.5f\nDistance: %.5f\n",
       stdDevX, stdDevY, stdDevRot, distance);
-    if (GlobalConst.kLogging) {
+    if (GlobalConst.DO_LOGGING) {
       LogManager.addDouble("Vision/StdDevTest/StdDevX", stdDevX);
       LogManager.addDouble("Vision/StdDevTest/StdDevY", stdDevY);
       LogManager.addDouble("Vision/StdDevTest/StdDevRotation", stdDevRot);

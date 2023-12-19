@@ -35,7 +35,7 @@ import frc.robot.constants.GlobalConst;
 import frc.robot.constants.miscConstants.FieldConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
-import frc.robot.subsystems.drivetrain.swerve.SwerveDrive;
+import frc.robot.subsystems.Drivetrain;
 
 // Vision and it's commands are adapted from Iron Claw's FRC2022, FRC2023, and: https://www.youtube.com/watch?v=TG9KAa2EGzQ&t=1439s
 public class Vision {
@@ -74,7 +74,7 @@ public class Vision {
   /**
    * Set up the vision commands on SmartDashboard so we can turn them on/off for testing
    */
-  public void setUpSmartDashboardCommandButtons(SwerveDrive drive){
+  public void setUpSmartDashboardCommandButtons(Drivetrain drive){
     SmartDashboard.putData("Calculate vision std devs", new CalculateStdDevs(1000, this, drive));
     m_shuffleboardTab.add("Calculate std devs", new CalculateStdDevs(1000, this, drive));
     SmartDashboard.putData("Vision aim at tag", new AimAtTag(drive));

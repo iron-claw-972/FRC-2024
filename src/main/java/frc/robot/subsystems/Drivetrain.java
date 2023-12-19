@@ -20,6 +20,7 @@ import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
 import frc.robot.subsystems.drivetrain.module.ModuleSim;
+import frc.robot.subsystems.drivetrain.module.Module;
 import frc.robot.util.LogManager;
 import frc.robot.util.Vision;
 
@@ -55,7 +56,7 @@ public class Drivetrain extends SubsystemBase {
     private final Field2d fieldDisplay;
 
     // If vision is enabled for drivetrain odometry updating
-    // DO NOT CHANGE THIS HERE, change VisionConstants.ENABLED instead
+    // DO NOT CHANGE THIS HERE TO DISABLE VISION, change VisionConstants.ENABLED instead
     private boolean visionEnabled = true;
 
     /**
@@ -254,6 +255,10 @@ public class Drivetrain extends SubsystemBase {
         Arrays.stream(modules).forEach(module -> module.setStateDeadband(stateDeadBand));
     }
 
+    public void setVisionEnabled(boolean enabled){
+        visionEnabled = enabled;
+    }
+
 
     /**
      * Calculates chassis speed of drivetrain using the current SwerveModuleStates
@@ -367,7 +372,7 @@ public class Drivetrain extends SubsystemBase {
             modules[3].getDriveMotor().getBusVoltage(),
             modules[3].getDriveMotor().getMotorOutputVoltage()
           };
-          LogManager.addDoubleArray("Swerve Voltage", desiredStates);
+          LogManager.addDoubleArray("Swerve Voltage", moduleVoltage);
         
         // double[] errorStates = {
         //   desiredStates[0] - actualStates[0],

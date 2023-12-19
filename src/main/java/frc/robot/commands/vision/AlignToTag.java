@@ -5,19 +5,19 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.GoToPose;
 import frc.robot.constants.miscConstants.FieldConstants;
-import frc.robot.subsystems.drivetrain.swerve.SwerveDrive;
+import frc.robot.subsystems.Drivetrain;
 
 /**
  * Aligns to the y coordinate of the closest April tag and turns toward it
  */
 public class AlignToTag extends SequentialCommandGroup {
-    private SwerveDrive m_drive;
+    private Drivetrain m_drive;
 
     /**
      * Aligns to the y coordinate of the closest April tag and turns toward it
      * @param drive The drivetrain
      */
-    public AlignToTag(SwerveDrive drive) {
+    public AlignToTag(Drivetrain drive) {
         m_drive = drive;
         addCommands(new GoToPose(()->getPose(), drive).withTimeout(2));
     }

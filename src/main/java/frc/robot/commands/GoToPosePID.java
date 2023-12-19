@@ -1,13 +1,11 @@
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drivetrain;
+package frc.robot.commands;
 
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.miscConstants.VisionConstants;
+import frc.robot.subsystems.Drivetrain;
 
 /**
  * Runs the chassis PIDs to move the robot to a specific pose. 
@@ -34,7 +32,7 @@ public class GoToPosePID extends CommandBase {
   @Override
   public void initialize() {
     pose = poseSupplier.get();
-    drive.enableVision(VisionConstants.ENABLED_GO_TO_POSE);
+    drive.setVisionEnabled(VisionConstants.ENABLED_GO_TO_POSE);
   }
 
   @Override
@@ -44,8 +42,8 @@ public class GoToPosePID extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    m_drive.stop();
-    m_drive.enableVision(true);
+    drive.stop();
+    drive.setVisionEnabled(true);
   }
 
   @Override

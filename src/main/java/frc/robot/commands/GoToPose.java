@@ -1,11 +1,5 @@
 package frc.robot.commands;
 
-import com.pathplanner.lib.PathPoint;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -57,9 +51,9 @@ public class GoToPose extends SequentialCommandGroup {
     this.maxAccel = maxAccel;
     this.drive = drive;
     addCommands(
-      new InstantCommand(()->drive.enableVision(VisionConstants.ENABLED_GO_TO_POSE)),
+      new InstantCommand(()->drive.setVisionEnabled(VisionConstants.ENABLED_GO_TO_POSE)),
       new SupplierCommand(() -> createCommand(), drive),
-      new InstantCommand(()->drive.enableVision(true))
+      new InstantCommand(()->drive.setVisionEnabled(true))
     );
   }
 
@@ -113,6 +107,6 @@ public class GoToPose extends SequentialCommandGroup {
       DriverStation.reportWarning("Alignment Path too short, doing nothing, GoToPose.java", false);
     }
 
-    return command.handleInterrupt(()->m_drive.enableVision(true));
+    return command.handleInterrupt(()->drive.setVisionEnabled(true));
   }
 }
