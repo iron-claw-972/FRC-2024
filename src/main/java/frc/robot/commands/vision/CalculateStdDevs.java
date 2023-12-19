@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.constants.GlobalConst;
+import frc.robot.constants.Constants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.LogManager;
 import frc.robot.util.MathUtils;
@@ -110,7 +110,7 @@ public class CalculateStdDevs extends CommandBase {
     // Print and log values
     System.out.printf("Standard deviation values:\nX: %.5f\nY: %.5f\nRotation: %.5f\nDistance: %.5f\n",
       stdDevX, stdDevY, stdDevRot, distance);
-    if (GlobalConst.DO_LOGGING) {
+    if (Constants.DO_LOGGING) {
       LogManager.addDouble("Vision/StdDevTest/StdDevX", stdDevX);
       LogManager.addDouble("Vision/StdDevTest/StdDevY", stdDevY);
       LogManager.addDouble("Vision/StdDevTest/StdDevRotation", stdDevRot);

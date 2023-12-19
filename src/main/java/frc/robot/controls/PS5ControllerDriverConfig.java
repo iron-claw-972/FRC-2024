@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import frc.robot.commands.drive_comm.SetFormationX;
-import frc.robot.constants.GlobalConst;
+import frc.robot.constants.Constants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.MathUtils;
 import lib.controllers.PS5Controller;
@@ -19,7 +19,7 @@ import lib.controllers.PS5Controller.PS5Button;
  */
 public class PS5ControllerDriverConfig extends BaseDriverConfig {
 
-    private final PS5Controller kDriver = new PS5Controller(GlobalConst.DRIVER_JOY);
+    private final PS5Controller kDriver = new PS5Controller(Constants.DRIVER_JOY);
 
     public PS5ControllerDriverConfig(Drivetrain drive, ShuffleboardTab controllerTab, boolean shuffleboardUpdates) {
         super(drive, controllerTab, shuffleboardUpdates);

@@ -1,7 +1,7 @@
 package frc.robot.util;
 
 import edu.wpi.first.math.MathUtil;
-import frc.robot.constants.GlobalConst;
+import frc.robot.constants.Constants;
 
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class MathUtils {
      * @return the input rescaled and to fit [-1, -DEADBAND], [DEADBAND, 1]
      */
     public static double deadband(double input) {
-        return deadband(input, GlobalConst.DEADBAND);
+        return deadband(input, Constants.DEADBAND);
     }
 
     /**

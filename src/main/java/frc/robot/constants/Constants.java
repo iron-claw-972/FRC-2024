@@ -8,7 +8,7 @@ import edu.wpi.first.math.util.Units;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GlobalConst {
+public class Constants {
 
     // constants:   
 
