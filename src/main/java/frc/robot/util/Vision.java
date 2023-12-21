@@ -95,7 +95,7 @@ public class Vision {
 
     // Puts the cameras in an array list
     for (int i = 0; i < camList.size(); i++) {
-      m_cameras.add(new VisionCamera(camList.get(i).getFirst(), camList.get(i).getSecond()));
+      // m_cameras.add(new VisionCamera(camList.get(i).getFirst(), camList.get(i).getSecond()));
     }
   }
 
