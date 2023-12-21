@@ -165,7 +165,7 @@ public class Vision {
         // distance[i],
         objectClass[i],
         // VisionConstants.CAMERAS.get((int)cameraIndex[i]).getSecond()
-        VisionConstants.kCameras.get(0).getSecond()
+        VisionConstants.CAMERAS.get(0).getSecond()
       );
     }
     return objects;
