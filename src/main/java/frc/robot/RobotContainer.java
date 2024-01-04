@@ -71,8 +71,6 @@ public class RobotContainer {
         
         m_vision.setUpSmartDashboardCommandButtons(m_drive);
 
-        m_vision.setUpSmartDashboardCommandButtons(m_drive);
-
         m_driver = new GameControllerDriverConfig(m_drive, m_controllerTab, false);
   
         // load paths before auto starts

@@ -194,7 +194,7 @@ public class Vision {
    * Set up the vision commands on SmartDashboard so we can turn them on/off for testing
    */
   public void setUpSmartDashboardCommandButtons(Drivetrain drive){
-    m_shuffleboardTab.add("Return Data", new ReturnData(this));
+    m_shuffleboardTab.add("Return Data a", new ReturnData(this));
     SmartDashboard.putData("Vision Return Data", new ReturnData(this));
     m_shuffleboardTab.add("Acquire Game Piece PID", new AcquireGamePiecePID(drive, this));
     SmartDashboard.putData("Acquire Game Piece PID", new AcquireGamePiecePID(drive, this));
