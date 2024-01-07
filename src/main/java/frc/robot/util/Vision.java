@@ -143,7 +143,7 @@ public class Vision {
       System.out.println("Tried to find the pose of april tag "+id);
       return null;
     }
-    return getAprilTagFieldLayout().getTagPose(id).get();
+    return getAprilTagFieldLayout().getTags().get(id-1).pose;
   }
 
   /**
