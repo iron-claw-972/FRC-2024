@@ -161,7 +161,8 @@ public class Vision {
             EstimatedRobotPose estimatedPose = new EstimatedRobotPose(
               new Pose3d(pose.getX(), pose.getY(), 0, new Rotation3d(0, 0, pose.getRotation().getRadians())), 
               m_cameras.get(i).getTimeStamp(), 
-              List.of(m_cameras.get(i).getBestTarget())
+              List.of(m_cameras.get(i).getBestTarget()),
+              PoseStrategy.LOWEST_AMBIGUITY
             );
             estimatedPoses.add(estimatedPose);
             if(Constants.DO_LOGGING){
