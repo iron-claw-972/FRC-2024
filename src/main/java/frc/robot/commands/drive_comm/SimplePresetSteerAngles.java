@@ -3,7 +3,7 @@ package frc.robot.commands.drive_comm;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.drivetrain.swerve.SwerveDriveImpl;
+import frc.robot.subsystems.Drivetrain;
 
 /**
  * Attempts to set all four modules to a constant angle. Determines if the modules are able to reach the angle requested in a certain time.
@@ -15,7 +15,7 @@ public class SimplePresetSteerAngles extends InstantCommand {
      *
      * @param drive drivetrain to be used
      */
-    public SimplePresetSteerAngles(SwerveDriveImpl drive) {
+    public SimplePresetSteerAngles(Drivetrain drive) {
         this(drive, new Rotation2d());
     }
 
@@ -25,7 +25,7 @@ public class SimplePresetSteerAngles extends InstantCommand {
      * @param angle angle to set module steer to in radians
      * @param drive drivetrain to be used
      */
-    public SimplePresetSteerAngles(SwerveDriveImpl drive, double angle) {
+    public SimplePresetSteerAngles(Drivetrain drive, double angle) {
         this(drive, new Rotation2d(angle));
     }
 
@@ -35,17 +35,17 @@ public class SimplePresetSteerAngles extends InstantCommand {
      * @param rotation rotation to set module steer to
      * @param drive    drivetrain to be used
      */
-    public SimplePresetSteerAngles(SwerveDriveImpl drive, Rotation2d rotation) {
+    public SimplePresetSteerAngles(Drivetrain drive, Rotation2d rotation) {
         super(() -> {
-            drive.enableStateDeadband(false);
+            drive.setStateDeadband(false);
             drive.setModuleStates(new SwerveModuleState[]{
                     new SwerveModuleState(0, rotation),
                     new SwerveModuleState(0, rotation),
                     new SwerveModuleState(0, rotation),
                     new SwerveModuleState(0, rotation)
             }, true);
-            drive.enableStateDeadband(true);
+            drive.setStateDeadband(true);
         }, drive);
-        drive.enableStateDeadband(true);
+        drive.setStateDeadband(true);
     }
 }

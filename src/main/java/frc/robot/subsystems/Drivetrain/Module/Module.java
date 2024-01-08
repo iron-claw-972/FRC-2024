@@ -12,10 +12,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.globalConst;
+import frc.robot.constants.Constants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
 import frc.robot.constants.swerve.ModuleType;
@@ -23,31 +20,28 @@ import frc.robot.util.ConversionUtils;
 import frc.robot.util.LogManager;
 import lib.CTREModuleState;
 
-public class Module extends SubsystemBase {
-    private final ShuffleboardTab swerveTab;
+public class Module extends ModuleSim {
     private final ModuleType type;
-
-    private final Rotation2d angleOffset;
+    
+    // Motor ticks
+    private final double angleOffset;
 
     private final WPI_TalonFX angleMotor;
     private final WPI_TalonFX driveMotor;
     private final WPI_CANCoder CANcoder;
     private SwerveModuleState desiredState;
 
-    private boolean stateDeadband;
-
     SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(DriveConstants.DRIVE_KS, DriveConstants.DRIVE_KV, DriveConstants.DRIVE_KA);
 
     private boolean optimizeStates = true;
 
-    public Module(ModuleConstants moduleConstants, ShuffleboardTab swerveTab) {
-        this.swerveTab = swerveTab;
+    public Module(ModuleConstants moduleConstants) {
+        super(moduleConstants);
 
         type = moduleConstants.getType();
 
-        angleOffset = new Rotation2d(moduleConstants.getSteerOffset());
-
-        stateDeadband = true;
+        //angleOffset = new Rotation2d(constants.getSteerOffset());
+        angleOffset = moduleConstants.getSteerOffset();
 
         /* Angle Encoder Config */
         CANcoder = new WPI_CANCoder(moduleConstants.getEncoderPort(), DriveConstants.kSteerEncoderCAN);
@@ -62,19 +56,23 @@ public class Module extends SubsystemBase {
         configDriveMotor();
 
         setDesiredState(new SwerveModuleState(0, getAngle()), false);
-
-        setupShuffleboard();
     }
 
-    public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
+    @Override
+    public void periodic() {
+        
+    }
+
+    @Override
+    public void setDesiredState(SwerveModuleState wantedState, boolean isOpenLoop) {
 
         /*
          * This is a custom optimize function, since default WPILib optimize assumes
          * continuous controller which CTRE and Rev onboard is not
          */
-        desiredState = optimizeStates ? CTREModuleState.optimize(desiredState, getState().angle) : desiredState;
-        setAngle(desiredState);
-        setSpeed(desiredState, isOpenLoop);
+        desiredState = optimizeStates ? CTREModuleState.optimize(wantedState, getState().angle) : wantedState;
+        setAngle(wantedState);
+        setSpeed(wantedState, isOpenLoop);
     }
 
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop) {
@@ -87,7 +85,7 @@ public class Module extends SubsystemBase {
             driveMotor.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward,
                            feedforward.calculate(desiredState.speedMetersPerSecond));
         }
-        if (globalConst.DO_LOGGING) {
+        if (Constants.DO_LOGGING) {
             double motorSpeed = ConversionUtils.falconToMPS(driveMotor.getSelectedSensorVelocity(), DriveConstants.kWheelCircumference,
                                                             DriveConstants.kDriveGearRatio);
             LogManager.addDouble("Swerve/Modules/DriveSpeed/" + type.name(),
@@ -112,36 +110,10 @@ public class Module extends SubsystemBase {
             return;
         }
         angleMotor.set(ControlMode.Position, ConversionUtils.degreesToFalcon(desiredState.angle.getDegrees(), DriveConstants.kAngleGearRatio));
-        if (globalConst.DO_LOGGING) {
-            double position = ConversionUtils.falconToDegrees(angleMotor.getSelectedSensorPosition(),
-                                                              DriveConstants.kAngleGearRatio);
-            LogManager.addDouble("Swerve/Modules/SteerPosition/" + type.name(),
-                                 position
-                                );
-            LogManager.addDouble("Swerve/Modules/SteerPositionError/" + type.name(),
-                                 position - desiredState.angle.getDegrees()
-                                );
-            LogManager.addDouble("Swerve/Modules/SteerVelocity/" + type.name(),
-                                 ConversionUtils.falconToDegrees(angleMotor.getSelectedSensorVelocity(),
-                                                                 DriveConstants.kAngleGearRatio)
-                                );
-            LogManager.addDouble("Swerve/Modules/SteerVoltage/" + type.name(),
-                                 angleMotor.getMotorOutputVoltage()
-                                );
-            LogManager.addDouble("Swerve/Modules/SteerCurrent/" + type.name(),
-                                 angleMotor.getStatorCurrent()
-                                );
-        }
-    }
-
-    public void enableStateDeadband(boolean enabled) {
-        stateDeadband = enabled;
-        LogManager.addBoolean("Swerve/Modules/StateDeadband/" + type.name(), enabled);
     }
 
     public void setOptimize(boolean enable) {
         optimizeStates = enable;
-        LogManager.addBoolean("Swerve/Modules/Optimized/" + type.name(), enable);
     }
 
     public byte getModuleIndex() {
@@ -157,10 +129,13 @@ public class Module extends SubsystemBase {
         return Rotation2d.fromDegrees(CANcoder.getAbsolutePosition());
     }
 
+    @Override
     public void resetToAbsolute() {
-        double absolutePosition = ConversionUtils.degreesToFalcon(getCANcoder().getDegrees() - angleOffset.getDegrees(),
+        // Sensor ticks
+        // TODO: Convert sensor ticks in driveconstants to radians
+        double absolutePosition = ConversionUtils.degreesToFalcon(getCANcoder().getDegrees() - angleOffset,
                                                                   DriveConstants.kAngleGearRatio);
-        angleMotor.setSelectedSensorPosition(absolutePosition);
+        angleMotor.setSelectedSensorPosition(absolutePosition);                    
     }
 
     private void configCANcoder() {
@@ -185,30 +160,10 @@ public class Module extends SubsystemBase {
         angleMotor.config_kF(0, DriveConstants.kModuleConstants.angleKF);
         angleMotor.setInverted(DriveConstants.kAngleMotorInvert);
         angleMotor.setNeutralMode(DriveConstants.kAngleNeutralMode);
-        angleMotor.configVoltageCompSaturation(globalConst.ROBOT_VOLTAGE);
+        angleMotor.configVoltageCompSaturation(Constants.ROBOT_VOLTAGE);
         angleMotor.enableVoltageCompensation(true);
+        angleMotor.setSelectedSensorPosition(0);
         resetToAbsolute();
-    }
-
-    public void setDriveCharacterizationVoltage(double voltage) {
-        angleMotor.set(ControlMode.Position, ConversionUtils.degreesToFalcon(0, DriveConstants.kAngleGearRatio));
-        driveMotor.set(ControlMode.PercentOutput, voltage / globalConst.ROBOT_VOLTAGE);
-        if (globalConst.DO_LOGGING) {
-            LogManager.addDouble("Swerve/Modules/DriveCharacterizationVoltage/" + type.name(),
-                                 voltage
-                                );
-        }
-    }
-
-    public void setAngleCharacterizationVoltage(double voltage) {
-        angleMotor.set(ControlMode.PercentOutput, voltage / globalConst.ROBOT_VOLTAGE);
-        // Set the drive motor to just enough to overcome static friction
-        driveMotor.set(ControlMode.PercentOutput, 1.1 * DriveConstants.DRIVE_KS);
-        if (globalConst.DO_LOGGING) {
-            LogManager.addDouble("Swerve/Modules/AngleCharacterizationVoltage/" + type.name(),
-                                 voltage
-                                );
-        }
     }
 
     public double getSteerVelocity() {
@@ -231,11 +186,11 @@ public class Module extends SubsystemBase {
         driveMotor.configClosedloopRamp(DriveConstants.kClosedLoopRamp);
         driveMotor.setInverted(DriveConstants.kDriveMotorInvert);
         driveMotor.setNeutralMode(DriveConstants.kDriveNeutralMode);
-        driveMotor.configVoltageCompSaturation(globalConst.ROBOT_VOLTAGE);
+        driveMotor.configVoltageCompSaturation(Constants.ROBOT_VOLTAGE);
         driveMotor.enableVoltageCompensation(true);
-        driveMotor.setSelectedSensorPosition(0);
     }
 
+    @Override
     public SwerveModuleState getState() {
         return new SwerveModuleState(
                 ConversionUtils.falconToMPS(driveMotor.getSelectedSensorVelocity(), DriveConstants.kWheelCircumference,
@@ -250,46 +205,13 @@ public class Module extends SubsystemBase {
                 getAngle());
     }
 
-    private void setupShuffleboard() {
-        if (RobotBase.isReal() && globalConst.USE_TELEMETRY) {
-            swerveTab.addDouble(type.name() + " CANcoder Angle (deg)", getCANcoder()::getDegrees);
-            swerveTab.addDouble(type.name() + " FX Angle (deg)", getPosition().angle::getDegrees);
-            swerveTab.addDouble(type.name() + " Velocity (m/s)", () -> getState().speedMetersPerSecond);
-            swerveTab.addDouble(type.name() + " Desired Velocity (m/s)", () -> getDesiredState().speedMetersPerSecond);
-            swerveTab.addDouble(type.name() + " Desired Angle (deg)", () -> getDesiredState().angle.getDegrees());
-            swerveTab.addBoolean(type.name() + " Jitter prevention enabled", () -> stateDeadband);
-            swerveTab.addDouble(type.name() + " Drive Current (A)", driveMotor::getSupplyCurrent);
-            swerveTab.addDouble(type.name() + " Angle Current (A)", angleMotor::getSupplyCurrent);
-        }
-    }
-
-    @Override
-    public void periodic() {
-
-    }
-
     public SwerveModuleState getDesiredState() {
         return desiredState;
     }
 
-    public double getDesiredVelocity() {
-        return getDesiredState().speedMetersPerSecond;
-    }
-
-    public Rotation2d getDesiredAngle() {
-        return getDesiredState().angle;
-    }
 
     public double getDriveVelocityError() {
         return getDesiredState().speedMetersPerSecond - getState().speedMetersPerSecond;
-    }
-
-    public double getDriveFeedForwardKV() {
-        return DriveConstants.DRIVE_KV;
-    }
-
-    public double getDriveFeedForwardKS() {
-        return DriveConstants.DRIVE_KS;
     }
 
     public void stop() {
@@ -297,25 +219,7 @@ public class Module extends SubsystemBase {
         angleMotor.set(0);
     }
 
-    public void setDriveVoltage(double volts) {
-        //with voltage compensation enabled do not use setVoltage
-    }
-
-    public void setSteerVoltage(double voltage) {
-        //with voltage compensation enabled do not use setVoltage
-    }
-
-    public void setDriveFeedForwardValues(double kS, double kV) {
-    }
-
-    public double getSteerFeedForwardKV() {
-        return 0;
-    }
-
-    public double getSteerFeedForwardKS() {
-        return 0;
-    }
-
-    public void setAngle(Rotation2d rotation2d) {
+    public WPI_TalonFX getDriveMotor(){
+        return driveMotor;
     }
 }

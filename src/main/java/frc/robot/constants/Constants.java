@@ -8,7 +8,7 @@ import edu.wpi.first.math.util.Units;
 import java.util.ArrayList;
 import java.util.List;
 
-public class globalConst {
+public class Constants {
 
     // constants:   
 
@@ -44,8 +44,8 @@ public class globalConst {
 
     /*
      * Talon Stator / Supply Limits explanation
-     * Supply current is current that’s being drawn at the input bus voltage. Stator
-     * current is current that’s being drawn by the motor.
+     * Supply current is current that's being drawn at the input bus voltage. Stator
+     * current is current that's being drawn by the motor.
      * Supply limiting (supported by Talon FX and SRX) is useful for preventing
      * breakers from tripping in the PDP.
      * Stator limiting (supported by Talon FX) is useful for limiting
