@@ -60,6 +60,9 @@ public class Drivetrain extends SubsystemBase {
     // DO NOT CHANGE THIS HERE TO DISABLE VISION, change VisionConstants.ENABLED instead
     private boolean visionEnabled = true;
 
+    // If the robot should aim at the speaker
+    private boolean isAlign = false;
+
     /**
      * Creates a new Swerve Style Drivetrain.
      */
@@ -269,6 +272,12 @@ public class Drivetrain extends SubsystemBase {
         visionEnabled = enabled;
     }
 
+    public void setIsAlign(boolean isAlign){
+        this.isAlign = isAlign;
+    }
+    public boolean getIsAlign(){
+        return isAlign;
+    }
 
     /**
      * Calculates chassis speed of drivetrain using the current SwerveModuleStates

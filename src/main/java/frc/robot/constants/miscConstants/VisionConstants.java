@@ -10,6 +10,9 @@ import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.Pair;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -51,32 +54,49 @@ public class VisionConstants {
   // Only affects calculations using PhotonVision, not manual calculations
   public static final double HIGHEST_AMBIGUITY = 0.02;
 
-  // The distance the robot should be from the grid to score in inches
-  public static final double GRID_DISTANCE = Units.metersToInches(DriveConstants.kRobotWidthWithBumpers/2)+1;
+  // Speaker poses
+  // TODO: Add accurate numbers from CAD
+  public static final Pose3d BLUE_SPEAKER_POSE = new Pose3d(
+    1,
+    5,
+    2,
+    new Rotation3d(0, 0, 0)
+  );
+  public static final Pose3d RED_SPEAKER_POSE = new Pose3d(
+    15,
+    BLUE_SPEAKER_POSE.getY(),
+    BLUE_SPEAKER_POSE.getZ(),
+    BLUE_SPEAKER_POSE.getRotation().rotateBy(new Rotation3d(0, 0, Math.PI))
+  );
 
-  // Distance from the April tag to the single substation in the x direction
-  public static final double SINGLE_SUBSTATION_DISTANCE = Units.inchesToMeters(79.395);
+  // The amp poses to align to
+  // TODO: Add accurate numbers form CAD for x and y
+  public static final Pose2d BLUE_AMP_POSE = new Pose2d(
+    3,
+    1 + DriveConstants.kRobotWidthWithBumpers/2,
+    new Rotation2d(Math.PI/2)
+  );
+  public static final Pose2d RED_AMP_POSE = new Pose2d(
+    13,
+    BLUE_AMP_POSE.getY(),
+    BLUE_AMP_POSE.getRotation()
+  );
 
-  // X in m of the single substations
-  public static final double BLUE_SINGLE_SUBSTATION_X = FieldConstants.APRIL_TAGS.get(3).pose.getX() - SINGLE_SUBSTATION_DISTANCE;
-  public static final double RED_SINGLE_SUBSTATION_X = FieldConstants.APRIL_TAGS.get(4).pose.getX() + SINGLE_SUBSTATION_DISTANCE;
-
-  // How far the robot should be from the shelf when aligning
-  public static final double SHELF_DISTANCE = 1;
-
-  /** The Blue Shelf X position to align to */
-  public static final double BLUE_SHELF_X = FieldConstants.APRIL_TAGS.get(3).pose.getX() - SHELF_DISTANCE;
-  /** The Red Shelf X position to align to */
-  public static final double RED_SHELF_X = FieldConstants.APRIL_TAGS.get(4).pose.getX() + SHELF_DISTANCE;
-
-  /** The Y position of the top double substation shelf, the one closer to the wall */
-  // 15 from april tag to edge of portal (where cones are accessible). That area is 34.21 inches wide, just aim for the center
-  public static final double TOP_SHELF_Y = FieldConstants.APRIL_TAGS.get(3).pose.getY() + Units.inchesToMeters(15 + (34.21 / 2));
-  /** The Y position of the bottom double substation shelf, the one closer to the grids */
-  // 15 from april tag to edge of portal (where cones are accessible). That area is 34.21 inches wide, just aim for the center
-  public static final double BOTTOM_SHELF_Y = FieldConstants.APRIL_TAGS.get(3).pose.getY() - Units.inchesToMeters(15 + (34.21 / 2));
+  // The podium poses to align to
+  // TODO: Add accurate numbers from the CAD for x, y, and rotation (in radians)
+  public static final Pose2d BLUE_PODIUM_POSE = new Pose2d(
+    5 - DriveConstants.kRobotWidthWithBumpers/2,
+    5,
+    new Rotation2d(Math.PI)
+  );
+  public static final Pose2d RED_PODIUM_POSE = new Pose2d(
+    11 + DriveConstants.kRobotWidthWithBumpers/2,
+    BLUE_PODIUM_POSE.getY(),
+    new Rotation2d(Math.PI).minus(BLUE_PODIUM_POSE.getRotation())
+  );
 
   // The camera poses
+  // TODO: Add these
   public static final ArrayList<Pair<String, Transform3d>> CAMERAS = new ArrayList<Pair<String, Transform3d>>(List.of(
     new Pair<String, Transform3d>(
       "Camera1",
