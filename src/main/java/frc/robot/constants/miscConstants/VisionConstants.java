@@ -70,14 +70,13 @@ public class VisionConstants {
   );
 
   // The amp poses to align to
-  // TODO: Add accurate numbers form CAD for x and y
   public static final Pose2d BLUE_AMP_POSE = new Pose2d(
-    3,
-    1 + DriveConstants.kRobotWidthWithBumpers/2,
+    FieldConstants.APRIL_TAGS.get(5).pose.getX(),
+    FieldConstants.APRIL_TAGS.get(5).pose.getX() + DriveConstants.kRobotWidthWithBumpers/2,
     new Rotation2d(Math.PI/2)
   );
   public static final Pose2d RED_AMP_POSE = new Pose2d(
-    13,
+    FieldConstants.APRIL_TAGS.get(3).pose.getX(),
     BLUE_AMP_POSE.getY(),
     BLUE_AMP_POSE.getRotation()
   );
