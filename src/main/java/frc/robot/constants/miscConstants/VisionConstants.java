@@ -55,15 +55,14 @@ public class VisionConstants {
   public static final double HIGHEST_AMBIGUITY = 0.02;
 
   // Speaker poses
-  // TODO: Add accurate numbers from CAD
   public static final Pose3d BLUE_SPEAKER_POSE = new Pose3d(
-    1,
-    5,
-    2,
+    FieldConstants.APRIL_TAGS.get(6).pose.getX() + Units.inchesToMeters(9),
+    FieldConstants.APRIL_TAGS.get(6).pose.getY(),
+    Units.inchesToMeters(80.5),
     new Rotation3d(0, 0, 0)
   );
   public static final Pose3d RED_SPEAKER_POSE = new Pose3d(
-    15,
+    FieldConstants.APRIL_TAGS.get(3).pose.getX() - Units.inchesToMeters(9),
     BLUE_SPEAKER_POSE.getY(),
     BLUE_SPEAKER_POSE.getZ(),
     BLUE_SPEAKER_POSE.getRotation().rotateBy(new Rotation3d(0, 0, Math.PI))
