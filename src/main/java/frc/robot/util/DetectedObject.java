@@ -16,7 +16,7 @@ public class DetectedObject {
     private static Drivetrain drive;
     public final Pose3d pose;
     public final ObjectType type;
-    public enum ObjectType{CONE, CUBE, RED_ROBOT, BLUE_ROBOT, NONE};
+    public enum ObjectType{NOTE, HIGH_NOTE, RED_ROBOT, BLUE_ROBOT, NONE};
 
     /**
      * Sets the drivetrain to use for pose calculations
@@ -89,7 +89,9 @@ public class DetectedObject {
         // Rotate it to get the position relative to the rotated camera
         translation = translation.rotateBy(robotToCamera.getRotation());
         // Scale it so that the object will be on the ground (- because translation's z will be negative)
-        translation = translation.times(-robotToCamera.getZ()/translation.getZ());
+        if(!isRobot()){
+            translation = translation.times(-robotToCamera.getZ()/translation.getZ());
+        }
         // Translate it to make it relative to the robot
         translation = translation.plus(robotToCamera.getTranslation());
         // If the drivetrain exists, rotate and translate it to be field relative
@@ -127,8 +129,8 @@ public class DetectedObject {
     public static ObjectType getType(String type){
         return
             type==null?ObjectType.NONE:
-            type.toLowerCase().equals("cone")?ObjectType.CONE:
-            type.toLowerCase().equals("cube")?ObjectType.CUBE:
+            type.toLowerCase().equals("note")?ObjectType.NOTE:
+            type.toLowerCase().equals("high note")?ObjectType.HIGH_NOTE:
             type.toLowerCase().equals("red robot")?ObjectType.RED_ROBOT:
             type.toLowerCase().equals("blue robot")?ObjectType.BLUE_ROBOT:
             ObjectType.NONE;
@@ -136,10 +138,10 @@ public class DetectedObject {
 
     /**
      * Returns if the object is a game piece
-     * @return True if the object is a cone or cube, false otherwise
+     * @return True if the object is a note, false otherwise
      */
     public boolean isGamePiece(){
-        return type==ObjectType.CONE || type==ObjectType.CUBE;
+        return type==ObjectType.NOTE;
     }
     /**
      * Returns if the object is a robot
