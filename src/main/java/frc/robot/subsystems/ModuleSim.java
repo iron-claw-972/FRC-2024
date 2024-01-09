@@ -15,7 +15,8 @@ import lib.CTREModuleState;
 /**
  * Swerve module for drivetrain to be used inside of simulation.
  */
-public class ModuleSim extends SubsystemBase {
+public class ModuleSim extends Module {
+
 
     private double currentSteerPositionRad = 0;
     private double currentDrivePositionMeters = 0;
@@ -27,6 +28,7 @@ public class ModuleSim extends SubsystemBase {
     protected boolean stateDeadband = true;
 
     public ModuleSim(ModuleConstants ignored) {
+        super(ignored);
     }
 
     /**

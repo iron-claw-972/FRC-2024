@@ -45,12 +45,14 @@ public class DriveConstants {
 
     public static Rotation2d kStartingHeading = new Rotation2d();
 
-    public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(
+    public static final Translation2d[] swerveModuleLocations = {
             new Translation2d(DriveConstants.kTrackWidth / 2, DriveConstants.kTrackWidth / 2),
             new Translation2d(DriveConstants.kTrackWidth / 2, -DriveConstants.kTrackWidth / 2),
             new Translation2d(-DriveConstants.kTrackWidth / 2, DriveConstants.kTrackWidth / 2),
             new Translation2d(-DriveConstants.kTrackWidth / 2, -DriveConstants.kTrackWidth / 2)
-    );
+    };
+
+    public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(swerveModuleLocations);
 
     public static int kDriveFrontLeft = 1;
     public static int kSteerFrontLeft = 2;

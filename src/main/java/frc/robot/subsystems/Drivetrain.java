@@ -33,7 +33,7 @@ import java.util.Arrays;
  */
 public class Drivetrain extends SubsystemBase {
 
-    protected final ModuleSim[] modules;
+    protected final Module[] modules;
 
     // Odometry
     private final SwerveDrivePoseEstimator poseEstimator;
@@ -45,20 +45,24 @@ public class Drivetrain extends SubsystemBase {
     private final PIDController yController;
     private final PIDController rotationController;
 
-    // Displays the field with the robots estimated pose on it
-    private final Field2d fieldDisplay;
-
     /**
      * Creates a new Swerve Style Drivetrain.
      */
     public Drivetrain() {
-        modules = new ModuleSim[4];
+        modules = new Module[4];
 
         ModuleConstants[] constants = Arrays.copyOfRange(ModuleConstants.values(), 0, 4);
+        if (Robot.isSimulation()){
+            Arrays.stream(constants).forEach(moduleConstants -> {
+                modules[moduleConstants.ordinal()] = new ModuleSim(moduleConstants);
+            });
+        }
+        else{
+            Arrays.stream(constants).forEach(moduleConstants -> {
+                modules[moduleConstants.ordinal()] = new Module(moduleConstants);
+            });
+        }
         
-        Arrays.stream(constants).forEach(moduleConstants -> {
-            modules[moduleConstants.ordinal()] = new Module(moduleConstants);
-        });
 
         // The Pigeon is a gyroscope and implements WPILib's Gyro interface
         pigeon = new WPI_Pigeon2(DriveConstants.kPigeon, DriveConstants.kPigeonCAN);
@@ -91,15 +95,11 @@ public class Drivetrain extends SubsystemBase {
         rotationController.enableContinuousInput(-Math.PI, Math.PI);
         rotationController.setTolerance(Units.degreesToRadians(0.25), Units.degreesToRadians(0.25));
 
-        fieldDisplay = new Field2d();
-        fieldDisplay.setRobotPose(getPose());
     }
 
     @Override
     public void periodic() {
-        updateLogs();
-        LogManager.log();
-        fieldDisplay.setRobotPose(getPose());
+        updateOdometry();
     }
 
     // DRIVE
@@ -169,7 +169,7 @@ public class Drivetrain extends SubsystemBase {
      * Stops all swerve modules.
      */
     public void stop() {
-        Arrays.stream(modules).forEach(ModuleSim::stop);
+        Arrays.stream(modules).forEach(Module::stop);
     }
 
 
@@ -225,7 +225,7 @@ public class Drivetrain extends SubsystemBase {
      * @return an array of all swerve module positions
      */
     public SwerveModulePosition[] getModulePositions() {
-        return Arrays.stream(modules).map(ModuleSim::getPosition).toArray(SwerveModulePosition[]::new);
+        return Arrays.stream(modules).map(Module::getPosition).toArray(SwerveModulePosition[]::new);
     }
 
     /**
@@ -245,7 +245,7 @@ public class Drivetrain extends SubsystemBase {
      */
     public ChassisSpeeds getChassisSpeeds() {
         return DriveConstants.KINEMATICS.toChassisSpeeds(
-                Arrays.stream(modules).map(ModuleSim::getState).toArray(SwerveModuleState[]::new)
+                Arrays.stream(modules).map(Module::getState).toArray(SwerveModuleState[]::new)
         );
     }
 
@@ -256,7 +256,7 @@ public class Drivetrain extends SubsystemBase {
         return poseEstimator.getEstimatedPosition().getRotation();
     }
 
-    public ModuleSim[] getModules(){
+    public Module[] getModules(){
         return modules;
     }
 
@@ -290,7 +290,7 @@ public class Drivetrain extends SubsystemBase {
      * TODO: Comment
      */
     public void resetModulesToAbsolute() {
-        Arrays.stream(modules).forEach(ModuleSim::resetToAbsolute);
+        Arrays.stream(modules).forEach(Module::resetToAbsolute);
     }
 
 
@@ -304,9 +304,7 @@ public class Drivetrain extends SubsystemBase {
     public PIDController getRotationController() {
         return rotationController;
     }
-    public Field2d getFeild(){
-        return fieldDisplay;
-    }
+    
     public void updateLogs() {
 
         double[] pose = {
@@ -364,5 +362,7 @@ public class Drivetrain extends SubsystemBase {
         // };
         // LogManager.addDoubleArray("Swerve/error swerve states", errorStates);
       }
+
+      
 
 }
