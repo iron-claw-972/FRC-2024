@@ -83,12 +83,12 @@ public class VisionConstants {
   // The podium poses to align to
   // TODO: Add accurate numbers from the CAD for x, y, and rotation (in radians)
   public static final Pose2d BLUE_PODIUM_POSE = new Pose2d(
-    5 - DriveConstants.kRobotWidthWithBumpers/2,
-    5,
+    FieldConstants.APRIL_TAGS.get(13).pose.getX() - Units.inchesToMeters(82.75) - DriveConstants.kRobotWidthWithBumpers/2,
+    FieldConstants.APRIL_TAGS.get(13).pose.getY(),
     new Rotation2d(Math.PI)
   );
   public static final Pose2d RED_PODIUM_POSE = new Pose2d(
-    11 + DriveConstants.kRobotWidthWithBumpers/2,
+    FieldConstants.APRIL_TAGS.get(12).pose.getX() + Units.inchesToMeters(82.75) + DriveConstants.kRobotWidthWithBumpers/2,
     BLUE_PODIUM_POSE.getY(),
     new Rotation2d(Math.PI).minus(BLUE_PODIUM_POSE.getRotation())
   );
@@ -101,8 +101,7 @@ public class VisionConstants {
       new Transform3d(
         new Translation3d(Units.inchesToMeters(8.996), Units.inchesToMeters(6.48), Units.inchesToMeters(37.44)),
         new Rotation3d(0, Units.degreesToRadians(18), 0)
-      ))
-    ,
+      )),
     new Pair<String, Transform3d>(
       "Camera2",
       new Transform3d(
