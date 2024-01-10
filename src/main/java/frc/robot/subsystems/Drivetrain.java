@@ -20,8 +20,8 @@ import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
-import frc.robot.subsystems.drivetrain2.module2.Module;
-import frc.robot.subsystems.drivetrain2.module2.ModuleSim;
+import frc.robot.subsystems.drivetrain.module.Module;
+import frc.robot.subsystems.drivetrain.module.ModuleSim;
 import frc.robot.util.LogManager;
 import frc.robot.util.Vision;
 
