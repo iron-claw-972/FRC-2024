@@ -21,7 +21,6 @@ public class AprilTagPoseTest {
    * Tests if all of the April tags are in the right spot
    */
   @Test
-  @Disabled
   public void testTagPoses() {
     Vision vision = new Vision(null, new ArrayList<Pair<String, Transform3d>>());
     for(int i = 0; i < vision.getAprilTagFieldLayout().getTags().size(); i++){
