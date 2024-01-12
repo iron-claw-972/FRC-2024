@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.constants.Constants;
+import frc.robot.constants.globalConst;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -161,7 +161,7 @@ public class Robot extends TimedRobot {
         RobotId robotId = RobotId.Default;
 
         // check whether Preferences has an entry for the RobotId
-        if (!Preferences.containsKey(Constants.ROBOT_ID_KEY)) {
+        if (!Preferences.containsKey(globalConst.ROBOT_ID_KEY)) {
             // There is no such key. Set it to the default identity.
             setRobotId(RobotId.Default);
         }
@@ -172,7 +172,7 @@ public class Robot extends TimedRobot {
         }
 
         // get the RobotId string from the RoboRIO's Preferences
-        String strId = Preferences.getString(Constants.ROBOT_ID_KEY, RobotId.Default.name());
+        String strId = Preferences.getString(globalConst.ROBOT_ID_KEY, RobotId.Default.name());
 
         // match that string to a RobotId by looking at all possible RobotId enums
         for (RobotId rid : RobotId.values()) {
@@ -197,7 +197,7 @@ public class Robot extends TimedRobot {
      */
     private static void setRobotId(RobotId robotId) {
         // Set the robot identity in the RoboRIO Preferences
-        Preferences.setString(Constants.ROBOT_ID_KEY, robotId.name());
+        Preferences.setString(globalConst.ROBOT_ID_KEY, robotId.name());
         ROBOT_ID = robotId;
     }
 }

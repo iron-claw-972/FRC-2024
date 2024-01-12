@@ -1,4 +1,4 @@
-package frc.robot.commands.auto;
+package frc.robot.commands.auto_comm;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,8 +18,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.constants.miscConstants.AutoConstants;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.constants.AutoConstants;
+import frc.robot.subsystems.Drivetrain.Drivetrain;
 import frc.robot.util.ConversionUtils;
 import frc.robot.util.PathGroupLoader;
 
