@@ -38,12 +38,12 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     kDriver.get(Button.A).onTrue(new InstantCommand(() -> getDrivetrain().resetModulesToAbsolute()));
 
     // Amp alignment
-    kDriver.get(Button.LB).whileTrue(new GoToPose(
+    kDriver.get(Button.LB).whileTrue(new GoToPose(()->
       DriverStation.getAlliance() == Alliance.Blue ? VisionConstants.BLUE_AMP_POSE : VisionConstants.RED_AMP_POSE,
       getDrivetrain()
     ));
     // Podium alignment
-    kDriver.get(Button.RB).whileTrue(new GoToPose(
+    kDriver.get(Button.RB).whileTrue(new GoToPose(()->
       DriverStation.getAlliance() == Alliance.Blue ? VisionConstants.BLUE_PODIUM_POSE : VisionConstants.RED_PODIUM_POSE,
       getDrivetrain()
     ));

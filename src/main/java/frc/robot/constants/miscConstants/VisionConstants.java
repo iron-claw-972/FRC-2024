@@ -71,17 +71,16 @@ public class VisionConstants {
   // The amp poses to align to
   public static final Pose2d BLUE_AMP_POSE = new Pose2d(
     FieldConstants.APRIL_TAGS.get(5).pose.getX(),
-    FieldConstants.APRIL_TAGS.get(5).pose.getX() + DriveConstants.kRobotWidthWithBumpers/2,
+    FieldConstants.APRIL_TAGS.get(5).pose.getY() - DriveConstants.kRobotWidthWithBumpers/2,
     new Rotation2d(Math.PI/2)
   );
   public static final Pose2d RED_AMP_POSE = new Pose2d(
-    FieldConstants.APRIL_TAGS.get(3).pose.getX(),
+    FieldConstants.APRIL_TAGS.get(4).pose.getX(),
     BLUE_AMP_POSE.getY(),
     BLUE_AMP_POSE.getRotation()
   );
 
   // The podium poses to align to
-  // TODO: Add accurate numbers from the CAD for x, y, and rotation (in radians)
   public static final Pose2d BLUE_PODIUM_POSE = new Pose2d(
     FieldConstants.APRIL_TAGS.get(13).pose.getX() - Units.inchesToMeters(82.75) - DriveConstants.kRobotWidthWithBumpers/2,
     FieldConstants.APRIL_TAGS.get(13).pose.getY(),

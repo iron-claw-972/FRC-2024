@@ -10,10 +10,9 @@ import edu.wpi.first.math.util.Units;
 
 public class FieldConstants {
   public static final double kFieldLength = Units.inchesToMeters(54*12 + 3.25); // meters
-  public static final double kFieldWidth = Units.inchesToMeters(26*12 + 3.5); // meters
+  public static final double kFieldWidth = Units.inchesToMeters(26*12 + 11.25); // meters
 
   // Array to use if it can't find the April tag field layout
-  // TODO: Add these
   public static final ArrayList<AprilTag> APRIL_TAGS = new ArrayList<AprilTag>(List.of(
     new AprilTag(1, new Pose3d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), Units.inchesToMeters(53.38), new Rotation3d(0, 0, 2*Math.PI/3))),
     new AprilTag(2, new Pose3d(Units.inchesToMeters(637.21), Units.inchesToMeters(34.79), Units.inchesToMeters(53.38), new Rotation3d(0, 0, 2*Math.PI/3))),

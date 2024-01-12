@@ -59,10 +59,10 @@ public class RobotContainer {
 
         drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
         drivetrainTab.add("feild", drive.getFeild());
-        drivetrainTab.addDouble("module1", ()->drive.getModules()[0].getAngle().getDegrees()%360);
-        drivetrainTab.addDouble("module2", ()->drive.getModules()[1].getAngle().getDegrees()%360);
-        drivetrainTab.addDouble("module3", ()->drive.getModules()[2].getAngle().getDegrees()%360);
-        drivetrainTab.addDouble("module4", ()->drive.getModules()[3].getAngle().getDegrees()%360);
+        drivetrainTab.addDouble("module1", ()-> drive.getModules()[0].getAngle().getDegrees()%360);
+        drivetrainTab.addDouble("module2", ()-> drive.getModules()[1].getAngle().getDegrees()%360);
+        drivetrainTab.addDouble("module3", ()-> drive.getModules()[2].getAngle().getDegrees()%360);
+        drivetrainTab.addDouble("module4", ()-> drive.getModules()[3].getAngle().getDegrees()%360);
 
 
 
