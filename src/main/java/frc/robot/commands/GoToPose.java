@@ -8,6 +8,7 @@ import com.pathplanner.lib.path.PathPoint;
 import com.pathplanner.lib.path.RotationTarget;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -65,8 +66,8 @@ public class GoToPose extends SequentialCommandGroup {
     Command command;
     // Gets the current position of the robot for the start of the path
     PathPoint point1 = new PathPoint(
-      m_drive.getPose().getTranslation(),
-      new RotationTarget(0, m_drive.getFieldRelativeHeading())
+      drive.getPose().getTranslation(),
+      new RotationTarget(0, new Rotation2d(Math.atan2(drive.getChassisSpeeds().vyMetersPerSecond, drive.getChassisSpeeds().vxMetersPerSecond)).plus(drive.getYaw()))
     );
 
     // get the desired score pose
