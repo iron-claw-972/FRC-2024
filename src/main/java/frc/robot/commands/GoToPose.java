@@ -12,20 +12,20 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.auto.PathPlannerCommand;
-import frc.robot.constants.miscConstants.AutoConstants;
+import frc.robot.commands.auto_comm.PathPlannerCommand;
+import frc.robot.constants.AutoConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
 
 /**
- * Moves the robot to a pose using PathPlanner
- */
+* Moves the robot to a pose using PathPlanner
+*/
 public class GoToPose extends SequentialCommandGroup {
 
-  private Drivetrain m_drive;
-  private Supplier<Pose2d> m_poseSupplier;
-  private double m_maxSpeed;
-  private double m_maxAccel;
+  private Drivetrain drive;
+  private Supplier<Pose2d> poseSupplier;
+  private double maxSpeed;
+  private double maxAccel;
 
   /**
    * Uses PathPlanner to go to a pose
@@ -33,7 +33,7 @@ public class GoToPose extends SequentialCommandGroup {
    * @param drive The drivetrain
    */
   public GoToPose(Supplier<Pose2d> poseSupplier, Drivetrain drive) {
-    this(poseSupplier, AutoConstants.kMaxAutoSpeed, AutoConstants.kMaxAutoAccel, drive);
+    this(poseSupplier, AutoConstants.MAX_AUTO_SPEED, AutoConstants.MAX_AUTO_ACCEL, drive);
   }
   public GoToPose(Pose2d pose, Drivetrain drive){
     this(()->pose, drive);
@@ -47,14 +47,14 @@ public class GoToPose extends SequentialCommandGroup {
    * @param drive The drivetrain
    */
   public GoToPose(Supplier<Pose2d> poseSupplier, double maxSpeed, double maxAccel, Drivetrain drive) {
-    m_poseSupplier = poseSupplier;
-    m_maxSpeed = maxSpeed;
-    m_maxAccel = maxAccel;
-    m_drive = drive;
+    this.poseSupplier = poseSupplier;
+    this.maxSpeed = maxSpeed;
+    this.maxAccel = maxAccel;
+    this.drive = drive;
     addCommands(
-      new InstantCommand(()->drive.enableVision(VisionConstants.ENABLED_GO_TO_POSE)),
+      new InstantCommand(()->drive.setVisionEnabled(VisionConstants.ENABLED_GO_TO_POSE)),
       new SupplierCommand(() -> createCommand(), drive),
-      new InstantCommand(()->drive.enableVision(true))
+      new InstantCommand(()->drive.setVisionEnabled(true))
     );
   }
 
@@ -70,7 +70,7 @@ public class GoToPose extends SequentialCommandGroup {
     );
 
     // get the desired score pose
-    Pose2d pose = m_poseSupplier.get();
+    Pose2d pose = poseSupplier.get();
 
     // Uses the pose to find the end point for the path
     PathPoint point2 = new PathPoint(
@@ -81,14 +81,14 @@ public class GoToPose extends SequentialCommandGroup {
     // Creates the command using the two points
     command = new PathPlannerCommand(
       new ArrayList<PathPoint>(List.of(point1, point2)),
-      m_drive,
+      drive,
       false,
-      m_maxSpeed,
-      m_maxAccel
+      maxSpeed,
+      maxAccel
     );
 
     // get the distance to the pose.
-    double dist = m_drive.getPose().minus(pose).getTranslation().getNorm();
+    double dist = drive.getPose().minus(pose).getTranslation().getNorm();
 
     // if greater than 6m or less than 10 cm, don't run it. If the path is too small pathplanner makes weird paths.
     if (dist > 6) {
@@ -99,6 +99,6 @@ public class GoToPose extends SequentialCommandGroup {
       DriverStation.reportWarning("Alignment Path too short, doing nothing, GoToPose.java", false);
     }
 
-    return command.handleInterrupt(()->m_drive.enableVision(true));
+    return command.handleInterrupt(()->drive.setVisionEnabled(true));
   }
 }

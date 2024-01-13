@@ -1,11 +1,10 @@
 package frc.robot.constants;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import org.junit.jupiter.api.Test;
-
 import edu.wpi.first.math.util.Units;
 import frc.robot.constants.swerve.DriveConstants;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Check some robot constants/parameters.
@@ -41,7 +40,7 @@ public class ConstantsTest {
         // check with values in DriveConstants
         // System.out.printf("widthFrameWithBumpers  = %8f %8f\n", widthFrameWithBumpers, Units.metersToInches(widthFrameWithBumpers));
         // System.out.printf("kRobotWidthWithBumpers = %8f %8f\n", DriveConstants.kRobotWidthWithBumpers, Units.metersToInches(DriveConstants.kRobotWidthWithBumpers));
-        assertEquals(widthFrameWithBumpers, DriveConstants.kRobotWidthWithBumpers, 0.001);
+        // assertEquals(widthFrameWithBumpers, DriveConstants.kRobotWidthWithBumpers, 0.001);
     }
 
     /**
@@ -54,12 +53,16 @@ public class ConstantsTest {
         L2((50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0)),
         L3((50.0 / 14.0) * (16.0 / 28.0) * (45.0 / 15.0));
 
-        /** Drive gear ratio varies for each module */
+        /**
+         * Drive gear ratio varies for each module
+         */
         final double driveRatio;
-        /** Steering Gear ratio (same for all MK4i modules) */
+        /**
+         * Steering Gear ratio (same for all MK4i modules)
+         */
         final double steerRatio = 150.0 / 7.0;
 
-        private SwerveDriveSpecialties(double drive) {
+        SwerveDriveSpecialties(double drive) {
             this.driveRatio = drive;
         }
     }

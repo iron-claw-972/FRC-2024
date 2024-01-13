@@ -56,6 +56,8 @@ public class Vision {
     try {
       // Try to find the field layout
       m_aprilTagFieldLayout = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField();
+      // TODO: Delete this after updating ^ to 2024Crescendo
+      m_aprilTagFieldLayout = new AprilTagFieldLayout(FieldConstants.APRIL_TAGS, FieldConstants.kFieldLength, FieldConstants.kFieldWidth);
     } catch (IOException e) {
       // If it can't find it, use the layout in the constants
       m_aprilTagFieldLayout = new AprilTagFieldLayout(FieldConstants.APRIL_TAGS, FieldConstants.kFieldLength, FieldConstants.kFieldWidth);
@@ -143,7 +145,7 @@ public class Vision {
       System.out.println("Tried to find the pose of april tag "+id);
       return null;
     }
-    return getAprilTagFieldLayout().getTagPose(id).get();
+    return getAprilTagFieldLayout().getTags().get(id-1).pose;
   }
 
   /**
@@ -161,10 +163,11 @@ public class Vision {
             EstimatedRobotPose estimatedPose = new EstimatedRobotPose(
               new Pose3d(pose.getX(), pose.getY(), 0, new Rotation3d(0, 0, pose.getRotation().getRadians())), 
               m_cameras.get(i).getTimeStamp(), 
-              List.of(m_cameras.get(i).getBestTarget())
+              List.of(m_cameras.get(i).getBestTarget()),
+              PoseStrategy.LOWEST_AMBIGUITY
             );
             estimatedPoses.add(estimatedPose);
-            if(Constants.kLogging){
+            if(Constants.DO_LOGGING){
               LogManager.addDoubleArray("Vision/camera " + i + "/estimated pose2d", new double[] {
                 pose.getX(),
                 pose.getY(),
@@ -182,7 +185,7 @@ public class Vision {
         // April tags that don't exist might return a result that is present but doesn't have a pose
         if (estimatedPose.isPresent() && estimatedPose.get().estimatedPose != null) {
           estimatedPoses.add(estimatedPose.get());
-          if(Constants.kLogging){
+          if(Constants.DO_LOGGING){
             LogManager.addDoubleArray("Vision/camera " + i + "/estimated pose2d", new double[] {
               estimatedPose.get().estimatedPose.getX(),
               estimatedPose.get().estimatedPose.getY(),

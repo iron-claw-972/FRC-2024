@@ -54,7 +54,7 @@ public class TestVisionDistance extends CommandBase {
     m_endTimer.reset();
     m_printTimer.restart();
 
-    m_drive.enableVision(false);
+    m_drive.setVisionEnabled(false);
 
     m_currentPose = m_vision.getPose2d(m_drive.getPose());
     m_visionStartTranslation = m_currentPose.getTranslation();
@@ -64,7 +64,7 @@ public class TestVisionDistance extends CommandBase {
   }
 
   /**
-   * Drives the robot, finds the pose fromt he drivetrain and vision, and someimes prints the distances
+   * Drives the robot, finds the pose from the drivetrain and vision, and someimes prints the distances
    */
   @Override
   public void execute() {
@@ -90,7 +90,7 @@ public class TestVisionDistance extends CommandBase {
           m_visionDistance-m_driveDistance, (m_visionDistance-m_driveDistance) / m_driveDistance * 100
         );
       }
-      if(Constants.kLogging){
+      if(Constants.DO_LOGGING){
         LogManager.addDouble("Vision/Distance Test Drive Distance", m_driveDistance);
         LogManager.addDouble("Vision/Distance Test Vision Distance", m_visionDistance);
         LogManager.addDouble("Vision/Distance Test Vision Error Value", m_visionDistance - m_driveDistance);
@@ -106,7 +106,7 @@ public class TestVisionDistance extends CommandBase {
    */
   @Override
   public void end(boolean interrupted) {
-    m_drive.enableVision(true);
+    m_drive.setVisionEnabled(true);
     m_drive.stop();
   }
 

@@ -42,7 +42,7 @@ public class CalculateStdDevs extends CommandBase {
     // an ArrayList prevents issues if the command ends early, and makes checking if the command has finished easy
     m_poses = new ArrayList<Pose2d>();
 
-    m_drive.enableVision(false);
+    m_drive.setVisionEnabled(false);
   }
 
   /**
@@ -76,7 +76,7 @@ public class CalculateStdDevs extends CommandBase {
    */
   @Override
   public void end(boolean interrupted) {
-    m_drive.enableVision(true);
+    m_drive.setVisionEnabled(true);
 
     // If the array is empty, don't try to calculate std devs
     if (m_poses.size() == 0) {
@@ -110,7 +110,7 @@ public class CalculateStdDevs extends CommandBase {
     // Print and log values
     System.out.printf("Standard deviation values:\nX: %.5f\nY: %.5f\nRotation: %.5f\nDistance: %.5f\n",
       stdDevX, stdDevY, stdDevRot, distance);
-    if (Constants.kLogging) {
+    if (Constants.DO_LOGGING) {
       LogManager.addDouble("Vision/StdDevTest/StdDevX", stdDevX);
       LogManager.addDouble("Vision/StdDevTest/StdDevY", stdDevY);
       LogManager.addDouble("Vision/StdDevTest/StdDevRotation", stdDevRot);

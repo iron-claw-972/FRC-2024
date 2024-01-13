@@ -2,21 +2,15 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Robot.RobotId;
 import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.VisionConstants;
-import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 
 /**
@@ -27,164 +21,149 @@ import frc.robot.util.Vision;
  */
 public class RobotContainer {
 
-  // Shuffleboard auto chooser
-  private final SendableChooser<Command> m_autoCommand = new SendableChooser<>();
+    // Shuffleboard auto chooser
+    private final SendableChooser<Command> autoCommand = new SendableChooser<>();
 
-  //shuffleboard tabs
-  // The main tab is not currently used. Delete the SuppressWarning if it is used.
-  @SuppressWarnings("unused")
-  private final ShuffleboardTab m_mainTab = Shuffleboard.getTab("Main");
-  private final ShuffleboardTab m_drivetrainTab = Shuffleboard.getTab("Drive");
-  private final ShuffleboardTab m_swerveModulesTab = Shuffleboard.getTab("Swerve Modules");
-  private final ShuffleboardTab m_autoTab = Shuffleboard.getTab("Auto");
-  private final ShuffleboardTab m_controllerTab = Shuffleboard.getTab("Controller");
-  private final ShuffleboardTab m_visionTab = Shuffleboard.getTab("Vision");
-  @SuppressWarnings("unused") // Remove this when the test tab is used
-  private final ShuffleboardTab m_testTab = Shuffleboard.getTab("Test");
+    //shuffleboard tabs
+    // The main tab is not currently used. Delete the SuppressWarning if it is used.
+    @SuppressWarnings("unused")
+    private final ShuffleboardTab mainTab = Shuffleboard.getTab("Main");
+    private final ShuffleboardTab drivetrainTab = Shuffleboard.getTab("Drive");
+    private final ShuffleboardTab swerveModulesTab = Shuffleboard.getTab("Swerve Modules");
+    private final ShuffleboardTab autoTab = Shuffleboard.getTab("Auto");
+    private final ShuffleboardTab controllerTab = Shuffleboard.getTab("Controller");
+    private final ShuffleboardTab visionTab = Shuffleboard.getTab("Vision");
+    private final ShuffleboardTab testTab = Shuffleboard.getTab("Test");
 
-  private final Vision m_vision;
+//    private final Vision vision;
 
-  // The robot's subsystems are defined here...
-  private final Drivetrain m_drive;
+    // The robot's subsystems are defined here...
+    private final Drivetrain drive;
+    private final Vision vision;
 
 
-  // Controllers are defined here
-  private final BaseDriverConfig m_driver;
+    // Controllers are defined here
+    private final BaseDriverConfig driver;
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer(RobotId robotId) {
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
+    public RobotContainer() {
+        vision = new Vision(visionTab, VisionConstants.CAMERAS);
 
-    // PowerDistribution m_PDModule = new PowerDistribution(1, ModuleType.kRev);
-    // m_PDModule.clearStickyFaults();
-    // m_PDModule.close();
+        drive = new Drivetrain(vision);
+        vision.setUpSmartDashboardCommandButtons(drive);
+        driver = new GameControllerDriverConfig(drive, controllerTab, false);
 
-    switch (robotId) {
-      case SwerveCompetition:
-        // Update drive constants based off of robot type
-        DriveConstants.update(robotId);
-        
-        m_vision = new Vision(m_visionTab, VisionConstants.CAMERAS);
+        driver.configureControls();
 
-        // Create Drivetrain
-        m_drive = new Drivetrain(m_drivetrainTab, m_swerveModulesTab, m_vision);
-        
-        m_vision.setUpSmartDashboardCommandButtons(m_drive);
+        drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
+        drivetrainTab.add("feild", drive.getFeild());
+        drivetrainTab.addDouble("module1", ()-> drive.getModules()[0].getAngle().getDegrees()%360);
+        drivetrainTab.addDouble("module2", ()-> drive.getModules()[1].getAngle().getDegrees()%360);
+        drivetrainTab.addDouble("module3", ()-> drive.getModules()[2].getAngle().getDegrees()%360);
+        drivetrainTab.addDouble("module4", ()-> drive.getModules()[3].getAngle().getDegrees()%360);
 
-        m_driver = new GameControllerDriverConfig(m_drive, m_controllerTab, false);
-  
-        // load paths before auto starts
-        PathGroupLoader.loadPathGroups();
 
-        m_driver.configureControls();
 
-        m_driver.setupShuffleboard();
+//        switch (robotId) {
+//            case SwerveCompetition:
+//                // Update drive constants based off of robot type
+//                DriveConstants.update(robotId);
+//                VisionConstants.update(robotId);
+//
+//                vision = new Vision(visionTab, VisionConstants.kCameras);
+//
+//                // Create Drivetrain
+//                drive = new Drivetrain(drivetrainTab, swerveModulesTab, vision);
+//
+//                m_vision.setUpSmartDashboardCommandButtons(m_drive);
+//
+//                driver = new PS5ControllerDriverConfig(drive, controllerTab, false);
+//                // testController.configureControls();
+//                // manualController.configureControls();
+//
+//                // load paths before auto starts
+//                PathGroupLoader.loadPathGroups();
+//
+//                driver.configureControls();
+//
+//                driver.setupShuffleboard();
+//
+//                drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
+//
+//                break;
+//
+//            case SwerveTest:
+//                // Update drive constants based off of robot type
+//                DriveConstants.update(robotId);
+//                VisionConstants.update(robotId);
+//
+//                vision = new Vision(visionTab, VisionConstants.kCameras);
+//
+//                // Create Drivetrain, because every robot will have a drivetrain
+//                drive = new Drivetrain(drivetrainTab, swerveModulesTab, vision);
+//                driver = new GameControllerDriverConfig(drive, controllerTab, false);
+//
+//                m_vision.setUpSmartDashboardCommandButtons(m_drive);
+//
+//                DriverStation.reportWarning("Not registering subsystems and controls due to incorrect robot", false);
+//
+//                // TODO: construct dummy subsystems so SwerveTest can run all auto routines
+//
+//                // load paths before auto starts
+//                PathGroupLoader.loadPathGroups();
+//
+//                driver.configureControls();
+//
+//                driver.setupShuffleboard();
+//
+//                drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
+//
+//                break;
+//
+//            default:
+//                DriverStation.reportWarning("Not registering subsystems and controls due to incorrect robot", false);
+//
+//                vision = null;
+//
+//                driver = null;
+//                drive = null;
+//
+//                break;
+//        }
 
-        m_drive.setDefaultCommand(new DefaultDriveCommand(m_drive, m_driver));
+        // This is really annoying so it's disabled
+        DriverStation.silenceJoystickConnectionWarning(true);
 
-        break;
+        LiveWindow.disableAllTelemetry(); // LiveWindow is causing periodic loop overruns
+        LiveWindow.setEnabled(false);
 
-      case SwerveTest:
-        // Update drive constants based off of robot type
-        DriveConstants.update(robotId);
-
-        m_vision = new Vision(m_visionTab, VisionConstants.CAMERAS);
-
-        // Create Drivetrain, because every robot will have a drivetrain
-        m_drive = new Drivetrain(m_drivetrainTab, m_swerveModulesTab, m_vision);
-
-        m_vision.setUpSmartDashboardCommandButtons(m_drive);
-
-        m_driver = new GameControllerDriverConfig(m_drive, m_controllerTab, false);
-
-        DriverStation.reportWarning("Not registering subsystems and controls due to incorrect robot", false);
-
-        // TODO: construct dummy subsystems so SwerveTest can run all auto routines
-       
-        // load paths before auto starts
-        PathGroupLoader.loadPathGroups();
-
-        m_driver.configureControls();
-
-        m_driver.setupShuffleboard();
-
-        m_drive.setDefaultCommand(new DefaultDriveCommand(m_drive, m_driver));
-        
-        break;
-
-      default:
-        DriverStation.reportWarning("Not registering subsystems and controls due to incorrect robot", false);
-
-        m_vision = null;
-
-        m_driver = null;
-        m_drive = null;
-
-        break;
+        autoTab.add("Auto Chooser", autoCommand);
     }
 
-    // This is really annoying so it's disabled
-    DriverStation.silenceJoystickConnectionWarning(true);
+    /**
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
+    public Command getAutonomousCommand() {
+        return autoCommand.getSelected();
+    }
 
-    LiveWindow.disableAllTelemetry(); // LiveWindow is causing periodic loop overruns
-    LiveWindow.setEnabled(false);
-    
-    m_autoTab.add("Auto Chooser", m_autoCommand);
+    // TODO
+    /**
+     * Resets the swerve modules to their absolute positions.
+     */
+//    public void resetModules() {
+//        drive.resetModulesToAbsolute();
+//    }
 
-    if (Constants.kUseTelemetry) loadCommandSchedulerShuffleboard();
-    
-    //addTestCommands();
-  }
-
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    return m_autoCommand.getSelected();
-  }
-
-  // /**
-  //  * Adds the test commands to shuffleboard, so they can be run that way.
-  //  */
-  // public void addTestCommands() {
-  //   GenericEntry testEntry = m_testTab.add("Test Results", false).getEntry();
-  //   m_testTab.add("Blinkin Id",0.65).getEntry();
-  //   m_testTab.add("Cancel Command", new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));
-
-  //   if (m_drive != null) {
-  //     m_drive.addTestCommands(m_testTab, testEntry);
-  //   }
-
-  //   if (m_vision != null) {
-  //     m_vision.addTestCommands(m_testTab, testEntry, m_drive);
-  //   }
-  // }
-
-   
-  /**
-   * Loads the command scheduler shuffleboard which will add event markers whenever a command finishes, ends, or is interrupted.
-   */
-  public void loadCommandSchedulerShuffleboard() {
-    // Set the scheduler to log Shuffleboard events for command initialize, interrupt, finish
-    CommandScheduler.getInstance().onCommandInitialize(command -> Shuffleboard.addEventMarker("Command initialized", command.getName(), EventImportance.kNormal));
-    CommandScheduler.getInstance().onCommandInterrupt(command -> Shuffleboard.addEventMarker("Command interrupted", command.getName(), EventImportance.kNormal));
-    CommandScheduler.getInstance().onCommandFinish(command -> Shuffleboard.addEventMarker("Command finished", command.getName(), EventImportance.kNormal));
-  }
-
-
-  /**
-   * Resets the swerve modules to their absolute positions.
-   */
-  public void resetModules() {
-    m_drive.resetModulesToAbsolute();
-  }
-
-  /**
-   * Sets whether the drivetrain uses vision to update odometry
-   */
-  public void setVisionEnabled(boolean enabled) {
-    m_drive.enableVision(enabled);
-  }
+    /**
+     * Sets whether the drivetrain uses vision to update odometry
+     */
+   public void setVisionEnabled(boolean enabled) {
+       drive.setVisionEnabled(enabled);
+   }
 
 }
