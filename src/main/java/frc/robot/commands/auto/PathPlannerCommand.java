@@ -1,4 +1,4 @@
-package frc.robot.commands.auto_comm;
+package frc.robot.commands.auto;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +19,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.constants.AutoConstants;
+import frc.robot.constants.miscConstants.AutoConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.ConversionUtils;
 import frc.robot.util.PathGroupLoader;
@@ -32,8 +32,8 @@ public class PathPlannerCommand extends SequentialCommandGroup {
   }
 
   public PathPlannerCommand(ArrayList<PathPoint> waypoints, Drivetrain drive, boolean useAllianceColor) {
-    this(new ArrayList<PathPlannerTrajectory>(Arrays.asList(PathPlanner.generatePath(
-      new PathConstraints(AutoConstants.MAX_AUTO_SPEED, AutoConstants.MAX_AUTO_ACCEL),
+    this(new ArrayList<PathPlannerTrajectory>(Arrays.asList(new PathPlannerTrajectory(
+      new PathConstraints(AutoConstants.kMaxAutoSpeed, AutoConstants.kMaxAutoAccel),
       waypoints.get(0),
       waypoints.get(1)
     ))), 0, drive, false, useAllianceColor, true);
@@ -77,11 +77,11 @@ public class PathPlannerCommand extends SequentialCommandGroup {
       createSwerveControllerCommand(
         pathGroup.get(pathIndex), 
         useAllianceColor ? // Pose supplier
-          () -> ConversionUtils.absolutePoseToPathPlannerPose(drive.getPose(), DriverStation.getAlliance().get()) : 
+          () -> ConversionUtils.absolutePoseToPathPlannerPose(drive.getPose(), DriverStation.getAlliance()) :
           () -> drive.getPose(), 
-        drive.getXController(), // X controller can't normal PID as pathplanner has Feed Forward 
-        drive.getYController(), // Y controller can't normal PID as pathplanner has Feed Forward 
-        drive.getRotationController(), // Rotation controller can't normal PID as pathplanner has Feed Forward 
+        drive.getPathplannerXController(), // X controller can't normal PID as pathplanner has Feed Forward 
+        drive.getPathplannerYController(), // Y controller can't normal PID as pathplanner has Feed Forward 
+        drive.getPathplannerRotationController(), // Rotation controller can't normal PID as pathplanner has Feed Forward 
         (chassisSpeeds) -> { drive.setChassisSpeeds(chassisSpeeds, false); }, // chassis Speeds consumer
         useAllianceColor,  // use Alliance color
         drive, // Requires this drive subsystem
