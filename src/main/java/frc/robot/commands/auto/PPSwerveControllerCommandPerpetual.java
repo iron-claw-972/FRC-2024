@@ -3,7 +3,7 @@ package frc.robot.commands.auto;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.path.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
