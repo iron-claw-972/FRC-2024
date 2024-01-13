@@ -64,7 +64,7 @@ public class TestVisionDistance extends CommandBase {
   }
 
   /**
-   * Drives the robot, finds the pose fromt he drivetrain and vision, and someimes prints the distances
+   * Drives the robot, finds the pose from the drivetrain and vision, and someimes prints the distances
    */
   @Override
   public void execute() {
