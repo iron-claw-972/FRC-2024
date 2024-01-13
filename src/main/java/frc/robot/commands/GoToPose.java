@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import com.pathplanner.lib.PathPoint;
+import com.pathplanner.lib.path.PathPoint;
+import com.pathplanner.lib.path.RotationTarget;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -63,14 +64,10 @@ public class GoToPose extends SequentialCommandGroup {
   public Command createCommand() {
     Command command;
     // Gets the current position of the robot for the start of the path
-    PathPoint point1 = PathPoint.fromCurrentHolonomicState(
-      m_drive.getPose(),
-      m_drive.getChassisSpeeds()
-    
-      // set the control lengths. This controls how strong the heading is
-      // aka how much the robot will curve to get to the point. 
-      // We want it to follow a straight line, and with swerve, it isn't too necessary.
-    ).withControlLengths(0.001, 0.001);
+    PathPoint point1 = new PathPoint(
+      m_drive.getPose().getTranslation(),
+      new RotationTarget(0, m_drive.getFieldRelativeHeading())
+    );
 
     // get the desired score pose
     Pose2d pose = m_poseSupplier.get();
@@ -78,13 +75,8 @@ public class GoToPose extends SequentialCommandGroup {
     // Uses the pose to find the end point for the path
     PathPoint point2 = new PathPoint(
       pose.getTranslation(),
-      pose.getRotation(),
-      pose.getRotation(),
-      0
-      // set the control lengths. This controls how strong the heading is
-      // aka how much the robot will curve to get to the point. 
-      // We want it to follow a straight line, and with swerve, it isn't too necessary.
-    ).withControlLengths(0.001, 0.001);
+      new RotationTarget(0, pose.getRotation())
+    );
 
     // Creates the command using the two points
     command = new PathPlannerCommand(

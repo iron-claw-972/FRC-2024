@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.commands.PathfindHolonomic;
 import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.PathPlannerTrajectory;
 import com.pathplanner.lib.path.PathPoint;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
-
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -32,7 +32,7 @@ public class PathPlannerCommand extends SequentialCommandGroup {
   }
 
   public PathPlannerCommand(ArrayList<PathPoint> waypoints, Drivetrain drive, boolean useAllianceColor) {
-    this(new ArrayList<PathPlannerTrajectory>(Arrays.asList(PathPlanner.generatePath(
+    this(new ArrayList<PathPlannerTrajectory>(Arrays.asList(new PathPlannerTrajectory(
       new PathConstraints(AutoConstants.kMaxAutoSpeed, AutoConstants.kMaxAutoAccel),
       waypoints.get(0),
       waypoints.get(1)
@@ -90,7 +90,7 @@ public class PathPlannerCommand extends SequentialCommandGroup {
     );
   }
   
-  public static PPSwerveControllerCommand createSwerveControllerCommand(
+  public static PathfindHolonomic createSwerveControllerCommand(
       PathPlannerTrajectory trajectory, Supplier<Pose2d> poseSupplier, 
       PIDController xController, PIDController yController, PIDController rotationController, 
       Consumer<ChassisSpeeds> outputChassisSpeeds, boolean useAllianceColor, Drivetrain drive, boolean isPerpetual) {
@@ -107,7 +107,7 @@ public class PathPlannerCommand extends SequentialCommandGroup {
       );
     }
 
-    return new PPSwerveControllerCommand(
+    return new PathfindHolonomic(
       trajectory,
       poseSupplier,
       xController,
