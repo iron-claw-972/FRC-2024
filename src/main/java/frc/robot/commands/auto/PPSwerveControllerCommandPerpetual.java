@@ -3,8 +3,8 @@ package frc.robot.commands.auto;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import com.pathplanner.lib.commands.PathfindHolonomic;
 import com.pathplanner.lib.path.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -13,7 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
-public class PPSwerveControllerCommandPerpetual extends PPSwerveControllerCommand{
+public class PPSwerveControllerCommandPerpetual extends PathfindHolonomic{
 
   public PPSwerveControllerCommandPerpetual(
       PathPlannerTrajectory trajectory,

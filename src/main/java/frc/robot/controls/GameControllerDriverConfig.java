@@ -40,7 +40,7 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
 
     // reset the yaw forward if it hasn't been. Mainly useful for testing/driver practice 
     kDriver.get(Button.START).onTrue(new InstantCommand(() -> super.getDrivetrain().setYaw(
-      new Rotation2d(DriverStation.getAlliance() == Alliance.Blue ? 0 : Math.PI)
+      new Rotation2d(DriverStation.getAlliance().get() == Alliance.Blue ? 0 : Math.PI)
     )));
 
     // set the wheels to X
@@ -58,19 +58,19 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     kDriver.get(Button.RB).whileTrue(new GoToPose(() -> getSelectedPose(), getDrivetrain()));
     // Single substation x and angle alignment
     kDriver.get(Button.LB).whileTrue(new GoToPose(() -> new Pose2d(
-      DriverStation.getAlliance()==Alliance.Blue?VisionConstants.BLUE_SINGLE_SUBSTATION_X:VisionConstants.RED_SINGLE_SUBSTATION_X,
+      DriverStation.getAlliance().get()==Alliance.Blue?VisionConstants.BLUE_SINGLE_SUBSTATION_X:VisionConstants.RED_SINGLE_SUBSTATION_X,
       getDrivetrain().getPose().getY(),
       new Rotation2d(Math.PI/2)
     ), getDrivetrain()));
     // Double substation alignment
     kDriver.get(Button.Y).whileTrue(new GoToPose(() -> new Pose2d(
-      DriverStation.getAlliance()==Alliance.Blue?VisionConstants.BLUE_SHELF_X:VisionConstants.RED_SHELF_X,
+      DriverStation.getAlliance().get()==Alliance.Blue?VisionConstants.BLUE_SHELF_X:VisionConstants.RED_SHELF_X,
       VisionConstants.TOP_SHELF_Y,
       new Rotation2d(Math.PI/2)
     ), getDrivetrain()));
     // Double substation alignment
     kDriver.get(Button.Y).whileTrue(new GoToPose(() -> new Pose2d(
-      DriverStation.getAlliance()==Alliance.Blue?VisionConstants.BLUE_SHELF_X:VisionConstants.RED_SHELF_X,
+      DriverStation.getAlliance().get()==Alliance.Blue?VisionConstants.BLUE_SHELF_X:VisionConstants.RED_SHELF_X,
       VisionConstants.BOTTOM_SHELF_Y,
       new Rotation2d(Math.PI/2)
     ), getDrivetrain()));
