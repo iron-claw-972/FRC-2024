@@ -15,6 +15,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -27,6 +28,7 @@ import frc.robot.util.ConversionUtils;
 import frc.robot.util.PathGroupLoader;
 
 
+/**TODO: MOST CONSTRUCTORS DON'T WORK YET*/
 public class PathPlannerCommand extends SequentialCommandGroup {
   
   public PathPlannerCommand(ArrayList<PathPoint> waypoints, Drivetrain drive) {
@@ -34,20 +36,20 @@ public class PathPlannerCommand extends SequentialCommandGroup {
   }
 
   public PathPlannerCommand(ArrayList<PathPoint> waypoints, Drivetrain drive, boolean useAllianceColor) {
-    this(new ArrayList<PathPlannerPath>(Arrays.asList(new PathPlannerPath(
+    this(new ArrayList<PathPlannerPath>(Arrays.asList(PathPlannerPath.fromPathPoints(
       List.of(
-        waypoints.get(0).position,
-        waypoints.get(1).position),
+        waypoints.get(0),
+        waypoints.get(1)),
       new PathConstraints(AutoConstants.MAX_AUTO_SPEED, AutoConstants.MAX_AUTO_ACCEL, DriveConstants.kMaxAngularSpeed, DriveConstants.kMaxAngularAccel),
       new GoalEndState(0, waypoints.get(1).rotationTarget.getTarget())
     ))), 0, drive, false, useAllianceColor, true);
   }
 
   public PathPlannerCommand(ArrayList<PathPoint> waypoints, Drivetrain drive, boolean useAllianceColor, double maxSpeed, double maxAccel) {
-    this(new ArrayList<PathPlannerPath>(Arrays.asList(new PathPlannerPath(
+    this(new ArrayList<PathPlannerPath>(Arrays.asList(PathPlannerPath.fromPathPoints(
       List.of(
-        waypoints.get(0).position,
-        waypoints.get(1).position),
+        waypoints.get(0),
+        waypoints.get(1)),
       new PathConstraints(maxSpeed, maxAccel, DriveConstants.kMaxAngularSpeed, DriveConstants.kMaxAngularAccel),
       new GoalEndState(0, waypoints.get(1).rotationTarget.getTarget())
     ))), 0, drive, false, useAllianceColor, true);
@@ -63,6 +65,21 @@ public class PathPlannerCommand extends SequentialCommandGroup {
 
   public PathPlannerCommand(List<PathPlannerPath> pathGroup, int pathIndex, Drivetrain drive, boolean resetPose){
     this(pathGroup, pathIndex, drive, resetPose, true, false);
+  }
+
+  public PathPlannerCommand(List<Pose2d> poses, PathConstraints constraints, double endSpeed, Rotation2d endRotation, Drivetrain drive, boolean resetPose, boolean useAllianceColor, boolean isPerpetual){
+    this(
+      List.of(new PathPlannerPath(PathPlannerPath.bezierFromPoses(poses), constraints, new GoalEndState(endSpeed, endRotation))),
+      0, drive, resetPose, useAllianceColor, isPerpetual
+    );
+  }
+
+  public PathPlannerCommand(List<Pose2d> poses, Drivetrain drive, Rotation2d endRotation, double maxSpeed, double maxAccel){
+    this(
+      poses,
+      new PathConstraints(maxSpeed, maxAccel, DriveConstants.kMaxAngularSpeed, DriveConstants.kMaxAngularAccel),
+      0, endRotation, drive, false, false, false
+    );
   }
 
   public PathPlannerCommand(List<PathPlannerPath> pathGroup, int pathIndex, Drivetrain drive, boolean resetPose, boolean useAllianceColor, boolean isPerpetual) {
