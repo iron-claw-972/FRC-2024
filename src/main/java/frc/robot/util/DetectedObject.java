@@ -16,7 +16,7 @@ public class DetectedObject {
     private static Drivetrain drive;
     public final Pose3d pose;
     public final ObjectType type;
-    public enum ObjectType{NOTE, HIGH_NOTE, RED_ROBOT, BLUE_ROBOT, NONE};
+    public enum ObjectType{NOTE, RED_ROBOT, BLUE_ROBOT, NONE};
 
     /**
      * Sets the drivetrain to use for pose calculations
@@ -91,6 +91,9 @@ public class DetectedObject {
         // Scale it so that the object will be on the ground (- because translation's z will be negative)
         if(!isRobot()){
             translation = translation.times(-robotToCamera.getZ()/translation.getZ());
+        }else{
+            // Assume all robots are ~3m from the camera
+            translation = translation.times(3);
         }
         // Translate it to make it relative to the robot
         translation = translation.plus(robotToCamera.getTranslation());
@@ -130,7 +133,6 @@ public class DetectedObject {
         return
             type==null?ObjectType.NONE:
             type.toLowerCase().equals("note")?ObjectType.NOTE:
-            type.toLowerCase().equals("high note")?ObjectType.HIGH_NOTE:
             type.toLowerCase().equals("red robot")?ObjectType.RED_ROBOT:
             type.toLowerCase().equals("blue robot")?ObjectType.BLUE_ROBOT:
             ObjectType.NONE;
