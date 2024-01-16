@@ -29,7 +29,7 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
 
         // reset the yaw forward if it hasn't been. Mainly useful for testing/driver practice
         kDriver.get(Button.START).onTrue(new InstantCommand(() -> super.getDrivetrain().setYaw(
-                new Rotation2d(DriverStation.getAlliance() == Alliance.Blue ? 0 : Math.PI)
+                new Rotation2d(DriverStation.getAlliance().get() == Alliance.Blue ? 0 : Math.PI)
                                                                                               )));
 
         // set the wheels to X
