@@ -26,10 +26,10 @@ public class Field {
     
     public void updateModulePositions(){
         
-        if (chassisPose != null){
+        if (drive.getPose() != null){
             chassisPose = drive.getPose();
         }
-        
+
         for (int i = 0; i<4; i++ ){
             Translation2d postion = DriveConstants.swerveModuleLocations[i].
             rotateBy(chassisPose.getRotation())
@@ -38,10 +38,11 @@ public class Field {
             Rotation2d moduleRotation = drive.getModulePositions()[i].angle
             .plus(chassisPose.getRotation());
 
-            modulePositions[i] = new Pose2d(postion, moduleRotation);
             if (drive.getModules()[i].getState().speedMetersPerSecond<0){
                 moduleRotation = moduleRotation.plus(Rotation2d.fromDegrees(180));
             }
+
+            modulePositions[i] = new Pose2d(postion, moduleRotation);
         }
     }
 
