@@ -69,7 +69,9 @@ public class ModuleSim extends Module {
         return getDesiredState().angle;
       }
 
-    // TODO: Comment
+    /**
+     * Sets current speed to zero
+     */
     public void stop() {
         currentSpeed = 0;
     }
@@ -95,7 +97,9 @@ public class ModuleSim extends Module {
         return new Rotation2d(currentSteerPositionRad);
     }
 
-    // TODO: Comment
+     /**
+     * Sets state deadband
+     */
     public void setStateDeadband(boolean enabled) {
         stateDeadband = enabled;
     }
