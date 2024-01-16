@@ -2,16 +2,14 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.constants.globalConst;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
-import frc.robot.controls.PS5ControllerDriverConfig;
-import frc.robot.subsystems.Drivetrain.Drivetrain;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.util.PathGroupLoader;
+import frc.robot.util.ShuffleBoard.ShuffleBoadManager;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -21,22 +19,6 @@ import frc.robot.subsystems.Drivetrain.Drivetrain;
  */
 public class RobotContainer {
 
-    // Shuffleboard auto chooser
-    private final SendableChooser<Command> autoCommand = new SendableChooser<>();
-
-    //shuffleboard tabs
-    // The main tab is not currently used. Delete the SuppressWarning if it is used.
-    @SuppressWarnings("unused")
-    private final ShuffleboardTab mainTab = Shuffleboard.getTab("Main");
-    private final ShuffleboardTab drivetrainTab = Shuffleboard.getTab("Drive");
-    private final ShuffleboardTab swerveModulesTab = Shuffleboard.getTab("Swerve Modules");
-    private final ShuffleboardTab autoTab = Shuffleboard.getTab("Auto");
-    private final ShuffleboardTab controllerTab = Shuffleboard.getTab("Controller");
-    private final ShuffleboardTab visionTab = Shuffleboard.getTab("Vision");
-    private final ShuffleboardTab testTab = Shuffleboard.getTab("Test");
-
-//    private final Vision vision;
-
     // The robot's subsystems are defined here...
     private final Drivetrain drive;
 
@@ -44,16 +26,23 @@ public class RobotContainer {
     // Controllers are defined here
     private final BaseDriverConfig driver;
 
+    ShuffleBoadManager shuffleboardManager;
+
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
         drive = new Drivetrain();
-        driver = new GameControllerDriverConfig(drive, controllerTab, false);
+        driver = new GameControllerDriverConfig(drive);
 
         driver.configureControls();
 
         drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
+
+        PathGroupLoader.loadPathGroups();
+
+        shuffleboardManager = new ShuffleBoadManager(drive);
+
 
 
 
@@ -128,7 +117,6 @@ public class RobotContainer {
         LiveWindow.disableAllTelemetry(); // LiveWindow is causing periodic loop overruns
         LiveWindow.setEnabled(false);
 
-        autoTab.add("Auto Chooser", autoCommand);
     }
 
     /**
@@ -137,16 +125,12 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return autoCommand.getSelected();
+        return shuffleboardManager.getSelectedCommand();
     }
 
-    // TODO
-    /**
-     * Resets the swerve modules to their absolute positions.
-     */
-//    public void resetModules() {
-//        drive.resetModulesToAbsolute();
-//    }
-
-
+    public void updateShuffleBoard(){
+        if (globalConst.USE_TELEMETRY){
+            shuffleboardManager.update();
+        }
+    }
 }

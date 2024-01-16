@@ -1,22 +1,18 @@
-package frc.robot.subsystems.Drivetrain.Module;
+package frc.robot.subsystems.module;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.globalConst;
-import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
-import frc.robot.util.ConversionUtils;
 import lib.CTREModuleState;
 
 /**
  * Swerve module for drivetrain to be used inside of simulation.
  */
 public class ModuleSim extends Module {
-
 
     private double currentSteerPositionRad = 0;
     private double currentDrivePositionMeters = 0;
@@ -108,6 +104,18 @@ public class ModuleSim extends Module {
         return null;
     }
 
-    
+    public double getDriveVoltage(){
+        return 0;
+    }
 
+    public double getDriveStatorCurrent(){
+        return 0;
+    }
+    
+    public double getSteerVelocity() {
+        return 0;
+    }
+    public double getDriveVelocity() {
+        return 0;
+    }
 }

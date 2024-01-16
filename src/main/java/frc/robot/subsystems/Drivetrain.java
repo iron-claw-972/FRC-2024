@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Drivetrain;
+package frc.robot.subsystems;
 import java.util.Arrays;
 
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
@@ -19,8 +19,8 @@ import frc.robot.Robot;
 import frc.robot.constants.globalConst;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
-import frc.robot.subsystems.Drivetrain.Module.ModuleSim;
-import frc.robot.subsystems.Drivetrain.Module.Module;
+import frc.robot.subsystems.module.ModuleSim;
+import frc.robot.subsystems.module.Module;
 import frc.robot.util.LogManager;
 
 /**
@@ -86,7 +86,6 @@ public class Drivetrain extends SubsystemBase {
                 getModulePositions(),
                 new Pose2d() 
         );
-//        poseEstimator.setVisionMeasurementStdDevs(VisionConstants.kBaseVisionPoseStdDevs);
         
         // initialize PID controllers
         xController = new PIDController(DriveConstants.kTranslationalP, 0, DriveConstants.kTranslationalD);
@@ -256,6 +255,9 @@ public class Drivetrain extends SubsystemBase {
         return poseEstimator.getEstimatedPosition().getRotation();
     }
 
+    /**
+     * @return an array of modules
+     */
     public Module[] getModules(){
         return modules;
     }
@@ -293,7 +295,6 @@ public class Drivetrain extends SubsystemBase {
         Arrays.stream(modules).forEach(Module::resetToAbsolute);
     }
 
-
     // getters for the PID Controllers
     public PIDController getXController() {
         return xController;
@@ -304,65 +305,4 @@ public class Drivetrain extends SubsystemBase {
     public PIDController getRotationController() {
         return rotationController;
     }
-    
-    public void updateLogs() {
-
-        double[] pose = {
-          getPose().getX(),
-          getPose().getY(),
-          getPose().getRotation().getRadians()
-        };
-        LogManager.addDoubleArray("Swerve/Pose2d", pose);
-    
-        double[] actualStates = {
-          modules[0].getAngle().getRadians(),
-          modules[0].getState().speedMetersPerSecond,
-          modules[1].getAngle().getRadians(),
-          modules[1].getState().speedMetersPerSecond,
-          modules[2].getAngle().getRadians(),
-          modules[2].getState().speedMetersPerSecond,
-          modules[3].getAngle().getRadians(),
-          modules[3].getState().speedMetersPerSecond
-        };
-        LogManager.addDoubleArray("Swerve/actual swerve states", actualStates);
-    
-        double[] desiredStates = {
-          modules[0].getDesiredAngle().getRadians(),
-          modules[0].getDesiredVelocity(),
-          modules[1].getDesiredAngle().getRadians(),
-          modules[1].getDesiredVelocity(),
-          modules[2].getDesiredAngle().getRadians(),
-          modules[2].getDesiredVelocity(),
-          modules[3].getDesiredAngle().getRadians(),
-          modules[3].getDesiredVelocity()
-        };
-        LogManager.addDoubleArray("Swerve/desired swerve states", desiredStates);
-
-        double[] moduleVoltage = {
-            modules[0].getDriveMotor().getBusVoltage(),
-            modules[0].getDriveMotor().getMotorOutputVoltage(),
-            modules[1].getDriveMotor().getBusVoltage(),
-            modules[1].getDriveMotor().getMotorOutputVoltage(),
-            modules[2].getDriveMotor().getBusVoltage(),
-            modules[2].getDriveMotor().getMotorOutputVoltage(),
-            modules[3].getDriveMotor().getBusVoltage(),
-            modules[3].getDriveMotor().getMotorOutputVoltage()
-          };
-          LogManager.addDoubleArray("Swerve Voltage", desiredStates);
-        
-        // double[] errorStates = {
-        //   desiredStates[0] - actualStates[0],
-        //   desiredStates[1] - actualStates[1],
-        //   desiredStates[2] - actualStates[2],
-        //   desiredStates[3] - actualStates[3],
-        //   desiredStates[4] - actualStates[4],
-        //   desiredStates[5] - actualStates[5],
-        //   desiredStates[6] - actualStates[6],
-        //   desiredStates[7] - actualStates[7]
-        // };
-        // LogManager.addDoubleArray("Swerve/error swerve states", errorStates);
-      }
-
-      
-
 }

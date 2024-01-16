@@ -9,7 +9,7 @@ import frc.robot.commands.DoNothing;
 import frc.robot.commands.SupplierCommand;
 import frc.robot.commands.auto_comm.PathPlannerCommand;
 import frc.robot.constants.AutoConstants;
-import frc.robot.subsystems.Drivetrain.Drivetrain;
+import frc.robot.subsystems.Drivetrain;
 
 import java.util.ArrayList;
 import java.util.List;

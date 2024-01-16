@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Drivetrain.Module;
+package frc.robot.subsystems.module;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
@@ -173,6 +173,14 @@ public class Module extends SubsystemBase {
     }
     public double getDriveVelocity() {
         return ConversionUtils.falconToRPM(driveMotor.getSelectedSensorVelocity(), DriveConstants.kAngleGearRatio) * 2 * Math.PI / 60;
+    }
+
+    public double getDriveVoltage(){
+        return driveMotor.getMotorOutputVoltage();
+    }
+
+    public double getDriveStatorCurrent(){
+        return driveMotor.getStatorCurrent();
     }
 
     private void configDriveMotor() {
