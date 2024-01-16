@@ -16,7 +16,7 @@ import frc.robot.subsystems.Drivetrain;
 public class Field {
     Drivetrain drive;
     Field2d feild = new Field2d();
-    Pose2d chassisPose;
+    Pose2d chassisPose = new Pose2d();
     Pose2d[] modulePositions = new Pose2d[4];
     
     public Field(Drivetrain drive){
@@ -25,11 +25,9 @@ public class Field {
     } 
     
     public void updateModulePositions(){
+        
         if (chassisPose != null){
             chassisPose = drive.getPose();
-        }
-        else{
-            chassisPose = new Pose2d();
         }
         
         for (int i = 0; i<4; i++ ){
@@ -42,7 +40,7 @@ public class Field {
 
             modulePositions[i] = new Pose2d(postion, moduleRotation);
             if (drive.getModules()[i].getState().speedMetersPerSecond<0){
-                modulePositions[i].getRotation().plus(Rotation2d.fromDegrees(180));
+                moduleRotation = moduleRotation.plus(Rotation2d.fromDegrees(180));
             }
         }
     }
