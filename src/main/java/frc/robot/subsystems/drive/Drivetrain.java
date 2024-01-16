@@ -1,6 +1,8 @@
 package frc.robot.subsystems.drive;
 
 import com.ctre.phoenix.sensors.Pigeon2.AxisDirection;
+import com.revrobotics.CANSparkFlex;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -48,6 +50,10 @@ public class Drivetrain extends SubsystemBase {
 
     // Displays the field with the robots estimated pose on it
     private final Field2d fieldDisplay;
+
+    //testing Vortex motors
+    CANSparkFlex leftVortex = new CANSparkFlex(1, MotorType.kBrushless);
+    CANSparkFlex rightVortex = new CANSparkFlex(2, MotorType.kBrushless);
 
     private final ShuffleboardTab swerveTab;
     /**
@@ -308,6 +314,11 @@ public class Drivetrain extends SubsystemBase {
     }
     public Field2d getFeild(){
         return fieldDisplay;
+    }
+
+    public void driveVortex(double speedLeft, double speedRight) {
+        leftVortex.set(speedLeft);
+        rightVortex.set(speedRight);
     }
     
 
