@@ -11,13 +11,25 @@ import frc.robot.util.MotorFactory;
 
 public class Pivot extends SubsystemBase {
 
+    public enum Mode {
+        STOW(PivotConstants.STOW_POS), INTAKE(PivotConstants.INTAKE_POS);
+
+        private double setpoint;
+
+        Mode(double setpoint) {
+            this.setpoint = setpoint;
+        }
+
+        public double getSetpoint() {
+            return setpoint;
+        }
+    }
+
     private final WPI_TalonFX motor;
     private final PIDController pid;
 
     protected final DutyCycleEncoder encoder;
 
-    private double pidPower = 0;
-    private double power = 0;
     private double lastPos = 0;
 
     public Pivot() {
@@ -48,20 +60,14 @@ public class Pivot extends SubsystemBase {
         // set the PID controller's tolerance
         pid.setTolerance(PivotConstants.TOLERANCE);
 
-        // go to the initial position
-        setSetpoint(PivotConstants.STOW_POS);
+        setMode(Mode.STOW);
     }
 
-
-    /**
-     * Set the Wrist's desired position.
-     * @param setpoint the desired arm position (in rotations)
-     */
-    public void setSetpoint(double setpoint) {
+    public void setMode(Mode mode) {
         // set the PID integration error to zero.
         pid.reset();
         // set the PID desired position
-        pid.setSetpoint(setpoint);
+        pid.setSetpoint(mode.getSetpoint());
     }
 
     @Override
@@ -72,7 +78,8 @@ public class Pivot extends SubsystemBase {
         // calculate the PID power level
         // for safety, clamp the setpoint to prevent tuning with SmartDashboard/Shuffleboard from commanding out of range
         // This method continually changes the setpoint.
-        pidPower = pid.calculate(position, MathUtil.clamp(pid.getSetpoint(), PivotConstants.MIN_POS, PivotConstants.MAX_POS));
+        double pidPower = pid.calculate(position, MathUtil.clamp(pid.getSetpoint(), PivotConstants.MIN_POS,
+                PivotConstants.MAX_POS));
 
         // calculate the value of kGravityCompensation
         double feedforwardPower = PivotConstants.GRAVITY_COMPENSATION * Math.cos(position);
@@ -94,19 +101,19 @@ public class Pivot extends SubsystemBase {
      */
     private void setMotorPower(double power) {
 
-        this.power = MathUtil.clamp(power, -PivotConstants.MOTOR_POWER_CLAMP, PivotConstants.MOTOR_POWER_CLAMP);
+        power = MathUtil.clamp(power, -PivotConstants.MOTOR_POWER_CLAMP, PivotConstants.MOTOR_POWER_CLAMP);
 
         double pos = getAbsEncoderPos();
 
         // double safety check incase encoder outputs weird values again
-        if (pos <= PivotConstants.MIN_POS && this.power < 0) {
-            this.power = 0;
+        if (pos <= PivotConstants.MIN_POS && power < 0) {
+            power = 0;
         }
-        if (pos >= PivotConstants.MAX_POS && this.power > 0) {
-            this.power = 0;
+        if (pos >= PivotConstants.MAX_POS && power > 0) {
+            power = 0;
         }
 
-        motor.set(this.power);
+        motor.set(power);
     }
 
     /**

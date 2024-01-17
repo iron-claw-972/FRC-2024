@@ -10,13 +10,13 @@ import frc.robot.util.MotorFactory;
 
 public class Intake extends SubsystemBase {
 
-    public enum IntakeMode {
+    public enum Mode {
         INTAKE(IntakeConstants.INTAKE_POWER), DISABLED(0)
         ;
 
         private double power;
 
-        IntakeMode(double power) {
+        Mode(double power) {
             this.power = power;
         }
 
@@ -27,8 +27,7 @@ public class Intake extends SubsystemBase {
 
     private final WPI_TalonFX motor;
 
-    private boolean hasNote;
-    private IntakeMode mode;
+    private Mode mode;
 
 
     public Intake() {
@@ -42,11 +41,10 @@ public class Intake extends SubsystemBase {
         motor.setNeutralMode(IntakeConstants.NEUTRAL_MODE);
         motor.enableVoltageCompensation(true);
 
-        hasNote = false;
-        mode = IntakeMode.DISABLED;
+        mode = Mode.DISABLED;
     }
 
-    public void setMode(IntakeMode mode) {
+    public void setMode(Mode mode) {
         this.mode = mode;
     }
 
@@ -55,8 +53,8 @@ public class Intake extends SubsystemBase {
         motor.set(mode.getPower());
     }
 
-    public boolean hasNote() {
-        return hasNote;
+    public double getCurrent() {
+        return Math.abs(motor.getSupplyCurrent());
     }
 
 }

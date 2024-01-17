@@ -17,6 +17,9 @@ public final class IntakeConstants {
     public static final double PEAK_CURRENT_DURATION = 0.1;
     public static final boolean ENABLE_CURRENT_LIMIT = true;
 
+    public static final double INTAKE_STALL_TIME = 0.2;
+    public static final double INTAKE_CURRENT_STOP = 10;
+
     private IntakeConstants() {
     }
 
