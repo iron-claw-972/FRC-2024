@@ -39,9 +39,9 @@ public class Drivetrain extends SubsystemBase {
     protected final Module[] modules;
 
     // Odometry
-    private final SwerveDrivePoseEstimator poseEstimator;
+    //private final SwerveDrivePoseEstimator poseEstimator;
 
-    private final WPI_Pigeon2 pigeon;
+    //private final WPI_Pigeon2 pigeon;
 
     // PID Controllers for chassis movement
     private final PIDController xController;
@@ -53,7 +53,7 @@ public class Drivetrain extends SubsystemBase {
 
     //testing Vortex motors
     CANSparkFlex leftVortex = new CANSparkFlex(4, MotorType.kBrushless);
-    //CANSparkFlex rightVortex = new CANSparkFlex(2, MotorType.kBrushless);
+    CANSparkFlex rightVortex = new CANSparkFlex(3, MotorType.kBrushless);
 
     private final ShuffleboardTab swerveTab;
     /**
@@ -66,14 +66,14 @@ public class Drivetrain extends SubsystemBase {
         ModuleConst[] constants = Arrays.copyOfRange(ModuleConst.values(), 0, 4);
         
         Arrays.stream(constants).forEach(moduleConstants -> {
-            modules[moduleConstants.ordinal()] = new Module(moduleConstants, swerveTab);
+           // modules[moduleConstants.ordinal()] = new Module(moduleConstants, swerveTab);
         });
 
-        // The Pigeon is a gyroscope and implements WPILib's Gyro interface
-        pigeon = new WPI_Pigeon2(DriveConst.kPigeon, DriveConst.kPigeonCAN);
-        pigeon.configFactoryDefault();
-        // Our pigeon is mounted with y forward, and z upward
-        pigeon.configMountPose(AxisDirection.PositiveY, AxisDirection.PositiveZ);
+        // // The Pigeon is a gyroscope and implements WPILib's Gyro interface
+        // pigeon = new WPI_Pigeon2(DriveConst.kPigeon, DriveConst.kPigeonCAN);
+        // pigeon.configFactoryDefault();
+        // // Our pigeon is mounted with y forward, and z upward
+        // pigeon.configMountPose(AxisDirection.PositiveY, AxisDirection.PositiveZ);
 
         /*
          * By pausing init for a second before setting module offsets, we avoid a bug
@@ -84,13 +84,13 @@ public class Drivetrain extends SubsystemBase {
         resetModulesToAbsolute();
         
         // initial Odometry Location
-        pigeon.setYaw(DriveConst.kStartingHeading.getDegrees());
-        poseEstimator = new SwerveDrivePoseEstimator(
-                DriveConst.KINEMATICS,
-                Rotation2d.fromDegrees(pigeon.getYaw()),
-                getModulePositions(),
-                new Pose2d() 
-        );
+        // pigeon.setYaw(DriveConst.kStartingHeading.getDegrees());
+        // poseEstimator = new SwerveDrivePoseEstimator(
+        //         DriveConst.KINEMATICS,
+        //         Rotation2d.fromDegrees(pigeon.getYaw()),
+        //         getModulePositions(),
+        //         new Pose2d() 
+        // );
 //        poseEstimator.setVisionMeasurementStdDevs(VisionConstants.kBaseVisionPoseStdDevs);
         
         // initialize PID controllers
@@ -106,7 +106,7 @@ public class Drivetrain extends SubsystemBase {
 
     @Override
     public void periodic() {
-        updateOdometry();
+       // updateOdometry();
         fieldDisplay.setRobotPose(getPose());
     }
 
@@ -158,26 +158,26 @@ public class Drivetrain extends SubsystemBase {
      * @param y   the position to move to in the y, in meters
      * @param rot the angle to move to, in radians
      */
-    public void driveWithPID(double x, double y, double rot) {
-        double xSpeed = xController.calculate(poseEstimator.getEstimatedPosition().getX(), x);
-        double ySpeed = yController.calculate(poseEstimator.getEstimatedPosition().getY(), y);
-        double rotRadians = rotationController.calculate(getYaw().getRadians(), rot);
-        drive(xSpeed, ySpeed, rotRadians, true, false);
-    }
+    // public void driveWithPID(double x, double y, double rot) {
+    //     double xSpeed = xController.calculate(poseEstimator.getEstimatedPosition().getX(), x);
+    //     double ySpeed = yController.calculate(poseEstimator.getEstimatedPosition().getY(), y);
+    //     double rotRadians = rotationController.calculate(getYaw().getRadians(), rot);
+    //     drive(xSpeed, ySpeed, rotRadians, true, false);
+    // }
 
     /**
      * Updates the field relative position of the robot.
      */
-    public void updateOdometry() {
+    // public void updateOdometry() {
         // Updates pose based on encoders and gyro. NOTE: must use yaw directly from gyro!
-        poseEstimator.update(Rotation2d.fromDegrees(pigeon.getYaw()), getModulePositions());
-    }
+        // poseEstimator.update(Rotation2d.fromDegrees(pigeon.getYaw()), getModulePositions());
+    // }
 
     /**
      * Stops all swerve modules.
      */
     public void stop() {
-        Arrays.stream(modules).forEach(Module::stop);
+        //Arrays.stream(modules).forEach(Module::stop);
     }
 
 
@@ -193,7 +193,7 @@ public class Drivetrain extends SubsystemBase {
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConst.kMaxSpeed);
 
         for (int i = 0; i < 4; i++) {
-            modules[i].setDesiredState(swerveModuleStates[i], isOpenLoop);
+            //modules[i].setDesiredState(swerveModuleStates[i], isOpenLoop);
         }
     }
 
@@ -205,8 +205,8 @@ public class Drivetrain extends SubsystemBase {
      */
     public void setChassisSpeeds(ChassisSpeeds chassisSpeeds, boolean isOpenLoop) {
         if (Robot.isSimulation()) {
-            pigeon.getSimCollection().addHeading(
-                    +Units.radiansToDegrees(chassisSpeeds.omegaRadiansPerSecond * GlobalConst.LOOP_TIME));
+            // pigeon.getSimCollection().addHeading(
+            //         +Units.radiansToDegrees(chassisSpeeds.omegaRadiansPerSecond * GlobalConst.LOOP_TIME));
         }
         SwerveModuleState[] swerveModuleStates = DriveConst.KINEMATICS.toSwerveModuleStates(chassisSpeeds);
         setModuleStates(swerveModuleStates, isOpenLoop);
@@ -221,7 +221,7 @@ public class Drivetrain extends SubsystemBase {
     public double getAngularRate(int id) {
         // uses pass by reference and edits reference to array
         double[] rawGyros = new double[3];
-        pigeon.getRawGyro(rawGyros);
+        //pigeon.getRawGyro(rawGyros);
 
         // outputs in deg/s, so convert to rad/s
         return Units.degreesToRadians(rawGyros[id]);
@@ -232,9 +232,9 @@ public class Drivetrain extends SubsystemBase {
      *
      * @return an array of all swerve module positions
      */
-    public SwerveModulePosition[] getModulePositions() {
-        return Arrays.stream(modules).map(Module::getPosition).toArray(SwerveModulePosition[]::new);
-    }
+    // public SwerveModulePosition[] getModulePositions() {
+    //     return Arrays.stream(modules).map(Module::getPosition).toArray(SwerveModulePosition[]::new);
+    // }
 
     /**
      * Enables or disables the state deadband for all swerve modules.
@@ -242,7 +242,7 @@ public class Drivetrain extends SubsystemBase {
      * It should be enabled for all regular driving, to prevent releasing the controls from setting the angles.
      */
     public void setStateDeadband(boolean stateDeadBand) {
-        Arrays.stream(modules).forEach(module -> module.setStateDeadband(stateDeadBand));
+        //Arrays.stream(modules).forEach(module -> module.setStateDeadband(stateDeadBand));
     }
 
 
@@ -251,17 +251,18 @@ public class Drivetrain extends SubsystemBase {
      * @return ChassisSpeeds object
      * This is often used as an input for other methods
      */
-    public ChassisSpeeds getChassisSpeeds() {
-        return DriveConst.KINEMATICS.toChassisSpeeds(
-                Arrays.stream(modules).map(Module::getState).toArray(SwerveModuleState[]::new)
-        );
-    }
+    // public ChassisSpeeds getChassisSpeeds() {
+    //     // return DriveConst.KINEMATICS.toChassisSpeeds(
+    //     //         Arrays.stream(modules).map(Module::getState).toArray(SwerveModuleState[]::new)
+    //     // );
+    // }
 
     /**
      * @return the yaw of the robot, aka heading, the direction it is facing
      */
     public Rotation2d getYaw() {
-        return poseEstimator.getEstimatedPosition().getRotation();
+        Rotation2d test = new Rotation2d();
+        return test;
     }
 
     public Module[] getModules(){
@@ -284,21 +285,23 @@ public class Drivetrain extends SubsystemBase {
      */
     public void resetOdometry(Pose2d pose) {
         // NOTE: must use pigeon yaw for odometer!
-        poseEstimator.resetPosition(Rotation2d.fromDegrees(pigeon.getYaw()), getModulePositions(), pose);
+       // poseEstimator.resetPosition(Rotation2d.fromDegrees(pigeon.getYaw()), getModulePositions(), pose);
     }
 
     /**
      * @return the pose of the robot as estimated by the odometry
      */
     public Pose2d getPose() {
-        return poseEstimator.getEstimatedPosition();
+    Pose2d test = new Pose2d();
+     return test;
+        //return poseEstimator.getEstimatedPosition();
     }
 
     /**
      * TODO: Comment
      */
     public void resetModulesToAbsolute() {
-        Arrays.stream(modules).forEach(Module::resetToAbsolute);
+        //Arrays.stream(modules).forEach(Module::resetToAbsolute);
     }
 
 
@@ -318,7 +321,10 @@ public class Drivetrain extends SubsystemBase {
 
     public void driveVortex(double speedLeft, double speedRight) {
         leftVortex.set(speedLeft);
-        //rightVortex.set(speedRight);
+        System.out.println(speedLeft);
+        rightVortex.set(speedRight);
+        System.out.println(speedRight);
+
     }
     
 

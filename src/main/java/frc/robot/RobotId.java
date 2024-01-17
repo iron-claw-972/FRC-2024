@@ -2,7 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.drive.Drivetrain;
-import frc.robot.subsystems.drive.Module;
+//import frc.robot.subsystems.drive.Module;
 
 import java.util.List;
 
@@ -14,7 +14,8 @@ import java.util.List;
  */
 public enum RobotId {
     Default,
-    SwerveCompetition(Drivetrain.class, Module.class), SwerveTest(Drivetrain.class),
+   // SwerveCompetition(Drivetrain.class, Module.class), 
+    SwerveTest(Drivetrain.class),
     ClassBot1, ClassBot2, ClassBot3, ClassBot4;
 
     /**
@@ -35,9 +36,9 @@ public enum RobotId {
         return this == ClassBot1 || this == ClassBot2 || this == ClassBot3 || this == ClassBot4;
     }
 
-    public boolean isSwerveBot() {
-        return this == SwerveCompetition || this == SwerveTest;
-    }
+    // public boolean isSwerveBot() {
+    //     return this == SwerveCompetition || this == SwerveTest;
+    // }
     
 
 }
