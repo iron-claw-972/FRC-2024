@@ -24,6 +24,7 @@ public class IntakeNote extends CommandBase {
         intake.setMode(Intake.Mode.INTAKE);
     }
 
+    // TODO: This code might need some adjusting, as the cone passes through the intake.
     @Override
     public boolean isFinished() {
         if (forever) {
