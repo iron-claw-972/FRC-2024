@@ -16,7 +16,7 @@ public class IntakeNote extends CommandBase {
         addRequirements(intake);
         this.intake = intake;
         this.forever = forever;
-        this.stallDebouncer = new Debouncer(IntakeConstants.INTAKE_STALL_TIME, Debouncer.DebounceType.kBoth)
+        this.stallDebouncer = new Debouncer(IntakeConstants.INTAKE_STALL_TIME, Debouncer.DebounceType.kBoth);
     }
 
     @Override
