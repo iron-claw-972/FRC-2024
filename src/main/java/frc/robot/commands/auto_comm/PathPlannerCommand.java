@@ -132,7 +132,8 @@ public class PathPlannerCommand extends SequentialCommandGroup {
         poseSupplier,
         speedSupplier,
         outputChassisSpeeds,
-        new HolonomicPathFollowerConfig(maxModuleSpeed, driveBaseReadius, new ReplanningConfig(false, false)),
+        // TODO: Decide if we should have dynamic replanning
+        new HolonomicPathFollowerConfig(maxModuleSpeed, driveBaseReadius, new ReplanningConfig(true, true)),
         useAllianceColor,
         drive
       );
@@ -143,7 +144,7 @@ public class PathPlannerCommand extends SequentialCommandGroup {
         poseSupplier,
         speedSupplier,
         outputChassisSpeeds,
-        new HolonomicPathFollowerConfig(maxModuleSpeed, driveBaseReadius, new ReplanningConfig(false, false)),
+        new HolonomicPathFollowerConfig(maxModuleSpeed, driveBaseReadius, new ReplanningConfig(true, true)),
         ()-> useAllianceColor,
         drive
     );
