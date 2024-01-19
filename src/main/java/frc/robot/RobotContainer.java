@@ -7,10 +7,12 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.auto_comm.PathPlannerCommand;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 
 /**
@@ -58,12 +60,14 @@ public class RobotContainer {
         driver.configureControls();
 
         drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
+        PathPlannerCommand pathPlanner = new PathPlannerCommand(drive);
         drivetrainTab.add("feild", drive.getFeild());
         drivetrainTab.addDouble("module1", ()-> drive.getModules()[0].getAngle().getDegrees()%360);
         drivetrainTab.addDouble("module2", ()-> drive.getModules()[1].getAngle().getDegrees()%360);
         drivetrainTab.addDouble("module3", ()-> drive.getModules()[2].getAngle().getDegrees()%360);
         drivetrainTab.addDouble("module4", ()-> drive.getModules()[3].getAngle().getDegrees()%360);
-
+        PathGroupLoader.loadPathGroups();
+        autoCommand.addOption("Example Path", PathPlannerCommand.followPath("Example Path"));
 
 
 //        switch (robotId) {

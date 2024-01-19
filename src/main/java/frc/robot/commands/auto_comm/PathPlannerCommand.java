@@ -3,9 +3,11 @@ package frc.robot.commands.auto_comm;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.FollowPathHolonomic;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
@@ -19,6 +21,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.constants.AutoConstants;
@@ -30,7 +33,36 @@ import frc.robot.util.PathGroupLoader;
 
 /**TODO: MOST CONSTRUCTORS DON'T WORK YET*/
 public class PathPlannerCommand extends SequentialCommandGroup {
+   public PathPlannerCommand(Drivetrain drive){
+    AutoBuilder.configureHolonomic(
+      ()->drive.getPose(),
+      (pose) -> {drive.resetOdometry(pose);},
+      ()->drive.getChassisSpeeds(),
+      (chassisSpeeds) -> {drive.setChassisSpeeds(chassisSpeeds,false);},
+      AutoConstants.config,
+      allianceColor(),
+      drive
+    );
+  }
+
+  public static Command followPath(String pathName){
+    PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+    return AutoBuilder.followPath(path);
+  }
   
+  public BooleanSupplier allianceColor(){
+    return () -> {
+      // Boolean supplier that controls when the path will be mirrored for the red alliance
+      // This will flip the path being followed to the red side of the field.
+      // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+      var alliance = DriverStation.getAlliance();
+      if (alliance.isPresent()) {
+          return alliance.get() == DriverStation.Alliance.Red;
+      }
+      return false;
+  };
+  }
   public PathPlannerCommand(ArrayList<PathPoint> waypoints, Drivetrain drive) {
     this(waypoints, drive, true);
   }
@@ -55,13 +87,13 @@ public class PathPlannerCommand extends SequentialCommandGroup {
     ))), 0, drive, false, useAllianceColor, true);
   }
   
-  public PathPlannerCommand(String pathGroupName, int pathIndex, Drivetrain drive) {
-    this(PathGroupLoader.getPathGroup(pathGroupName), pathIndex, drive, true, true, false); 
-  }
+  // public PathPlannerCommand(String pathGroupName, int pathIndex, Drivetrain drive) {
+  //   this(PathGroupLoader.getPathGroup(pathGroupName), pathIndex, drive, true, true, false); 
+  // }
   
-  public PathPlannerCommand(String pathGroupName, int pathIndex, Drivetrain drive, boolean resetPose) {
-    this(PathGroupLoader.getPathGroup(pathGroupName), pathIndex, drive, resetPose, true, false); 
-  }
+  // public PathPlannerCommand(String pathGroupName, int pathIndex, Drivetrain drive, boolean resetPose) {
+  //   this(PathGroupLoader.getPathGroup(pathGroupName), pathIndex, drive, resetPose, true, false); 
+  // }
 
   public PathPlannerCommand(List<PathPlannerPath> pathGroup, int pathIndex, Drivetrain drive, boolean resetPose){
     this(pathGroup, pathIndex, drive, resetPose, true, false);
