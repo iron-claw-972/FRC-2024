@@ -34,35 +34,9 @@ import frc.robot.util.PathGroupLoader;
 /**TODO: MOST CONSTRUCTORS DON'T WORK YET*/
 public class PathPlannerCommand extends SequentialCommandGroup {
    public PathPlannerCommand(Drivetrain drive){
-    AutoBuilder.configureHolonomic(
-      ()->drive.getPose(),
-      (pose) -> {drive.resetOdometry(pose);},
-      ()->drive.getChassisSpeeds(),
-      (chassisSpeeds) -> {drive.setChassisSpeeds(chassisSpeeds,false);},
-      AutoConstants.config,
-      allianceColor(),
-      drive
-    );
   }
 
-  public static Command followPath(String pathName){
-    PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
-    return AutoBuilder.followPath(path);
-  }
   
-  public BooleanSupplier allianceColor(){
-    return () -> {
-      // Boolean supplier that controls when the path will be mirrored for the red alliance
-      // This will flip the path being followed to the red side of the field.
-      // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-      var alliance = DriverStation.getAlliance();
-      if (alliance.isPresent()) {
-          return alliance.get() == DriverStation.Alliance.Red;
-      }
-      return false;
-  };
-  }
   public PathPlannerCommand(ArrayList<PathPoint> waypoints, Drivetrain drive) {
     this(waypoints, drive, true);
   }
