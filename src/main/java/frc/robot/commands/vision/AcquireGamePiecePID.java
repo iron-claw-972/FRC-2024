@@ -56,6 +56,9 @@ public class AcquireGamePiecePID extends CommandBase {
    */
   @Override
   public void execute() {
+    if(m_vision.getHorizontalOffset().length==0){
+      return;
+    }
     //get horizontal offset from cam to center of game piece + distance from cam to game piece from networktables
     double xOffset = Units.degreesToRadians(m_vision.getHorizontalOffset()[0]);
     double distance = m_vision.getDistance()[0];
@@ -80,7 +83,8 @@ public class AcquireGamePiecePID extends CommandBase {
    */
   @Override
   public boolean isFinished() { 
-    return m_rotationPID.atSetpoint() && m_distancePID.atSetpoint();
+    return false;
+    // return m_rotationPID.atSetpoint() && m_distancePID.atSetpoint();
   }
 
   /**
