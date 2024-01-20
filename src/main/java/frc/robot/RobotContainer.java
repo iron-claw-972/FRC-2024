@@ -1,5 +1,10 @@
 package frc.robot;
 
+import java.util.function.BooleanSupplier;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -7,10 +12,14 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.SupplierCommand;
+import frc.robot.commands.auto_comm.PathPlannerCommand;
+import frc.robot.constants.AutoConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 
 /**
@@ -22,7 +31,7 @@ import frc.robot.util.Vision;
 public class RobotContainer {
 
     // Shuffleboard auto chooser
-    private final SendableChooser<Command> autoCommand = new SendableChooser<>();
+    private final SendableChooser<SupplierCommand> autoCommand = new SendableChooser<>();
 
     //shuffleboard tabs
     // The main tab is not currently used. Delete the SuppressWarning if it is used.
@@ -56,14 +65,17 @@ public class RobotContainer {
         driver = new GameControllerDriverConfig(drive, controllerTab, false);
 
         driver.configureControls();
-
+        initializeAutoBuilder();
         drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
         drivetrainTab.add("feild", drive.getFeild());
         drivetrainTab.addDouble("module1", ()-> drive.getModules()[0].getAngle().getDegrees()%360);
         drivetrainTab.addDouble("module2", ()-> drive.getModules()[1].getAngle().getDegrees()%360);
         drivetrainTab.addDouble("module3", ()-> drive.getModules()[2].getAngle().getDegrees()%360);
         drivetrainTab.addDouble("module4", ()-> drive.getModules()[3].getAngle().getDegrees()%360);
-
+        PathGroupLoader.loadPathGroups();
+        autoCommand.addOption("Example Path", new SupplierCommand(
+            ()->followPath("Example Path", true),
+            drive));
 
 
 //        switch (robotId) {
@@ -165,5 +177,39 @@ public class RobotContainer {
    public void setVisionEnabled(boolean enabled) {
        drive.setVisionEnabled(enabled);
    }
+
+   public void initializeAutoBuilder(){
+    AutoBuilder.configureHolonomic(
+      ()->drive.getPose(),
+      (pose) -> {drive.resetOdometry(pose);},
+      ()->drive.getChassisSpeeds(),
+      (chassisSpeeds) -> {drive.setChassisSpeeds(chassisSpeeds,false);},
+      AutoConstants.config,
+      allianceColor(),
+      drive
+    );
+   }
+
+   public BooleanSupplier allianceColor(){
+    return () -> {
+      // Boolean supplier that controls when the path will be mirrored for the red alliance
+      // This will flip the path being followed to the red side of the field.
+      // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+      var alliance = DriverStation.getAlliance();
+      if (alliance.isPresent()) {
+          return alliance.get() == DriverStation.Alliance.Red;
+      }
+      return false;
+  };
+  }
+
+    public Command followPath(String pathName, boolean resetOdemetry){
+     PathPlannerPath path = PathGroupLoader.getPathGroup(pathName);
+     if (resetOdemetry){
+            drive.resetOdometry(path.getPreviewStartingHolonomicPose());
+          }
+    return AutoBuilder.followPath(PathGroupLoader.getPathGroup(pathName));
+  }
 
 }

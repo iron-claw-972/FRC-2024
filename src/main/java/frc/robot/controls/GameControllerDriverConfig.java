@@ -29,9 +29,10 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
   public void configureControls() {
     // Reset yaw to be away from driver
     kDriver.get(Button.START).onTrue(new InstantCommand(() -> super.getDrivetrain().setYaw(
-      new Rotation2d(DriverStation.getAlliance() == Alliance.Blue ? 0 : Math.PI))));
-      
-      // set the wheels to X
+      new Rotation2d(DriverStation.getAlliance().get() == Alliance.Blue ? 0 : Math.PI)
+    )));
+
+    // set the wheels to X
     kDriver.get(Button.X).onTrue(new SetFormationX(super.getDrivetrain()));
     
     // Resets the modules to absolute if they are having the unresolved zeroing error
@@ -39,12 +40,12 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
 
     // Amp alignment
     kDriver.get(Button.LB).whileTrue(new GoToPose(()->
-      DriverStation.getAlliance() == Alliance.Blue ? VisionConstants.BLUE_AMP_POSE : VisionConstants.RED_AMP_POSE,
+      DriverStation.getAlliance().get() == Alliance.Blue ? VisionConstants.BLUE_AMP_POSE : VisionConstants.RED_AMP_POSE,
       getDrivetrain()
     ));
     // Podium alignment
     kDriver.get(Button.RB).whileTrue(new GoToPose(()->
-      DriverStation.getAlliance() == Alliance.Blue ? VisionConstants.BLUE_PODIUM_POSE : VisionConstants.RED_PODIUM_POSE,
+      DriverStation.getAlliance().get() == Alliance.Blue ? VisionConstants.BLUE_PODIUM_POSE : VisionConstants.RED_PODIUM_POSE,
       getDrivetrain()
     ));
   }
