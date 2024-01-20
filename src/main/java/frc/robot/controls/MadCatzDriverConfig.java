@@ -2,7 +2,7 @@ package frc.robot.controls;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.drive_comm.SetFormationX;
-import frc.robot.constants.globalConst;
+import frc.robot.constants.Constants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.subsystems.Drivetrain;
 import lib.controllers.MadCatzController;
@@ -14,7 +14,7 @@ import lib.controllers.MadCatzController.MadCatzButton;
  */
 public class MadCatzDriverConfig extends BaseDriverConfig {
 
-    private final MadCatzController kDriver = new MadCatzController(globalConst.DRIVER_JOY);
+    private final MadCatzController kDriver = new MadCatzController(Constants.DRIVER_JOY);
 
     public MadCatzDriverConfig(Drivetrain drive) {
         super(drive);

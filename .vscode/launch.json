@@ -9,7 +9,7 @@
       "name": "Launch TestConstants",
       "request": "launch",
       "mainClass": "test.TestConstants",
-      "projectName": "FRC2023"
+      "projectName": "FRC2024"
     },
     {
       "type": "wpilib",

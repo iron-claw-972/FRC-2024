@@ -6,12 +6,12 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import frc.robot.RobotId;
-import frc.robot.constants.globalConst;
+import frc.robot.constants.Constants;
 import lib.COTSFalconSwerveConstants;
 
 /**
- * Constants are, by default, for the competition robot.
- * Constants get changed if the RobotId detected is not the competition robot.
+ * GlobalConst are, by default, for the competition robot.
+ * GlobalConst get changed if the RobotId detected is not the competition robot.
  */
 public class DriveConstants {
 
@@ -31,7 +31,7 @@ public class DriveConstants {
     public static final double DRIVE_KV = 1.51 / 12.0; // 1.93074
     public static final double DRIVE_KA = 0.27 / 12.0; // 0.00214
 
-    public static double kMaxSpeed = (globalConst.MAX_RPM / 60.0) * kWheelRadius * 2 * Math.PI / kDriveGearRatio;
+    public static double kMaxSpeed = (Constants.MAX_RPM / 60.0) * kWheelRadius * 2 * Math.PI / kDriveGearRatio;
 
     // Need to convert tangential velocity (the m/s of the edge of the robot) to angular velocity (the radians/s of the robot)
     // To do so, divide by the radius. The radius is the diagonal of the square chassis, diagonal = sqrt(2) * side_length.
@@ -89,10 +89,10 @@ public class DriveConstants {
     public static double kPathplannerTranslationalD = 0;
 
     // CAN
-    public static String kDriveMotorCAN = globalConst.CANIVORE_CAN;
-    public static String kSteerMotorCAN = globalConst.CANIVORE_CAN;
-    public static String kSteerEncoderCAN = globalConst.CANIVORE_CAN;
-    public static String kPigeonCAN = globalConst.CANIVORE_CAN;
+    public static String kDriveMotorCAN = Constants.CANIVORE_CAN;
+    public static String kSteerMotorCAN = Constants.CANIVORE_CAN;
+    public static String kSteerEncoderCAN = Constants.CANIVORE_CAN;
+    public static String kPigeonCAN = Constants.CANIVORE_CAN;
 
 
     public static final COTSFalconSwerveConstants kModuleConstants = COTSFalconSwerveConstants.SDSMK4i(COTSFalconSwerveConstants.DriveGearRatios.SDSMK4i_L2);
@@ -170,7 +170,7 @@ public class DriveConstants {
             kSteerOffsetBackRight = -0.383494421839714;
 
             // CAN
-            kDriveMotorCAN = globalConst.RIO_CAN;
+            kDriveMotorCAN = Constants.RIO_CAN;
         }
     }
 }

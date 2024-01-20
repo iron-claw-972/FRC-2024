@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.subsystems.Drivetrain;
@@ -41,17 +42,19 @@ public class DefaultDriveCommand extends CommandBase {
         sideTranslation *= slowFactor;
         rotation *= driver.getIsSlowMode() ? DriveConstants.kSlowRotFactor : 1;
 
-        int allianceReversal = DriverStation.getAlliance() == Alliance.Blue ? 1 : -1;
+        int allianceReversal = DriverStation.getAlliance().get() == Alliance.Red ? 1 : -1;
         forwardTranslation *= allianceReversal;
         sideTranslation *= allianceReversal;
 
-        if (driver.getIsAlign()) {
+        if (driver.getIsAlign() || swerve.getIsAlign()) {
             swerve.driveHeading(
                     forwardTranslation,
                     sideTranslation,
-                    (Math.abs(swerve.getYaw().getRadians()) > Math.PI / 2) ? Math.PI : 0,
+                    DriverStation.getAlliance().get() == Alliance.Blue ?
+                        Math.atan2(VisionConstants.BLUE_SPEAKER_POSE.getY() - swerve.getPose().getY(), VisionConstants.BLUE_SPEAKER_POSE.getX() - swerve.getPose().getX()) :
+                        Math.atan2(VisionConstants.RED_SPEAKER_POSE.getY() - swerve.getPose().getY(), VisionConstants.RED_SPEAKER_POSE.getX() - swerve.getPose().getX()),
                     true
-                               );
+                );
         } else {
             swerve.drive(
                     forwardTranslation,

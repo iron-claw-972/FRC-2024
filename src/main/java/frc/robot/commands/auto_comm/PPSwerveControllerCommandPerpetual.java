@@ -1,97 +1,93 @@
 package frc.robot.commands.auto_comm;
 
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
-import edu.wpi.first.math.controller.PIDController;
+import com.pathplanner.lib.commands.FollowPathHolonomic;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class PPSwerveControllerCommandPerpetual extends PPSwerveControllerCommand {
+public class PPSwerveControllerCommandPerpetual extends FollowPathHolonomic {
 
     public PPSwerveControllerCommandPerpetual(
-            PathPlannerTrajectory trajectory,
+            PathPlannerPath path,
             Supplier<Pose2d> poseSupplier,
-            PIDController xController,
-            PIDController yController,
-            PIDController rotationController,
+            Supplier<ChassisSpeeds> speedSupplier,
             Consumer<ChassisSpeeds> outputChassisSpeeds,
+            HolonomicPathFollowerConfig config,
             boolean useAllianceColor,
             Subsystem... requirements) {
         super(
-                trajectory,
+                path,
                 poseSupplier,
-                xController,
-                yController,
-                rotationController,
+                speedSupplier,
                 outputChassisSpeeds,
-                useAllianceColor,
-                requirements);
+                config,
+                ()->useAllianceColor,
+                requirements
+        );
     }
 
     public PPSwerveControllerCommandPerpetual(
-            PathPlannerTrajectory trajectory,
-            Supplier<Pose2d> poseSupplier,
-            PIDController xController,
-            PIDController yController,
-            PIDController rotationController,
-            Consumer<ChassisSpeeds> outputChassisSpeeds,
-            Subsystem... requirements) {
+        PathPlannerPath path,
+        Supplier<Pose2d> poseSupplier,
+        Supplier<ChassisSpeeds> speedSupplier,
+        Consumer<ChassisSpeeds> outputChassisSpeeds,
+        PIDConstants translationConstatns,
+        PIDConstants rotationConstants,
+        double maxModuleSpeed,
+        double driveBaseRadius,
+        ReplanningConfig replanningConfig,
+        boolean flipPath,
+        Subsystem... requirements){
         super(
-                trajectory,
-                poseSupplier,
-                xController,
-                yController,
-                rotationController,
-                outputChassisSpeeds,
-                requirements);
+            path,
+            poseSupplier,
+            speedSupplier,
+            outputChassisSpeeds,
+            translationConstatns,
+            rotationConstants,
+            maxModuleSpeed,
+            driveBaseRadius,
+            replanningConfig,
+            ()->flipPath,
+            requirements
+        );
     }
 
     public PPSwerveControllerCommandPerpetual(
-            PathPlannerTrajectory trajectory,
-            Supplier<Pose2d> poseSupplier,
-            SwerveDriveKinematics kinematics,
-            PIDController xController,
-            PIDController yController,
-            PIDController rotationController,
-            Consumer<SwerveModuleState[]> outputModuleStates,
-            boolean useAllianceColor,
-            Subsystem... requirements) {
+        PathPlannerPath path,
+        Supplier<Pose2d> poseSupplier,
+        Supplier<ChassisSpeeds> speeSupplier,
+        Consumer<ChassisSpeeds> outputChassisSpeeds,
+        PIDConstants translationConstatns,
+        PIDConstants rotationConstants,
+        double maxModuleSpeed,
+        double driveBaseRadius,
+        double perioud,
+        ReplanningConfig replanningConfig,
+        boolean flipPath,
+        Subsystem... requirements){
         super(
-                trajectory,
-                poseSupplier,
-                kinematics,
-                xController,
-                yController,
-                rotationController,
-                outputModuleStates,
-                useAllianceColor,
-                requirements);
-    }
-
-    public PPSwerveControllerCommandPerpetual(
-            PathPlannerTrajectory trajectory,
-            Supplier<Pose2d> poseSupplier,
-            SwerveDriveKinematics kinematics,
-            PIDController xController,
-            PIDController yController,
-            PIDController rotationController,
-            Consumer<SwerveModuleState[]> outputModuleStates,
-            Subsystem... requirements) {
-        super(
-                trajectory,
-                poseSupplier,
-                kinematics,
-                xController,
-                yController,
-                rotationController,
-                outputModuleStates,
-                requirements);
+            path,
+            poseSupplier,
+            speeSupplier,
+            outputChassisSpeeds,
+            translationConstatns,
+            rotationConstants,
+            maxModuleSpeed,
+            driveBaseRadius,
+            perioud,
+            replanningConfig,
+            ()->flipPath,
+            requirements
+        );
     }
 
     @Override

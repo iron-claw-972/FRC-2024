@@ -1,9 +1,8 @@
 package frc.robot.subsystems;
 import java.util.Arrays;
 
-import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import com.ctre.phoenix.sensors.Pigeon2.AxisDirection;
-
+import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -13,15 +12,18 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
-import frc.robot.constants.globalConst;
+import frc.robot.constants.Constants;
+import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
 import frc.robot.subsystems.module.ModuleSim;
 import frc.robot.subsystems.module.Module;
 import frc.robot.util.LogManager;
+import frc.robot.util.Vision;
 
 /**
  * Represents a swerve drive style drivetrain.
@@ -39,6 +41,9 @@ public class Drivetrain extends SubsystemBase {
     // Odometry
     private final SwerveDrivePoseEstimator poseEstimator;
 
+    // Vision
+    private final Vision vision;
+
     private final WPI_Pigeon2 pigeon;
 
     // PID Controllers for chassis movement
@@ -46,23 +51,32 @@ public class Drivetrain extends SubsystemBase {
     private final PIDController yController;
     private final PIDController rotationController;
 
+    // If vision is enabled for drivetrain odometry updating
+    // DO NOT CHANGE THIS HERE TO DISABLE VISION, change VisionConstants.ENABLED instead
+    private boolean visionEnabled = true;
+
+    // If the robot should aim at the speaker
+    private boolean isAlign = false;
+
     /**
      * Creates a new Swerve Style Drivetrain.
      */
-    public Drivetrain() {
-        modules = new Module[4];
+    public Drivetrain(Vision vision) {
+        this.vision = vision;
+
+        modules = new ModuleSim[4];
+
         ModuleConstants[] constants = Arrays.copyOfRange(ModuleConstants.values(), 0, 4);
-        if (Robot.isSimulation()){
+        
+        if(RobotBase.isReal()){
+            Arrays.stream(constants).forEach(moduleConstants -> {
+                modules[moduleConstants.ordinal()] = new Module(moduleConstants);
+            });
+        }else{
             Arrays.stream(constants).forEach(moduleConstants -> {
                 modules[moduleConstants.ordinal()] = new ModuleSim(moduleConstants);
             });
         }
-        else{
-            Arrays.stream(constants).forEach(moduleConstants -> {
-                modules[moduleConstants.ordinal()] = new Module(moduleConstants);
-            });
-        }
-        
 
         // The Pigeon is a gyroscope and implements WPILib's Gyro interface
         pigeon = new WPI_Pigeon2(DriveConstants.kPigeon, DriveConstants.kPigeonCAN);
@@ -86,6 +100,7 @@ public class Drivetrain extends SubsystemBase {
                 getModulePositions(),
                 new Pose2d() 
         );
+       poseEstimator.setVisionMeasurementStdDevs(VisionConstants.VISION_STD_DEVS);
         
         // initialize PID controllers
         xController = new PIDController(DriveConstants.kTranslationalP, 0, DriveConstants.kTranslationalD);
@@ -162,6 +177,10 @@ public class Drivetrain extends SubsystemBase {
     public void updateOdometry() {
         // Updates pose based on encoders and gyro. NOTE: must use yaw directly from gyro!
         poseEstimator.update(Rotation2d.fromDegrees(pigeon.getYaw()), getModulePositions());
+
+        if(RobotBase.isReal() && VisionConstants.ENABLED && visionEnabled){
+            vision.updateOdometry(poseEstimator);
+        }
     }
 
     /**
@@ -197,7 +216,7 @@ public class Drivetrain extends SubsystemBase {
     public void setChassisSpeeds(ChassisSpeeds chassisSpeeds, boolean isOpenLoop) {
         if (Robot.isSimulation()) {
             pigeon.getSimCollection().addHeading(
-                    +Units.radiansToDegrees(chassisSpeeds.omegaRadiansPerSecond * globalConst.LOOP_TIME));
+                    +Units.radiansToDegrees(chassisSpeeds.omegaRadiansPerSecond * Constants.LOOP_TIME));
         }
         SwerveModuleState[] swerveModuleStates = DriveConstants.KINEMATICS.toSwerveModuleStates(chassisSpeeds);
         setModuleStates(swerveModuleStates, isOpenLoop);
@@ -236,6 +255,16 @@ public class Drivetrain extends SubsystemBase {
         Arrays.stream(modules).forEach(module -> module.setStateDeadband(stateDeadBand));
     }
 
+    public void setVisionEnabled(boolean enabled){
+        visionEnabled = enabled;
+    }
+
+    public void setIsAlign(boolean isAlign){
+        this.isAlign = isAlign;
+    }
+    public boolean getIsAlign(){
+        return isAlign;
+    }
 
     /**
      * Calculates chassis speed of drivetrain using the current SwerveModuleStates

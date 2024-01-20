@@ -1,7 +1,7 @@
 package frc.robot.controls;
 
 import edu.wpi.first.math.MathUtil;
-import frc.robot.constants.globalConst;
+import frc.robot.constants.Constants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.DynamicSlewRateLimiter;
@@ -16,24 +16,24 @@ public abstract class BaseDriverConfig {
 
     // Some of these are not currently used, but we might want them later
     @SuppressWarnings("unused")
-    private double translationalSensitivity = globalConst.TRANSLATIONAL_SENSITIVITY;
+    private double translationalSensitivity = Constants.TRANSLATIONAL_SENSITIVITY;
     @SuppressWarnings("unused")
-    private double translationalExpo = globalConst.TRANSLATIONAL_EXPO;
+    private double translationalExpo = Constants.TRANSLATIONAL_EXPO;
     @SuppressWarnings("unused")
-    private double translationalDeadband = globalConst.TRANSLATIONAL_DEADBAND;
-    private double translationalSlewrate = globalConst.TRANSLATIONAL_SLEWRATE;
+    private double translationalDeadband = Constants.TRANSLATIONAL_DEADBAND;
+    private double translationalSlewrate = Constants.TRANSLATIONAL_SLEWRATE;
 
     @SuppressWarnings("unused")
-    private double rotationSensitivity = globalConst.ROTATION_SENSITIVITY;
+    private double rotationSensitivity = Constants.ROTATION_SENSITIVITY;
     @SuppressWarnings("unused")
-    private double rotationExpo = globalConst.ROTATION_EXPO;
+    private double rotationExpo = Constants.ROTATION_EXPO;
     @SuppressWarnings("unused")
-    private double rotationDeadband = globalConst.ROTATION_DEADBAND;
-    private double rotationSlewrate = globalConst.ROTATION_SLEWRATE;
+    private double rotationDeadband = Constants.ROTATION_DEADBAND;
+    private double rotationSlewrate = Constants.ROTATION_SLEWRATE;
 
-    private double headingSensitivity = globalConst.HEADING_SENSITIVITY;
-    private double headingExpo = globalConst.HEADING_EXPO;
-    private double headingDeadband = globalConst.HEADING_DEADBAND;
+    private double headingSensitivity = Constants.HEADING_SENSITIVITY;
+    private double headingExpo = Constants.HEADING_EXPO;
+    private double headingDeadband = Constants.HEADING_DEADBAND;
     private double previousHeading = 0;
 
     @SuppressWarnings("unused")
@@ -56,15 +56,15 @@ public abstract class BaseDriverConfig {
     }
 
     public double getForwardTranslation() {
-        return MathUtils.expoMS(MathUtil.applyDeadband(getRawForwardTranslation(), globalConst.DEADBAND), 2) * DriveConstants.kMaxSpeed * 1;
+        return MathUtils.expoMS(MathUtil.applyDeadband(getRawForwardTranslation(), Constants.DEADBAND), 2) * DriveConstants.kMaxSpeed * 1;
     }
 
     public double getSideTranslation() {
-        return MathUtils.expoMS(MathUtil.applyDeadband(getRawSideTranslation(), globalConst.DEADBAND), 2) * DriveConstants.kMaxSpeed * 1;
+        return MathUtils.expoMS(MathUtil.applyDeadband(getRawSideTranslation(), Constants.DEADBAND), 2) * DriveConstants.kMaxSpeed * 1;
     }
 
     public double getRotation() {
-        return MathUtils.expoMS(MathUtil.applyDeadband(getRawRotation(), globalConst.DEADBAND), 2) * DriveConstants.kMaxAngularSpeed * 1;
+        return MathUtils.expoMS(MathUtil.applyDeadband(getRawRotation(), Constants.DEADBAND), 2) * DriveConstants.kMaxAngularSpeed * 1;
     }
 
     public double getHeading() {
