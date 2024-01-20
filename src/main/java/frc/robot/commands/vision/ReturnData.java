@@ -35,9 +35,11 @@ public class ReturnData extends CommandBase{
     SmartDashboard.putNumberArray("Object Y offsets degrees", yOffset); 
     SmartDashboard.putNumberArray("Object Distances", m_vision.getDistance()); 
 
-    DetectedObject bestGamePiece = m_vision.getBestGamePiece(40);
-    SmartDashboard.putString("Vision best game piece", bestGamePiece.toString());
-    System.out.println("Best game piece: "+bestGamePiece);
+    DetectedObject bestGamePiece = m_vision.getBestGamePiece(70);
+    if(bestGamePiece!=null){
+      SmartDashboard.putString("Vision best game piece", bestGamePiece.toString());
+      System.out.println("Best game piece: "+bestGamePiece);
+    }
     for(int i = 0; i < xOffset.length; i++){
       System.out.printf("\nx: %.2f, y: %.2f, type: %s\n", xOffset[i], yOffset[i], objectClass[i]);
       DetectedObject object = new DetectedObject(xOffset[i], yOffset[i], objectClass[i], VisionConstants.CAMERAS.get(0).getSecond());
