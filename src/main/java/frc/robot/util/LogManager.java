@@ -43,7 +43,7 @@ public class LogManager {
   /**
    * Records the metadata supplied by gversion (https://github.com/lessthanoptimal/gversion-plugin) in BuildData.java.
    */
-  public static void recordMetadata() {
+  /*public static void recordMetadata() {
     new StringLogEntry(log, "BuildData/Maven Group").append(BuildData.MAVEN_GROUP);
     new StringLogEntry(log, "BuildData/Maven Name").append(BuildData.MAVEN_NAME); // The name of the repository
     new StringLogEntry(log, "BuildData/Version").append(BuildData.VERSION);
@@ -54,7 +54,7 @@ public class LogManager {
     new StringLogEntry(log, "BuildData/Build Date").append(BuildData.BUILD_DATE);
     new IntegerLogEntry(log, "BuildData/Build Unix Time").append(BuildData.BUILD_UNIX_TIME);
     new IntegerLogEntry(log, "BuildData/Dirty").append(BuildData.DIRTY);
-  }
+  }*/
 
   /**
    * @deprecated Use {@link #addDouble(String, double)} with a single value instead.
