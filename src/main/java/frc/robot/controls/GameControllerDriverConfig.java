@@ -40,7 +40,7 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
                 getDrivetrain().resetModulesToAbsolute()
         ));
 
-        kDriver.get(Button.B).onTrue(new InstantCommand(() -> getDrivetrain().driveVortex(0.3, 0.3)));
+        kDriver.get(Button.B).onTrue(new InstantCommand(() -> getDrivetrain().driveVortex(.75, .75)));
     }
 
 

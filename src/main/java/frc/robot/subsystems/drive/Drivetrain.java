@@ -52,8 +52,8 @@ public class Drivetrain extends SubsystemBase {
     private final Field2d fieldDisplay;
 
     //testing Vortex motors
-    CANSparkFlex leftVortex = new CANSparkFlex(4, MotorType.kBrushless);
-    CANSparkFlex rightVortex = new CANSparkFlex(3, MotorType.kBrushless);
+    CANSparkFlex leftVortex = new CANSparkFlex(3, MotorType.kBrushless);
+    CANSparkFlex rightVortex = new CANSparkFlex(4, MotorType.kBrushless);
 
     private final ShuffleboardTab swerveTab;
     /**
@@ -320,7 +320,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void driveVortex(double speedLeft, double speedRight) {
-        leftVortex.set(speedLeft);
+        leftVortex.set(-speedLeft);
         System.out.println(speedLeft);
         rightVortex.set(speedRight);
         System.out.println(speedRight);
