@@ -3,18 +3,30 @@ package frc.robot.subsystems.gpm_subsystem;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.simulation.DutyCycleEncoderSim;
+import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.globalConst;
 import frc.robot.constants.PivotConstants;
 import frc.robot.util.MotorFactory;
 
 public class Pivot extends SubsystemBase {
-
+    protected MechanismLigament2d simulationLigament;
     public enum Mode {
         STOW(PivotConstants.STOW_POS), INTAKE(PivotConstants.INTAKE_POS);
 
         private double setpoint;
+        double angle;
+        double targetAngle; 
 
         Mode(double setpoint) {
             this.setpoint = setpoint;
@@ -28,11 +40,22 @@ public class Pivot extends SubsystemBase {
     private final WPI_TalonFX motor;
     private final PIDController pid;
 
+    private SingleJointedArmSim sim;
+
     protected final DutyCycleEncoder encoder;
 
     private double lastPos = 0;
 
     public Pivot() {
+       
+            Mechanism2d simulationMechanism = new Mechanism2d(3, 3);
+            MechanismRoot2d mechanismRoot = simulationMechanism.getRoot("Pivot", 1.5, 1.5);
+            simulationLigament = mechanismRoot.append(
+                    new MechanismLigament2d("angle", 1, 0, 4, new Color8Bit(Color.kOrange))
+            );
+
+            SmartDashboard.putData("Pivot", simulationMechanism);
+        
         // configure the motor.
         motor = MotorFactory.createTalonFXSupplyLimit(
                 PivotConstants.MOTOR_ID,
@@ -63,6 +86,12 @@ public class Pivot extends SubsystemBase {
         setMode(Mode.STOW);
     }
 
+
+    @Override
+    public void simulationPeriodic() {
+        //simulationLigament.setAngle(angle);
+    }
+
     public void setMode(Mode mode) {
         // set the PID integration error to zero.
         pid.reset();
@@ -74,7 +103,8 @@ public class Pivot extends SubsystemBase {
     public void periodic() {
         // obtain the wrist position
         double position = getAbsEncoderPos();
-
+        //double add = (targetAngle - angle) * 0.2;
+        //angle += add;
         // calculate the PID power level
         // for safety, clamp the setpoint to prevent tuning with SmartDashboard/Shuffleboard from commanding out of range
         // This method continually changes the setpoint.

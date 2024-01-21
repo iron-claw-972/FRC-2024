@@ -7,6 +7,10 @@ public class PivotConstants {
 
     public static final int MOTOR_ID = 2;
 
+    public static final int GEAR_RATIO = 1;
+    public static final double MOMENT_OF_INERTIA = 0.01403;
+    public static final double RADIUS = 0.127;
+
     public static final int CONTINUOUS_CURRENT_LIMIT = 20;
     public static final int PEAK_CURRENT_LIMIT = 50;
     public static final double PEAK_CURRENT_DURATION = 0.5;
@@ -30,7 +34,7 @@ public class PivotConstants {
     /** wrist absolute encoder offset (rotations). */
     public static final double ENCODER_OFFSET = 0.687;
 
-    public static final double STOW_POS = 0;
+    public static final double STOW_POS = 40;
     public static final double INTAKE_POS = 0;
 
     // min/max, in radians
