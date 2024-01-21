@@ -29,12 +29,12 @@ public class PS5ControllerDriverConfig extends BaseDriverConfig {
 
         // reset the yaw forward. Mainly useful for testing/driver practice
         kDriver.get(PS5Button.OPTIONS).onTrue(new InstantCommand(() -> super.getDrivetrain().setYaw(
-                new Rotation2d(DriverStation.getAlliance() == Alliance.Blue ? 0 : Math.PI)
+                new Rotation2d(DriverStation.getAlliance().get() == Alliance.Blue ? 0 : Math.PI)
                                                                                                    )));
 
         // reset the yaw backward. Mainly useful for testing/driver practice
         kDriver.get(PS5Button.CREATE).onTrue(new InstantCommand(() -> super.getDrivetrain().setYaw(
-                new Rotation2d(DriverStation.getAlliance() == Alliance.Red ? 0 : Math.PI)
+                new Rotation2d(DriverStation.getAlliance().get() == Alliance.Red ? 0 : Math.PI)
                                                                                                   )));
 
         // set the wheels to X
