@@ -3,13 +3,13 @@ package frc.robot;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.DefaultDriveCommand;
+//import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.constants.globalConst;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.util.PathGroupLoader;
-import frc.robot.util.ShuffleBoard.ShuffleBoadManager;
+//import frc.robot.util.PathGroupLoader;
+//import frc.robot.util.ShuffleBoard.ShuffleBoadManager;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -26,7 +26,7 @@ public class RobotContainer {
     // Controllers are defined here
     private final BaseDriverConfig driver;
 
-    ShuffleBoadManager shuffleboardManager;
+    //ShuffleBoadManager shuffleboardManager;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -37,12 +37,12 @@ public class RobotContainer {
 
         driver.configureControls();
 
-        drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
+        /*drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
 
         PathGroupLoader.loadPathGroups();
 
         shuffleboardManager = new ShuffleBoadManager(drive);
-
+*/
 
 
 
@@ -124,7 +124,7 @@ public class RobotContainer {
      *
      * @return the command to run in autonomous
      */
-    public Command getAutonomousCommand() {
+    /*public Command getAutonomousCommand() {
         return shuffleboardManager.getSelectedCommand();
     }
 
@@ -132,5 +132,5 @@ public class RobotContainer {
         if (globalConst.USE_TELEMETRY){
             shuffleboardManager.update();
         }
-    }
+    }*/
 }
