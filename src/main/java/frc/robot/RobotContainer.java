@@ -10,6 +10,7 @@ import frc.robot.controls.GameControllerDriverConfig;
 import frc.robot.subsystems.Drivetrain;
 // import frc.robot.util.PathGroupLoader;
 // import frc.robot.util.ShuffleBoard.ShuffleBoadManager;
+import frc.robot.subsystems.gpm_subsystem.PivotSim;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -18,6 +19,8 @@ import frc.robot.subsystems.Drivetrain;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+
+    private final PivotSim m_pivotSim;
 
     // The robot's subsystems are defined here...
     private final Drivetrain drive;
@@ -32,6 +35,9 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
+
+        m_pivotSim = new PivotSim();
+
         drive = new Drivetrain();
         driver = new GameControllerDriverConfig(drive);
 

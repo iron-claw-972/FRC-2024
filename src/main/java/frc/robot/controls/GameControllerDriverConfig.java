@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.drive_comm.SetFormationX;
 import frc.robot.constants.globalConst;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.gpm_subsystem.PivotSim;
 import frc.robot.util.MathUtils;
 import lib.controllers.GameController;
 import lib.controllers.GameController.Axis;
@@ -25,6 +26,7 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
 
     @Override
     public void configureControls() {
+
 
         // reset the yaw forward if it hasn't been. Mainly useful for testing/driver practice
         kDriver.get(Button.START).onTrue(new InstantCommand(() -> super.getDrivetrain().setYaw(

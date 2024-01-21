@@ -1,4 +1,25 @@
-public class PivotSim {
+package frc.robot.subsystems.gpm_subsystem;
+
+import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.simulation.BatterySim;
+import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.PivotSimConstants;
+
+public class PivotSim extends SubsystemBase{
 
     private final WPI_TalonFX m_wristMotor;
     private final PIDController m_controller;
@@ -26,7 +47,8 @@ public class PivotSim {
               PivotSimConstants.ARM_LENGTH, 
               PivotSimConstants.MIN_POS, 
               PivotSimConstants.MAX_POS,
-              false
+              false,
+              PivotSimConstants.STARTING_POS
             );
 
             m_wristPhysicsSim.setState(VecBuilder.fill(PivotSimConstants.MIN_POS,0)); 
@@ -52,14 +74,7 @@ public class PivotSim {
 
     SmartDashboard.putData(m_controller); 
 
-    setSetpoint(Units.radiansToDegrees(WristConstantsPID.kMinAngleRadsSoftStop));
-
-    }
-
-    @Override
-    public void periodic() {
-
-    moveMotorsWithPID();
+    setSetpoint(Units.radiansToDegrees(PivotSimConstants.MIN_POS));
 
     }
 
@@ -72,7 +87,7 @@ public class PivotSim {
         
         m_wristPhysicsSim.update(0.020);
         
-        m_motorSim.setIntegratedSensorRawPosition(physicsSimRadsToTicks(m_wristPhysicsSim.getAngleRads()+WristConstantsPID.kSetpointOffsetRads)); 
+        m_motorSim.setIntegratedSensorRawPosition(physicsSimRadsToTicks(m_wristPhysicsSim.getAngleRads()+PivotSimConstants.kSetpointOffsetRads)); 
     
         m_moving.setAngle(Units.radiansToDegrees(m_wristPhysicsSim.getAngleRads()));
 
@@ -84,7 +99,7 @@ public class PivotSim {
 
         setpoint = Units.degreesToRadians(setpoint)+PivotSimConstants.kSetpointOffsetRads;
 
-        setpoint = MathUtil.clamp(setpoint, PivotSimConstants.MIN_POS+PivotSimConstants.kSetpointOffsetRads,PivotSimConstants.MAX_POS+PivotSimConstantsD.kSetpointOffsetRads);
+        setpoint = MathUtil.clamp(setpoint, PivotSimConstants.MIN_POS+PivotSimConstants.kSetpointOffsetRads,PivotSimConstants.MAX_POS+PivotSimConstants.kSetpointOffsetRads);
     
         m_controller.setSetpoint(setpoint); 
 
@@ -92,7 +107,7 @@ public class PivotSim {
 
     public void moveMotorsWithPID(){
 
-        m_motorPower = m_controller.calculate(m_wristMotor.getSelectedSensorPosition()*WristConstantsPID.kEncoderTicksToRadsConversion);
+        m_motorPower = m_controller.calculate(m_wristMotor.getSelectedSensorPosition()*PivotSimConstants.kEncoderTicksToRadsConversion);
 
         MathUtil.clamp(m_motorPower, PivotSimConstants.MIN_POW, PivotSimConstants.MAX_POW); 
 
@@ -106,7 +121,7 @@ public class PivotSim {
 
         return rawPos;  
 
-  }
+    }
   
-}
-
+  }
+      
