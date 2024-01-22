@@ -40,6 +40,6 @@ public class FollowPathCommand extends SequentialCommandGroup {
         else{
             drive.resetOdometry(path.getPreviewStartingHolonomicPose());
         }
-          }
+    }
   }
 }
