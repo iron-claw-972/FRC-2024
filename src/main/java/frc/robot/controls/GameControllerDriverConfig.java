@@ -4,10 +4,14 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.commands.drive_comm.SetFormationX;
 import frc.robot.constants.GlobalConst;
 import frc.robot.subsystems.drive.Drivetrain;
+import frc.robot.subsystems.gpm_subsystem.Outtake;
 import frc.robot.util.MathUtils;
 import lib.controllers.GameController;
 import lib.controllers.GameController.Axis;
@@ -19,6 +23,7 @@ import lib.controllers.GameController.Button;
 public class GameControllerDriverConfig extends BaseDriverConfig {
 
     private final GameController kDriver = new GameController(GlobalConst.DRIVER_JOY);
+    private final Outtake m_shooter = new Outtake();
 
     public GameControllerDriverConfig(Drivetrain drive, ShuffleboardTab controllerTab, boolean shuffleboardUpdates) {
         super(drive, controllerTab, shuffleboardUpdates);
@@ -39,8 +44,8 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
         kDriver.get(Button.A).onTrue(new InstantCommand(() ->
                 getDrivetrain().resetModulesToAbsolute()
         ));
-
-        kDriver.get(Button.B).onTrue(new InstantCommand(() -> getDrivetrain().driveVortex(.75, .75)));
+        
+        kDriver.get(Button.Y).onTrue(new RunCommand(() -> m_shooter.enable(), m_shooter));
     }
 
 
