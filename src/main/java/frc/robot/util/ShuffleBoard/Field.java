@@ -40,6 +40,9 @@ public class Field {
 
             if (drive.getModules()[i].getState().speedMetersPerSecond<0){
                 moduleRotation = moduleRotation.plus(Rotation2d.fromDegrees(180));
+            }else if(drive.getModules()[i].getState().speedMetersPerSecond == 0 && modulePositions[i] != null){
+                // Use previous rotation if it isn't moving
+                moduleRotation = modulePositions[i].getRotation();
             }
 
             modulePositions[i] = new Pose2d(postion, moduleRotation);
