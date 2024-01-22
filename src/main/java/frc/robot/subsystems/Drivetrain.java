@@ -63,7 +63,7 @@ public class Drivetrain extends SubsystemBase {
     public Drivetrain(Vision vision) {
         this.vision = vision;
 
-        modules = new ModuleSim[4];
+        modules = new Module[4];
 
         ModuleConstants[] constants = Arrays.copyOfRange(ModuleConstants.values(), 0, 4);
         

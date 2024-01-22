@@ -52,7 +52,7 @@ public class Field {
     public void updateFeild(){
         updateModulePositions();
         feild.setRobotPose(chassisPose);
-        feild.getObject("modules").setPoses(modulePositions);      
+        feild.getObject("modules").setPoses(modulePositions);     
     }
 
 }

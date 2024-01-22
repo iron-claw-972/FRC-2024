@@ -53,24 +53,24 @@ public class DriveConstants {
 
     public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(swerveModuleLocations);
 
-    public static int kDriveFrontLeft = 1;
+   public static int kDriveFrontLeft = 1;
     public static int kSteerFrontLeft = 2;
-    public static int kEncoderFrontLeft = 9;
+    public static int kEncoderFrontLeft = 3;
     public static double kSteerOffsetFrontLeft = 4.972265625;//0.058291152119637;//-3.060285486280918+Math.PI;
 
-    public static int kDriveFrontRight = 7;
-    public static int kSteerFrontRight = 8;
+    public static int kDriveFrontRight = 10;
+    public static int kSteerFrontRight = 11;
     public static int kEncoderFrontRight = 12;
     public static double kSteerOffsetFrontRight = 189.353906250000023;//-2.994324445724487;//-3.001994334161282;
 
-    public static int kDriveBackLeft = 5;
-    public static int kSteerBackLeft = 6;
-    public static int kEncoderBackLeft = 11;
+    public static int kDriveBackLeft = 7;
+    public static int kSteerBackLeft = 8;
+    public static int kEncoderBackLeft = 9;
     public static double kSteerOffsetBackLeft = 215.87343750000002;//-2.540267050266266;//0.650406539440155+Math.PI;
 
-    public static int kDriveBackRight = 3;
-    public static int kSteerBackRight = 4;
-    public static int kEncoderBackRight = 10;
+    public static int kDriveBackRight = 4;
+    public static int kSteerBackRight = 5;
+    public static int kEncoderBackRight = 6;
     public static double kSteerOffsetBackRight = 151.65117187500002;//2.626169800758362;//2.771897681057453;
 
     // heading PID
@@ -151,22 +151,22 @@ public class DriveConstants {
 
             kDriveFrontLeft = 1;
             kSteerFrontLeft = 2;
-            kEncoderFrontLeft = 3;
+            kEncoderFrontLeft = 9;
             kSteerOffsetFrontLeft = -1.58;
 
-            kDriveFrontRight = 10;
-            kSteerFrontRight = 11;
+            kDriveFrontRight = 7;
+            kSteerFrontRight = 8;
             kEncoderFrontRight = 12;
             kSteerOffsetFrontRight = 1.935;
 
-            kDriveBackLeft = 7;
-            kSteerBackLeft = 8;
-            kEncoderBackLeft = 9;
+            kDriveBackLeft = 5;
+            kSteerBackLeft = 6;
+            kEncoderBackLeft = 11;
             kSteerOffsetBackLeft = -8;
 
-            kDriveBackRight = 4;
-            kSteerBackRight = 5;
-            kEncoderBackRight = 6;
+            kDriveBackRight = 3;
+            kSteerBackRight = 4;
+            kEncoderBackRight = 10;
             kSteerOffsetBackRight = -0.383494421839714;
 
             // CAN
