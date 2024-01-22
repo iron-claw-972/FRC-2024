@@ -164,12 +164,12 @@ public class RobotContainer {
       ()->drive.getChassisSpeeds(),
       (chassisSpeeds) -> {drive.setChassisSpeeds(chassisSpeeds,false);},
       AutoConstants.config,
-      allianceColor(),
+      getAllianceColorBooleanSupplier(),
       drive
     );
    }
 
-   public BooleanSupplier allianceColor(){
+   public static BooleanSupplier getAllianceColorBooleanSupplier(){
     return () -> {
       // Boolean supplier that controls when the path will be mirrored for the red alliance
       // This will flip the path being followed to the red side of the field.
@@ -180,7 +180,7 @@ public class RobotContainer {
           return alliance.get() == DriverStation.Alliance.Red;
       }
       return false;
-  };
+    };
   }
 
 
