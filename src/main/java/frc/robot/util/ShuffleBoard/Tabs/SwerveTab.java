@@ -7,7 +7,6 @@ package frc.robot.util.ShuffleBoard.Tabs;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.LayoutType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import frc.robot.subsystems.Drivetrain;
@@ -19,23 +18,20 @@ import frc.robot.subsystems.module.Module;
 /** Add your docs here. */
 public class SwerveTab extends ShuffleBoardTabs {
     
-    Drivetrain drive;
+    private Drivetrain drive;
 
-    Module[] modules;
+    private Module[] modules;
 
-    GenericEntry xOdemetry;
-    GenericEntry yOdemetry;
-    GenericEntry rotOdemetry;
-    GenericEntry[] steerSpeed = new GenericEntry[4];
-    GenericEntry[] driveSpeed = new GenericEntry[4];
-    GenericEntry[] rotationalPosition = new GenericEntry[4];
-    GenericEntry[] voltage = new GenericEntry[4];
-    GenericEntry[] current = new GenericEntry[4];
+    private GenericEntry xOdemetry;
+    private GenericEntry yOdemetry;
+    private GenericEntry rotOdemetry;
+    private GenericEntry[] steerSpeed = new GenericEntry[4];
+    private GenericEntry[] driveSpeed = new GenericEntry[4];
+    private GenericEntry[] rotationalPosition = new GenericEntry[4];
+    private GenericEntry[] voltage = new GenericEntry[4];
+    private GenericEntry[] current = new GenericEntry[4];
 
     private ShuffleboardLayout[] driveLayouts = new ShuffleboardLayout[4];
-
-
-
 
     public SwerveTab(Drivetrain drive){
         this.drive = drive;

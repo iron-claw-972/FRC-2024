@@ -3,21 +3,18 @@ package frc.robot;
 import java.util.function.BooleanSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathPlannerPath;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.constants.AutoConstants;
-import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
-import frc.robot.util.ShuffleBoard.ShuffleBoadManager;
+import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -34,7 +31,7 @@ public class RobotContainer {
     // Controllers are defined here
     private final BaseDriverConfig driver;
 
-    ShuffleBoadManager shuffleboardManager;
+    ShuffleBoardManager shuffleboardManager;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -51,7 +48,7 @@ public class RobotContainer {
 
         PathGroupLoader.loadPathGroups();
 
-        shuffleboardManager = new ShuffleBoadManager(drive, vision);
+        shuffleboardManager = new ShuffleBoardManager(drive, vision);
          
 
 

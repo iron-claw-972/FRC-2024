@@ -14,10 +14,10 @@ import frc.robot.subsystems.Drivetrain;
 
 /** Add your docs here. */
 public class Field {
-    Drivetrain drive;
-    Field2d feild = new Field2d();
-    Pose2d chassisPose = new Pose2d();
-    Pose2d[] modulePositions = new Pose2d[4];
+    private Drivetrain drive;
+    private Field2d feild = new Field2d();
+    private Pose2d chassisPose = new Pose2d();
+    private Pose2d[] modulePositions = new Pose2d[4];
     
     public Field(Drivetrain drive){
         this.drive = drive;

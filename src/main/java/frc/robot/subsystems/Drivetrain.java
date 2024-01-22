@@ -22,7 +22,6 @@ import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
 import frc.robot.subsystems.module.ModuleSim;
 import frc.robot.subsystems.module.Module;
-import frc.robot.util.LogManager;
 import frc.robot.util.Vision;
 
 /**

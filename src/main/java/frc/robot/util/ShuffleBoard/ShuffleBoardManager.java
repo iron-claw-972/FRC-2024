@@ -4,11 +4,7 @@
 
 package frc.robot.util.ShuffleBoard;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Map;
-
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.Vision;
@@ -17,17 +13,17 @@ import frc.robot.util.ShuffleBoard.Tabs.SwerveTab;
 import frc.robot.util.ShuffleBoard.Tabs.VisionTab;
 
 /** Add your docs here. */
-public class ShuffleBoadManager {
+public class ShuffleBoardManager {
 
-    ArrayList<ShuffleBoardTabs> tabs = new ArrayList<>();
+    private ArrayList<ShuffleBoardTabs> tabs = new ArrayList<>();
     
-    Field feild;
+    private Field feild;
 
-    SwerveTab swerveTab;
-    AutoTab autoTab;
-    VisionTab visionTab;
+    private SwerveTab swerveTab;
+    private AutoTab autoTab;
+    private VisionTab visionTab;
 
-    public ShuffleBoadManager(Drivetrain drive, Vision vision){
+    public ShuffleBoardManager(Drivetrain drive, Vision vision){
         
         swerveTab = new SwerveTab(drive);
         autoTab = new AutoTab(drive);
