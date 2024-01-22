@@ -47,13 +47,13 @@ public class Drivetrain extends SubsystemBase {
     private final PIDController xController;
     private final PIDController yController;
     private final PIDController rotationController;
-
+    private final PIDController velocityController;
     // Displays the field with the robots estimated pose on it
     private final Field2d fieldDisplay;
 
     //testing Vortex motors
     CANSparkFlex leftVortex = new CANSparkFlex(3, MotorType.kBrushless);
-    CANSparkFlex rightVortex = new CANSparkFlex(4, MotorType.kBrushless);
+    CANSparkFlex rightVortex = new CANSparkFlex(6, MotorType.kBrushless);
 
     private final ShuffleboardTab swerveTab;
     /**
@@ -99,6 +99,9 @@ public class Drivetrain extends SubsystemBase {
         rotationController = new PIDController(DriveConst.kHeadingP, 0, DriveConst.kHeadingD);
         rotationController.enableContinuousInput(-Math.PI, Math.PI);
         rotationController.setTolerance(Units.degreesToRadians(0.25), Units.degreesToRadians(0.25));
+
+        velocityController = new PIDController(0.5,0,0.01);
+        velocityController.setTolerance(0, 0.01);
 
         fieldDisplay = new Field2d();
         fieldDisplay.setRobotPose(getPose());
@@ -320,10 +323,14 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void driveVortex(double speedLeft, double speedRight) {
-        leftVortex.set(-speedLeft);
-        System.out.println(speedLeft);
-        rightVortex.set(speedRight);
-        System.out.println(speedRight);
+        // velocityController.setSetpoint(0.5);
+        // leftVortex.set(-velocityController.calculate(leftVortex.getOutputCurrent()));
+        // System.out.println(speedLeft);
+        // rightVortex.set(velocityController.calculate(rightVortex.getOutputCurrent()));
+        // System.out.println(speedRight);
+        leftVortex.set(-0.5);
+        rightVortex.set(0.5);
+
 
     }
     
