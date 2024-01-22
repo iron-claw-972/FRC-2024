@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.commands.drive_comm.SetFormationX;
 import frc.robot.constants.GlobalConst;
 import frc.robot.subsystems.drive.Drivetrain;
-import frc.robot.subsystems.gpm_subsystem.Outtake;
+import frc.robot.subsystems.gpm_subsystem.Shooter;
 import frc.robot.util.MathUtils;
 import lib.controllers.GameController;
 import lib.controllers.GameController.Axis;
@@ -23,7 +23,7 @@ import lib.controllers.GameController.Button;
 public class GameControllerDriverConfig extends BaseDriverConfig {
 
     private final GameController kDriver = new GameController(GlobalConst.DRIVER_JOY);
-    private final Outtake m_shooter = new Outtake();
+    private final Shooter m_shooter = new Shooter();
 
     public GameControllerDriverConfig(Drivetrain drive, ShuffleboardTab controllerTab, boolean shuffleboardUpdates) {
         super(drive, controllerTab, shuffleboardUpdates);
