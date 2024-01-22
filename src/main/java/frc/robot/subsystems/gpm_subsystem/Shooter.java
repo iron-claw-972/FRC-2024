@@ -21,6 +21,9 @@ public class Shooter extends PIDSubsystem{
         super(new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD));
         getController().setTolerance(ShooterConstants.kShooterToleranceRPM);
         getController().setSetpoint(ShooterConstants.kShooterTargetRPM);
+        topMotor.setSecondaryCurrentLimit(0.5);
+        bottomMotor.setSecondaryCurrentLimit(0.5);
+
     }
 
     @Override
