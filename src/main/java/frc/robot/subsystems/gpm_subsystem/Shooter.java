@@ -1,7 +1,9 @@
 package frc.robot.subsystems.gpm_subsystem;
 
 import com.revrobotics.CANSparkFlex;
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -29,7 +31,7 @@ public class Shooter extends PIDSubsystem{
 
     @Override
     public double getMeasurement()  {
-        return topMotor.get() + bottomMotor.get() / 2;
+        return topMotor.getAbsoluteEncoder(Type.kDutyCycle).getVelocity() +  bottomMotor.getAbsoluteEncoder(Type.kDutyCycle).getVelocity() / 2;
     }
 
     public boolean atSetpoint() {
