@@ -21,14 +21,15 @@ public class FollowPathCommand extends SequentialCommandGroup {
     PathPlannerPath path;
 
     public FollowPathCommand(String name, Drivetrain drive){
-        this(name, true, drive);
+        this(name, false, drive);
     }
     
-    public FollowPathCommand(String pathName, boolean resetOdemetry, Drivetrain drivetrain){
+    public FollowPathCommand(String pathName, boolean resetOdemetry, Drivetrain drive){
         this.drive = drive;
+        this.path = PathGroupLoader.getPathGroup(pathName);
         addCommands(
             new InstantCommand(()->resetOdemetry(resetOdemetry)),
-            new SupplierCommand(()->AutoBuilder.followPath(PathPlannerPath.fromPathFile(pathName)), drive)
+            new SupplierCommand(()->AutoBuilder.followPath(path), drive)
         );
     }
 
