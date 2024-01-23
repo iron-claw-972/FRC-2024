@@ -6,12 +6,7 @@ import frc.robot.constants.AutoConstants;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.List;
-
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.PathPlannerTrajectory;
 
 /**
  * Utility class for loading paths using pathplanner.

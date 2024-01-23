@@ -20,7 +20,7 @@ public class AutoConstants {
     public static final PIDConstants translationConstants = new PIDConstants(0,0,0);
     public static final PIDConstants rotationConstants = new PIDConstants(0,0,0);
 
-    public static final ReplanningConfig replanningConfig = new ReplanningConfig(false, false);
+    public static final ReplanningConfig replanningConfig = new ReplanningConfig(true, false);
 
     public static final HolonomicPathFollowerConfig config = new HolonomicPathFollowerConfig(
         translationConstants,

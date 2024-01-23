@@ -28,7 +28,7 @@ public class VisionConstants {
   public static final boolean ENABLED = true;
 
   // If odometry should be updated using vision during auto
-  public static final boolean ENABLED_AUTO = true;
+  public static final boolean ENABLED_AUTO = false;
 
   // If odometry should be updated using vision while running the GoToPose and GoToPosePID commands in teleop
   public static final boolean ENABLED_GO_TO_POSE = true;
@@ -39,7 +39,7 @@ public class VisionConstants {
   // The number to multiply the distance to the April tag by
   // Only affects manual calculations
   // To find this, set it to 1 and measure the actual distance and the calculated distance
-  public static final double DISTANCE_SCALE = 0.9;
+  public static final double DISTANCE_SCALE = 0.85;
 
   /*
    * The standard deviations to use for the vision
