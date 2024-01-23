@@ -4,25 +4,12 @@
 
 package frc.robot.util.ShuffleBoard.Tabs;
 
-import java.util.function.BooleanSupplier;
-
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import frc.robot.RobotContainer;
-import frc.robot.commands.SupplierCommand;
 import frc.robot.commands.auto_comm.FollowPathCommand;
-import frc.robot.commands.auto_comm.PathPlannerCommand;
-import frc.robot.constants.AutoConstants;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.util.PathGroupLoader;
 import frc.robot.util.ShuffleBoard.ShuffleBoardTabs;
 
 /** Add your docs here. */

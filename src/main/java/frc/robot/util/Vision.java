@@ -24,7 +24,6 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.FieldConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
@@ -32,9 +31,6 @@ import frc.robot.constants.swerve.DriveConstants;
 
 // Vision and it's commands are adapted from Iron Claw's FRC2022, FRC2023, and: https://www.youtube.com/watch?v=TG9KAa2EGzQ&t=1439s
 public class Vision {
-
-  private ShuffleboardTab m_shuffleboardTab;
-
   // The field layout
   private AprilTagFieldLayout m_aprilTagFieldLayout;
   // A list of the cameras on the robot

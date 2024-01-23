@@ -44,7 +44,7 @@ public class VisionConstants {
   /*
    * The standard deviations to use for the vision
    */
-  public static final Matrix<N3, N1> VISION_STD_DEVS = new MatBuilder<>(Nat.N3(), Nat.N1()).fill(
+  public static final Matrix<N3, N1> VISION_STD_DEVS = MatBuilder.fill(Nat.N3(), Nat.N1(),
     0.00443, // x in meters (default=0.9)
     0.00630, // y in meters (default=0.9)
     1000  // heading in radians. The gyroscope is very accurate, so as long as it is reset correctly it is unnecessary to correct it with vision
