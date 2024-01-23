@@ -1,4 +1,4 @@
-package frc.robot.subsystems.drivetrain.module;
+package frc.robot.subsystems.module;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
@@ -12,6 +12,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
@@ -20,7 +21,7 @@ import frc.robot.util.ConversionUtils;
 import frc.robot.util.LogManager;
 import lib.CTREModuleState;
 
-public class Module extends ModuleSim {
+public class Module extends SubsystemBase {
     private final ModuleType type;
     
     // Motor ticks
@@ -31,12 +32,16 @@ public class Module extends ModuleSim {
     private final WPI_CANCoder CANcoder;
     private SwerveModuleState desiredState;
 
+    protected boolean stateDeadband = true;
+
     SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(DriveConstants.DRIVE_KS, DriveConstants.DRIVE_KV, DriveConstants.DRIVE_KA);
 
     private boolean optimizeStates = true;
 
+    ModuleConstants moduleConstants;
+
     public Module(ModuleConstants moduleConstants) {
-        super(moduleConstants);
+        this.moduleConstants = moduleConstants;
 
         type = moduleConstants.getType();
 
@@ -58,12 +63,10 @@ public class Module extends ModuleSim {
         setDesiredState(new SwerveModuleState(0, getAngle()), false);
     }
 
-    @Override
     public void periodic() {
         
     }
 
-    @Override
     public void setDesiredState(SwerveModuleState wantedState, boolean isOpenLoop) {
 
         /*
@@ -71,8 +74,8 @@ public class Module extends ModuleSim {
          * continuous controller which CTRE and Rev onboard is not
          */
         desiredState = optimizeStates ? CTREModuleState.optimize(wantedState, getState().angle) : wantedState;
-        setAngle(wantedState);
-        setSpeed(wantedState, isOpenLoop);
+        setAngle(desiredState);
+        setSpeed(desiredState, isOpenLoop);
     }
 
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop) {
@@ -129,7 +132,6 @@ public class Module extends ModuleSim {
         return Rotation2d.fromDegrees(CANcoder.getAbsolutePosition());
     }
 
-    @Override
     public void resetToAbsolute() {
         // Sensor ticks
         // TODO: Convert sensor ticks in driveconstants to radians
@@ -169,6 +171,17 @@ public class Module extends ModuleSim {
     public double getSteerVelocity() {
         return ConversionUtils.falconToRPM(angleMotor.getSelectedSensorVelocity(), DriveConstants.kAngleGearRatio) * 2 * Math.PI / 60;
     }
+    public double getDriveVelocity() {
+        return ConversionUtils.falconToRPM(driveMotor.getSelectedSensorVelocity(), DriveConstants.kAngleGearRatio) * 2 * Math.PI / 60;
+    }
+
+    public double getDriveVoltage(){
+        return driveMotor.getMotorOutputVoltage();
+    }
+
+    public double getDriveStatorCurrent(){
+        return driveMotor.getStatorCurrent();
+    }
 
     private void configDriveMotor() {
         driveMotor.configFactoryDefault();
@@ -190,7 +203,6 @@ public class Module extends ModuleSim {
         driveMotor.enableVoltageCompensation(true);
     }
 
-    @Override
     public SwerveModuleState getState() {
         return new SwerveModuleState(
                 ConversionUtils.falconToMPS(driveMotor.getSelectedSensorVelocity(), DriveConstants.kWheelCircumference,
@@ -222,4 +234,20 @@ public class Module extends ModuleSim {
     public WPI_TalonFX getDriveMotor(){
         return driveMotor;
     }
+
+    public ModuleType getModuleType(){
+        return type;
+    }
+
+    public void setStateDeadband(boolean enabled) {
+        stateDeadband = enabled;
+    }
+
+    public double getDesiredVelocity() {
+        return getDesiredState().speedMetersPerSecond;
+      }
+    
+      public Rotation2d getDesiredAngle() {
+        return getDesiredState().angle;
+      }
 }

@@ -3,7 +3,6 @@ package frc.robot.controls;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.GoToPose;
 import frc.robot.commands.drive_comm.SetFormationX;
@@ -21,8 +20,8 @@ import lib.controllers.GameController.Button;
 public class GameControllerDriverConfig extends BaseDriverConfig {  
   private final GameController kDriver = new GameController(Constants.DRIVER_JOY);
   
-  public GameControllerDriverConfig(Drivetrain drive, ShuffleboardTab controllerTab, boolean shuffleboardUpdates) {
-    super(drive, controllerTab, shuffleboardUpdates);
+  public GameControllerDriverConfig(Drivetrain drive) {
+    super(drive);
   }
 
   @Override

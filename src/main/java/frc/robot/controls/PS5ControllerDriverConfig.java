@@ -3,7 +3,6 @@ package frc.robot.controls;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import frc.robot.commands.drive_comm.SetFormationX;
@@ -21,8 +20,8 @@ public class PS5ControllerDriverConfig extends BaseDriverConfig {
 
     private final PS5Controller kDriver = new PS5Controller(Constants.DRIVER_JOY);
 
-    public PS5ControllerDriverConfig(Drivetrain drive, ShuffleboardTab controllerTab, boolean shuffleboardUpdates) {
-        super(drive, controllerTab, shuffleboardUpdates);
+    public PS5ControllerDriverConfig(Drivetrain drive) {
+        super(drive);
     }
 
     public void configureControls() {
