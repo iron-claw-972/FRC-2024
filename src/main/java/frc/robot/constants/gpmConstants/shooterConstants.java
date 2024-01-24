@@ -1,4 +1,4 @@
-package frc.robot.constants;
+package frc.robot.constants.gpmConstants;
 
 public class shooterConstants {
         
@@ -7,7 +7,8 @@ public class shooterConstants {
  public static final int topMotorID = 99;
 
 // constants for Pids
- public static final double kP =
+ public static final double kP = 
  public static final double kI = 
  public static final double kD = 
+ 
 }
