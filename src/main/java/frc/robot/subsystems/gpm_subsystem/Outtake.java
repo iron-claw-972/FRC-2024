@@ -27,6 +27,7 @@ public class Outtake extends SubsystemBase {
         m_motor = motor;
         m_encoder = new TalonEncoder(motor);
         feedforward = new SimpleMotorFeedforward(Constants.SHOOTER_KS, Constants.SHOOTER_KV, Constants.SHOOTER_KA);
+        
     }
 
 
