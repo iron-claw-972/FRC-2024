@@ -7,8 +7,8 @@ public class shooterConstants {
  public static final int topMotorID = 99;
 
 // constants for Pids
- public static final double kP = 0;
- public static final double kI = 0;
- public static final double kD = 0;
+ public static final double kP = 
+ public static final double kI = 
+ public static final double kD = 
  
 }
