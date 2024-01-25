@@ -51,9 +51,9 @@ public class Drivetrain extends SubsystemBase {
     // Displays the field with the robots estimated pose on it
     private final Field2d fieldDisplay;
 
-    //testing Vortex motors
-    CANSparkFlex leftVortex = new CANSparkFlex(3, MotorType.kBrushless);
-    CANSparkFlex rightVortex = new CANSparkFlex(4, MotorType.kBrushless);
+    
+    // CANSparkFlex leftVortex = new CANSparkFlex(3, MotorType.kBrushless);
+    // CANSparkFlex rightVortex = new CANSparkFlex(6, MotorType.kBrushless);
 
     private final ShuffleboardTab swerveTab;
     /**
@@ -316,16 +316,16 @@ public class Drivetrain extends SubsystemBase {
         return rotationController;
     }
     public Field2d getFeild(){
-        return fieldDisplay;
+        return fieldDisplay; 
     }
 
-    public void driveVortex(double speedLeft, double speedRight) {
-        leftVortex.set(-speedLeft);
-        System.out.println(speedLeft);
-        rightVortex.set(speedRight);
-        System.out.println(speedRight);
+    // public void driveVortex(double speedLeft, double speedRight) {
+    //     leftVortex.set(-speedLeft);
+    //     System.out.println(speedLeft);
+    //     rightVortex.set(speedRight);
+    //     System.out.println(speedRight);
 
-    }
+    // }
     
 
 }
