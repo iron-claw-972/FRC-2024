@@ -51,8 +51,8 @@ public class DetectedObject {
         // If the drivetrain exists, rotate and translate it to get the field relative position
         if(drive != null){
             translation = translation.rotateBy(new Rotation3d(
-                drive.getRoll().getRadians(),
-                drive.getPitch().getRadians(),
+                0,
+                0,
                 drive.getYaw().getRadians()
             ));
             Translation2d drivePose = drive.getPose().getTranslation();
@@ -100,8 +100,8 @@ public class DetectedObject {
         // If the drivetrain exists, rotate and translate it to be field relative
         if(drive != null){
             translation = translation.rotateBy(new Rotation3d(
-                drive.getRoll().getRadians(),
-                drive.getPitch().getRadians(),
+                0,
+                0,
                 drive.getYaw().getRadians()
             ));
             Translation2d drivePose = drive.getPose().getTranslation();
@@ -157,14 +157,14 @@ public class DetectedObject {
      * @return If the object is a robot on the same alliance
      */
     public boolean isSameAllianceRobot(){
-        return type == (DriverStation.getAlliance()==Alliance.Red?ObjectType.RED_ROBOT:ObjectType.BLUE_ROBOT);
+        return type == (DriverStation.getAlliance().get()==Alliance.Red?ObjectType.RED_ROBOT:ObjectType.BLUE_ROBOT);
     }
     /**
      * Returns if the object is a robot on the other alliance
      * @return If the object is a robot on the other alliance
      */
     public boolean isOtherAllianceRobot(){
-        return type == (DriverStation.getAlliance()==Alliance.Red?ObjectType.BLUE_ROBOT:ObjectType.RED_ROBOT);
+        return type == (DriverStation.getAlliance().get()==Alliance.Red?ObjectType.BLUE_ROBOT:ObjectType.RED_ROBOT);
     }
 
     /**

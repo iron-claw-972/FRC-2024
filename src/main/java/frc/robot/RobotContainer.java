@@ -44,7 +44,7 @@ public class RobotContainer {
         driver = new GameControllerDriverConfig(drive);
 
         // Detected objects need access to the drivetrain
-        DetectedObject.setDrive(m_drive);
+        DetectedObject.setDrive(drive);
 
         driver.configureControls();
         initializeAutoBuilder();

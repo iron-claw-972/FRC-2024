@@ -44,8 +44,6 @@ import frc.robot.constants.swerve.DriveConstants;
 // Vision and it's commands are adapted from Iron Claw's FRC2022, FRC2023, and: https://www.youtube.com/watch?v=TG9KAa2EGzQ&t=1439s
 public class Vision {
 
-  private ShuffleboardTab m_shuffleboardTab;
-
   private NetworkTable m_objectDetectionTable;
 
   // DoubleSubscribers for the subscribing to the topics with data
@@ -63,7 +61,7 @@ public class Vision {
   /**
    * Creates a new instance of Vision and sets up the cameras and field layout
    */
-  public Vision(ShuffleboardTab shuffleboardTab, ArrayList<Pair<String, Transform3d>> camList) {
+  public Vision(ArrayList<Pair<String, Transform3d>> camList) {
     // Initialize object_detection NetworkTable
     m_objectDetectionTable = NetworkTableInstance.getDefault().getTable("object_detection");
 
@@ -184,28 +182,6 @@ public class Vision {
       }
     }
     return best;
-  }
-
-  /**
-   * Set up the vision commands on SmartDashboard so we can turn them on/off for testing
-   */
-  public void setUpSmartDashboardCommandButtons(Drivetrain drive){
-    m_shuffleboardTab.add("Return Data a", new ReturnData(this));
-    SmartDashboard.putData("Vision Return Data", new ReturnData(this));
-    m_shuffleboardTab.add("Acquire Game Piece PID", new AcquireGamePiecePID(drive, this));
-    SmartDashboard.putData("Acquire Game Piece PID", new AcquireGamePiecePID(drive, this));
-    m_shuffleboardTab.add("Acquire Game Piece", new AcquireGamePiece(()->getBestGamePiece(60), drive));
-    SmartDashboard.putData("Acquire Game Piece", new AcquireGamePiece(()->getBestGamePiece(60), drive));
-    SmartDashboard.putData("Calculate vision std devs", new CalculateStdDevs(1000, this, drive));
-    m_shuffleboardTab.add("Calculate std devs", new CalculateStdDevs(1000, this, drive));
-    SmartDashboard.putData("Vision aim at tag", new AimAtTag(drive));
-    m_shuffleboardTab.add("Aim at tag", new AimAtTag(drive));
-    SmartDashboard.putData("Vision distance test (forward)", new TestVisionDistance(0.1, drive, this));
-    m_shuffleboardTab.add("Distance test (forward)", new TestVisionDistance(0.1, drive, this));
-    SmartDashboard.putData("Vision distance test (backward)", new TestVisionDistance(-0.1, drive, this));
-    m_shuffleboardTab.add("Distance test (backward)", new TestVisionDistance(-0.1, drive, this));
-    SmartDashboard.putData("Vision align to tag", new AlignToTag(drive));
-    m_shuffleboardTab.add("Align to tag", new AlignToTag(drive));
   }
 
   /**
