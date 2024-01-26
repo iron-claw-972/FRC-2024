@@ -39,7 +39,7 @@ public class VisionConstants {
   // The number to multiply the distance to the April tag by
   // Only affects manual calculations
   // To find this, set it to 1 and measure the actual distance and the calculated distance
-  public static final double DISTANCE_SCALE = 0.85;
+  public static final double DISTANCE_SCALE = 1.05;
 
   /*
    * The standard deviations to use for the vision
