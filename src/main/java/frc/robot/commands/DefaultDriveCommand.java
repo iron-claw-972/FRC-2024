@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.subsystems.Drivetrain;
@@ -11,55 +12,57 @@ import frc.robot.subsystems.Drivetrain;
  * Default drive command. Drives robot using driver controls.
  */
 public class DefaultDriveCommand extends CommandBase {
-  private final Drivetrain m_swerve;    
-  private final BaseDriverConfig m_driver;
+    private final Drivetrain swerve;
+    private final BaseDriverConfig driver;
 
-  public DefaultDriveCommand(
-    Drivetrain swerve,
-    BaseDriverConfig driver
-  ) {
-    m_swerve = swerve;
-    m_driver = driver;
-    addRequirements(swerve);
-  }
-  
-  @Override
-  public void initialize() {
-    m_swerve.enableStateDeadband(true);
-  }
-
-  @Override
-  public void execute() {
-    
-    double forwardTranslation = m_driver.getForwardTranslation();
-    double sideTranslation = m_driver.getSideTranslation();
-    double rotation = m_driver.getRotation();
-
-    double slowFactor = m_driver.getIsSlowMode() ? DriveConstants.kSlowDriveFactor : 1;
-
-    forwardTranslation *= slowFactor;
-    sideTranslation *= slowFactor;
-    rotation *= m_driver.getIsSlowMode() ? DriveConstants.kSlowRotFactor : 1;
-
-    int allianceReversal = DriverStation.getAlliance() == Alliance.Blue ? 1 : -1;
-    forwardTranslation *= allianceReversal;
-    sideTranslation *= allianceReversal;
-
-    if (m_driver.getIsAlign()) {
-      m_swerve.driveHeading(
-        forwardTranslation,
-        sideTranslation,
-        (Math.abs(m_swerve.getYaw().getRadians()) > Math.PI / 2) ? Math.PI : 0,
-        true
-      );
-    } else {
-      m_swerve.drive(
-        forwardTranslation,
-        sideTranslation,
-        rotation,
-        true,
-        false
-      );
+    public DefaultDriveCommand(
+            Drivetrain swerve,
+            BaseDriverConfig driver
+                              ) {
+        this.swerve = swerve;
+        this.driver = driver;
+        addRequirements(swerve);
     }
-  }
+
+    @Override
+    public void initialize() {
+        swerve.setStateDeadband(true);
+    }
+
+    @Override
+    public void execute() {
+
+        double forwardTranslation = driver.getForwardTranslation();
+        double sideTranslation = driver.getSideTranslation();
+        double rotation = driver.getRotation();
+
+        double slowFactor = driver.getIsSlowMode() ? DriveConstants.kSlowDriveFactor : 1;
+
+        forwardTranslation *= slowFactor;
+        sideTranslation *= slowFactor;
+        rotation *= driver.getIsSlowMode() ? DriveConstants.kSlowRotFactor : 1;
+
+        int allianceReversal = DriverStation.getAlliance().get() == Alliance.Red ? 1 : -1;
+        forwardTranslation *= allianceReversal;
+        sideTranslation *= allianceReversal;
+
+        if (driver.getIsAlign() || swerve.getIsAlign()) {
+            swerve.driveHeading(
+                    forwardTranslation,
+                    sideTranslation,
+                    DriverStation.getAlliance().get() == Alliance.Blue ?
+                        Math.atan2(VisionConstants.BLUE_SPEAKER_POSE.getY() - swerve.getPose().getY(), VisionConstants.BLUE_SPEAKER_POSE.getX() - swerve.getPose().getX()) :
+                        Math.atan2(VisionConstants.RED_SPEAKER_POSE.getY() - swerve.getPose().getY(), VisionConstants.RED_SPEAKER_POSE.getX() - swerve.getPose().getX()),
+                    true
+                );
+        } else {
+            swerve.drive(
+                    forwardTranslation,
+                    sideTranslation,
+                    rotation,
+                    true,
+                    false
+                        );
+        }
+    }
 }

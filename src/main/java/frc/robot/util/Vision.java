@@ -1,6 +1,5 @@
 package frc.robot.util;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -41,7 +40,6 @@ import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.FieldConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
-import frc.robot.subsystems.Drivetrain;
 
 // Vision and it's commands are adapted from Iron Claw's FRC2022, FRC2023, and: https://www.youtube.com/watch?v=TG9KAa2EGzQ&t=1439s
 public class Vision {
@@ -63,11 +61,9 @@ public class Vision {
   private ArrayList<VisionCamera> m_cameras = new ArrayList<>();
 
   /**
-   * Creates a new instance of Vision and sets up the limelight NetworkTable and the SmartDashboard
+   * Creates a new instance of Vision and sets up the cameras and field layout
    */
   public Vision(ShuffleboardTab shuffleboardTab, ArrayList<Pair<String, Transform3d>> camList) {
-    m_shuffleboardTab = shuffleboardTab;
-
     // Initialize object_detection NetworkTable
     m_objectDetectionTable = NetworkTableInstance.getDefault().getTable("object_detection");
 
@@ -83,8 +79,8 @@ public class Vision {
 
     try {
       // Try to find the field layout
-      m_aprilTagFieldLayout = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField();
-    } catch (IOException e) {
+      m_aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+    } catch (Exception e) {
       // If it can't find it, use the layout in the constants
       m_aprilTagFieldLayout = new AprilTagFieldLayout(FieldConstants.APRIL_TAGS, FieldConstants.kFieldLength, FieldConstants.kFieldWidth);
       DriverStation.reportWarning("Could not find k2023ChargedUp.m_resourceFile, check that GradleRIO is updated to at least 2023.2.1 in build.gradle",  e.getStackTrace());
@@ -268,7 +264,7 @@ public class Vision {
       System.out.println("Tried to find the pose of april tag "+id);
       return null;
     }
-    return getAprilTagFieldLayout().getTagPose(id).get();
+    return getAprilTagFieldLayout().getTags().get(id-1).pose;
   }
 
   /**
@@ -282,18 +278,24 @@ public class Vision {
       if(VisionConstants.USE_MANUAL_CALCULATIONS){
         Pose2d pose = m_cameras.get(i).getEstimatedPose(referencePose.getRotation().getRadians());
         if(pose != null){
-          EstimatedRobotPose estimatedPose = new EstimatedRobotPose(
-            new Pose3d(pose.getX(), pose.getY(), 0, new Rotation3d(0, 0, pose.getRotation().getRadians())), 
-            m_cameras.get(i).getTimeStamp(), 
-            List.of(m_cameras.get(i).getBestTarget())
-          );
-          estimatedPoses.add(estimatedPose);
-          if(Constants.kLogging){
-            LogManager.addDoubleArray("Vision/camera " + i + "/estimated pose2d", new double[] {
-              pose.getX(),
-              pose.getY(),
-              pose.getRotation().getRadians()
-            });
+          try{
+            EstimatedRobotPose estimatedPose = new EstimatedRobotPose(
+              new Pose3d(pose.getX(), pose.getY(), 0, new Rotation3d(0, 0, pose.getRotation().getRadians())), 
+              m_cameras.get(i).getTimeStamp(), 
+              List.of(m_cameras.get(i).getBestTarget()),
+              PoseStrategy.LOWEST_AMBIGUITY
+            );
+            estimatedPoses.add(estimatedPose);
+            if(Constants.DO_LOGGING){
+              LogManager.addDoubleArray("Vision/camera " + i + "/estimated pose2d", new double[] {
+                pose.getX(),
+                pose.getY(),
+                pose.getRotation().getRadians()
+              });
+            }
+          }catch(Exception e){
+            System.out.println(e.getStackTrace());
+            DriverStation.reportWarning("EXCEPTION THROWN:", true);
           }
         }
       }else{
@@ -302,7 +304,7 @@ public class Vision {
         // April tags that don't exist might return a result that is present but doesn't have a pose
         if (estimatedPose.isPresent() && estimatedPose.get().estimatedPose != null) {
           estimatedPoses.add(estimatedPose.get());
-          if(Constants.kLogging){
+          if(Constants.DO_LOGGING){
             LogManager.addDoubleArray("Vision/camera " + i + "/estimated pose2d", new double[] {
               estimatedPose.get().estimatedPose.getX(),
               estimatedPose.get().estimatedPose.getY(),

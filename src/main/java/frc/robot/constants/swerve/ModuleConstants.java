@@ -3,79 +3,80 @@ package frc.robot.constants.swerve;
 /**
  * Container class for module constants, defined using constants from {@link DriveConstants}
  * .
+ *
  * @see DriveConstants
  */
 public enum ModuleConstants {
-  
-  FRONT_LEFT(
-    DriveConstants.kDriveFrontLeft,
-    DriveConstants.kSteerFrontLeft,
-    DriveConstants.kEncoderFrontLeft,
-    DriveConstants.kSteerOffsetFrontLeft,
-    ModuleType.FRONT_LEFT
-  ),
-  FRONT_RIGHT(
-    DriveConstants.kDriveFrontRight,
-    DriveConstants.kSteerFrontRight,
-    DriveConstants.kEncoderFrontRight,
-    DriveConstants.kSteerOffsetFrontRight,
-    ModuleType.FRONT_RIGHT
-  ),
-  BACK_LEFT(
-    DriveConstants.kDriveBackLeft,
-    DriveConstants.kSteerBackLeft,
-    DriveConstants.kEncoderBackLeft,
-    DriveConstants.kSteerOffsetBackLeft,
-    ModuleType.BACK_LEFT
-  ),
-  BACK_RIGHT(
-    DriveConstants.kDriveBackRight,
-    DriveConstants.kSteerBackRight,
-    DriveConstants.kEncoderBackRight,
-    DriveConstants.kSteerOffsetBackRight,
-    ModuleType.BACK_RIGHT
-  ),
 
-  NONE(0, 0, 0, 0.0, ModuleType.NONE);
-  
-  private final int m_drivePort;
-  private final int m_steerPort;
-  private final int m_encoderPort;
-  private final double m_steerOffset;
-  private final ModuleType m_type;
-  
-  ModuleConstants(
-    int drivePort,
-    int steerPort,
-    int encoderPort,
-    double steerOffset,
-    ModuleType type
-  ) {
-    m_drivePort = drivePort;
-    m_steerPort = steerPort;
-    m_encoderPort = encoderPort;
-    m_steerOffset = steerOffset;
-    m_type = type;
-  }
+    FRONT_LEFT(
+            DriveConstants.kDriveFrontLeft,
+            DriveConstants.kSteerFrontLeft,
+            DriveConstants.kEncoderFrontLeft,
+            DriveConstants.kSteerOffsetFrontLeft,
+            ModuleType.FRONT_LEFT
+    ),
+    FRONT_RIGHT(
+            DriveConstants.kDriveFrontRight,
+            DriveConstants.kSteerFrontRight,
+            DriveConstants.kEncoderFrontRight,
+            DriveConstants.kSteerOffsetFrontRight,
+            ModuleType.FRONT_RIGHT
+    ),
+    BACK_LEFT(
+            DriveConstants.kDriveBackLeft,
+            DriveConstants.kSteerBackLeft,
+            DriveConstants.kEncoderBackLeft,
+            DriveConstants.kSteerOffsetBackLeft,
+            ModuleType.BACK_LEFT
+    ),
+    BACK_RIGHT(
+            DriveConstants.kDriveBackRight,
+            DriveConstants.kSteerBackRight,
+            DriveConstants.kEncoderBackRight,
+            DriveConstants.kSteerOffsetBackRight,
+            ModuleType.BACK_RIGHT
+    ),
 
-  public int getDrivePort() {
-    return m_drivePort;
-  }
+    NONE(0, 0, 0, 0.0, ModuleType.NONE);
 
-  public int getSteerPort() {
-    return m_steerPort;
-  }
+    private final int drivePort;
+    private final int steerPort;
+    private final int encoderPort;
+    private final double steerOffset;
+    private final ModuleType type;
 
-  public int getEncoderPort() {
-    return m_encoderPort;
-  }
+    ModuleConstants(
+            int drivePort,
+            int steerPort,
+            int encoderPort,
+            double steerOffset,
+            ModuleType type
+                   ) {
+        this.drivePort = drivePort;
+        this.steerPort = steerPort;
+        this.encoderPort = encoderPort;
+        this.steerOffset = steerOffset;
+        this.type = type;
+    }
 
-  public double getSteerOffset() {
-    return m_steerOffset;
-  }
+    public int getDrivePort() {
+        return drivePort;
+    }
 
-  public ModuleType getType() {
-    return m_type;
-  }
+    public int getSteerPort() {
+        return steerPort;
+    }
+
+    public int getEncoderPort() {
+        return encoderPort;
+    }
+
+    public double getSteerOffset() {
+        return steerOffset;
+    }
+
+    public ModuleType getType() {
+        return type;
+    }
 
 }

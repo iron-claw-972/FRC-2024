@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import edu.wpi.first.math.Pair;
@@ -21,7 +22,7 @@ public class AprilTagPoseTest {
    */
   @Test
   public void testTagPoses() {
-    Vision vision = new Vision(null, new ArrayList<Pair<String, Transform3d>>());
+    Vision vision = new Vision(new ArrayList<Pair<String, Transform3d>>());
     for(int i = 0; i < vision.getAprilTagFieldLayout().getTags().size(); i++){
       Pose3d p1 = FieldConstants.APRIL_TAGS.get(i).pose;
       Pose3d p2 = vision.getTagPose(i+1);

@@ -1,9 +1,7 @@
 package frc.robot.controls;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import frc.robot.constants.miscConstants.OIConstants;
+import frc.robot.constants.Constants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.DynamicSlewRateLimiter;
@@ -14,131 +12,87 @@ import frc.robot.util.MathUtils;
  */
 public abstract class BaseDriverConfig {
 
-  private final Drivetrain m_drive;
+    private final Drivetrain drive;
 
-  private boolean m_shuffleboardUpdates = false;
+    // Some of these are not currently used, but we might want them later
+    @SuppressWarnings("unused")
+    private double translationalSensitivity = Constants.TRANSLATIONAL_SENSITIVITY;
+    @SuppressWarnings("unused")
+    private double translationalExpo = Constants.TRANSLATIONAL_EXPO;
+    @SuppressWarnings("unused")
+    private double translationalDeadband = Constants.TRANSLATIONAL_DEADBAND;
+    private double translationalSlewrate = Constants.TRANSLATIONAL_SLEWRATE;
 
-  private final ShuffleboardTab m_controllerTab;
-  private GenericEntry m_translationalSensitivityEntry, m_translationalExpoEntry, m_translationalDeadbandEntry, m_translationalSlewrateEntry;
-  private GenericEntry m_rotationSensitivityEntry, m_rotationExpoEntry, m_rotationDeadbandEntry, m_rotationSlewrateEntry;
-  private GenericEntry m_headingSensitivityEntry, m_headingExpoEntry, m_headingDeadbandEntry;
+    @SuppressWarnings("unused")
+    private double rotationSensitivity = Constants.ROTATION_SENSITIVITY;
+    @SuppressWarnings("unused")
+    private double rotationExpo = Constants.ROTATION_EXPO;
+    @SuppressWarnings("unused")
+    private double rotationDeadband = Constants.ROTATION_DEADBAND;
+    private double rotationSlewrate = Constants.ROTATION_SLEWRATE;
 
-  // Some of these are not currently used, but we might want them later
-  @SuppressWarnings("unused")
-  private double m_translationalSensitivity = OIConstants.kTranslationalSensitivity;
-  @SuppressWarnings("unused")
-  private double m_translationalExpo = OIConstants.kTranslationalExpo;
-  @SuppressWarnings("unused")
-  private double m_translationalDeadband = OIConstants.kTranslationalDeadband;
-  private double m_translationalSlewrate = OIConstants.kTranslationalSlewrate;
+    private double headingSensitivity = Constants.HEADING_SENSITIVITY;
+    private double headingExpo = Constants.HEADING_EXPO;
+    private double headingDeadband = Constants.HEADING_DEADBAND;
+    private double previousHeading = 0;
 
-  @SuppressWarnings("unused")
-  private double m_rotationSensitivity = OIConstants.kRotationSensitivity;
-  @SuppressWarnings("unused")
-  private double m_rotationExpo = OIConstants.kRotationExpo;
-  @SuppressWarnings("unused")
-  private double m_rotationDeadband = OIConstants.kRotationDeadband;
-  private double m_rotationSlewrate = OIConstants.kRotationSlewrate;
+    @SuppressWarnings("unused")
+    private final DynamicSlewRateLimiter xSpeedLimiter = new DynamicSlewRateLimiter(translationalSlewrate);
+    @SuppressWarnings("unused")
+    private final DynamicSlewRateLimiter ySpeedLimiter = new DynamicSlewRateLimiter(translationalSlewrate);
+    @SuppressWarnings("unused")
+    private final DynamicSlewRateLimiter rotLimiter = new DynamicSlewRateLimiter(rotationSlewrate);
+    private final DynamicSlewRateLimiter headingLimiter = new DynamicSlewRateLimiter(headingSensitivity);
 
-  private double m_headingSensitivity = OIConstants.kHeadingSensitivity;
-  private double m_headingExpo = OIConstants.kHeadingExpo;
-  private double m_headingDeadband = OIConstants.kHeadingDeadband;
-  private double m_previousHeading = 0;
+    /**
+     * @param drive               the drivetrain instance
+     * @param controllerTab       the shuffleboard controller tab
+     * @param shuffleboardUpdates whether to update the shuffleboard
+     */
+    public BaseDriverConfig(Drivetrain drive) {
+        headingLimiter.setContinuousLimits(-Math.PI, Math.PI);
+        headingLimiter.enableContinuous(true);
+        this.drive = drive;
+    }
 
-  @SuppressWarnings("unused")
-  private final DynamicSlewRateLimiter m_xSpeedLimiter = new DynamicSlewRateLimiter(m_translationalSlewrate);
-  @SuppressWarnings("unused")
-  private final DynamicSlewRateLimiter m_ySpeedLimiter = new DynamicSlewRateLimiter(m_translationalSlewrate);
-  @SuppressWarnings("unused")
-  private final DynamicSlewRateLimiter m_rotLimiter = new DynamicSlewRateLimiter(m_rotationSlewrate);
-  private final DynamicSlewRateLimiter m_headingLimiter = new DynamicSlewRateLimiter(m_headingSensitivity);
+    public double getForwardTranslation() {
+        return MathUtils.expoMS(MathUtil.applyDeadband(getRawForwardTranslation(), Constants.DEADBAND), 2) * DriveConstants.kMaxSpeed * 1;
+    }
 
-  /**
-   * @param drive the drivetrain instance
-   * @param controllerTab the shuffleboard controller tab
-   * @param shuffleboardUpdates whether or not to update the shuffleboard
-   */
-  public BaseDriverConfig(Drivetrain drive, ShuffleboardTab controllerTab, boolean shuffleboardUpdates) {
-    m_headingLimiter.setContinuousLimits(-Math.PI,Math.PI);
-    m_headingLimiter.enableContinuous(true);
-    m_controllerTab = controllerTab;
-    m_shuffleboardUpdates = shuffleboardUpdates;
-    m_drive = drive;
-  }
+    public double getSideTranslation() {
+        return MathUtils.expoMS(MathUtil.applyDeadband(getRawSideTranslation(), Constants.DEADBAND), 2) * DriveConstants.kMaxSpeed * 1;
+    }
 
-  public double getForwardTranslation() {
-    return -MathUtils.expoMS(MathUtil.applyDeadband(getRawForwardTranslation(), OIConstants.kDeadband), 2) * DriveConstants.kMaxSpeed * 1;
-  }
+    public double getRotation() {
+        return MathUtils.expoMS(MathUtil.applyDeadband(getRawRotation(), Constants.DEADBAND), 2) * DriveConstants.kMaxAngularSpeed * 1;
+    }
 
-  public double getSideTranslation() {
-    return -MathUtils.expoMS(MathUtil.applyDeadband(getRawSideTranslation(), OIConstants.kDeadband), 2) * DriveConstants.kMaxSpeed * 1;
-  }
-  
-  public double getRotation() {
-    return -MathUtils.expoMS(MathUtil.applyDeadband(getRawRotation(), OIConstants.kDeadband), 2) * DriveConstants.kMaxAngularSpeed * 1;
-  }
+    public double getHeading() {
+        if (getRawHeadingMagnitude() <= headingDeadband) return headingLimiter.calculate(previousHeading, 1e-6);
+        previousHeading = headingLimiter.calculate(getRawHeadingAngle(), MathUtils.expoMS(getRawHeadingMagnitude(), headingExpo) * headingSensitivity);
+        return previousHeading;
+    }
 
-  public double getHeading() {
-    if (getRawHeadingMagnitude() <= m_headingDeadband) return m_headingLimiter.calculate(m_previousHeading,1e-6);
-    m_previousHeading = m_headingLimiter.calculate(getRawHeadingAngle(), MathUtils.expoMS(getRawHeadingMagnitude(), m_headingExpo) * m_headingSensitivity);
-    return m_previousHeading;
-  }
+    protected Drivetrain getDrivetrain() {
+        return drive;
+    }
 
-  protected Drivetrain getDrivetrain() {
-    return m_drive;
-  }
+    /**
+     * Configures the controls for the controller.
+     */
+    public abstract void configureControls();
 
+    public abstract double getRawSideTranslation();
 
-  /**
-   * Sets up shuffleboard values for the controller.
-   */
-  public void setupShuffleboard() {
-    if (!m_shuffleboardUpdates) return;
-    
-    m_translationalSensitivityEntry = m_controllerTab.add("translationalSensitivity", OIConstants.kTranslationalSensitivity).getEntry();
-    m_translationalExpoEntry = m_controllerTab.add("translationalExpo", OIConstants.kTranslationalExpo).getEntry();
-    m_translationalDeadbandEntry = m_controllerTab.add("translationalDeadband", OIConstants.kTranslationalDeadband).getEntry();
-    m_translationalSlewrateEntry = m_controllerTab.add("translationalSlewrate", OIConstants.kTranslationalSlewrate).getEntry();
-    m_rotationSensitivityEntry = m_controllerTab.add("rotationSensitivity", OIConstants.kRotationSensitivity).getEntry();
-    m_rotationExpoEntry = m_controllerTab.add("rotationExpo", OIConstants.kRotationExpo).getEntry();
-    m_rotationDeadbandEntry = m_controllerTab.add("rotationDeadband", OIConstants.kRotationDeadband).getEntry();
-    m_rotationSlewrateEntry = m_controllerTab.add("rotationSlewrate", OIConstants.kRotationSlewrate).getEntry();
-    m_headingSensitivityEntry = m_controllerTab.add("headingSensitivity", OIConstants.kHeadingSensitivity).getEntry();
-    m_headingExpoEntry = m_controllerTab.add("headingExpo", OIConstants.kHeadingExpo).getEntry();
-    m_headingDeadbandEntry = m_controllerTab.add("headingDeadband", OIConstants.kHeadingDeadband).getEntry();
-  }
+    public abstract double getRawForwardTranslation();
 
-  /**
-   * Updates the controller settings from shuffleboard.
-   */
-  public void updateSettings() { //updates the shuffleboard data
-    if (!m_shuffleboardUpdates) return;
+    public abstract double getRawRotation();
 
-    m_translationalSensitivity = m_translationalSensitivityEntry.getDouble(OIConstants.kTranslationalSensitivity);
-    m_translationalExpo = m_translationalExpoEntry.getDouble(OIConstants.kTranslationalExpo);
-    m_translationalDeadband = m_translationalDeadbandEntry.getDouble(OIConstants.kTranslationalDeadband);
-    m_translationalSlewrate = m_translationalSlewrateEntry.getDouble(OIConstants.kTranslationalSlewrate);
+    public abstract double getRawHeadingAngle();
 
-    m_rotationSensitivity = m_rotationSensitivityEntry.getDouble(OIConstants.kRotationSensitivity);
-    m_rotationExpo = m_rotationExpoEntry.getDouble(OIConstants.kRotationExpo);
-    m_rotationDeadband = m_rotationDeadbandEntry.getDouble(OIConstants.kRotationDeadband);
-    m_rotationSlewrate = m_rotationSlewrateEntry.getDouble(OIConstants.kRotationSlewrate);
+    public abstract double getRawHeadingMagnitude();
 
-    m_headingSensitivity = m_headingSensitivityEntry.getDouble(OIConstants.kHeadingSensitivity);
-    m_headingExpo = m_headingExpoEntry.getDouble(OIConstants.kHeadingExpo);
-    m_headingDeadband = m_headingDeadbandEntry.getDouble(OIConstants.kHeadingDeadband);
-  }
+    public abstract boolean getIsSlowMode();
 
-  /**
-   * Configures the controls for the controller.
-   */
-  public abstract void configureControls();
-
-  public abstract double getRawSideTranslation();
-  public abstract double getRawForwardTranslation();
-  public abstract double getRawRotation();
-  public abstract double getRawHeadingAngle();
-  public abstract double getRawHeadingMagnitude();
-  public abstract boolean getIsSlowMode();
-  public abstract boolean getIsAlign();
+    public abstract boolean getIsAlign();
 }
