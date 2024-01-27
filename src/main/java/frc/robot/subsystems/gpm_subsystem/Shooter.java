@@ -2,6 +2,9 @@ package frc.robot.subsystems.gpm_subsystem;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix6.Timestamp;
+
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class Shooter extends CommandBase {
@@ -9,7 +12,8 @@ public class Shooter extends CommandBase {
     private final WPI_TalonFX shooterMotor;
     private final double shooterSpeed;
     private final double duration;
-
+    private int integerTimer; 
+    
     public Shooter(int motorId, double shooterSpeed, double duration) {
         this.shooterSpeed = shooterSpeed;
         this.duration = duration;
@@ -35,12 +39,14 @@ public class Shooter extends CommandBase {
     public void initialize() {
         shooterMotor.set(ControlMode.PercentOutput, shooterSpeed);
         setTimeout(duration);
+        integerTimer = 0;   
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
         // No additional execution logic needed
+        integerTimer++;
     }
 
     // Called once the command ends or is interrupted.
