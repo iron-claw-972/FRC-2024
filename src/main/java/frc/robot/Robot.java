@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.VisionConstants;
+import frc.robot.constants.swerve.DriveConstants;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -35,8 +36,8 @@ public class Robot extends TimedRobot {
         //   SimGUI: Persistent Values, Preferences, RobotId, then restart Simulation
         //     changes networktables.json, networktables.json.bck (both Untracked)
         //   Uncomment the next line, set the desired RobotId, deploy, and then comment the line out
-        //  setRobotId(RobotId.SwerveTest);
-
+          setRobotId(RobotId.SwerveTest);
+        DriveConstants.update(RobotId.SwerveTest);
         // build the RobotContainer with the robot id from preferences
         robotContainer = new RobotContainer();
     }
