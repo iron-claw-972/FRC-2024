@@ -36,8 +36,8 @@ public class Robot extends TimedRobot {
         //   SimGUI: Persistent Values, Preferences, RobotId, then restart Simulation
         //     changes networktables.json, networktables.json.bck (both Untracked)
         //   Uncomment the next line, set the desired RobotId, deploy, and then comment the line out
-          setRobotId(RobotId.SwerveTest);
-        DriveConstants.update(RobotId.SwerveTest);
+          setRobotId(RobotId.SwerveCompetition);
+        DriveConstants.update(getRobotId());
         // build the RobotContainer with the robot id from preferences
         robotContainer = new RobotContainer();
     }
