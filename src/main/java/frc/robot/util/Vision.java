@@ -98,7 +98,8 @@ public class Vision {
    * @return An array of offsets in degrees
    */
   public double[] getHorizontalOffset(){
-    return m_xOffset.getDoubleArray(new double[0]);
+    // return m_xOffset.getDoubleArray(new double[0]);
+    return new double[]{60};
   }
 
   /**
@@ -106,7 +107,8 @@ public class Vision {
    * @return An array of offsets in degrees
    */
   public double[] getVerticalOffset(){
-    return m_yOffset.getDoubleArray(new double[0]);
+    // return m_yOffset.getDoubleArray(new double[0]);
+    return new double[]{-20};
   }
 
   /**
@@ -114,7 +116,8 @@ public class Vision {
    * @return Distance in meters
    */
   public double[] getDistance(){
-    return m_objectDistance.getDoubleArray(new double[0]);
+    // return m_objectDistance.getDoubleArray(new double[0]);
+    return new double[]{1};
   }
 
   /**
@@ -130,7 +133,8 @@ public class Vision {
    * @return The object types as a String array
    */
   public String[] getDetectedObjectClass(){
-    return m_objectClass.getStringArray(new String[0]);
+    // return m_objectClass.getStringArray(new String[0]);
+    return new String[]{"note"};
   }
 
   /**
@@ -138,7 +142,8 @@ public class Vision {
    * @return The indices as a long array (method returns long array instead of int array)
    */
   public long[] getCameraIndex(){
-    return m_cameraIndex.getIntegerArray(new long[0]);
+    // return m_cameraIndex.getIntegerArray(new long[0]);
+    return new long[]{0};
   }
 
   /**
@@ -148,7 +153,7 @@ public class Vision {
   public DetectedObject[] getDetectedObjects(){
     double[] xOffset = getHorizontalOffset();
     double[] yOffset = getVerticalOffset();
-    // double[] distance = getDistance();
+    double[] distance = getDistance();
     String[] objectClass = getDetectedObjectClass();
     long[] cameraIndex = getCameraIndex();
     DetectedObject[] objects = new DetectedObject[xOffset.length];

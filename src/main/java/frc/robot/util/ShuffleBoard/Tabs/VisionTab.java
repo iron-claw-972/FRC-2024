@@ -4,12 +4,19 @@
 
 package frc.robot.util.ShuffleBoard.Tabs;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.GoToPose;
+import frc.robot.commands.vision.AcquireGamePiece;
+import frc.robot.commands.vision.AcquireGamePiecePID;
 import frc.robot.commands.vision.AimAtTag;
 import frc.robot.commands.vision.AlignToTag;
 import frc.robot.commands.vision.CalculateStdDevs;
+import frc.robot.commands.vision.ReturnData;
 import frc.robot.commands.vision.TestVisionDistance;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.Vision;
@@ -47,6 +54,12 @@ public class VisionTab extends ShuffleBoardTabs {
         tab.add("Distance test (backward)", new TestVisionDistance(-0.2, drive, vision));
         SmartDashboard.putData("Vision align to tag", new AlignToTag(drive));
         tab.add("Align to tag", new AlignToTag(drive));
+        SmartDashboard.putData("Acquire game piece PID", new AcquireGamePiecePID(drive, vision));
+        tab.add("Acquire game piece PID", new AcquireGamePiecePID(drive, vision));
+        SmartDashboard.putData("Acquire game piece", new AcquireGamePiece(()->vision.getBestGamePiece(Math.PI/2), drive));
+        tab.add("Acquire game piece", new AcquireGamePiece(()->vision.getBestGamePiece(Math.PI/2), drive));
+        SmartDashboard.putData("Return visin data", new ReturnData(vision));
+        tab.add("Return data", new ReturnData(vision));
     }
 
 }
