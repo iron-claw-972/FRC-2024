@@ -1,6 +1,7 @@
 package frc.robot.constants.swerve;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -113,8 +114,8 @@ public class DriveConstants {
     public static final boolean kAngleMotorInvert = kModuleConstants.angleMotorInvert;
 
     /* Neutral Modes */
-    public static final NeutralMode kDriveNeutralMode = NeutralMode.Brake;
-    public static final NeutralMode kAngleNeutralMode = NeutralMode.Coast;
+    public static final NeutralModeValue kDriveNeutralMode = NeutralModeValue.Brake;
+    public static final NeutralModeValue kAngleNeutralMode = NeutralModeValue.Coast;
 
     /* Drive Motor PID Values */
     public static final double kDriveP = 0.05;
