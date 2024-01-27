@@ -23,11 +23,11 @@ public class RobotContainer {
     private final PivotSim m_pivotSim;
 
     // The robot's subsystems are defined here...
-    private final Drivetrain drive;
+    private  Drivetrain drive;
 
 
     // Controllers are defined here
-    private final BaseDriverConfig driver;
+    private BaseDriverConfig driver;
 
     //ShuffleBoadManager shuffleboardManager;
 
@@ -38,12 +38,12 @@ public class RobotContainer {
 
         m_pivotSim = new PivotSim();
 
-        drive = new Drivetrain();
-        driver = new GameControllerDriverConfig(drive);
+        // drive = new Drivetrain();
+        // driver = new GameControllerDriverConfig(drive);
 
-        driver.configureControls();
+        // driver.configureControls();
 
-        drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
+        // drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
 
         /*PathGroupLoader.loadPathGroups();
 

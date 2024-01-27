@@ -10,7 +10,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
  * Class to control a simulated encoder.
  */
 public class TalonEncoderSim {
-    private TalonEncoder encoder;
+    private TalonEncoder m_encoder;
 
     private TalonSRXSimCollection simCollectionSRX = null;
     private TalonFXSimCollection simCollectionFX = null;
@@ -21,7 +21,7 @@ public class TalonEncoderSim {
      * @param encoder Encoder to simulate
      */
     public TalonEncoderSim(TalonEncoder encoder) {
-        encoder = encoder;
+        m_encoder = encoder;
 
         if (encoder.getMotor() instanceof TalonSRX) {
             simCollectionSRX = new TalonSRXSimCollection(encoder.getMotor());
@@ -39,7 +39,7 @@ public class TalonEncoderSim {
      * @return the count
      */
     public int getCount() {
-        return encoder.get();
+        return m_encoder.get();
     }
 
     /**
@@ -49,7 +49,7 @@ public class TalonEncoderSim {
      */
     public void setCount(int count) {
         if (simCollectionSRX != null) {
-            FeedbackDevice selected = encoder.getSelectedFeedbackSensor();
+            FeedbackDevice selected = m_encoder.getSelectedFeedbackSensor();
 
             switch (selected) {
                 case QuadEncoder:
@@ -79,7 +79,7 @@ public class TalonEncoderSim {
      * @return the encoder period
      */
     public double getPeriod() {
-        return encoder.getRate();
+        return m_encoder.getRate();
     }
 
     /**
@@ -90,7 +90,7 @@ public class TalonEncoderSim {
     public void setPeriod(double period) {
         // seconds -> distance/second
         // distancePerPulse (distance) / period (seconds) = distance / second
-        setRate(encoder.getDistancePerPulse() / period);
+        setRate(m_encoder.getDistancePerPulse() / period);
     }
 
     // These are no-op in WPILib
@@ -103,7 +103,7 @@ public class TalonEncoderSim {
      * @return the direction of the encoder
      */
     public boolean getDirection() {
-        return encoder.getDirection();
+        return m_encoder.getDirection();
     }
 
     /**
@@ -114,7 +114,7 @@ public class TalonEncoderSim {
      * @return the samples-to-average value
      */
     public int getSamplesToAverage() {
-        return encoder.getSamplesToAverage();
+        return m_encoder.getSamplesToAverage();
     }
 
     /**
@@ -125,7 +125,7 @@ public class TalonEncoderSim {
      * @param samplesToAverage the new value
      */
     public void setSamplesToAverage(int samplesToAverage) {
-        encoder.setSamplesToAverage(samplesToAverage);
+        m_encoder.setSamplesToAverage(samplesToAverage);
     }
 
     /**
@@ -134,7 +134,7 @@ public class TalonEncoderSim {
      * @param distance the new distance
      */
     public void setDistance(double distance) {
-        setCount((int) (distance / encoder.getDistancePerPulse()));
+        setCount((int) (distance / m_encoder.getDistancePerPulse()));
     }
 
     /**
@@ -143,7 +143,7 @@ public class TalonEncoderSim {
      * @return the encoder distance
      */
     public double getDistance() {
-        return encoder.getDistance();
+        return m_encoder.getDistance();
     }
 
     /**
@@ -152,10 +152,10 @@ public class TalonEncoderSim {
      * @param rate the new rate
      */
     public void setRate(double rate) {
-        int rateInNativeUnits = (int) (rate / (10 * encoder.getDistancePerPulse()));
+        int rateInNativeUnits = (int) (rate / (10 * m_encoder.getDistancePerPulse()));
 
         if (simCollectionSRX != null) {
-            FeedbackDevice selected = encoder.getSelectedFeedbackSensor();
+            FeedbackDevice selected = m_encoder.getSelectedFeedbackSensor();
 
             switch (selected) {
                 case QuadEncoder:
@@ -185,7 +185,7 @@ public class TalonEncoderSim {
      * @return the rate of change
      */
     public double getRate() {
-        return encoder.getRate();
+        return m_encoder.getRate();
     }
 
     /**
