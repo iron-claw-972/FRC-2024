@@ -12,6 +12,7 @@ import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.SendPoseNT;
 import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
@@ -27,6 +28,7 @@ public class RobotContainer {
     // The robot's subsystems are defined here...
     private final Drivetrain drive;
     private final Vision vision;
+    private final SendPoseNT sendPoseNT;
 
     // Controllers are defined here
     private final BaseDriverConfig driver;
@@ -41,6 +43,8 @@ public class RobotContainer {
 
         drive = new Drivetrain(vision);
         driver = new GameControllerDriverConfig(drive);
+        
+        sendPoseNT = new SendPoseNT(drive);
 
         driver.configureControls();
         initializeAutoBuilder();
