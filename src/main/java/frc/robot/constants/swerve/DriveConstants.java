@@ -144,33 +144,29 @@ public class DriveConstants {
      */
     public static void update(RobotId robotId) {
         if (robotId == RobotId.SwerveTest) {
-
             kTrackWidth = Units.inchesToMeters(22.75); //22.75 swerve bot, 20.75 comp bot
 
             kPigeon = 13;
 
             kDriveFrontLeft = 1;
             kSteerFrontLeft = 2;
-            kEncoderFrontLeft = 9;
-            kSteerOffsetFrontLeft = -1.58;
+            kEncoderFrontLeft = 3;
+            kSteerOffsetFrontLeft = 85.107;
 
-            kDriveFrontRight = 7;
-            kSteerFrontRight = 8;
+            kDriveFrontRight = 10;
+            kSteerFrontRight = 11;
             kEncoderFrontRight = 12;
-            kSteerOffsetFrontRight = 1.935;
+            kSteerOffsetFrontRight = 292.334;
 
-            kDriveBackLeft = 5;
-            kSteerBackLeft = 6;
-            kEncoderBackLeft = 11;
-            kSteerOffsetBackLeft = -8;
+            kDriveBackLeft = 7;
+            kSteerBackLeft = 8;
+            kEncoderBackLeft = 9;
+            kSteerOffsetBackLeft = 181.239-180;
 
-            kDriveBackRight = 3;
-            kSteerBackRight = 4;
-            kEncoderBackRight = 10;
-            kSteerOffsetBackRight = -0.383494421839714;
-
-            // CAN
-            kDriveMotorCAN = Constants.RIO_CAN;
+            kDriveBackRight = 4;
+            kSteerBackRight = 5;
+            kEncoderBackRight = 6;
+            kSteerOffsetBackRight = 156.86;
         }
     }
 }
