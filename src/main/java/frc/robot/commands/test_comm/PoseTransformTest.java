@@ -1,6 +1,9 @@
 package frc.robot.commands.test_comm;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -17,21 +20,26 @@ public class PoseTransformTest extends CommandBase {
     private double startTime;
     private Pose2d finalPose;
     private Pose2d error;
+    private double x;
+    private double y;
+    private double rotation;
 
-    public PoseTransformTest(Drivetrain drive) {
+    public PoseTransformTest(Drivetrain drive, double x, double y, double rotation) {
         this.drive = drive;
         // finalPose is position after robot moves from current position-- startPose-- by the values that are inputted-- distanceToMove
-
+        this.x =x;
+        this.y =y;
+        this.rotation = rotation;
         addRequirements(drive);
     }
 
     @Override
     public void initialize() {
         startTime = Timer.getFPGATimestamp();
-//        finalPose = drive.getPose().transformBy(new Transform2d(
-//                new Translation2d(drive.getRequestedXPos(0), drive.getRequestedYPos(0)),
-//                new Rotation2d(drive.getRequestedHeading(0))
-//        ));
+        finalPose = drive.getPose().transformBy(new Transform2d(
+               new Translation2d(x, y),
+               Rotation2d.fromDegrees(rotation)
+       ));
     }
 
     @Override

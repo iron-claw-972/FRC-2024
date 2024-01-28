@@ -1,6 +1,5 @@
 package frc.robot.util;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,16 +25,10 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.vision.AimAtTag;
-import frc.robot.commands.vision.AlignToTag;
-import frc.robot.commands.vision.CalculateStdDevs;
-import frc.robot.commands.vision.TestVisionDistance;
 import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.FieldConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
-import frc.robot.subsystems.Drivetrain;
 
 // Vision and it's commands are adapted from Iron Claw's FRC2022, FRC2023, and: https://www.youtube.com/watch?v=TG9KAa2EGzQ&t=1439s
 public class Vision {
@@ -48,10 +41,9 @@ public class Vision {
   private ArrayList<VisionCamera> m_cameras = new ArrayList<>();
 
   /**
-   * Creates a new instance of Vision and sets up the limelight NetworkTable and the SmartDashboard
+   * Creates a new instance of Vision and sets up the cameras and field layout
    */
-  public Vision(ShuffleboardTab shuffleboardTab, ArrayList<Pair<String, Transform3d>> camList) {
-    m_shuffleboardTab = shuffleboardTab;
+  public Vision( ArrayList<Pair<String, Transform3d>> camList) {
     
     try {
       // Try to find the field layout
@@ -69,22 +61,6 @@ public class Vision {
     for (int i = 0; i < camList.size(); i++) {
       m_cameras.add(new VisionCamera(camList.get(i).getFirst(), camList.get(i).getSecond()));
     }
-  }
-
-  /**
-   * Set up the vision commands on SmartDashboard so we can turn them on/off for testing
-   */
-  public void setUpSmartDashboardCommandButtons(Drivetrain drive){
-    SmartDashboard.putData("Calculate vision std devs", new CalculateStdDevs(1000, this, drive));
-    m_shuffleboardTab.add("Calculate std devs", new CalculateStdDevs(1000, this, drive));
-    SmartDashboard.putData("Vision aim at tag", new AimAtTag(drive));
-    m_shuffleboardTab.add("Aim at tag", new AimAtTag(drive));
-    SmartDashboard.putData("Vision distance test (forward)", new TestVisionDistance(0.1, drive, this));
-    m_shuffleboardTab.add("Distance test (forward)", new TestVisionDistance(0.1, drive, this));
-    SmartDashboard.putData("Vision distance test (backward)", new TestVisionDistance(-0.1, drive, this));
-    m_shuffleboardTab.add("Distance test (backward)", new TestVisionDistance(-0.1, drive, this));
-    SmartDashboard.putData("Vision align to tag", new AlignToTag(drive));
-    m_shuffleboardTab.add("Align to tag", new AlignToTag(drive));
   }
 
   /**

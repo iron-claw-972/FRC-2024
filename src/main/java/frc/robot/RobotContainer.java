@@ -3,17 +3,10 @@ package frc.robot;
 import java.util.function.BooleanSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathPlannerPath;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.commands.SupplierCommand;
-import frc.robot.commands.auto_comm.PathPlannerCommand;
 import frc.robot.constants.AutoConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
@@ -21,6 +14,7 @@ import frc.robot.controls.GameControllerDriverConfig;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
+import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -30,52 +24,34 @@ import frc.robot.util.Vision;
  */
 public class RobotContainer {
 
-    // Shuffleboard auto chooser
-    private final SendableChooser<SupplierCommand> autoCommand = new SendableChooser<>();
-
-    //shuffleboard tabs
-    // The main tab is not currently used. Delete the SuppressWarning if it is used.
-    @SuppressWarnings("unused")
-    private final ShuffleboardTab mainTab = Shuffleboard.getTab("Main");
-    private final ShuffleboardTab drivetrainTab = Shuffleboard.getTab("Drive");
-    private final ShuffleboardTab swerveModulesTab = Shuffleboard.getTab("Swerve Modules");
-    private final ShuffleboardTab autoTab = Shuffleboard.getTab("Auto");
-    private final ShuffleboardTab controllerTab = Shuffleboard.getTab("Controller");
-    private final ShuffleboardTab visionTab = Shuffleboard.getTab("Vision");
-    private final ShuffleboardTab testTab = Shuffleboard.getTab("Test");
-
-//    private final Vision vision;
-
     // The robot's subsystems are defined here...
     private final Drivetrain drive;
     private final Vision vision;
 
-
     // Controllers are defined here
     private final BaseDriverConfig driver;
+
+    ShuffleBoardManager shuffleboardManager;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        vision = new Vision(visionTab, VisionConstants.CAMERAS);
+        vision = new Vision(VisionConstants.CAMERAS);
 
         drive = new Drivetrain(vision);
-        vision.setUpSmartDashboardCommandButtons(drive);
-        driver = new GameControllerDriverConfig(drive, controllerTab, false);
+        driver = new GameControllerDriverConfig(drive);
 
         driver.configureControls();
         initializeAutoBuilder();
         drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
-        drivetrainTab.add("feild", drive.getFeild());
-        drivetrainTab.addDouble("module1", ()-> drive.getModules()[0].getAngle().getDegrees()%360);
-        drivetrainTab.addDouble("module2", ()-> drive.getModules()[1].getAngle().getDegrees()%360);
-        drivetrainTab.addDouble("module3", ()-> drive.getModules()[2].getAngle().getDegrees()%360);
-        drivetrainTab.addDouble("module4", ()-> drive.getModules()[3].getAngle().getDegrees()%360);
+
         PathGroupLoader.loadPathGroups();
-        autoCommand.addOption("Example Path", new SupplierCommand(
-            ()->followPath("Example Path", true),
-            drive));
+
+        shuffleboardManager = new ShuffleBoardManager(drive, vision);
+         
+
+
 
 
 //        switch (robotId) {
@@ -151,7 +127,6 @@ public class RobotContainer {
         LiveWindow.disableAllTelemetry(); // LiveWindow is causing periodic loop overruns
         LiveWindow.setEnabled(false);
 
-        autoTab.add("Auto Chooser", autoCommand);
     }
 
     /**
@@ -160,7 +135,11 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return autoCommand.getSelected();
+        return shuffleboardManager.getSelectedCommand();
+    }
+
+    public void updateShuffleBoard(){
+        shuffleboardManager.update();
     }
 
     // TODO
@@ -185,12 +164,12 @@ public class RobotContainer {
       ()->drive.getChassisSpeeds(),
       (chassisSpeeds) -> {drive.setChassisSpeeds(chassisSpeeds,false);},
       AutoConstants.config,
-      allianceColor(),
+      getAllianceColorBooleanSupplier(),
       drive
     );
    }
 
-   public BooleanSupplier allianceColor(){
+   public static BooleanSupplier getAllianceColorBooleanSupplier(){
     return () -> {
       // Boolean supplier that controls when the path will be mirrored for the red alliance
       // This will flip the path being followed to the red side of the field.
@@ -201,15 +180,8 @@ public class RobotContainer {
           return alliance.get() == DriverStation.Alliance.Red;
       }
       return false;
-  };
+    };
   }
 
-    public Command followPath(String pathName, boolean resetOdemetry){
-     PathPlannerPath path = PathGroupLoader.getPathGroup(pathName);
-     if (resetOdemetry){
-            drive.resetOdometry(path.getPreviewStartingHolonomicPose());
-          }
-    return AutoBuilder.followPath(PathGroupLoader.getPathGroup(pathName));
-  }
 
 }

@@ -1,4 +1,5 @@
 package frc.robot.subsystems;
+import java.util.Arrays;
 
 import com.ctre.phoenix.sensors.Pigeon2.AxisDirection;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
@@ -13,19 +14,15 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
-import frc.robot.subsystems.drivetrain.module.Module;
-import frc.robot.subsystems.drivetrain.module.ModuleSim;
-import frc.robot.util.LogManager;
+import frc.robot.subsystems.module.ModuleSim;
+import frc.robot.subsystems.module.Module;
 import frc.robot.util.Vision;
-
-import java.util.Arrays;
 
 /**
  * Represents a swerve drive style drivetrain.
@@ -38,7 +35,7 @@ import java.util.Arrays;
  */
 public class Drivetrain extends SubsystemBase {
 
-    protected final ModuleSim[] modules;
+    protected final Module[] modules;
 
     // Odometry
     private final SwerveDrivePoseEstimator poseEstimator;
@@ -53,9 +50,6 @@ public class Drivetrain extends SubsystemBase {
     private final PIDController yController;
     private final PIDController rotationController;
 
-    // Displays the field with the robots estimated pose on it
-    private final Field2d fieldDisplay;
-
     // If vision is enabled for drivetrain odometry updating
     // DO NOT CHANGE THIS HERE TO DISABLE VISION, change VisionConstants.ENABLED instead
     private boolean visionEnabled = true;
@@ -69,7 +63,7 @@ public class Drivetrain extends SubsystemBase {
     public Drivetrain(Vision vision) {
         this.vision = vision;
 
-        modules = new ModuleSim[4];
+        modules = new Module[4];
 
         ModuleConstants[] constants = Arrays.copyOfRange(ModuleConstants.values(), 0, 4);
         
@@ -114,19 +108,11 @@ public class Drivetrain extends SubsystemBase {
         rotationController.enableContinuousInput(-Math.PI, Math.PI);
         rotationController.setTolerance(Units.degreesToRadians(0.25), Units.degreesToRadians(0.25));
 
-        fieldDisplay = new Field2d();
-        fieldDisplay.setRobotPose(getPose());
     }
 
     @Override
     public void periodic() {
         updateOdometry();
-        //TODO: This throws an exception in the simulator. Fix it.
-        if(RobotBase.isReal()){
-            updateLogs();
-        }
-        LogManager.log();
-        fieldDisplay.setRobotPose(getPose());
     }
 
     // DRIVE
@@ -200,7 +186,7 @@ public class Drivetrain extends SubsystemBase {
      * Stops all swerve modules.
      */
     public void stop() {
-        Arrays.stream(modules).forEach(ModuleSim::stop);
+        Arrays.stream(modules).forEach(Module::stop);
     }
 
 
@@ -256,7 +242,7 @@ public class Drivetrain extends SubsystemBase {
      * @return an array of all swerve module positions
      */
     public SwerveModulePosition[] getModulePositions() {
-        return Arrays.stream(modules).map(ModuleSim::getPosition).toArray(SwerveModulePosition[]::new);
+        return Arrays.stream(modules).map(Module::getPosition).toArray(SwerveModulePosition[]::new);
     }
 
     /**
@@ -286,7 +272,7 @@ public class Drivetrain extends SubsystemBase {
      */
     public ChassisSpeeds getChassisSpeeds() {
         return DriveConstants.KINEMATICS.toChassisSpeeds(
-                Arrays.stream(modules).map(ModuleSim::getState).toArray(SwerveModuleState[]::new)
+                Arrays.stream(modules).map(Module::getState).toArray(SwerveModuleState[]::new)
         );
     }
 
@@ -297,7 +283,10 @@ public class Drivetrain extends SubsystemBase {
         return poseEstimator.getEstimatedPosition().getRotation();
     }
 
-    public ModuleSim[] getModules(){
+    /**
+     * @return an array of modules
+     */
+    public Module[] getModules(){
         return modules;
     }
 
@@ -331,9 +320,8 @@ public class Drivetrain extends SubsystemBase {
      * TODO: Comment
      */
     public void resetModulesToAbsolute() {
-        Arrays.stream(modules).forEach(ModuleSim::resetToAbsolute);
+        Arrays.stream(modules).forEach(Module::resetToAbsolute);
     }
-
 
     // getters for the PID Controllers
     public PIDController getXController() {
@@ -345,65 +333,4 @@ public class Drivetrain extends SubsystemBase {
     public PIDController getRotationController() {
         return rotationController;
     }
-    public Field2d getFeild(){
-        return fieldDisplay;
-    }
-    public void updateLogs() {
-
-        double[] pose = {
-          getPose().getX(),
-          getPose().getY(),
-          getPose().getRotation().getRadians()
-        };
-        LogManager.addDoubleArray("Swerve/Pose2d", pose);
-    
-        double[] actualStates = {
-          modules[0].getAngle().getRadians(),
-          modules[0].getState().speedMetersPerSecond,
-          modules[1].getAngle().getRadians(),
-          modules[1].getState().speedMetersPerSecond,
-          modules[2].getAngle().getRadians(),
-          modules[2].getState().speedMetersPerSecond,
-          modules[3].getAngle().getRadians(),
-          modules[3].getState().speedMetersPerSecond
-        };
-        LogManager.addDoubleArray("Swerve/actual swerve states", actualStates);
-    
-        double[] desiredStates = {
-          modules[0].getDesiredAngle().getRadians(),
-          modules[0].getDesiredVelocity(),
-          modules[1].getDesiredAngle().getRadians(),
-          modules[1].getDesiredVelocity(),
-          modules[2].getDesiredAngle().getRadians(),
-          modules[2].getDesiredVelocity(),
-          modules[3].getDesiredAngle().getRadians(),
-          modules[3].getDesiredVelocity()
-        };
-        LogManager.addDoubleArray("Swerve/desired swerve states", desiredStates);
-
-        double[] moduleVoltage = {
-            modules[0].getDriveMotor().getBusVoltage(),
-            modules[0].getDriveMotor().getMotorOutputVoltage(),
-            modules[1].getDriveMotor().getBusVoltage(),
-            modules[1].getDriveMotor().getMotorOutputVoltage(),
-            modules[2].getDriveMotor().getBusVoltage(),
-            modules[2].getDriveMotor().getMotorOutputVoltage(),
-            modules[3].getDriveMotor().getBusVoltage(),
-            modules[3].getDriveMotor().getMotorOutputVoltage()
-          };
-          LogManager.addDoubleArray("Swerve Voltage", moduleVoltage);
-        
-        // double[] errorStates = {
-        //   desiredStates[0] - actualStates[0],
-        //   desiredStates[1] - actualStates[1],
-        //   desiredStates[2] - actualStates[2],
-        //   desiredStates[3] - actualStates[3],
-        //   desiredStates[4] - actualStates[4],
-        //   desiredStates[5] - actualStates[5],
-        //   desiredStates[6] - actualStates[6],
-        //   desiredStates[7] - actualStates[7]
-        // };
-        // LogManager.addDoubleArray("Swerve/error swerve states", errorStates);
-      }
-
 }
