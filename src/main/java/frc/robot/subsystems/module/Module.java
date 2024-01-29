@@ -4,6 +4,8 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.OpenLoopRampsConfigs;
+import com.ctre.phoenix6.configs.SlotConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
@@ -164,9 +166,10 @@ public class Module extends SubsystemBase {
         config.SupplyTimeThreshold = DriveConstants.kAnglePeakCurrentDuration;
         angleMotor.getConfigurator().apply(config);
         // TODO: I don't know which config type this is in
-        angleMotor.config_kP(0, DriveConstants.kModuleConstants.angleKP);
-        angleMotor.config_kI(0, DriveConstants.kModuleConstants.angleKI);
-        angleMotor.config_kD(0, DriveConstants.kModuleConstants.angleKD);
+        angleMotor.getConfigurator().apply(new SlotConfigs()
+            .withKP(DriveConstants.kModuleConstants.angleKP)
+            .withKI(DriveConstants.kModuleConstants.angleKI)
+            .withKD(DriveConstants.kModuleConstants.angleKD));
         angleMotor.config_kF(0, DriveConstants.kModuleConstants.angleKF);
         angleMotor.setInverted(DriveConstants.kAngleMotorInvert);
         angleMotor.setNeutralMode(DriveConstants.kAngleNeutralMode);
@@ -201,10 +204,10 @@ public class Module extends SubsystemBase {
         config.SupplyTimeThreshold = DriveConstants.kDrivePeakCurrentDuration;
         driveMotor.getConfigurator().apply(config);
         // TODO: Again, I don't know which config type this should be in
-        driveMotor.config_kP(0, DriveConstants.kDriveP);
-        driveMotor.config_kI(0, DriveConstants.kDriveI);
-        driveMotor.config_kD(0, DriveConstants.kDriveD);
-        driveMotor.config_kF(0, DriveConstants.kDriveF);
+        driveMotor.getConfigurator().apply(new SlotConfigs()
+            .withKP(DriveConstants.kDriveP)
+            .withKI(DriveConstants.kDriveI)
+            .withKD(DriveConstants.kDriveD));
         driveMotor.configOpenloopRamp(DriveConstants.kOpenLoopRamp);
         driveMotor.configClosedloopRamp(DriveConstants.kClosedLoopRamp);
         driveMotor.setInverted(DriveConstants.kDriveMotorInvert);
