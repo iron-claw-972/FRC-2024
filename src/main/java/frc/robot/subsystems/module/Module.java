@@ -170,7 +170,6 @@ public class Module extends SubsystemBase {
             .withKP(DriveConstants.kModuleConstants.angleKP)
             .withKI(DriveConstants.kModuleConstants.angleKI)
             .withKD(DriveConstants.kModuleConstants.angleKD));
-        angleMotor.config_kF(0, DriveConstants.kModuleConstants.angleKF);
         angleMotor.setInverted(DriveConstants.kAngleMotorInvert);
         angleMotor.setNeutralMode(DriveConstants.kAngleNeutralMode);
         angleMotor.configVoltageCompSaturation(Constants.ROBOT_VOLTAGE);
