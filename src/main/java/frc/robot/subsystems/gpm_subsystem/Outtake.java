@@ -3,25 +3,23 @@ package frc.robot.subsystems.gpm_subsystem;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.constants.ShooterConstants;
 
 public class Outtake extends PIDSubsystem{
-    private CANSparkFlex bottomMotor = new CANSparkFlex(ShooterConstants.bottomMotorID, MotorType.kBrushless);
-    private CANSparkFlex topMotor = new CANSparkFlex(ShooterConstants.topMotorID, MotorType.kBrushless);
-    //private CANSparkFlex intakeMotor = new CANSparkFlex(4, MotorType.kBrushless);
+    private final CANSparkFlex bottomMotor = new CANSparkFlex(ShooterConstants.BOTTOM_MOTOR_ID, MotorType.kBrushless);
+    private final CANSparkFlex topMotor = new CANSparkFlex(ShooterConstants.TOP_MOTOR_ID, MotorType.kBrushless);
 
 
     private final SimpleMotorFeedforward shooterFeedForward = 
-    new SimpleMotorFeedforward(ShooterConstants.kS, ShooterConstants.kV); // use same ff for wrist?
+    new SimpleMotorFeedforward(ShooterConstants.S, ShooterConstants.V); // use same ff for wrist?
 
     public Outtake() {
-        super(new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD));
-        getController().setTolerance(ShooterConstants.kShooterToleranceRPM);
-        getController().setSetpoint(ShooterConstants.kShooterTargetRPM);
+        super(new PIDController(ShooterConstants.P, ShooterConstants.I, ShooterConstants.D));
+        getController().setTolerance(ShooterConstants.TOLERANCE_RPM);
+        getController().setSetpoint(ShooterConstants.TARGET_RPM);
         topMotor.setSecondaryCurrentLimit(0.5);
         bottomMotor.setSecondaryCurrentLimit(0.5);
     }
