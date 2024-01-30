@@ -18,7 +18,8 @@ public class Wrist extends PIDSubsystem{
     public Wrist() {
         super(new PIDController(WristConstants.kP, WristConstants.kI, WristConstants.kD));
         getController().setTolerance(WristConstants.kToleranceDegrees);
-        getController().setSetpoint(WristConstants.kDegrees);
+        getController().setSetpoint(WristConstants.INITIAL_ANGLE);
+        wrist.getAbsoluteEncoder(Type.kDutyCycle).setPositionConversionFactor(WristConstants.kConversionFactor);
         wrist.setSecondaryCurrentLimit(0.5);
     }
     @Override
@@ -26,10 +27,19 @@ public class Wrist extends PIDSubsystem{
         wrist.setVoltage((-output-wristFeedForward.calculate(setpoint))/2);
         System.out.println("wrist" + wrist.getAppliedOutput());
     }
+    // TODO: Return in radians?
     @Override
     public double getMeasurement() {
         return wrist.getAbsoluteEncoder(Type.kDutyCycle).getPosition();
     }
+
+    /**
+     * Sets the angle of the wrist in radians.
+     */
+    public void setAngle(double angle) {
+        getController().setSetpoint(angle);
+    }
+
     public boolean atSetpoint() {
         return getController().atSetpoint();
     }
