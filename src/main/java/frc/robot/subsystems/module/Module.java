@@ -178,8 +178,6 @@ public class Module extends SubsystemBase {
         angleMotor.enableVoltageCompensation(true);
         angleMotor.setPosition(0);
         m_VelocityVoltage.Slot = 0;
-        // TODO: Fix this
-        angleMotor.setControl(m_VelocityVoltage.withVelocity(0));
         
         resetToAbsolute();
     }
