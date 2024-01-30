@@ -115,9 +115,8 @@ public class MotorFactory {
 
         // TODO: I can't find where these settings are
         talon.getConfigurator().apply(config);
-        talon.enableVoltageCompensation(false);
         talon.setNeutralMode(NeutralModeValue.Brake);
-        talon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+        
 
         return talon;
     }
