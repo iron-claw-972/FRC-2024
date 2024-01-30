@@ -44,7 +44,9 @@ public class Module extends SubsystemBase {
     protected boolean stateDeadband = true;
 
     SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(DriveConstants.DRIVE_KS, DriveConstants.DRIVE_KV, DriveConstants.DRIVE_KA);
-
+    
+    final VelocityVoltage m_VelocityVoltage = new VelocityVoltage(0);
+    
     private boolean optimizeStates = true;
 
     ModuleConstants moduleConstants;
@@ -138,7 +140,7 @@ public class Module extends SubsystemBase {
     }
 
     public Rotation2d getCANcoder() {
-        return Rotation2d.fromDegrees(CANcoder.getAbsolutePosition().getValue());
+        return Rotation2d.fromDegrees(CANcoder.getAbsolutePosition().getValue()*360);
     }
 
     public void resetToAbsolute() {
@@ -152,7 +154,6 @@ public class Module extends SubsystemBase {
     private void configCANcoder() {
         CANcoder.getConfigurator().apply(new CANcoderConfiguration());
         CANcoder.getConfigurator().apply(new MagnetSensorConfigs()
-            // TODO: The old option doesn't exist anymore. Changing to this option might require other changes
             .withAbsoluteSensorRange(AbsoluteSensorRangeValue.Unsigned_0To1)
             .withSensorDirection(DriveConstants.kModuleConstants.canCoderInvert?SensorDirectionValue.Clockwise_Positive:SensorDirectionValue.CounterClockwise_Positive));
     }
@@ -176,6 +177,8 @@ public class Module extends SubsystemBase {
         angleMotor.configVoltageCompSaturation(Constants.ROBOT_VOLTAGE);
         angleMotor.enableVoltageCompensation(true);
         angleMotor.setPosition(0);
+        m_VelocityVoltage.Slot = 0;
+        
         resetToAbsolute();
     }
 
