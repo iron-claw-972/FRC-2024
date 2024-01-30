@@ -1,6 +1,7 @@
 package frc.robot.subsystems.module;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
@@ -207,8 +208,8 @@ public class Module extends SubsystemBase {
             .withKP(DriveConstants.kDriveP)
             .withKI(DriveConstants.kDriveI)
             .withKD(DriveConstants.kDriveD));
-        driveMotor.configOpenloopRamp(DriveConstants.kOpenLoopRamp);
-        driveMotor.configClosedloopRamp(DriveConstants.kClosedLoopRamp);
+        driveMotor.getConfigurator().apply(new OpenLoopRampsConfigs().withDutyCycleOpenLoopRampPeriod(DriveConstants.kOpenLoopRamp));
+        driveMotor.getConfigurator().apply(new ClosedLoopRampsConfigs().withDutyCycleClosedLoopRampPeriod(DriveConstants.kOpenLoopRamp));
         driveMotor.setInverted(DriveConstants.kDriveMotorInvert);
         driveMotor.setNeutralMode(DriveConstants.kDriveNeutralMode);
         driveMotor.configVoltageCompSaturation(Constants.ROBOT_VOLTAGE);
