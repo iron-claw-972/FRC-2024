@@ -215,8 +215,7 @@ public class Module extends SubsystemBase {
         driveMotor.getConfigurator().apply(new ClosedLoopRampsConfigs().withDutyCycleClosedLoopRampPeriod(DriveConstants.kOpenLoopRamp));
         driveMotor.setInverted(DriveConstants.kDriveMotorInvert);
         driveMotor.setNeutralMode(DriveConstants.kDriveNeutralMode);
-        driveMotor.configVoltageCompSaturation(Constants.ROBOT_VOLTAGE);
-        driveMotor.enableVoltageCompensation(true);
+        
     }
 
     public SwerveModuleState getState() {
