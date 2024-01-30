@@ -44,7 +44,9 @@ public class Module extends SubsystemBase {
     protected boolean stateDeadband = true;
 
     SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(DriveConstants.DRIVE_KS, DriveConstants.DRIVE_KV, DriveConstants.DRIVE_KA);
-
+    
+    final VelocityVoltage m_VelocityVoltage = new VelocityVoltage(0);
+    
     private boolean optimizeStates = true;
 
     ModuleConstants moduleConstants;
@@ -176,6 +178,10 @@ public class Module extends SubsystemBase {
         angleMotor.configVoltageCompSaturation(Constants.ROBOT_VOLTAGE);
         angleMotor.enableVoltageCompensation(true);
         angleMotor.setPosition(0);
+        m_VelocityVoltage.Slot = 0;
+        // TODO: Fix this
+        angleMotor.setControl(m_VelocityVoltage.withVelocity(0));
+        
         resetToAbsolute();
     }
 
