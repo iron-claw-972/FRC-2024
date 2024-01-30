@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ConstantsTest {
 
     @Test
+    @SuppressWarnings("unused")
     public void testRobotSize() {
         // The competition robot frame width and length is 26 inches.
         // It has 3/16 inch plates on all sides,
