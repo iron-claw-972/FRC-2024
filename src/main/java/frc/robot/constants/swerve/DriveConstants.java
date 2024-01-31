@@ -144,29 +144,29 @@ public class DriveConstants {
      */
     public static void update(RobotId robotId) {
         if (robotId == RobotId.SwerveTest) {
-            kTrackWidth = Units.inchesToMeters(22.75); //22.75 swerve bot, 20.75 comp bot
+          kTrackWidth = Units.inchesToMeters(22.75); //22.75 swerve bot, 20.75 comp bot
 
             kPigeon = 13;
 
             kDriveFrontLeft = 1;
             kSteerFrontLeft = 2;
             kEncoderFrontLeft = 3;
-            kSteerOffsetFrontLeft = 85.107;
+            kSteerOffsetFrontLeft = 271.367-180;
 
             kDriveFrontRight = 10;
             kSteerFrontRight = 11;
             kEncoderFrontRight = 12;
-            kSteerOffsetFrontRight = 292.334;
+            kSteerOffsetFrontRight = 292.972;
 
             kDriveBackLeft = 7;
             kSteerBackLeft = 8;
             kEncoderBackLeft = 9;
-            kSteerOffsetBackLeft = 181.239-180;
+            kSteerOffsetBackLeft = 179.033+180;
 
             kDriveBackRight = 4;
             kSteerBackRight = 5;
             kEncoderBackRight = 6;
-            kSteerOffsetBackRight = 156.86;
+            kSteerOffsetBackRight = 154.809;
         }
     }
 }
