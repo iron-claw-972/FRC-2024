@@ -37,8 +37,8 @@ public class SysID extends SequentialCommandGroup {
     
     
     
-    public Mechanism initializeMechanism(){
-        return mechanism = new Mechanism(
+    public void initializeMechanism(){
+         mechanism = new Mechanism(
         x->{drive.setModuleStates(new SwerveModuleState[]{new SwerveModuleState(0,new Rotation2d()),
                                   new SwerveModuleState(0,new Rotation2d()),
                                   new SwerveModuleState(0,new Rotation2d()),
