@@ -4,14 +4,8 @@
 
 package frc.robot.commands;
 
-import java.util.function.Supplier;
-
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
@@ -22,32 +16,31 @@ import frc.robot.subsystems.Drivetrain;
 /** Add your docs here. */
 public class SysID extends SequentialCommandGroup {
     
-    Config config = new SysIdRoutine.Config();
+    Config config = new Config();
     Drivetrain drive;
     Mechanism mechanism;
     SysIdRoutine SysIdRoutine;
     
     public SysID(Drivetrain drive) {
-    this.drive = drive;
-    initializeMechanism();
-    SysIdRoutine = new SysIdRoutine(config, mechanism);
-    addRequirements(drive);
-    addCommands(SysIdRoutine.quasistatic(Direction.kForward));
-  }
+        this.drive = drive;
+        initializeMechanism();
+        SysIdRoutine = new SysIdRoutine(config, mechanism);
+        addCommands(SysIdRoutine.quasistatic(Direction.kForward));
+    }
     
     
     
     public Mechanism initializeMechanism(){
         return mechanism = new Mechanism(
-        x->{drive.setModuleStates(new SwerveModuleState[]{new SwerveModuleState(0,new Rotation2d()),
-                                  new SwerveModuleState(0,new Rotation2d()),
-                                  new SwerveModuleState(0,new Rotation2d()),
-                                  new SwerveModuleState(0,new Rotation2d())},true);
-            drive.setDriveVoltages(x);
-        },
-        null,
-        drive,
-        "DriveTrain"
-    );
+            x->{drive.setModuleStates(new SwerveModuleState[]{new SwerveModuleState(0,new Rotation2d()),
+                new SwerveModuleState(0,new Rotation2d()),
+                new SwerveModuleState(0,new Rotation2d()),
+                new SwerveModuleState(0,new Rotation2d())},true);
+                drive.setDriveVoltages(x);
+            },
+            null,
+            drive,
+            "Drivetrain"
+        );
     }
 }
