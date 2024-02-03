@@ -122,7 +122,8 @@ public class Module extends SubsystemBase {
             stop();
             return;
         }
-        angleMotor.setControl(new PositionDutyCycle(0).withPosition(desiredState.angle.getRotations()));
+        // angleMotor.setControl(new PositionDutyCycle(3));
+        angleMotor.setControl(new PositionDutyCycle(desiredState.angle.getRotations()*DriveConstants.kModuleConstants.angleGearRatio));
     }
 
     public void setOptimize(boolean enable) {
@@ -135,7 +136,7 @@ public class Module extends SubsystemBase {
 
     public Rotation2d getAngle() {
         return Rotation2d.fromRotations(
-                angleMotor.getPosition().getValue());
+                angleMotor.getPosition().getValue()/DriveConstants.kModuleConstants.angleGearRatio);
     }
 
     public Rotation2d getCANcoder() {
@@ -144,9 +145,8 @@ public class Module extends SubsystemBase {
 
     public void resetToAbsolute() {
         // Sensor ticks
-        // TODO: Convert sensor ticks in driveconstants to radians
         double absolutePosition = getCANcoder().getRotations() - Units.degreesToRotations(angleOffset);
-        angleMotor.setPosition(absolutePosition);
+        angleMotor.setPosition(absolutePosition*DriveConstants.kModuleConstants.angleGearRatio);
     }
 
     private void configCANcoder() {
@@ -179,7 +179,7 @@ public class Module extends SubsystemBase {
     }
 
     public double getSteerVelocity() {
-        return angleMotor.getVelocity().getValue()*60;
+        return angleMotor.getVelocity().getValue()/DriveConstants.kModuleConstants.angleGearRatio*60;
     }
     public double getDriveVelocity() {
         return driveMotor.getVelocity().getValue()*60;
