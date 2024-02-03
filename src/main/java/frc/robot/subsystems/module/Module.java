@@ -19,6 +19,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.swerve.DriveConstants;
@@ -92,8 +93,8 @@ public class Module extends SubsystemBase {
             double percentOutput = desiredState.speedMetersPerSecond / DriveConstants.kMaxSpeed;
             driveMotor.set(percentOutput);
         } else {
-            double velocity = ConversionUtils.MPSToFalcon(desiredState.speedMetersPerSecond, DriveConstants.kWheelCircumference,
-                                                          DriveConstants.kDriveGearRatio);
+            double velocity = ConversionUtils.falconToRPM(ConversionUtils.MPSToFalcon(desiredState.speedMetersPerSecond, DriveConstants.kWheelCircumference,
+                DriveConstants.kDriveGearRatio), 1)/60;
             // TODO: This might or might not be the right way to control the motor.
             driveMotor.setControl(new VelocityDutyCycle(velocity));
         }
@@ -121,7 +122,7 @@ public class Module extends SubsystemBase {
             stop();
             return;
         }
-        angleMotor.setControl(new PositionDutyCycle(ConversionUtils.degreesToFalcon(desiredState.angle.getDegrees(), DriveConstants.kAngleGearRatio)));
+        angleMotor.setControl(new PositionDutyCycle(desiredState.angle.getRotations()));
     }
 
     public void setOptimize(boolean enable) {
@@ -133,8 +134,8 @@ public class Module extends SubsystemBase {
     }
 
     public Rotation2d getAngle() {
-        return Rotation2d.fromDegrees(
-                ConversionUtils.falconToDegrees(angleMotor.getPosition().getValue(), DriveConstants.kAngleGearRatio));
+        return Rotation2d.fromRotations(
+                angleMotor.getPosition().getValue());
     }
 
     public Rotation2d getCANcoder() {
@@ -144,9 +145,8 @@ public class Module extends SubsystemBase {
     public void resetToAbsolute() {
         // Sensor ticks
         // TODO: Convert sensor ticks in driveconstants to radians
-        double absolutePosition = ConversionUtils.degreesToFalcon(getCANcoder().getDegrees() - angleOffset,
-                                                                  DriveConstants.kAngleGearRatio);
-        angleMotor.setPosition(absolutePosition);                    
+        double absolutePosition = getCANcoder().getRotations() - Units.degreesToRotations(angleOffset);
+        angleMotor.setPosition(absolutePosition);
     }
 
     private void configCANcoder() {
@@ -179,10 +179,10 @@ public class Module extends SubsystemBase {
     }
 
     public double getSteerVelocity() {
-        return ConversionUtils.falconToRPM(angleMotor.getVelocity().getValue(), DriveConstants.kAngleGearRatio) * 2 * Math.PI / 60;
+        return angleMotor.getVelocity().getValue()*60;
     }
     public double getDriveVelocity() {
-        return ConversionUtils.falconToRPM(driveMotor.getVelocity().getValue(), DriveConstants.kAngleGearRatio) * 2 * Math.PI / 60;
+        return driveMotor.getVelocity().getValue()*60;
     }
 
     public double getDriveVoltage(){
@@ -216,14 +216,14 @@ public class Module extends SubsystemBase {
 
     public SwerveModuleState getState() {
         return new SwerveModuleState(
-                ConversionUtils.falconToMPS(driveMotor.getVelocity().getValue(), DriveConstants.kWheelCircumference,
+                ConversionUtils.falconToMPS(ConversionUtils.RPMToFalcon(driveMotor.getVelocity().getValue()*60, 1), DriveConstants.kWheelCircumference,
                                             DriveConstants.kDriveGearRatio),
                 getAngle());
     }
 
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(
-                ConversionUtils.falconToMeters(driveMotor.getPosition().getValue(), DriveConstants.kWheelCircumference,
+                ConversionUtils.falconToMeters(ConversionUtils.degreesToFalcon(driveMotor.getPosition().getValue()*360, 1), DriveConstants.kWheelCircumference,
                                                DriveConstants.kDriveGearRatio),
                 getAngle());
     }
