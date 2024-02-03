@@ -32,7 +32,9 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     )));
 
     // set the wheels to X
-    kDriver.get(Button.X).onTrue(new SetFormationX(super.getDrivetrain()));
+    kDriver.get(Button.X).whileTrue(new SetFormationX(super.getDrivetrain()));
+    // Enable state deadband after setting formation to X
+    kDriver.get(Button.X).onFalse(new InstantCommand(()->getDrivetrain().setStateDeadband(true)));
     
     // Resets the modules to absolute if they are having the unresolved zeroing error
     kDriver.get(Button.A).onTrue(new InstantCommand(() -> getDrivetrain().resetModulesToAbsolute()));
