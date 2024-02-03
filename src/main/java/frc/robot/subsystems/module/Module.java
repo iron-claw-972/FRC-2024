@@ -5,7 +5,7 @@ import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.OpenLoopRampsConfigs;
-import com.ctre.phoenix6.configs.SlotConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
@@ -122,7 +122,7 @@ public class Module extends SubsystemBase {
             stop();
             return;
         }
-        angleMotor.setControl(new PositionDutyCycle(desiredState.angle.getRotations()));
+        angleMotor.setControl(new PositionDutyCycle(0).withPosition(desiredState.angle.getRotations()));
     }
 
     public void setOptimize(boolean enable) {
@@ -166,7 +166,7 @@ public class Module extends SubsystemBase {
         config.SupplyTimeThreshold = DriveConstants.kAnglePeakCurrentDuration;
         angleMotor.getConfigurator().apply(config);
         // TODO: I don't know which config type this is in
-        angleMotor.getConfigurator().apply(new SlotConfigs()
+        angleMotor.getConfigurator().apply(new Slot0Configs()
             .withKP(DriveConstants.kModuleConstants.angleKP)
             .withKI(DriveConstants.kModuleConstants.angleKI)
             .withKD(DriveConstants.kModuleConstants.angleKD));
@@ -203,7 +203,7 @@ public class Module extends SubsystemBase {
         config.SupplyTimeThreshold = DriveConstants.kDrivePeakCurrentDuration;
         driveMotor.getConfigurator().apply(config);
         // TODO: Again, I don't know which config type this should be in
-        driveMotor.getConfigurator().apply(new SlotConfigs()
+        driveMotor.getConfigurator().apply(new Slot0Configs()
             .withKP(DriveConstants.kDriveP)
             .withKI(DriveConstants.kDriveI)
             .withKD(DriveConstants.kDriveD));
