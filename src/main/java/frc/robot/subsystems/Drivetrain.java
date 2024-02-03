@@ -261,6 +261,9 @@ public class Drivetrain extends SubsystemBase {
     public void setStateDeadband(boolean stateDeadBand) {
         Arrays.stream(modules).forEach(module -> module.setStateDeadband(stateDeadBand));
     }
+    public void setOptimized(boolean optimized) {
+        Arrays.stream(modules).forEach(module -> module.setOptimize(optimized));
+    }
 
     public void setVisionEnabled(boolean enabled){
         visionEnabled = enabled;

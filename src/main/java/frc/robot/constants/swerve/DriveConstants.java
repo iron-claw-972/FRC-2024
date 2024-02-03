@@ -120,7 +120,7 @@ public class DriveConstants {
 
     /* Neutral Modes */
     public static final NeutralMode kDriveNeutralMode = NeutralMode.Brake;
-    public static final NeutralMode kAngleNeutralMode = NeutralMode.Coast;
+    public static final NeutralMode kAngleNeutralMode = NeutralMode.Brake;
 
     /* Drive Motor PID Values */
     public static final double kDriveP = 0.05;
@@ -157,22 +157,22 @@ public class DriveConstants {
             kDriveFrontLeft = 1;
             kSteerFrontLeft = 2;
             kEncoderFrontLeft = 3;
-            kSteerOffsetFrontLeft = 271.367-180;
+            kSteerOffsetFrontLeft = 271.367;
 
             kDriveFrontRight = 10;
             kSteerFrontRight = 11;
             kEncoderFrontRight = 12;
-            kSteerOffsetFrontRight = 292.972;
+            kSteerOffsetFrontRight = 292.972-180;
 
             kDriveBackLeft = 7;
             kSteerBackLeft = 8;
             kEncoderBackLeft = 9;
-            kSteerOffsetBackLeft = 179.033+180;
+            kSteerOffsetBackLeft = 179.033;
 
             kDriveBackRight = 4;
             kSteerBackRight = 5;
             kEncoderBackRight = 6;
-            kSteerOffsetBackRight = 154.809;
+            kSteerOffsetBackRight = 154.809+180;
         }
     }
 }
