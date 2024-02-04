@@ -53,7 +53,7 @@ public class Robot extends TimedRobot {
         // block in order for anything in the Command-based framework to work.
 
         // TODO: why is this here?
-        // robotContainer.updateShuffleBoard();
+        robotContainer.updateShuffleBoard();
 
         CommandScheduler.getInstance().run();
     }
