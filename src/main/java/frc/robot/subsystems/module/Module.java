@@ -99,7 +99,7 @@ public class Module extends SubsystemBase {
             driveMotor.setControl(new VelocityDutyCycle(velocity));
         }
         if (Constants.DO_LOGGING) {
-            double motorSpeed = ConversionUtils.falconToMPS(driveMotor.getVelocity().getValue(), DriveConstants.kWheelCircumference,
+            double motorSpeed = ConversionUtils.falconToMPS(ConversionUtils.RPMToFalcon(driveMotor.getVelocity().getValue()/60, 1), DriveConstants.kWheelCircumference,
                                                             DriveConstants.kDriveGearRatio);
             LogManager.addDouble("Swerve/Modules/DriveSpeed/" + type.name(),
                                  motorSpeed
@@ -178,11 +178,17 @@ public class Module extends SubsystemBase {
         resetToAbsolute();
     }
 
+    /**
+     * @return Speed in RPM
+     */
     public double getSteerVelocity() {
         return angleMotor.getVelocity().getValue()/DriveConstants.kModuleConstants.angleGearRatio*60;
     }
+    /**
+     * @return Speed in RPM
+     */
     public double getDriveVelocity() {
-        return driveMotor.getVelocity().getValue()*60;
+        return driveMotor.getVelocity().getValue()*60/DriveConstants.kModuleConstants.driveGearRatio;
     }
 
     public double getDriveVoltage(){
