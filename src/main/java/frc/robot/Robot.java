@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.VisionConstants;
+import frc.robot.subsystems.gpm_subsystem.Outtake;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -21,6 +22,7 @@ import frc.robot.constants.miscConstants.VisionConstants;
 public class Robot extends TimedRobot {
 
     private static RobotId ROBOT_ID = null;
+    private Outtake outtake;
 
     private Command autoCommand;
     private RobotContainer robotContainer;
@@ -38,7 +40,10 @@ public class Robot extends TimedRobot {
          //setRobotId(RobotId.SwerveTest);
 
         // build the RobotContainer with the robot id from preferences
-        robotContainer = new RobotContainer();
+
+        // robotContainer = new RobotContainer();
+        outtake = new Outtake();
+
     }
 
     /**
@@ -54,8 +59,9 @@ public class Robot extends TimedRobot {
         // commands, running already-scheduled commands, removing finished or interrupted commands,
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
-        robotContainer.updateShuffleBoard();
+        // robotContainer.updateShuffleBoard();
         CommandScheduler.getInstance().run();
+
     }
 
     /**
@@ -83,12 +89,12 @@ public class Robot extends TimedRobot {
 //        robotContainer.resetModules();
 
         // Disable vision if the constant is false.
-       robotContainer.setVisionEnabled(VisionConstants.ENABLED_AUTO);
+       //robotContainer.setVisionEnabled(VisionConstants.ENABLED_AUTO);
 
         // Get the autonomous command.
         // This access is fast (about 14 microseconds) because the value is already resident in the Network Tables.
         // There was a problem last year because the operation also installed about over a dozen items (taking more than 20 ms).
-        autoCommand = robotContainer.getAutonomousCommand();
+        //autoCommand = robotContainer.getAutonomousCommand();
 
         // If there is an autonomous command, then schedule it
         if (autoCommand != null) {
@@ -111,7 +117,7 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
 //        robotContainer.resetModules();
 
-        robotContainer.setVisionEnabled(true);
+        //robotContainer.setVisionEnabled(true);
 
         // This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to
