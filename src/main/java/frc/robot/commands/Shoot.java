@@ -41,8 +41,8 @@ public class Shoot extends Command {
                         SHOOTER_HEIGHT,
                         new Rotation3d(
                                 drivetrain.getPose().getRotation().getCos(),
-                                drivetrain.getPose().getRotation().getSin(),
-                                wrist.getMeasurement()
+                                wrist.getMeasurement(),
+                                drivetrain.getPose().getRotation().getSin() // TODO: is it cos->sin or sin->cos
                         )
                 ).relativeTo(SPEAKER_POSE);
 
@@ -51,11 +51,17 @@ public class Shoot extends Command {
         velocityY = drivetrain.getChassisSpeeds().vyMetersPerSecond;
         // Correct wrist position
         // TODO: Copy formula
-        double wristTheta = 0;
+
+        double v2 = VELOCITY * Math.cos(displacement.getRotation().getZ()) * Math.sqrt(velocityX * velocityX + velocityY * velocityY);
+        v2 *= v2;
+        double x =
+                Math.sqrt((displacement.getX()*displacement.getX()) + displacement.getY() * displacement.getY());
+        double y = -displacement.getZ(); // meters, yes it's supposed to be negative
+        double wristTheta = Math.atan(v2/9.8/x*(1-Math.sqrt(1+19.6/v2*(y-4.9*x*x/v2))));
         wrist.setAngle(wristTheta);
 
         // Set the outtake velocity
-        outtake.setSetpoint();
+//        outtake.shoot();
 
     }
 
