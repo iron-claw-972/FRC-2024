@@ -95,8 +95,8 @@ public class Module extends SubsystemBase {
         } else {
             double velocity = ConversionUtils.falconToRPM(ConversionUtils.MPSToFalcon(desiredState.speedMetersPerSecond, DriveConstants.kWheelCircumference,
                 DriveConstants.kDriveGearRatio), 1)/60;
-            // TODO: This might or might not be the right way to control the motor.
-            driveMotor.setControl(new VelocityDutyCycle(velocity));
+            // TODO: This curently doesn't use the feedforward.
+            driveMotor.setControl(new VelocityDutyCycle(velocity).withEnableFOC(true));
         }
         if (Constants.DO_LOGGING) {
             double motorSpeed = ConversionUtils.falconToMPS(ConversionUtils.RPMToFalcon(driveMotor.getVelocity().getValue()/60, 1), DriveConstants.kWheelCircumference,
@@ -159,13 +159,11 @@ public class Module extends SubsystemBase {
     private void configAngleMotor() {
         angleMotor.getConfigurator().apply(new TalonFXConfiguration());
         CurrentLimitsConfigs config = new CurrentLimitsConfigs();
-        // TODO: This might or might not be correct
         config.SupplyCurrentLimitEnable = DriveConstants.kAngleEnableCurrentLimit;
         config.SupplyCurrentLimit = DriveConstants.kAngleContinuousCurrentLimit;
         config.SupplyCurrentThreshold = DriveConstants.kAnglePeakCurrentLimit;
         config.SupplyTimeThreshold = DriveConstants.kAnglePeakCurrentDuration;
         angleMotor.getConfigurator().apply(config);
-        // TODO: I don't know which config type this is in
         angleMotor.getConfigurator().apply(new Slot0Configs()
             .withKP(DriveConstants.kModuleConstants.angleKP)
             .withKI(DriveConstants.kModuleConstants.angleKI)
@@ -201,14 +199,12 @@ public class Module extends SubsystemBase {
 
     private void configDriveMotor() {
         driveMotor.getConfigurator().apply(new TalonFXConfiguration());
-        // TODO: Again, this might or might not be correct
         CurrentLimitsConfigs config = new CurrentLimitsConfigs();
         config.SupplyCurrentLimitEnable = DriveConstants.kDriveEnableCurrentLimit;
         config.SupplyCurrentLimit = DriveConstants.kDriveContinuousCurrentLimit;
         config.SupplyCurrentThreshold = DriveConstants.kDrivePeakCurrentLimit;
         config.SupplyTimeThreshold = DriveConstants.kDrivePeakCurrentDuration;
         driveMotor.getConfigurator().apply(config);
-        // TODO: Again, I don't know which config type this should be in
         driveMotor.getConfigurator().apply(new Slot0Configs()
             .withKP(DriveConstants.kDriveP)
             .withKI(DriveConstants.kDriveI)
