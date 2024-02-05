@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.constants.ShooterConstants;
 
 public class Outtake extends PIDSubsystem {
+
     private final CANSparkFlex bottomMotor = new CANSparkFlex(ShooterConstants.BOTTOM_MOTOR_ID, MotorType.kBrushless);
     private final CANSparkFlex topMotor = new CANSparkFlex(ShooterConstants.TOP_MOTOR_ID, MotorType.kBrushless);
 
