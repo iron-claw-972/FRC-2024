@@ -26,15 +26,15 @@ public class Outtake extends PIDSubsystem {
 
     @Override
     public void useOutput(double output, double setpoint)  {
-        bottomMotor.setVoltage((-output-shooterFeedForward.calculate(setpoint))/2);
-        topMotor.setVoltage((output+shooterFeedForward.calculate(setpoint))/2);
+        bottomMotor.setVoltage((-output - shooterFeedForward.calculate(setpoint)) / 2);
+        topMotor.setVoltage((output + shooterFeedForward.calculate(setpoint)) / 2);
         System.out.println("b" + bottomMotor.getAppliedOutput());
         System.out.println("t" + topMotor.getAppliedOutput());
     }
 
     @Override
     public double getMeasurement()  {
-        return (topMotor.getAbsoluteEncoder(Type.kDutyCycle).getVelocity() +  bottomMotor.getAbsoluteEncoder(Type.kDutyCycle).getVelocity()) / 2;
+        return (topMotor.getAbsoluteEncoder(Type.kDutyCycle).getVelocity() + bottomMotor.getAbsoluteEncoder(Type.kDutyCycle).getVelocity()) / 2;
     }
 
     public boolean atSetpoint() {
