@@ -30,7 +30,10 @@ public class Outtake extends SubsystemBase {
 
         SmartDashboard.putData("speed 500", new InstantCommand(() -> setTargetRPM(500)));
         SmartDashboard.putData("speed 1500", new InstantCommand(() -> setTargetRPM(1500)));
+        SmartDashboard.putData("speed 2000", new InstantCommand(() -> setTargetRPM(2000)));
+        SmartDashboard.putData("speed 2500", new InstantCommand(() -> setTargetRPM(2500)));
         SmartDashboard.putData("speed 3000", new InstantCommand(() -> setTargetRPM(3000)));
+        SmartDashboard.putData("speed 3500", new InstantCommand(() -> setTargetRPM(3500)));
         SmartDashboard.putData("reset", new InstantCommand(() -> setTargetRPM(0)));
         bottomMotor.setInverted(true);
 
@@ -46,6 +49,7 @@ public class Outtake extends SubsystemBase {
 
         SmartDashboard.putNumber("top speed",topspeed/60*4*3.14*2.54/100);
         SmartDashboard.putNumber("bottom speed",bottomspeed/60*4*3.14*2.54/100);
+        SmartDashboard.putBoolean("at setpoint?", atSetpoint());
         System.out.println(topspeed/60*4*3.14*2.54/100+","+bottomspeed/60*4*3.14*2.54/100);
         /*
         try {
@@ -59,7 +63,7 @@ public class Outtake extends SubsystemBase {
     }
 
     public void setTargetRPM(double speed) {
-        topPID.setSetpoint(speed);
+        topPID.setSetpoint(speed*.5);
         bottomPID.setSetpoint(speed);
         
     }
