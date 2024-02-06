@@ -34,7 +34,7 @@ public class DefaultDriveCommand extends CommandBase {
 
         double forwardTranslation = driver.getForwardTranslation();
         double sideTranslation = driver.getSideTranslation();
-        double rotation = driver.getRotation();
+        double rotation = swerve.getIsShooting() ? 0 : driver.getRotation();
 
         double slowFactor = driver.getIsSlowMode() ? DriveConstants.kSlowDriveFactor : 1;
 
@@ -42,7 +42,7 @@ public class DefaultDriveCommand extends CommandBase {
         sideTranslation *= slowFactor;
         rotation *= driver.getIsSlowMode() ? DriveConstants.kSlowRotFactor : 1;
 
-        int allianceReversal = DriverStation.getAlliance() == Alliance.Red ? 1 : -1;
+        int allianceReversal = DriverStation.getAlliance().get() == Alliance.Red ? 1 : -1;
         forwardTranslation *= allianceReversal;
         sideTranslation *= allianceReversal;
 
@@ -50,9 +50,9 @@ public class DefaultDriveCommand extends CommandBase {
             swerve.driveHeading(
                     forwardTranslation,
                     sideTranslation,
-                    DriverStation.getAlliance() == Alliance.Blue ?
-                        Math.atan2(VisionConstants.BLUE_SPEAKER_POSE.getY() - swerve.getPose().getY(), VisionConstants.BLUE_SPEAKER_POSE.getX() - swerve.getPose().getX()) :
-                        Math.atan2(VisionConstants.RED_SPEAKER_POSE.getY() - swerve.getPose().getY(), VisionConstants.RED_SPEAKER_POSE.getX() - swerve.getPose().getX()),
+                    swerve.getIsShooting() ? swerve.shootAngle : DriverStation.getAlliance().get() == Alliance.Blue ?
+                            Math.atan2(VisionConstants.BLUE_SPEAKER_POSE.getY() - swerve.getPose().getY(), VisionConstants.BLUE_SPEAKER_POSE.getX() - swerve.getPose().getX()) :
+                            Math.atan2(VisionConstants.RED_SPEAKER_POSE.getY() - swerve.getPose().getY(), VisionConstants.RED_SPEAKER_POSE.getX() - swerve.getPose().getX()),
                     true
                 );
         } else {

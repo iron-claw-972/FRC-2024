@@ -63,6 +63,11 @@ public class Drivetrain extends SubsystemBase {
     // If the robot should aim at the speaker
     private boolean isAlign = false;
 
+    // If the shoot command is currently running, and the swerve angular speed should be locked
+    private boolean isShooting = false;
+    // Radians in which the shoot command is requesting
+    public double shootAngle = 0;
+
     /**
      * Creates a new Swerve Style Drivetrain.
      */
@@ -274,6 +279,12 @@ public class Drivetrain extends SubsystemBase {
 
     public void setIsAlign(boolean isAlign){
         this.isAlign = isAlign;
+    }
+    public void setIsShooting(boolean isShooting){
+        this.isShooting = isShooting;
+    }
+    public boolean getIsShooting(){
+        return isShooting;
     }
     public boolean getIsAlign(){
         return isAlign;

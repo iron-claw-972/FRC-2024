@@ -7,9 +7,12 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm_subsystem.Outtake;
 import frc.robot.subsystems.gpm_subsystem.Wrist;
 
+/**
+ * Shoots on the move.
+ */
 public class Shoot extends Command {
 
-    private static final Pose3d SPEAKER_POSE = new Pose3d(0, 0, 0, new Rotation3d());
+    private static final Pose3d SPEAKER_POSE = new Pose3d(0, 0, 2.055, new Rotation3d());
     private static final double SHOOTER_HEIGHT = 0;
 
     private final Outtake outtake;
@@ -17,8 +20,8 @@ public class Shoot extends Command {
     private final Drivetrain drivetrain;
 
     private Pose3d displacement;
-    private double velocityX;
-    private double velocityY;
+    private double v_rx;
+    private double v_ry;
 
     public Shoot(Outtake outtake, Wrist wrist, Drivetrain drivetrain) {
         this.outtake = outtake;
@@ -29,6 +32,7 @@ public class Shoot extends Command {
 
     @Override
     public void initialize() {
+        drivetrain.setIsShooting(true);
     }
 
     @Override
@@ -47,18 +51,35 @@ public class Shoot extends Command {
                 ).relativeTo(SPEAKER_POSE);
 
         // Set the drivetrain velocities
-        velocityX = drivetrain.getChassisSpeeds().vxMetersPerSecond;
-        velocityY = drivetrain.getChassisSpeeds().vyMetersPerSecond;
-        // Correct wrist position
-        // TODO: Copy formula
+        v_rx = drivetrain.getChassisSpeeds().vxMetersPerSecond;
+        v_ry = drivetrain.getChassisSpeeds().vyMetersPerSecond;
 
-        double v2 = VELOCITY * Math.cos(displacement.getRotation().getZ()) * Math.sqrt(velocityX * velocityX + velocityY * velocityY);
-        v2 *= v2;
+        // TOOD: Figure out what v_note is empirically
+        double v_note = 10;
+
+        // euclidean X distance to speaker
         double x =
                 Math.sqrt((displacement.getX()*displacement.getX()) + displacement.getY() * displacement.getY());
-        double y = -displacement.getZ(); // meters, yes it's supposed to be negative
-        double wristTheta = Math.atan(v2/9.8/x*(1-Math.sqrt(1+19.6/v2*(y-4.9*x*x/v2))));
-        wrist.setAngle(wristTheta);
+        // Y distance to speaker (negative intended)
+        double y = -displacement.getZ();
+
+        // Basic vertical angle calculation (static robot)
+        double phi_v =
+                Math.atan(Math.pow(v_note, 2)/9.8/x*(1-Math.sqrt(1+19.6/Math.pow(v_note, 2)*(SHOOTER_HEIGHT-4.9*x*x/Math.pow(v_note, 2)))));
+        // Angle to goal
+        double phi_h = Math.asin(y / x);
+
+        // Random variable to hold recurring code
+        double a = v_note * Math.cos(phi_v) * Math.sin(phi_h);
+        double theta_h =
+                Math.atan((a + v_ry) / (v_note * Math.cos(phi_v) * Math.cos(phi_h) + v_rx));
+        double theta_v =
+                1 / Math.atan((a + v_ry) / (v_note * Math.sin(phi_v) * Math.cos(phi_h)));
+        double v_shoot = v_note * Math.sin(phi_v) / Math.sin(theta_v);
+
+        wrist.setAngle(theta_v);
+        drivetrain.driveHeading(v_rx, v_ry, theta_h, true);
+        outtake.setTargetVelocity(v_shoot);
 
         // Set the outtake velocity
 //        outtake.shoot();
@@ -70,12 +91,13 @@ public class Shoot extends Command {
         // Finishes when the outtake no longer holds the note
         // TODO: Maybe use a timer?
         // TODO: Maybe use motor currents?
-        return true;
+        return outtake.atSetpoint() && true;
     }
 
     @Override
     public void end(boolean interrupted) {
-
+        outtake.setTargetVelocity(0);
+        drivetrain.setIsShooting(false);
     }
 
 }
