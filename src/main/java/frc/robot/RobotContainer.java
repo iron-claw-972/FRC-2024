@@ -26,18 +26,32 @@ import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
 public class RobotContainer {
 
     // The robot's subsystems are defined here...
-    private final Drivetrain drive;
-    private final Vision vision;
+    private Drivetrain drive = null;
+    private Vision vision = null;
 
     // Controllers are defined here
-    private final BaseDriverConfig driver;
+    private BaseDriverConfig driver = null;
 
-    ShuffleBoardManager shuffleboardManager;
+    ShuffleBoardManager shuffleboardManager = null;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
+     * <p>
+     * Different robots may have different subsystems.
      */
-    public RobotContainer() {
+    public RobotContainer(RobotId robotId) {
+      // dispatch on the robot
+      switch (robotId) {
+
+      case TestBed1:
+        break;
+
+      case TestBed2:
+        break;
+
+      default:
+      case SwerveCompetition:
+      case SwerveTest:
         vision = new Vision(VisionConstants.CAMERAS);
 
         drive = new Drivetrain(vision);
@@ -53,84 +67,16 @@ public class RobotContainer {
         PathGroupLoader.loadPathGroups();
 
         shuffleboardManager = new ShuffleBoardManager(drive, vision);
-         
+        break;
+      }
 
+      // This is really annoying so it's disabled
+      DriverStation.silenceJoystickConnectionWarning(true);
 
-
-
-//        switch (robotId) {
-//            case SwerveCompetition:
-//                // Update drive constants based off of robot type
-//                DriveConstants.update(robotId);
-//                VisionConstants.update(robotId);
-//
-//                vision = new Vision(visionTab, VisionConstants.kCameras);
-//
-//                // Create Drivetrain
-//                drive = new Drivetrain(drivetrainTab, swerveModulesTab, vision);
-//
-//                m_vision.setUpSmartDashboardCommandButtons(m_drive);
-//
-//                driver = new PS5ControllerDriverConfig(drive, controllerTab, false);
-//                // testController.configureControls();
-//                // manualController.configureControls();
-//
-//                // load paths before auto starts
-//                PathGroupLoader.loadPathGroups();
-//
-//                driver.configureControls();
-//
-//                driver.setupShuffleboard();
-//
-//                drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
-//
-//                break;
-//
-//            case SwerveTest:
-//                // Update drive constants based off of robot type
-//                DriveConstants.update(robotId);
-//                VisionConstants.update(robotId);
-//
-//                vision = new Vision(visionTab, VisionConstants.kCameras);
-//
-//                // Create Drivetrain, because every robot will have a drivetrain
-//                drive = new Drivetrain(drivetrainTab, swerveModulesTab, vision);
-//                driver = new GameControllerDriverConfig(drive, controllerTab, false);
-//
-//                m_vision.setUpSmartDashboardCommandButtons(m_drive);
-//
-//                DriverStation.reportWarning("Not registering subsystems and controls due to incorrect robot", false);
-//
-//                // TODO: construct dummy subsystems so SwerveTest can run all auto routines
-//
-//                // load paths before auto starts
-//                PathGroupLoader.loadPathGroups();
-//
-//                driver.configureControls();
-//
-//                driver.setupShuffleboard();
-//
-//                drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
-//
-//                break;
-//
-//            default:
-//                DriverStation.reportWarning("Not registering subsystems and controls due to incorrect robot", false);
-//
-//                vision = null;
-//
-//                driver = null;
-//                drive = null;
-//
-//                break;
-//        }
-
-        // This is really annoying so it's disabled
-        DriverStation.silenceJoystickConnectionWarning(true);
-
-        LiveWindow.disableAllTelemetry(); // LiveWindow is causing periodic loop overruns
-        LiveWindow.setEnabled(false);
-
+      // TODO: verify this claim.
+      // LiveWindow is causing periodic loop overruns
+      LiveWindow.disableAllTelemetry();
+      LiveWindow.setEnabled(false);
     }
 
     /**
@@ -143,22 +89,16 @@ public class RobotContainer {
     }
 
     public void updateShuffleBoard(){
+      if (shuffleboardManager != null)
         shuffleboardManager.update();
     }
-
-    // TODO
-    /**
-     * Resets the swerve modules to their absolute positions.
-     */
-//    public void resetModules() {
-//        drive.resetModulesToAbsolute();
-//    }
 
     /**
      * Sets whether the drivetrain uses vision to update odometry
      */
    public void setVisionEnabled(boolean enabled) {
-       drive.setVisionEnabled(enabled);
+    if (drive != null)
+      drive.setVisionEnabled(enabled);
    }
 
    public void initializeAutoBuilder(){
@@ -186,6 +126,4 @@ public class RobotContainer {
       return false;
     };
   }
-
-
 }
