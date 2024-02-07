@@ -2,7 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.controls.BaseDriverConfig;
@@ -11,7 +11,7 @@ import frc.robot.subsystems.Drivetrain;
 /**
  * Default drive command. Drives robot using driver controls.
  */
-public class DefaultDriveCommand extends CommandBase {
+public class DefaultDriveCommand extends Command {
     private final Drivetrain swerve;
     private final BaseDriverConfig driver;
 
@@ -34,7 +34,8 @@ public class DefaultDriveCommand extends CommandBase {
 
         double forwardTranslation = driver.getForwardTranslation();
         double sideTranslation = driver.getSideTranslation();
-        double rotation = driver.getRotation();
+        // Negative because counterclockwise is positive for the robot and right is positive on the controller
+        double rotation = -driver.getRotation();
 
         double slowFactor = driver.getIsSlowMode() ? DriveConstants.kSlowDriveFactor : 1;
 
@@ -46,6 +47,7 @@ public class DefaultDriveCommand extends CommandBase {
         forwardTranslation *= allianceReversal;
         sideTranslation *= allianceReversal;
 
+        // If the driver is pressing the align button or a command set the drivetrain to align, then align to speaker
         if (driver.getIsAlign() || swerve.getIsAlign()) {
             swerve.driveHeading(
                     forwardTranslation,

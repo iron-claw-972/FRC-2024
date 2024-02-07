@@ -27,15 +27,6 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.vision.AcquireGamePiece;
-import frc.robot.commands.vision.AcquireGamePiecePID;
-import frc.robot.commands.vision.AimAtTag;
-import frc.robot.commands.vision.AlignToTag;
-import frc.robot.commands.vision.CalculateStdDevs;
-import frc.robot.commands.vision.ReturnData;
-import frc.robot.commands.vision.TestVisionDistance;
 import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.FieldConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
@@ -98,8 +89,8 @@ public class Vision {
    * @return An array of offsets in degrees
    */
   public double[] getHorizontalOffset(){
-    // return m_xOffset.getDoubleArray(new double[0]);
-    return new double[]{60};
+    return m_xOffset.getDoubleArray(new double[0]);
+    // return new double[]{60};
   }
 
   /**
@@ -107,8 +98,8 @@ public class Vision {
    * @return An array of offsets in degrees
    */
   public double[] getVerticalOffset(){
-    // return m_yOffset.getDoubleArray(new double[0]);
-    return new double[]{-20};
+    return m_yOffset.getDoubleArray(new double[0]);
+    // return new double[]{-20};
   }
 
   /**
@@ -116,8 +107,8 @@ public class Vision {
    * @return Distance in meters
    */
   public double[] getDistance(){
-    // return m_objectDistance.getDoubleArray(new double[0]);
-    return new double[]{1};
+    return m_objectDistance.getDoubleArray(new double[0]);
+    // return new double[]{1};
   }
 
   /**
@@ -133,8 +124,8 @@ public class Vision {
    * @return The object types as a String array
    */
   public String[] getDetectedObjectClass(){
-    // return m_objectClass.getStringArray(new String[0]);
-    return new String[]{"note"};
+    return m_objectClass.getStringArray(new String[0]);
+    // return new String[]{"note"};
   }
 
   /**
@@ -142,8 +133,8 @@ public class Vision {
    * @return The indices as a long array (method returns long array instead of int array)
    */
   public long[] getCameraIndex(){
-    // return m_cameraIndex.getIntegerArray(new long[0]);
-    return new long[]{0};
+    return m_cameraIndex.getIntegerArray(new long[0]);
+    // return new long[]{0};
   }
 
   /**

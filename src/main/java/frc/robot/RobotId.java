@@ -2,11 +2,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.module.Module;
-
-import java.util.List;
 
 /**
  * Set of known Robot Names.
@@ -16,32 +11,12 @@ import java.util.List;
  */
 public enum RobotId {
     Default,
-    SwerveCompetition(Drivetrain.class, Module.class), SwerveTest(Drivetrain.class),
+    SwerveCompetition, SwerveTest,
     ClassBot1, ClassBot2, ClassBot3, ClassBot4,
-    TestBed1,
-    TestBed2;
+    TestBed1, TestBed2;
 
     /** The key used to access the RobotId name in the RoboRIO's persistent memory. */
     public static final String ROBOT_ID_KEY = "RobotId";
-
-    /**
-     * List of subsystems to create when the robot is instantiated.
-     */
-    private final List<Class<? extends SubsystemBase>> subsystems;
-
-    @SafeVarargs
-    RobotId(Class<? extends SubsystemBase>... subsystems) {
-        this.subsystems = List.of(subsystems);
-    }
-
-    /**
-     * @Deprecated The RobotId enum should just be for robot names
-     * @return
-     */
-    @Deprecated
-    public List<Class<? extends SubsystemBase>> getSubsystems() {
-        return subsystems;
-    }
 
     /**
      * Is this robot a classbot?
