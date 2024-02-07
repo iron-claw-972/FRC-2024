@@ -37,6 +37,7 @@ public class Outtake extends SubsystemBase {
         topMotor.set(topPID.calculate(topspeed) + shooterFF.calculate(topPID.getSetpoint()));
         bottomMotor.set(bottomPID.calculate(bottomspeed) + shooterFF.calculate(bottomPID.getSetpoint()));
 
+        // TODO: Maybe add a method in ConversionUtils to convert from RPM to m/s and etc
         SmartDashboard.putNumber("top speed",topspeed/60*4*3.14*2.54/100);
         SmartDashboard.putNumber("bottom speed",bottomspeed/60*4*3.14*2.54/100);
         SmartDashboard.putBoolean("at setpoint?", atSetpoint());
@@ -50,7 +51,6 @@ public class Outtake extends SubsystemBase {
 
     public void setTargetVelocity(double speed) {
         // convert speed to RPM
-        // TODO: should double check that this is correct
         setTargetRPM(speed*60*100/(4*3.14*2.54));
     }
 
