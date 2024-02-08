@@ -34,7 +34,8 @@ public class DefaultDriveCommand extends Command {
 
         double forwardTranslation = driver.getForwardTranslation();
         double sideTranslation = driver.getSideTranslation();
-        double rotation = driver.getRotation();
+        // Negative because counterclockwise is positive for the robot and right is positive on the controller
+        double rotation = -driver.getRotation();
 
         double slowFactor = driver.getIsSlowMode() ? DriveConstants.kSlowDriveFactor : 1;
 
@@ -46,6 +47,7 @@ public class DefaultDriveCommand extends Command {
         forwardTranslation *= allianceReversal;
         sideTranslation *= allianceReversal;
 
+        // If the driver is pressing the align button or a command set the drivetrain to align, then align to speaker
         if (driver.getIsAlign() || swerve.getIsAlign()) {
             swerve.driveHeading(
                     forwardTranslation,
