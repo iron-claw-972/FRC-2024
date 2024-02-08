@@ -4,14 +4,14 @@ import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.miscConstants.FieldConstants;
 import frc.robot.subsystems.Drivetrain;
 
 /**
  * Aims the robot at the closest April tag
  */
-public class AimAtTag extends CommandBase {
+public class AimAtTag extends Command {
   Drivetrain m_drive;
   PIDController m_pid;
 
