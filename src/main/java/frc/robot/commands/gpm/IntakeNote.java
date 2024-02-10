@@ -1,11 +1,11 @@
 package frc.robot.commands.gpm;
 
 import edu.wpi.first.math.filter.Debouncer;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.IntakeConstants;
 import frc.robot.subsystems.gpm_subsystem.Intake;
 
-public class IntakeNote extends CommandBase {
+public class IntakeNote extends Command {
 
     private final Intake intake;
     private final boolean forever;

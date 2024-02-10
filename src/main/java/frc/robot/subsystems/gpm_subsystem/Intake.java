@@ -1,11 +1,9 @@
 package frc.robot.subsystems.gpm_subsystem;
 
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.revrobotics.CANSparkFlex;
+import com.revrobotics.CANSparkLowLevel;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.IntakeConstants;
-import frc.robot.constants.globalConst;
-import frc.robot.util.MotorFactory;
 
 
 public class Intake extends SubsystemBase {
@@ -25,22 +23,13 @@ public class Intake extends SubsystemBase {
         }
     }
 
-    private final WPI_TalonFX motor;
+    private final CANSparkFlex motor;
 
     private Mode mode;
 
 
     public Intake() {
-        motor = MotorFactory.createTalonFX(IntakeConstants.MOTOR_ID, globalConst.RIO_CAN);
-        motor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(
-                IntakeConstants.ENABLE_CURRENT_LIMIT,
-                IntakeConstants.CONTINUOUS_CURRENT_LIMIT,
-                IntakeConstants.PEAK_CURRENT_LIMIT,
-                IntakeConstants.PEAK_CURRENT_DURATION
-        ));
-        motor.setNeutralMode(IntakeConstants.NEUTRAL_MODE);
-        motor.enableVoltageCompensation(true);
-
+        motor = new CANSparkFlex(IntakeConstants.MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
         mode = Mode.DISABLED;
     }
 
@@ -54,7 +43,7 @@ public class Intake extends SubsystemBase {
     }
 
     public double getCurrent() {
-        return Math.abs(motor.getSupplyCurrent());
+        return Math.abs(motor.getOutputCurrent());
     }
 
 }
