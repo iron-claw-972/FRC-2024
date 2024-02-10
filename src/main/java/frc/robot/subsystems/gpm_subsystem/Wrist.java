@@ -15,7 +15,7 @@ public class Wrist extends SubsystemBase {
     private final SparkAbsoluteEncoder encoder = motor.getAbsoluteEncoder(Type.kDutyCycle);
     private final PIDController pid = new PIDController(WristConstants.P, WristConstants.I, WristConstants.D);
 
-    private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(WristConstants.S, WristConstants.V); // use same ff for wrist?
+    private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(WristConstants.S, WristConstants.V);
 
     public Wrist() {
         pid.setTolerance(WristConstants.TOLERANCE);
