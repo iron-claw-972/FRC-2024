@@ -1,10 +1,8 @@
 package frc.robot.subsystems;
-import java.util.Arrays;
 
 import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -22,9 +20,11 @@ import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
-import frc.robot.subsystems.module.ModuleSim;
 import frc.robot.subsystems.module.Module;
+import frc.robot.subsystems.module.ModuleSim;
 import frc.robot.util.Vision;
+
+import java.util.Arrays;
 
 /**
  * Represents a swerve drive style drivetrain.
@@ -277,12 +277,6 @@ public class Drivetrain extends SubsystemBase {
 
     public void setIsAlign(boolean isAlign){
         this.isAlign = isAlign;
-    }
-    public void setIsShooting(boolean isShooting){
-        this.isShooting = isShooting;
-    }
-    public boolean getIsShooting(){
-        return isShooting;
     }
     public boolean getIsAlign(){
         return isAlign;
