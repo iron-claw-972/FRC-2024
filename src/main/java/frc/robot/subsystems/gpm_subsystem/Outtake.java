@@ -19,7 +19,7 @@ public class Outtake extends SubsystemBase {
     private final PIDController bottomPID = new PIDController(OuttakeConstants.BOTTOM_P, OuttakeConstants.BOTTOM_I, OuttakeConstants.BOTTOM_D);
 
     // TODO: TUNE THIS
-    private final SimpleMotorFeedforward shooterFF = new SimpleMotorFeedforward(OuttakeConstants.S, OuttakeConstants.V);
+    private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(OuttakeConstants.S, OuttakeConstants.V);
 
     public Outtake() {
         topPID.setTolerance(OuttakeConstants.TOLERANCE);
@@ -32,8 +32,8 @@ public class Outtake extends SubsystemBase {
         double topSpeed = topMotorEncoder.getVelocity();
         double bottomSpeed = bottomMotorEncoder.getVelocity();
 
-        topMotor.set(topPID.calculate(topSpeed) + shooterFF.calculate(topPID.getSetpoint()));
-        bottomMotor.set(bottomPID.calculate(bottomSpeed) + shooterFF.calculate(bottomPID.getSetpoint()));
+        topMotor.set(topPID.calculate(topSpeed) + feedforward.calculate(topPID.getSetpoint()));
+        bottomMotor.set(bottomPID.calculate(bottomSpeed) + feedforward.calculate(bottomPID.getSetpoint()));
 
         // TODO: Maybe add a method in ConversionUtils to convert from RPM to m/s and etc
         SmartDashboard.putNumber("top speed",topSpeed/60*4*3.14*2.54/100);
