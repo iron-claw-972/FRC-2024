@@ -8,14 +8,12 @@ import frc.robot.subsystems.gpm_subsystem.Intake;
 public class IntakeNote extends Command {
 
     private final Intake intake;
-    private final boolean forever;
     private final Debouncer stallDebouncer;
 
 
     public IntakeNote(Intake intake, boolean forever) {
         addRequirements(intake);
         this.intake = intake;
-        this.forever = forever;
         this.stallDebouncer = new Debouncer(IntakeConstants.INTAKE_STALL_TIME, Debouncer.DebounceType.kBoth);
     }
 
@@ -27,9 +25,6 @@ public class IntakeNote extends Command {
     // TODO: This code might need some adjusting, as the cone passes through the intake.
     @Override
     public boolean isFinished() {
-        if (forever) {
-            return false;
-        }
         return stallDebouncer.calculate(
                 intake.getCurrent() >= IntakeConstants.INTAKE_CURRENT_STOP
         );
