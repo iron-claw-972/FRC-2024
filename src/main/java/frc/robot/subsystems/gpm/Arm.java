@@ -1,4 +1,4 @@
-package frc.robot.subsystems.gpm_subsystem;
+package frc.robot.subsystems.gpm;
 
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;

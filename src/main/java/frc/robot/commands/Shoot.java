@@ -4,8 +4,8 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.gpm_subsystem.Outtake;
-import frc.robot.subsystems.gpm_subsystem.Arm;
+import frc.robot.subsystems.gpm.Shooter;
+import frc.robot.subsystems.gpm.Arm;
 
 /**
  * Shoots on the move.
@@ -15,7 +15,7 @@ public class Shoot extends Command {
     private static final Pose3d SPEAKER_POSE = new Pose3d(0, 0, 2.055, new Rotation3d());
     private static final double SHOOTER_HEIGHT = 0;
 
-    private final Outtake outtake;
+    private final Shooter shooter;
     private final Arm arm;
     private final Drivetrain drivetrain;
 
@@ -23,11 +23,11 @@ public class Shoot extends Command {
     private double v_rx;
     private double v_ry;
 
-    public Shoot(Outtake outtake, Arm arm, Drivetrain drivetrain) {
-        this.outtake = outtake;
+    public Shoot(Shooter shooter, Arm arm, Drivetrain drivetrain) {
+        this.shooter = shooter;
         this.arm = arm;
         this.drivetrain = drivetrain;
-        addRequirements(outtake);
+        addRequirements(shooter);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class Shoot extends Command {
 
         arm.setAngle(theta_v);
         drivetrain.driveHeading(v_rx, v_ry, theta_h, true);
-        outtake.setTargetVelocity(v_shoot);
+        shooter.setTargetVelocity(v_shoot);
 
         // Set the outtake velocity
 //        outtake.shoot();
@@ -93,12 +93,12 @@ public class Shoot extends Command {
         // Finishes when the outtake no longer holds the note
         // TODO: Maybe use a timer?
         // TODO: Maybe use motor currents?
-        return outtake.atSetpoint() && true;
+        return shooter.atSetpoint() && true;
     }
 
     @Override
     public void end(boolean interrupted) {
-        outtake.setTargetVelocity(0);
+        shooter.setTargetVelocity(0);
         drivetrain.setIsAlign(false);
     }
 

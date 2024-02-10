@@ -1,4 +1,4 @@
-package frc.robot.subsystems.gpm_subsystem;
+package frc.robot.subsystems.gpm;
 
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -7,23 +7,23 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.OuttakeConstants;
+import frc.robot.constants.ShooterConstants;
 
-public class Outtake extends SubsystemBase {
-    private final CANSparkFlex bottomMotor = new CANSparkFlex(OuttakeConstants.BOTTOM_MOTOR_ID, MotorType.kBrushless);
-    private final CANSparkFlex topMotor = new CANSparkFlex(OuttakeConstants.TOP_MOTOR_ID, MotorType.kBrushless);
+public class Shooter extends SubsystemBase {
+    private final CANSparkFlex bottomMotor = new CANSparkFlex(ShooterConstants.BOTTOM_MOTOR_ID, MotorType.kBrushless);
+    private final CANSparkFlex topMotor = new CANSparkFlex(ShooterConstants.TOP_MOTOR_ID, MotorType.kBrushless);
     private final RelativeEncoder bottomMotorEncoder = bottomMotor.getEncoder();
     private final RelativeEncoder topMotorEncoder = topMotor.getEncoder();
-    private final PIDController topPID = new PIDController(OuttakeConstants.TOP_P, OuttakeConstants.TOP_I,
-            OuttakeConstants.TOP_D);
-    private final PIDController bottomPID = new PIDController(OuttakeConstants.BOTTOM_P, OuttakeConstants.BOTTOM_I, OuttakeConstants.BOTTOM_D);
+    private final PIDController topPID = new PIDController(ShooterConstants.TOP_P, ShooterConstants.TOP_I,
+            ShooterConstants.TOP_D);
+    private final PIDController bottomPID = new PIDController(ShooterConstants.BOTTOM_P, ShooterConstants.BOTTOM_I, ShooterConstants.BOTTOM_D);
 
     // TODO: TUNE THIS
-    private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(OuttakeConstants.S, OuttakeConstants.V);
+    private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(ShooterConstants.S, ShooterConstants.V);
 
-    public Outtake() {
-        topPID.setTolerance(OuttakeConstants.TOLERANCE);
-        bottomPID.setTolerance(OuttakeConstants.TOLERANCE);
+    public Shooter() {
+        topPID.setTolerance(ShooterConstants.TOLERANCE);
+        bottomPID.setTolerance(ShooterConstants.TOLERANCE);
         bottomMotor.setInverted(true);
     }
 
