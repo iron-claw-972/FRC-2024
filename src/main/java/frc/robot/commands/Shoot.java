@@ -45,7 +45,7 @@ public class Shoot extends Command {
                         SHOOTER_HEIGHT,
                         new Rotation3d(
                                 drivetrain.getPose().getRotation().getCos(),
-                                wrist.getMeasurement(),
+                                wrist.getAngle(),
                                 drivetrain.getPose().getRotation().getSin() // TODO: is it cos->sin or sin->cos
                         )
                 ).relativeTo(SPEAKER_POSE);

@@ -9,22 +9,29 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.WristConstants;
 
+import java.util.Arrays;
+
 public class Wrist extends SubsystemBase {
     
     private final CANSparkFlex motor = new CANSparkFlex(WristConstants.MOTOR_ID, MotorType.kBrushless);
-    private final CANSparkFlex slave = new CANSparkFlex(WristConstants.SLAVE_ID, MotorType.kBrushless);
+    private final CANSparkFlex[] slaves = new CANSparkFlex[WristConstants.SLAVE_IDS.length]
     private final SparkAbsoluteEncoder encoder = motor.getAbsoluteEncoder(Type.kDutyCycle);
     private final PIDController pid = new PIDController(WristConstants.P, WristConstants.I, WristConstants.D);
 
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(WristConstants.S, WristConstants.V);
 
     public Wrist() {
+        Arrays.stream(WristConstants.SLAVE_IDS).forEach((id) ->
+                {
+                    slaves[id] = new CANSparkFlex(id, MotorType.kBrushless);
+                    slaves[id].follow(motor);
+                }
+        );
+
         pid.setTolerance(WristConstants.TOLERANCE);
         encoder.setPositionConversionFactor(WristConstants.CONVERSION_FACTOR);
         encoder.setZeroOffset(WristConstants.OFFSET);
         motor.setSecondaryCurrentLimit(0.5);
-
-        slave.follow(motor);
     }
 
     @Override
@@ -36,6 +43,13 @@ public class Wrist extends SubsystemBase {
      * Sets the angle of the wrist in radians.
      */
     public void setAngle(double angle) { pid.setSetpoint(angle);
+    }
+
+    /**
+     * Returns the angle of the wrist in radians.
+     */
+    public double getAngle() {
+        return encoder.getPosition();
     }
 
     public boolean atSetpoint() {
