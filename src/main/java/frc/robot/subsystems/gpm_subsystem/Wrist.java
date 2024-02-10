@@ -14,7 +14,7 @@ import java.util.Arrays;
 public class Wrist extends SubsystemBase {
     
     private final CANSparkFlex motor = new CANSparkFlex(WristConstants.MOTOR_ID, MotorType.kBrushless);
-    private final CANSparkFlex[] slaves = new CANSparkFlex[WristConstants.SLAVE_IDS.length]
+    private final CANSparkFlex[] slaves = new CANSparkFlex[WristConstants.SLAVE_IDS.length];
     private final SparkAbsoluteEncoder encoder = motor.getAbsoluteEncoder(Type.kDutyCycle);
     private final PIDController pid = new PIDController(WristConstants.P, WristConstants.I, WristConstants.D);
 
