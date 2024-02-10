@@ -34,7 +34,7 @@ public class DefaultDriveCommand extends Command {
 
         double forwardTranslation = driver.getForwardTranslation();
         double sideTranslation = driver.getSideTranslation();
-        double rotation = swerve.getIsShooting() ? 0 : -driver.getRotation();
+        double rotation = -driver.getRotation();
 
         double slowFactor = driver.getIsSlowMode() ? DriveConstants.kSlowDriveFactor : 1;
 
