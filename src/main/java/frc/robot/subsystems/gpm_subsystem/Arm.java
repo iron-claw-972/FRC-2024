@@ -11,7 +11,7 @@ import frc.robot.constants.WristConstants;
 
 import java.util.Arrays;
 
-public class Wrist extends SubsystemBase {
+public class Arm extends SubsystemBase {
     
     private final CANSparkFlex motor = new CANSparkFlex(WristConstants.MOTOR_ID, MotorType.kBrushless);
     private final CANSparkFlex[] slaves = new CANSparkFlex[WristConstants.SLAVE_IDS.length];
@@ -20,7 +20,7 @@ public class Wrist extends SubsystemBase {
 
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(WristConstants.S, WristConstants.V);
 
-    public Wrist() {
+    public Arm() {
         Arrays.stream(WristConstants.SLAVE_IDS).forEach((id) ->
                 {
                     slaves[id] = new CANSparkFlex(id, MotorType.kBrushless);

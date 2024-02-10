@@ -5,7 +5,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm_subsystem.Outtake;
-import frc.robot.subsystems.gpm_subsystem.Wrist;
+import frc.robot.subsystems.gpm_subsystem.Arm;
 
 /**
  * Shoots on the move.
@@ -16,16 +16,16 @@ public class Shoot extends Command {
     private static final double SHOOTER_HEIGHT = 0;
 
     private final Outtake outtake;
-    private final Wrist wrist;
+    private final Arm arm;
     private final Drivetrain drivetrain;
 
     private Pose3d displacement;
     private double v_rx;
     private double v_ry;
 
-    public Shoot(Outtake outtake, Wrist wrist, Drivetrain drivetrain) {
+    public Shoot(Outtake outtake, Arm arm, Drivetrain drivetrain) {
         this.outtake = outtake;
-        this.wrist = wrist;
+        this.arm = arm;
         this.drivetrain = drivetrain;
         addRequirements(outtake);
     }
@@ -45,7 +45,7 @@ public class Shoot extends Command {
                         SHOOTER_HEIGHT,
                         new Rotation3d(
                                 drivetrain.getPose().getRotation().getCos(),
-                                wrist.getAngle(),
+                                arm.getAngle(),
                                 drivetrain.getPose().getRotation().getSin() // TODO: is it cos->sin or sin->cos
                         )
                 ).relativeTo(SPEAKER_POSE);
@@ -77,7 +77,7 @@ public class Shoot extends Command {
                 1 / Math.atan((a + v_ry) / (v_note * Math.sin(phi_v) * Math.cos(phi_h)));
         double v_shoot = v_note * Math.sin(phi_v) / Math.sin(theta_v);
 
-        wrist.setAngle(theta_v);
+        arm.setAngle(theta_v);
         drivetrain.driveHeading(v_rx, v_ry, theta_h, true);
         outtake.setTargetVelocity(v_shoot);
 
