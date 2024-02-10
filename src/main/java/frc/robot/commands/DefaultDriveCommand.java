@@ -51,7 +51,7 @@ public class DefaultDriveCommand extends Command {
             swerve.driveHeading(
                     forwardTranslation,
                     sideTranslation,
-                    swerve.getIsShooting() ? swerve.shootAngle : DriverStation.getAlliance().get() == Alliance.Blue ?
+                    DriverStation.getAlliance().get() == Alliance.Blue ?
                             Math.atan2(VisionConstants.BLUE_SPEAKER_POSE.getY() - swerve.getPose().getY(), VisionConstants.BLUE_SPEAKER_POSE.getX() - swerve.getPose().getX()) :
                             Math.atan2(VisionConstants.RED_SPEAKER_POSE.getY() - swerve.getPose().getY(), VisionConstants.RED_SPEAKER_POSE.getX() - swerve.getPose().getX()),
                     true
