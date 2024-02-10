@@ -1,11 +1,13 @@
 package frc.robot.constants;
 
-public class WristConstants {
+public class ArmConstants {
 
     public static final int MOTOR_ID = 0;
     public static final int[] SLAVE_IDS = new int[] {
             0, 1, 2
     };
+    public static final int ENCODER_ID = 0;
+
     public static final double S = 0;
     public static final double V = 0;
     public static final double P = 0;
@@ -15,6 +17,6 @@ public class WristConstants {
     // All angle measurements in radians
     public static final double OFFSET = 0;
     public static final double TOLERANCE = 0;
-    public static final double CONVERSION_FACTOR = 0;
+    public static final double DISTANCE_PER_ROTATION = 2 * Math.PI;
     
 }
