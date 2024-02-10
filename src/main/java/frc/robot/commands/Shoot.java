@@ -32,7 +32,7 @@ public class Shoot extends Command {
 
     @Override
     public void initialize() {
-        drivetrain.setIsShooting(true);
+        drivetrain.setIsAlign(true);
     }
 
     @Override
@@ -97,7 +97,7 @@ public class Shoot extends Command {
     @Override
     public void end(boolean interrupted) {
         outtake.setTargetVelocity(0);
-        drivetrain.setIsShooting(false);
+        drivetrain.setIsAlign(false);
     }
 
 }
