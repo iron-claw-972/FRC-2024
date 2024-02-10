@@ -1,6 +1,5 @@
 package frc.robot.controls;
 
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.drive_comm.SetFormationX;
 import frc.robot.constants.Constants;
@@ -17,8 +16,8 @@ public class MadCatzDriverConfig extends BaseDriverConfig {
 
     private final MadCatzController kDriver = new MadCatzController(Constants.DRIVER_JOY);
 
-    public MadCatzDriverConfig(Drivetrain drive, ShuffleboardTab controllerTab, boolean shuffleboardUpdates) {
-        super(drive, controllerTab, shuffleboardUpdates);
+    public MadCatzDriverConfig(Drivetrain drive) {
+        super(drive);
     }
 
     @Override

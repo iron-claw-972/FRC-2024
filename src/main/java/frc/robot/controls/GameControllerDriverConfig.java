@@ -3,7 +3,6 @@ package frc.robot.controls;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.GoToPose;
 import frc.robot.commands.drive_comm.SetFormationX;
@@ -21,30 +20,33 @@ import lib.controllers.GameController.Button;
 public class GameControllerDriverConfig extends BaseDriverConfig {  
   private final GameController kDriver = new GameController(Constants.DRIVER_JOY);
   
-  public GameControllerDriverConfig(Drivetrain drive, ShuffleboardTab controllerTab, boolean shuffleboardUpdates) {
-    super(drive, controllerTab, shuffleboardUpdates);
+  public GameControllerDriverConfig(Drivetrain drive) {
+    super(drive);
   }
 
   @Override
   public void configureControls() {
     // Reset yaw to be away from driver
     kDriver.get(Button.START).onTrue(new InstantCommand(() -> super.getDrivetrain().setYaw(
-      new Rotation2d(DriverStation.getAlliance() == Alliance.Blue ? 0 : Math.PI))));
-      
-      // set the wheels to X
-    kDriver.get(Button.X).onTrue(new SetFormationX(super.getDrivetrain()));
+      new Rotation2d(DriverStation.getAlliance().get() == Alliance.Blue ? 0 : Math.PI)
+    )));
+
+    // set the wheels to X
+    kDriver.get(Button.X).whileTrue(new SetFormationX(super.getDrivetrain()));
+    // Enable state deadband after setting formation to X
+    kDriver.get(Button.X).onFalse(new InstantCommand(()->getDrivetrain().setStateDeadband(true)));
     
     // Resets the modules to absolute if they are having the unresolved zeroing error
     kDriver.get(Button.A).onTrue(new InstantCommand(() -> getDrivetrain().resetModulesToAbsolute()));
 
     // Amp alignment
     kDriver.get(Button.LB).whileTrue(new GoToPose(()->
-      DriverStation.getAlliance() == Alliance.Blue ? VisionConstants.BLUE_AMP_POSE : VisionConstants.RED_AMP_POSE,
+      DriverStation.getAlliance().get() == Alliance.Blue ? VisionConstants.BLUE_AMP_POSE : VisionConstants.RED_AMP_POSE,
       getDrivetrain()
     ));
     // Podium alignment
     kDriver.get(Button.RB).whileTrue(new GoToPose(()->
-      DriverStation.getAlliance() == Alliance.Blue ? VisionConstants.BLUE_PODIUM_POSE : VisionConstants.RED_PODIUM_POSE,
+      DriverStation.getAlliance().get() == Alliance.Blue ? VisionConstants.BLUE_PODIUM_POSE : VisionConstants.RED_PODIUM_POSE,
       getDrivetrain()
     ));
   }

@@ -1,8 +1,6 @@
 package frc.robot.controls;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.constants.Constants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.subsystems.Drivetrain;
@@ -15,13 +13,6 @@ import frc.robot.util.MathUtils;
 public abstract class BaseDriverConfig {
 
     private final Drivetrain drive;
-
-    private final boolean shuffleboardUpdates;
-
-    private final ShuffleboardTab controllerTab;
-    private GenericEntry translationalSensitivityEntry, translationalExpoEntry, translationalDeadbandEntry, translationalSlewrateEntry;
-    private GenericEntry rotationSensitivityEntry, rotationExpoEntry, rotationDeadbandEntry, rotationSlewrateEntry;
-    private GenericEntry headingSensitivityEntry, headingExpoEntry, headingDeadbandEntry;
 
     // Some of these are not currently used, but we might want them later
     @SuppressWarnings("unused")
@@ -58,11 +49,9 @@ public abstract class BaseDriverConfig {
      * @param controllerTab       the shuffleboard controller tab
      * @param shuffleboardUpdates whether to update the shuffleboard
      */
-    public BaseDriverConfig(Drivetrain drive, ShuffleboardTab controllerTab, boolean shuffleboardUpdates) {
+    public BaseDriverConfig(Drivetrain drive) {
         headingLimiter.setContinuousLimits(-Math.PI, Math.PI);
         headingLimiter.enableContinuous(true);
-        this.controllerTab = controllerTab;
-        this.shuffleboardUpdates = shuffleboardUpdates;
         this.drive = drive;
     }
 
@@ -86,47 +75,6 @@ public abstract class BaseDriverConfig {
 
     protected Drivetrain getDrivetrain() {
         return drive;
-    }
-
-
-    /**
-     * Sets up shuffleboard values for the controller.
-     */
-    public void setupShuffleboard() {
-        if (!shuffleboardUpdates) return;
-
-        translationalSensitivityEntry = controllerTab.add("translationalSensitivity", Constants.TRANSLATIONAL_SENSITIVITY).getEntry();
-        translationalExpoEntry = controllerTab.add("translationalExpo", Constants.TRANSLATIONAL_EXPO).getEntry();
-        translationalDeadbandEntry = controllerTab.add("translationalDeadband", Constants.TRANSLATIONAL_DEADBAND).getEntry();
-        translationalSlewrateEntry = controllerTab.add("translationalSlewrate", Constants.TRANSLATIONAL_SLEWRATE).getEntry();
-        rotationSensitivityEntry = controllerTab.add("rotationSensitivity", Constants.ROTATION_SENSITIVITY).getEntry();
-        rotationExpoEntry = controllerTab.add("rotationExpo", Constants.ROTATION_EXPO).getEntry();
-        rotationDeadbandEntry = controllerTab.add("rotationDeadband", Constants.ROTATION_DEADBAND).getEntry();
-        rotationSlewrateEntry = controllerTab.add("rotationSlewrate", Constants.ROTATION_SLEWRATE).getEntry();
-        headingSensitivityEntry = controllerTab.add("headingSensitivity", Constants.HEADING_SENSITIVITY).getEntry();
-        headingExpoEntry = controllerTab.add("headingExpo", Constants.HEADING_EXPO).getEntry();
-        headingDeadbandEntry = controllerTab.add("headingDeadband", Constants.HEADING_DEADBAND).getEntry();
-    }
-
-    /**
-     * Updates the controller settings from shuffleboard.
-     */
-    public void updateSettings() { //updates the shuffleboard data
-        if (!shuffleboardUpdates) return;
-
-        translationalSensitivity = translationalSensitivityEntry.getDouble(Constants.TRANSLATIONAL_SENSITIVITY);
-        translationalExpo = translationalExpoEntry.getDouble(Constants.TRANSLATIONAL_EXPO);
-        translationalDeadband = translationalDeadbandEntry.getDouble(Constants.TRANSLATIONAL_DEADBAND);
-        translationalSlewrate = translationalSlewrateEntry.getDouble(Constants.TRANSLATIONAL_SLEWRATE);
-
-        rotationSensitivity = rotationSensitivityEntry.getDouble(Constants.ROTATION_SENSITIVITY);
-        rotationExpo = rotationExpoEntry.getDouble(Constants.ROTATION_EXPO);
-        rotationDeadband = rotationDeadbandEntry.getDouble(Constants.ROTATION_DEADBAND);
-        rotationSlewrate = rotationSlewrateEntry.getDouble(Constants.ROTATION_SLEWRATE);
-
-        headingSensitivity = headingSensitivityEntry.getDouble(Constants.HEADING_SENSITIVITY);
-        headingExpo = headingExpoEntry.getDouble(Constants.HEADING_EXPO);
-        headingDeadband = headingDeadbandEntry.getDouble(Constants.HEADING_DEADBAND);
     }
 
     /**

@@ -1,11 +1,10 @@
-package frc.robot.subsystems.drivetrain.module;
+package frc.robot.subsystems.module;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.swerve.ModuleConstants;
 import lib.CTREModuleState;
@@ -13,18 +12,19 @@ import lib.CTREModuleState;
 /**
  * Swerve module for drivetrain to be used inside of simulation.
  */
-public class ModuleSim extends SubsystemBase {
+public class ModuleSim extends Module {
 
     private double currentSteerPositionRad = 0;
     private double currentDrivePositionMeters = 0;
     private double currentSpeed = 0;
 
-    private SwerveModuleState desiredState = new SwerveModuleState();
+    private SwerveModuleState desiredState;
 
 
     protected boolean stateDeadband = true;
 
     public ModuleSim(ModuleConstants ignored) {
+        super(ignored);
     }
 
     /**
@@ -69,7 +69,9 @@ public class ModuleSim extends SubsystemBase {
         return getDesiredState().angle;
       }
 
-    // TODO: Comment
+    /**
+     * Sets current speed to zero
+     */
     public void stop() {
         currentSpeed = 0;
     }
@@ -95,15 +97,29 @@ public class ModuleSim extends SubsystemBase {
         return new Rotation2d(currentSteerPositionRad);
     }
 
-    // TODO: Comment
+     /**
+     * Sets state deadband
+     */
     public void setStateDeadband(boolean enabled) {
         stateDeadband = enabled;
     }
 
-    public WPI_TalonFX getDriveMotor(){
+    public TalonFX getDriveMotor(){
         return null;
     }
 
-    
+    public double getDriveVoltage(){
+        return 0;
+    }
 
+    public double getDriveStatorCurrent(){
+        return 0;
+    }
+    
+    public double getSteerVelocity() {
+        return 0;
+    }
+    public double getDriveVelocity() {
+        return 0;
+    }
 }

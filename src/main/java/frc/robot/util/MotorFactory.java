@@ -1,16 +1,13 @@
 package frc.robot.util;
 
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
-import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.VoltageConfigs;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.constants.Constants;
@@ -22,56 +19,7 @@ import java.io.IOException;
  */
 public class MotorFactory {
 
-    private static final int TALON_SRX_DEFAULT_CONTINUOUS_LIMIT = 38;
-    private static final int TALON_SRX_DEFAULT_PEAK_LIMIT = 45;
-    private static final int TALON_SRX_DEFAULT_PEAK_DURATION = 125;
-
     private static final int SPARK_MAX_DEFAULT_CURRENT_LIMIT = 60;
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    // TALON SRX
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Create a TalonSRX with current limiting enabled, using parameters. It will
-     * have current
-     * limiting and voltage compensation enabled and be set to Brake Mode.
-     *
-     * @param id                     the ID of the TalonSRX
-     * @param continuousCurrentLimit the continuous current limit to set in amps (A)
-     * @param peakCurrentLimit       the peak current limit to set in amps (A)
-     * @param peakCurrentDuration    the peak current limit duration to set in
-     *                               milliseconds (ms)
-     * @return a fully configured TalonSRX object
-     */
-    public static WPI_TalonSRX createTalonSRX(
-            int id, int continuousCurrentLimit, int peakCurrentLimit, int peakCurrentDuration) {
-
-        TalonSRXConfiguration config = new TalonSRXConfiguration();
-        config.continuousCurrentLimit = continuousCurrentLimit;
-        config.peakCurrentLimit = peakCurrentLimit;
-        config.peakCurrentDuration = peakCurrentDuration;
-        config.voltageCompSaturation = Constants.ROBOT_VOLTAGE;
-
-        WPI_TalonSRX talon = new WPI_TalonSRX(id);
-        talon.configFactoryDefault();
-        talon.configAllSettings(config);
-        talon.enableCurrentLimit(true);
-        talon.enableVoltageCompensation(false);
-        talon.setNeutralMode(NeutralMode.Brake);
-
-        return talon;
-    }
-
-    /**
-     * Create a TalonSRX using default current limits.
-     *
-     * @param id the ID of the TalonSRX
-     * @return a fully configured TalonSRX object
-     */
-    public static WPI_TalonSRX createTalonSRXDefault(int id) {
-        return createTalonSRX(id, TALON_SRX_DEFAULT_CONTINUOUS_LIMIT, TALON_SRX_DEFAULT_PEAK_LIMIT, TALON_SRX_DEFAULT_PEAK_DURATION);
-    }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     // SPARK MAX
@@ -108,7 +56,7 @@ public class MotorFactory {
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    // TALON FX (Falcon 500)
+    // TALON FX (Falcon 500 and Kraken X60)
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -133,7 +81,7 @@ public class MotorFactory {
      *                               the threshold before triggering
      * @return A fully configured TalonFX
      */
-    public static WPI_TalonFX createTalonFXFull(int id, String CANBus, boolean StatorLimitEnable,
+    public static TalonFX createTalonFXFull(int id, String CANBus, boolean StatorLimitEnable,
                                                 double StatorCurrentLimit,
                                                 double StatorTriggerThreshold, double StatorTriggerDuration, boolean SupplyLimitEnable, double SupplyCurrentLimit,
                                                 double SupplyTriggerThreshold, double SupplyTriggerDuration) {
@@ -142,10 +90,10 @@ public class MotorFactory {
             return null;
         }
 
-        WPI_TalonFX talon = new WPI_TalonFX(id, CANBus);
+        TalonFX talon = new TalonFX(id, CANBus);
 
-        if (RobotBase.isReal() && talon.getFirmwareVersion() != Constants.FIRMWARE_VERSION) {
-            String errorMessage = "TalonFX " + id + " firmware incorrect. Has " + talon.getFirmwareVersion()
+        if (RobotBase.isReal() && talon.getVersion().getValue() != Constants.FIRMWARE_VERSION) {
+            String errorMessage = "TalonFX " + id + " firmware incorrect. Has " + talon.getVersion().getValue()
                                   + ", currently FalconConstants.java requires: " + Constants.FIRMWARE_VERSION;
             if (Constants.BREAK_ON_WRONG_FIRMWARE) {
                 DriverStation.reportError(errorMessage, true);
@@ -158,18 +106,17 @@ public class MotorFactory {
         TalonFXConfiguration config = new TalonFXConfiguration();
 
         // See explanations for Supply and Stator limiting in FalconConstants.java
-        config.statorCurrLimit = new StatorCurrentLimitConfiguration(StatorLimitEnable, StatorCurrentLimit,
-                                                                     StatorTriggerThreshold, StatorTriggerDuration);
-        config.supplyCurrLimit = new SupplyCurrentLimitConfiguration(SupplyLimitEnable, SupplyCurrentLimit,
-                                                                     SupplyTriggerThreshold, SupplyTriggerDuration);
+        config.CurrentLimits = new CurrentLimitsConfigs().withStatorCurrentLimitEnable(StatorLimitEnable).withStatorCurrentLimit(StatorCurrentLimit).
+            withSupplyCurrentLimitEnable(SupplyLimitEnable).withSupplyCurrentLimit(SupplyCurrentLimit).
+            withSupplyCurrentThreshold(SupplyTriggerThreshold).withSupplyTimeThreshold(SupplyTriggerDuration);
 
-        config.voltageCompSaturation = Constants.ROBOT_VOLTAGE;
+        // TODO: Previous variable doesn't exist, might or might not be correct
+        config.Voltage = new VoltageConfigs().withPeakForwardVoltage(Constants.ROBOT_VOLTAGE);
 
-        talon.configFactoryDefault();
-        talon.configAllSettings(config);
-        talon.enableVoltageCompensation(false);
-        talon.setNeutralMode(NeutralMode.Brake);
-        talon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+        // TODO: I can't find where these settings are
+        talon.getConfigurator().apply(config);
+        talon.setNeutralMode(NeutralModeValue.Brake);
+        
 
         return talon;
     }
@@ -180,7 +127,7 @@ public class MotorFactory {
      * @param id     the id of the motor
      * @param CANBus the CAN bus the TalonFX is on. If connected to the rio it is "rio".
      */
-    public static WPI_TalonFX createTalonFX(int id, String CANBus) {
+    public static TalonFX createTalonFX(int id, String CANBus) {
         return createTalonFXFull(id, CANBus, Constants.STATOR_LIMIT_ENABLE, Constants.STATOR_CURRENT_LIMIT,
                                  Constants.STATOR_TRIGGER_THRESHOLD, Constants.STATOR_TRIGGER_DURATION,
                                  Constants.SUPPLY_LIMIT_ENABLE, Constants.SUPPLY_CURRENT_LIMIT,
@@ -199,7 +146,7 @@ public class MotorFactory {
      * @param triggerThreshold the threshold current to trigger the supply limit
      * @param triggerDuration  the duration, in seconds, the current is above the threshold before triggering
      */
-    public static WPI_TalonFX createTalonFXSupplyLimit(int id, String CANBus, double currentLimit,
+    public static TalonFX createTalonFXSupplyLimit(int id, String CANBus, double currentLimit,
                                                        double triggerThreshold, double triggerDuration) {
         return createTalonFXFull(id, CANBus, Constants.STATOR_LIMIT_ENABLE, Constants.STATOR_CURRENT_LIMIT,
                                  Constants.STATOR_TRIGGER_THRESHOLD, Constants.STATOR_TRIGGER_DURATION, true, currentLimit,
@@ -218,7 +165,7 @@ public class MotorFactory {
      * @param triggerThreshold the threshold current to trigger the stator limit
      * @param triggerDuration  the duration, in seconds, the current is above the threshold before triggering
      */
-    public static WPI_TalonFX createTalonFXStatorLimit(int id, String CANBus, double currentLimit,
+    public static TalonFX createTalonFXStatorLimit(int id, String CANBus, double currentLimit,
                                                        double triggerThreshold, double triggerDuration) {
         return createTalonFXFull(id, CANBus, true, currentLimit, triggerThreshold, triggerDuration,
                                  Constants.SUPPLY_LIMIT_ENABLE, Constants.SUPPLY_CURRENT_LIMIT,

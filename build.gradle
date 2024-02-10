@@ -1,6 +1,6 @@
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2024.1.1"
+    id "edu.wpi.first.GradleRIO" version "2024.2.1"
     id "com.peterabeles.gversion" version "1.10.2"
 }
 
@@ -68,9 +68,6 @@ dependencies {
     simulationRelease wpi.sim.enableRelease()
 
     implementation "gov.nist.math:jama:1.0.3"
-
-    // JUnit 4
-    // testImplementation 'junit:junit:4.13'
 
     // JUnit 5. WPILIB wants to enable JUnit 5 by default
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.2")

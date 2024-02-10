@@ -1,17 +1,20 @@
 package frc.robot;
 
+import java.util.function.BooleanSupplier;
+
+import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.constants.AutoConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
+import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -21,125 +24,55 @@ import frc.robot.util.Vision;
  */
 public class RobotContainer {
 
-    // Shuffleboard auto chooser
-    private final SendableChooser<Command> autoCommand = new SendableChooser<>();
-
-    //shuffleboard tabs
-    // The main tab is not currently used. Delete the SuppressWarning if it is used.
-    @SuppressWarnings("unused")
-    private final ShuffleboardTab mainTab = Shuffleboard.getTab("Main");
-    private final ShuffleboardTab drivetrainTab = Shuffleboard.getTab("Drive");
-    private final ShuffleboardTab swerveModulesTab = Shuffleboard.getTab("Swerve Modules");
-    private final ShuffleboardTab autoTab = Shuffleboard.getTab("Auto");
-    private final ShuffleboardTab controllerTab = Shuffleboard.getTab("Controller");
-    private final ShuffleboardTab visionTab = Shuffleboard.getTab("Vision");
-    private final ShuffleboardTab testTab = Shuffleboard.getTab("Test");
-
-//    private final Vision vision;
-
     // The robot's subsystems are defined here...
-    private final Drivetrain drive;
-    private final Vision vision;
-
+    private Drivetrain drive = null;
+    private Vision vision = null;
 
     // Controllers are defined here
-    private final BaseDriverConfig driver;
+    private BaseDriverConfig driver = null;
+
+    ShuffleBoardManager shuffleboardManager = null;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
+     * <p>
+     * Different robots may have different subsystems.
      */
-    public RobotContainer() {
-        vision = new Vision(visionTab, VisionConstants.CAMERAS);
+    public RobotContainer(RobotId robotId) {
+      // dispatch on the robot
+      switch (robotId) {
+
+      case TestBed1:
+        break;
+
+      case TestBed2:
+        break;
+
+      default:
+      case SwerveCompetition:
+      case SwerveTest:
+        vision = new Vision(VisionConstants.CAMERAS);
 
         drive = new Drivetrain(vision);
-        vision.setUpSmartDashboardCommandButtons(drive);
-        driver = new GameControllerDriverConfig(drive, controllerTab, false);
+        driver = new GameControllerDriverConfig(drive);
 
         driver.configureControls();
-
+        initializeAutoBuilder();
         drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
-        drivetrainTab.add("feild", drive.getFeild());
-        drivetrainTab.addDouble("module1", ()-> drive.getModules()[0].getAngle().getDegrees()%360);
-        drivetrainTab.addDouble("module2", ()-> drive.getModules()[1].getAngle().getDegrees()%360);
-        drivetrainTab.addDouble("module3", ()-> drive.getModules()[2].getAngle().getDegrees()%360);
-        drivetrainTab.addDouble("module4", ()-> drive.getModules()[3].getAngle().getDegrees()%360);
 
+        PathGroupLoader.loadPathGroups();
 
+        shuffleboardManager = new ShuffleBoardManager(drive, vision);
+        break;
+      }
 
-//        switch (robotId) {
-//            case SwerveCompetition:
-//                // Update drive constants based off of robot type
-//                DriveConstants.update(robotId);
-//                VisionConstants.update(robotId);
-//
-//                vision = new Vision(visionTab, VisionConstants.kCameras);
-//
-//                // Create Drivetrain
-//                drive = new Drivetrain(drivetrainTab, swerveModulesTab, vision);
-//
-//                m_vision.setUpSmartDashboardCommandButtons(m_drive);
-//
-//                driver = new PS5ControllerDriverConfig(drive, controllerTab, false);
-//                // testController.configureControls();
-//                // manualController.configureControls();
-//
-//                // load paths before auto starts
-//                PathGroupLoader.loadPathGroups();
-//
-//                driver.configureControls();
-//
-//                driver.setupShuffleboard();
-//
-//                drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
-//
-//                break;
-//
-//            case SwerveTest:
-//                // Update drive constants based off of robot type
-//                DriveConstants.update(robotId);
-//                VisionConstants.update(robotId);
-//
-//                vision = new Vision(visionTab, VisionConstants.kCameras);
-//
-//                // Create Drivetrain, because every robot will have a drivetrain
-//                drive = new Drivetrain(drivetrainTab, swerveModulesTab, vision);
-//                driver = new GameControllerDriverConfig(drive, controllerTab, false);
-//
-//                m_vision.setUpSmartDashboardCommandButtons(m_drive);
-//
-//                DriverStation.reportWarning("Not registering subsystems and controls due to incorrect robot", false);
-//
-//                // TODO: construct dummy subsystems so SwerveTest can run all auto routines
-//
-//                // load paths before auto starts
-//                PathGroupLoader.loadPathGroups();
-//
-//                driver.configureControls();
-//
-//                driver.setupShuffleboard();
-//
-//                drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
-//
-//                break;
-//
-//            default:
-//                DriverStation.reportWarning("Not registering subsystems and controls due to incorrect robot", false);
-//
-//                vision = null;
-//
-//                driver = null;
-//                drive = null;
-//
-//                break;
-//        }
+      // This is really annoying so it's disabled
+      DriverStation.silenceJoystickConnectionWarning(true);
 
-        // This is really annoying so it's disabled
-        DriverStation.silenceJoystickConnectionWarning(true);
-
-        LiveWindow.disableAllTelemetry(); // LiveWindow is causing periodic loop overruns
-        LiveWindow.setEnabled(false);
-
-        autoTab.add("Auto Chooser", autoCommand);
+      // TODO: verify this claim.
+      // LiveWindow is causing periodic loop overruns
+      LiveWindow.disableAllTelemetry();
+      LiveWindow.setEnabled(false);
     }
 
     /**
@@ -148,22 +81,45 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return autoCommand.getSelected();
+        return shuffleboardManager.getSelectedCommand();
     }
 
-    // TODO
-    /**
-     * Resets the swerve modules to their absolute positions.
-     */
-//    public void resetModules() {
-//        drive.resetModulesToAbsolute();
-//    }
+    public void updateShuffleBoard(){
+      if (shuffleboardManager != null)
+        shuffleboardManager.update();
+    }
 
     /**
      * Sets whether the drivetrain uses vision to update odometry
      */
    public void setVisionEnabled(boolean enabled) {
-       drive.setVisionEnabled(enabled);
+    if (drive != null)
+      drive.setVisionEnabled(enabled);
    }
 
+   public void initializeAutoBuilder(){
+    AutoBuilder.configureHolonomic(
+      ()->drive.getPose(),
+      (pose) -> {drive.resetOdometry(pose);},
+      ()->drive.getChassisSpeeds(),
+      (chassisSpeeds) -> {drive.setChassisSpeeds(chassisSpeeds,false);},
+      AutoConstants.config,
+      getAllianceColorBooleanSupplier(),
+      drive
+    );
+   }
+
+   public static BooleanSupplier getAllianceColorBooleanSupplier(){
+    return () -> {
+      // Boolean supplier that controls when the path will be mirrored for the red alliance
+      // This will flip the path being followed to the red side of the field.
+      // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+      var alliance = DriverStation.getAlliance();
+      if (alliance.isPresent()) {
+          return alliance.get() == DriverStation.Alliance.Red;
+      }
+      return false;
+    };
+  }
 }

@@ -1,6 +1,7 @@
 package frc.robot.constants.swerve;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -44,32 +45,34 @@ public class DriveConstants {
 
     public static Rotation2d kStartingHeading = new Rotation2d();
 
-    public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(
+    public static final Translation2d[] swerveModuleLocations = {
             new Translation2d(DriveConstants.kTrackWidth / 2, DriveConstants.kTrackWidth / 2),
             new Translation2d(DriveConstants.kTrackWidth / 2, -DriveConstants.kTrackWidth / 2),
             new Translation2d(-DriveConstants.kTrackWidth / 2, DriveConstants.kTrackWidth / 2),
             new Translation2d(-DriveConstants.kTrackWidth / 2, -DriveConstants.kTrackWidth / 2)
-    );
+    };
 
-    public static int kDriveFrontLeft = 1;
+    public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(swerveModuleLocations);
+
+   public static int kDriveFrontLeft = 1;
     public static int kSteerFrontLeft = 2;
     public static int kEncoderFrontLeft = 3;
-    public static double kSteerOffsetFrontLeft = 89.5453;//0.058291152119637;//-3.060285486280918+Math.PI;
+    public static double kSteerOffsetFrontLeft = 4.185;//0.058291152119637;//-3.060285486280918+Math.PI;
 
     public static int kDriveFrontRight = 10;
     public static int kSteerFrontRight = 11;
     public static int kEncoderFrontRight = 12;
-    public static double kSteerOffsetFrontRight = 292.0605;//-2.994324445724487;//-3.001994334161282;
+    public static double kSteerOffsetFrontRight = 101.519+90;//-2.994324445724487;//-3.001994334161282;
 
     public static int kDriveBackLeft = 7;
     public static int kSteerBackLeft = 8;
     public static int kEncoderBackLeft = 9;
-    public static double kSteerOffsetBackLeft = -10.2403;//-2.540267050266266;//0.650406539440155+Math.PI;
+    public static double kSteerOffsetBackLeft = 38.997+180;//-2.540267050266266;//0.650406539440155+Math.PI;
 
     public static int kDriveBackRight = 4;
     public static int kSteerBackRight = 5;
     public static int kEncoderBackRight = 6;
-    public static double kSteerOffsetBackRight = 157.1482;//2.626169800758362;//2.771897681057453;
+    public static double kSteerOffsetBackRight = 242.847-90;//2.626169800758362;//2.771897681057453;
 
     // heading PID
     public static double kHeadingP = 4.6;
@@ -111,8 +114,8 @@ public class DriveConstants {
     public static final boolean kAngleMotorInvert = kModuleConstants.angleMotorInvert;
 
     /* Neutral Modes */
-    public static final NeutralMode kDriveNeutralMode = NeutralMode.Brake;
-    public static final NeutralMode kAngleNeutralMode = NeutralMode.Coast;
+    public static final NeutralModeValue kDriveNeutralMode = NeutralModeValue.Brake;
+    public static final NeutralModeValue kAngleNeutralMode = NeutralModeValue.Coast;
 
     /* Drive Motor PID Values */
     public static final double kDriveP = 0.05;
@@ -149,22 +152,22 @@ public class DriveConstants {
 
             kDriveFrontLeft = 1;
             kSteerFrontLeft = 2;
-            kEncoderFrontLeft = 3;
+            kEncoderFrontLeft = 9;
             kSteerOffsetFrontLeft = -1.58;
 
-            kDriveFrontRight = 10;
-            kSteerFrontRight = 11;
+            kDriveFrontRight = 7;
+            kSteerFrontRight = 8;
             kEncoderFrontRight = 12;
             kSteerOffsetFrontRight = 1.935;
 
-            kDriveBackLeft = 7;
-            kSteerBackLeft = 8;
-            kEncoderBackLeft = 9;
+            kDriveBackLeft = 5;
+            kSteerBackLeft = 6;
+            kEncoderBackLeft = 11;
             kSteerOffsetBackLeft = -8;
 
-            kDriveBackRight = 4;
-            kSteerBackRight = 5;
-            kEncoderBackRight = 6;
+            kDriveBackRight = 3;
+            kSteerBackRight = 4;
+            kEncoderBackRight = 10;
             kSteerOffsetBackRight = -0.383494421839714;
 
             // CAN

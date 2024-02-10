@@ -3,7 +3,6 @@ package frc.robot.controls;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import frc.robot.commands.drive_comm.SetFormationX;
@@ -21,19 +20,19 @@ public class PS5ControllerDriverConfig extends BaseDriverConfig {
 
     private final PS5Controller kDriver = new PS5Controller(Constants.DRIVER_JOY);
 
-    public PS5ControllerDriverConfig(Drivetrain drive, ShuffleboardTab controllerTab, boolean shuffleboardUpdates) {
-        super(drive, controllerTab, shuffleboardUpdates);
+    public PS5ControllerDriverConfig(Drivetrain drive) {
+        super(drive);
     }
 
     public void configureControls() {
         // reset the yaw forward. Mainly useful for testing/driver practice
         kDriver.get(PS5Button.OPTIONS).onTrue(new InstantCommand(() -> super.getDrivetrain().setYaw(
-                new Rotation2d(DriverStation.getAlliance() == Alliance.Blue ? 0 : Math.PI)
+                new Rotation2d(DriverStation.getAlliance().get() == Alliance.Blue ? 0 : Math.PI)
                                                                                                    )));
 
         // reset the yaw backward. Mainly useful for testing/driver practice
         kDriver.get(PS5Button.CREATE).onTrue(new InstantCommand(() -> super.getDrivetrain().setYaw(
-                new Rotation2d(DriverStation.getAlliance() == Alliance.Red ? 0 : Math.PI)
+                new Rotation2d(DriverStation.getAlliance().get() == Alliance.Red ? 0 : Math.PI)
                                                                                                   )));
 
         // set the wheels to X
