@@ -1,5 +1,5 @@
 package frc.robot.util;
 
-public class Advantage-Kit {
+public class AdvantageKit {
     
 }
