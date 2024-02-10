@@ -115,7 +115,7 @@ public class DriveConstants {
 
     /* Neutral Modes */
     public static final NeutralModeValue kDriveNeutralMode = NeutralModeValue.Brake;
-    public static final NeutralModeValue kAngleNeutralMode = NeutralModeValue.Coast;
+    public static final NeutralModeValue kAngleNeutralMode = NeutralModeValue.Brake;
 
     /* Drive Motor PID Values */
     public static final double kDriveP = 0.05;
@@ -149,29 +149,19 @@ public class DriveConstants {
             kTrackWidth = Units.inchesToMeters(22.75); //22.75 swerve bot, 20.75 comp bot
 
             kPigeon = 13;
+        
+            kSteerOffsetFrontLeft = -448.91;
 
-            kDriveFrontLeft = 1;
-            kSteerFrontLeft = 2;
-            kEncoderFrontLeft = 9;
-            kSteerOffsetFrontLeft = -1.58;
+            kSteerOffsetFrontRight = 112.473;
+            // kSteerOffsetFrontRight = 10.957+90;
 
-            kDriveFrontRight = 7;
-            kSteerFrontRight = 8;
-            kEncoderFrontRight = 12;
-            kSteerOffsetFrontRight = 1.935;
+            kSteerOffsetBackLeft = 180;
+            // [new one] kSteerOffsetBackLeft = 339.689;
 
-            kDriveBackLeft = 5;
-            kSteerBackLeft = 6;
-            kEncoderBackLeft = 11;
-            kSteerOffsetBackLeft = -8;
-
-            kDriveBackRight = 3;
-            kSteerBackRight = 4;
-            kEncoderBackRight = 10;
-            kSteerOffsetBackRight = -0.383494421839714;
+            kSteerOffsetBackRight = 333.241;
 
             // CAN
-            kDriveMotorCAN = Constants.RIO_CAN;
+            kDriveMotorCAN = Constants.CANIVORE_CAN;
         }
     }
 }
