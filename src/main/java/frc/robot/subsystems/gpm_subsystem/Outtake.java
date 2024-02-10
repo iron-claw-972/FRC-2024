@@ -9,20 +9,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ShooterConstants;
 
-import java.io.FileWriter;
-
 public class Outtake extends SubsystemBase {
-    private CANSparkFlex bottomMotor = new CANSparkFlex(ShooterConstants.BOTTOM_MOTOR_ID, MotorType.kBrushless);
-    private CANSparkFlex topMotor = new CANSparkFlex(ShooterConstants.TOP_MOTOR_ID, MotorType.kBrushless);
-    private RelativeEncoder bottomMotorEncoder = bottomMotor.getEncoder();
-    private RelativeEncoder topMotorEncoder = topMotor.getEncoder();
+    private final CANSparkFlex bottomMotor = new CANSparkFlex(ShooterConstants.BOTTOM_MOTOR_ID, MotorType.kBrushless);
+    private final CANSparkFlex topMotor = new CANSparkFlex(ShooterConstants.TOP_MOTOR_ID, MotorType.kBrushless);
+    private final RelativeEncoder bottomMotorEncoder = bottomMotor.getEncoder();
+    private final RelativeEncoder topMotorEncoder = topMotor.getEncoder();
     private final PIDController topPID = new PIDController(.00005, 0, 0.00);
     private final PIDController bottomPID = new PIDController(.00005, 0, 0);
 
+    // TODO: TUNE THIS
     private final SimpleMotorFeedforward shooterFF = new SimpleMotorFeedforward(0, 1.0/6000);
-    // observe motor characteristics to get better FF values.
 
-    FileWriter myWriter;
     public Outtake() {
         topPID.setTolerance(10); // rpm
         bottomPID.setTolerance(10);
@@ -31,17 +28,17 @@ public class Outtake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        double topspeed = topMotorEncoder.getVelocity();
-        double bottomspeed = bottomMotorEncoder.getVelocity();
+        double topSpeed = topMotorEncoder.getVelocity();
+        double bottomSpeed = bottomMotorEncoder.getVelocity();
 
-        topMotor.set(topPID.calculate(topspeed) + shooterFF.calculate(topPID.getSetpoint()));
-        bottomMotor.set(bottomPID.calculate(bottomspeed) + shooterFF.calculate(bottomPID.getSetpoint()));
+        topMotor.set(topPID.calculate(topSpeed) + shooterFF.calculate(topPID.getSetpoint()));
+        bottomMotor.set(bottomPID.calculate(bottomSpeed) + shooterFF.calculate(bottomPID.getSetpoint()));
 
         // TODO: Maybe add a method in ConversionUtils to convert from RPM to m/s and etc
-        SmartDashboard.putNumber("top speed",topspeed/60*4*3.14*2.54/100);
-        SmartDashboard.putNumber("bottom speed",bottomspeed/60*4*3.14*2.54/100);
+        SmartDashboard.putNumber("top speed",topSpeed/60*4*3.14*2.54/100);
+        SmartDashboard.putNumber("bottom speed",bottomSpeed/60*4*3.14*2.54/100);
         SmartDashboard.putBoolean("at setpoint?", atSetpoint());
-        System.out.println(topspeed/60*4*3.14*2.54/100+","+bottomspeed/60*4*3.14*2.54/100);
+        System.out.println(topSpeed/60*4*3.14*2.54/100+","+bottomSpeed/60*4*3.14*2.54/100);
     }
 
     public void setTargetRPM(double speed) {
