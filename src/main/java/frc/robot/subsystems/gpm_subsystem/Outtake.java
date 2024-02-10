@@ -7,22 +7,23 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.ShooterConstants;
+import frc.robot.constants.OuttakeConstants;
 
 public class Outtake extends SubsystemBase {
-    private final CANSparkFlex bottomMotor = new CANSparkFlex(ShooterConstants.BOTTOM_MOTOR_ID, MotorType.kBrushless);
-    private final CANSparkFlex topMotor = new CANSparkFlex(ShooterConstants.TOP_MOTOR_ID, MotorType.kBrushless);
+    private final CANSparkFlex bottomMotor = new CANSparkFlex(OuttakeConstants.BOTTOM_MOTOR_ID, MotorType.kBrushless);
+    private final CANSparkFlex topMotor = new CANSparkFlex(OuttakeConstants.TOP_MOTOR_ID, MotorType.kBrushless);
     private final RelativeEncoder bottomMotorEncoder = bottomMotor.getEncoder();
     private final RelativeEncoder topMotorEncoder = topMotor.getEncoder();
-    private final PIDController topPID = new PIDController(.00005, 0, 0.00);
-    private final PIDController bottomPID = new PIDController(.00005, 0, 0);
+    private final PIDController topPID = new PIDController(OuttakeConstants.TOP_P, OuttakeConstants.TOP_I,
+            OuttakeConstants.TOP_D);
+    private final PIDController bottomPID = new PIDController(OuttakeConstants.BOTTOM_P, OuttakeConstants.BOTTOM_I, OuttakeConstants.BOTTOM_D);
 
     // TODO: TUNE THIS
-    private final SimpleMotorFeedforward shooterFF = new SimpleMotorFeedforward(0, 1.0/6000);
+    private final SimpleMotorFeedforward shooterFF = new SimpleMotorFeedforward(OuttakeConstants.S, OuttakeConstants.V);
 
     public Outtake() {
-        topPID.setTolerance(10); // rpm
-        bottomPID.setTolerance(10);
+        topPID.setTolerance(OuttakeConstants.TOLERANCE);
+        bottomPID.setTolerance(OuttakeConstants.TOLERANCE);
         bottomMotor.setInverted(true);
     }
 
