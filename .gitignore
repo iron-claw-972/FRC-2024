@@ -173,3 +173,6 @@ src/main/java/frc/robot/util/BuildData.java
 
 # IntelliJ IDEA files
 .idea/
+
+#for meta data
+src/main/java/frc/robot/BuildConstants.java
