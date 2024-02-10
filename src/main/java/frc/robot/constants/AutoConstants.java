@@ -18,7 +18,7 @@ public class AutoConstants {
     public static final double MAX_AUTO_ACCEL = 2.1; // m/s^2
 
     public static final PIDConstants translationConstants = new PIDConstants(0,0,0);
-    public static final PIDConstants rotationConstants = new PIDConstants(0,0,0);
+    public static final PIDConstants rotationConstants = new PIDConstants(4,0,0);
 
     public static final ReplanningConfig replanningConfig = new ReplanningConfig(true, false);
 
