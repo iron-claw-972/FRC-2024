@@ -12,6 +12,7 @@ import frc.robot.constants.WristConstants;
 public class Wrist extends SubsystemBase {
     
     private final CANSparkFlex motor = new CANSparkFlex(WristConstants.MOTOR_ID, MotorType.kBrushless);
+    private final CANSparkFlex slave = new CANSparkFlex(WristConstants.SLAVE_ID, MotorType.kBrushless);
     private final SparkAbsoluteEncoder encoder = motor.getAbsoluteEncoder(Type.kDutyCycle);
     private final PIDController pid = new PIDController(WristConstants.P, WristConstants.I, WristConstants.D);
 
@@ -22,6 +23,8 @@ public class Wrist extends SubsystemBase {
         encoder.setPositionConversionFactor(WristConstants.CONVERSION_FACTOR);
         encoder.setZeroOffset(WristConstants.OFFSET);
         motor.setSecondaryCurrentLimit(0.5);
+
+        slave.follow(motor);
     }
 
     @Override
