@@ -11,7 +11,7 @@ public class IntakeNote extends Command {
     private final Debouncer stallDebouncer;
 
 
-    public IntakeNote(Intake intake, boolean forever) {
+    public IntakeNote(Intake intake) {
         addRequirements(intake);
         this.intake = intake;
         this.stallDebouncer = new Debouncer(IntakeConstants.INTAKE_STALL_TIME, Debouncer.DebounceType.kBoth);
