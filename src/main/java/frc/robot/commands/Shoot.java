@@ -54,7 +54,7 @@ public class Shoot extends Command {
         v_rx = drivetrain.getChassisSpeeds().vxMetersPerSecond;
         v_ry = drivetrain.getChassisSpeeds().vyMetersPerSecond;
 
-        // TOOD: Figure out what v_note is empirically
+        // TODO: Figure out what v_note is empirically
         double v_note = 10;
 
         // euclidean X distance to speaker
@@ -67,6 +67,8 @@ public class Shoot extends Command {
         double phi_v =
                 Math.atan(Math.pow(v_note, 2)/9.8/x*(1-Math.sqrt(1+19.6/Math.pow(v_note, 2)*(SHOOTER_HEIGHT-4.9*x*x/Math.pow(v_note, 2)))));
         // Angle to goal
+        // TODO: Should we use the align angle method from the drivetrain?
+        // double phi_h = drivetrain.getAlignAngle();
         double phi_h = Math.asin(y / x);
 
         // Random variable to hold recurring code
