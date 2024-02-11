@@ -58,8 +58,8 @@ public class Shooter extends SubsystemBase {
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(S, V);
 
     public Shooter() {
-        topPID.setTolerance(TOLERANCE);
-        bottomPID.setTolerance(TOLERANCE);
+        topPID.setTolerance(ShooterConstants.TOLERANCE);
+        bottomPID.setTolerance(ShooterConstants.TOLERANCE);
         bottomMotor.setInverted(true);
 
 		// are we simulating?
@@ -67,11 +67,11 @@ public class Shooter extends SubsystemBase {
 			topFlywheelSim = new FlywheelSim(
 				DCMotor.getNeoVortex(1),
 				1.0,
-				moiShaft);
+					ShooterConstants.moiShaft);
 			bottomFlywheelSim = new FlywheelSim(
 				DCMotor.getNeoVortex(1),
 				1.0,
-				moiShaft);
+					ShooterConstants.moiShaft);
 		}
     }
 
