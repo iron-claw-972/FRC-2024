@@ -14,7 +14,7 @@ public class ConversionUtils {
 	*
 	* @param  rpm the RPM to convert
 	* @return     the converted value in m/s
-	* @see        convertSpeedToShooterRPM
+	* @see        shooterSpeedToRPM
 	*/
 	public static double shooterRPMToSpeed(double rpm) {
 			return (rpm / 60) * (4 * Math.PI * 0.0254);
@@ -25,7 +25,7 @@ public class ConversionUtils {
 	*
 	* @param  speed the speed to convert in m/s
 	* @return       the converted value in RPM
-	* @see          convertShooterRPMToSpeed
+	* @see          shooterRPMToSpeed
 	*/
 	public static double shooterSpeedToRPM(double speed) {
 			return (speed * 60) / (4 * Math.PI * 0.0254);
