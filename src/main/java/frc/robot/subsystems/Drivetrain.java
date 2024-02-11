@@ -12,6 +12,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -334,7 +336,18 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /**
-     * TODO: Comment
+     * Gets the angle to align to for the speaker
+     * @return The angle in radians
+     */
+    public double getAlignAngle(){
+        Pose2d pose = getPose();
+        return Math.PI + (DriverStation.getAlliance().get() == Alliance.Blue ?
+            Math.atan2(VisionConstants.BLUE_SPEAKER_POSE.getY() - pose.getY(), VisionConstants.BLUE_SPEAKER_POSE.getX() - pose.getX()) :
+            Math.atan2(VisionConstants.RED_SPEAKER_POSE.getY() - pose.getY(), VisionConstants.RED_SPEAKER_POSE.getX() - pose.getX()));
+    }
+
+    /**
+     * Resets the swerve modules from the absolute encoders
      */
     public void resetModulesToAbsolute() {
         Arrays.stream(modules).forEach(Module::resetToAbsolute);
