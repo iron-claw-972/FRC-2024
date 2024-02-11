@@ -2,6 +2,7 @@ package frc.robot.subsystems.gpm;
 
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.IntakeConstants;
 
@@ -24,17 +25,23 @@ public class Intake extends SubsystemBase {
     }
 
     private final CANSparkFlex motor;
+    private final DigitalInput sensor;
 
     private Mode mode;
 
 
     public Intake() {
         motor = new CANSparkFlex(IntakeConstants.MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
+        sensor = new DigitalInput(IntakeConstants.SENSOR_ID);
         mode = Mode.DISABLED;
     }
 
     public void setMode(Mode mode) {
         this.mode = mode;
+    }
+
+    public boolean hasNote() {
+        return sensor.get();
     }
 
     @Override

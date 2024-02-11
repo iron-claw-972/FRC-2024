@@ -1,15 +1,13 @@
 package frc.robot.constants;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-
 public final class IntakeConstants {
 
     // motor port
     public static final int MOTOR_ID = 9;
+    public static final int SENSOR_ID = 0;
 
     // intake speeds
     public static final double INTAKE_POWER = 0.8;
-    public static final NeutralMode NEUTRAL_MODE = NeutralMode.Brake;
 
     // Current limits
     public static final int CONTINUOUS_CURRENT_LIMIT = 25;
