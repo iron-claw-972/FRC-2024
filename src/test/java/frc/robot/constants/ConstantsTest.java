@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ConstantsTest {
 
     @Test
+    @SuppressWarnings("unused")
     public void testRobotSize() {
         // The competition robot frame width and length is 26 inches.
         // It has 3/16 inch plates on all sides,
@@ -40,7 +41,7 @@ public class ConstantsTest {
         // check with values in DriveConstants
         // System.out.printf("widthFrameWithBumpers  = %8f %8f\n", widthFrameWithBumpers, Units.metersToInches(widthFrameWithBumpers));
         // System.out.printf("kRobotWidthWithBumpers = %8f %8f\n", DriveConstants.kRobotWidthWithBumpers, Units.metersToInches(DriveConstants.kRobotWidthWithBumpers));
-        //assertEquals(widthFrameWithBumpers, DriveConstants.kRobotWidthWithBumpers, 0.001);
+        // assertEquals(widthFrameWithBumpers, DriveConstants.kRobotWidthWithBumpers, 0.001);
     }
 
     /**

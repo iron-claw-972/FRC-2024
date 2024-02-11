@@ -1,11 +1,11 @@
 package frc.robot.subsystems.module;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import frc.robot.constants.globalConst;
+import frc.robot.constants.Constants;
 import frc.robot.constants.swerve.ModuleConstants;
 import lib.CTREModuleState;
 
@@ -32,7 +32,7 @@ public class ModuleSim extends Module {
      */
     @Override
     public void periodic() {
-        currentDrivePositionMeters += currentSpeed * globalConst.LOOP_TIME;
+        currentDrivePositionMeters += currentSpeed * Constants.LOOP_TIME;
     }
 
     /**
@@ -104,7 +104,7 @@ public class ModuleSim extends Module {
         stateDeadband = enabled;
     }
 
-    public WPI_TalonFX getDriveMotor(){
+    public TalonFX getDriveMotor(){
         return null;
     }
 

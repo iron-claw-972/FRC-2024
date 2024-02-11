@@ -1,17 +1,18 @@
 package frc.robot.constants.swerve;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import frc.robot.RobotId;
-import frc.robot.constants.globalConst;
+import frc.robot.constants.Constants;
 import lib.COTSFalconSwerveConstants;
 
 /**
- * Constants are, by default, for the competition robot.
- * Constants get changed if the RobotId detected is not the competition robot.
+ * GlobalConst are, by default, for the competition robot.
+ * GlobalConst get changed if the RobotId detected is not the competition robot.
  */
 public class DriveConstants {
 
@@ -31,7 +32,7 @@ public class DriveConstants {
     public static final double DRIVE_KV = 1.51 / 12.0; // 1.93074
     public static final double DRIVE_KA = 0.27 / 12.0; // 0.00214
 
-    public static double kMaxSpeed = (globalConst.MAX_RPM / 60.0) * kWheelRadius * 2 * Math.PI / kDriveGearRatio;
+    public static double kMaxSpeed = (Constants.MAX_RPM / 60.0) * kWheelRadius * 2 * Math.PI / kDriveGearRatio;
 
     // Need to convert tangential velocity (the m/s of the edge of the robot) to angular velocity (the radians/s of the robot)
     // To do so, divide by the radius. The radius is the diagonal of the square chassis, diagonal = sqrt(2) * side_length.
@@ -53,25 +54,25 @@ public class DriveConstants {
 
     public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(swerveModuleLocations);
 
-    public static int kDriveFrontLeft = 1;
+   public static int kDriveFrontLeft = 1;
     public static int kSteerFrontLeft = 2;
-    public static int kEncoderFrontLeft = 9;
-    public static double kSteerOffsetFrontLeft = -91.3+180;//0.058291152119637;//-3.060285486280918+Math.PI;
+    public static int kEncoderFrontLeft = 3;
+    public static double kSteerOffsetFrontLeft = 4.185;//0.058291152119637;//-3.060285486280918+Math.PI;
 
-    public static int kDriveFrontRight = 7;
-    public static int kSteerFrontRight = 8;
+    public static int kDriveFrontRight = 10;
+    public static int kSteerFrontRight = 11;
     public static int kEncoderFrontRight = 12;
-    public static double kSteerOffsetFrontRight = -242.055+180;//-2.994324445724487;//-3.001994334161282;
+    public static double kSteerOffsetFrontRight = 101.519+90;//-2.994324445724487;//-3.001994334161282;
 
-    public static int kDriveBackLeft = 5;
-    public static int kSteerBackLeft = 6;
-    public static int kEncoderBackLeft = 11;
-    public static double kSteerOffsetBackLeft = -0.434;//-2.540267050266266;//0.650406539440155+Math.PI;
+    public static int kDriveBackLeft = 7;
+    public static int kSteerBackLeft = 8;
+    public static int kEncoderBackLeft = 9;
+    public static double kSteerOffsetBackLeft = 38.997+180;//-2.540267050266266;//0.650406539440155+Math.PI;
 
-    public static int kDriveBackRight = 3;
-    public static int kSteerBackRight = 4;
-    public static int kEncoderBackRight = 10;
-    public static double kSteerOffsetBackRight = -337.301+135;//2.626169800758362;//2.771897681057453;
+    public static int kDriveBackRight = 4;
+    public static int kSteerBackRight = 5;
+    public static int kEncoderBackRight = 6;
+    public static double kSteerOffsetBackRight = 242.847-90;//2.626169800758362;//2.771897681057453;
 
     // heading PID
     public static double kHeadingP = 4.6;
@@ -89,10 +90,10 @@ public class DriveConstants {
     public static double kPathplannerTranslationalD = 0;
 
     // CAN
-    public static String kDriveMotorCAN = globalConst.CANIVORE_CAN;
-    public static String kSteerMotorCAN = globalConst.CANIVORE_CAN;
-    public static String kSteerEncoderCAN = globalConst.CANIVORE_CAN;
-    public static String kPigeonCAN = globalConst.CANIVORE_CAN;
+    public static String kDriveMotorCAN = Constants.CANIVORE_CAN;
+    public static String kSteerMotorCAN = Constants.CANIVORE_CAN;
+    public static String kSteerEncoderCAN = Constants.CANIVORE_CAN;
+    public static String kPigeonCAN = Constants.CANIVORE_CAN;
 
 
     public static final COTSFalconSwerveConstants kModuleConstants = COTSFalconSwerveConstants.SDSMK4i(COTSFalconSwerveConstants.DriveGearRatios.SDSMK4i_L2);
@@ -113,8 +114,8 @@ public class DriveConstants {
     public static final boolean kAngleMotorInvert = kModuleConstants.angleMotorInvert;
 
     /* Neutral Modes */
-    public static final NeutralMode kDriveNeutralMode = NeutralMode.Brake;
-    public static final NeutralMode kAngleNeutralMode = NeutralMode.Coast;
+    public static final NeutralModeValue kDriveNeutralMode = NeutralModeValue.Brake;
+    public static final NeutralModeValue kAngleNeutralMode = NeutralModeValue.Brake;
 
     /* Drive Motor PID Values */
     public static final double kDriveP = 0.05;
@@ -148,29 +149,19 @@ public class DriveConstants {
             kTrackWidth = Units.inchesToMeters(22.75); //22.75 swerve bot, 20.75 comp bot
 
             kPigeon = 13;
+        
+            kSteerOffsetFrontLeft = -448.91;
 
-            kDriveFrontLeft = 1;
-            kSteerFrontLeft = 2;
-            kEncoderFrontLeft = 3;
-            kSteerOffsetFrontLeft = -1.58;
+            kSteerOffsetFrontRight = 112.473;
+            // kSteerOffsetFrontRight = 10.957+90;
 
-            kDriveFrontRight = 10;
-            kSteerFrontRight = 11;
-            kEncoderFrontRight = 12;
-            kSteerOffsetFrontRight = 1.935;
+            kSteerOffsetBackLeft = 180;
+            // [new one] kSteerOffsetBackLeft = 339.689;
 
-            kDriveBackLeft = 7;
-            kSteerBackLeft = 8;
-            kEncoderBackLeft = 9;
-            kSteerOffsetBackLeft = -8;
-
-            kDriveBackRight = 4;
-            kSteerBackRight = 5;
-            kEncoderBackRight = 6;
-            kSteerOffsetBackRight = -0.383494421839714;
+            kSteerOffsetBackRight = 333.241;
 
             // CAN
-            kDriveMotorCAN = globalConst.RIO_CAN;
+            kDriveMotorCAN = Constants.CANIVORE_CAN;
         }
     }
 }

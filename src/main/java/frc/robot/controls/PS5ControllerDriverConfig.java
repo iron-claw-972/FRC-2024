@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import frc.robot.commands.drive_comm.SetFormationX;
-import frc.robot.constants.globalConst;
+import frc.robot.constants.Constants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.MathUtils;
 import lib.controllers.PS5Controller;
@@ -18,15 +18,13 @@ import lib.controllers.PS5Controller.PS5Button;
  */
 public class PS5ControllerDriverConfig extends BaseDriverConfig {
 
-    private final PS5Controller kDriver = new PS5Controller(globalConst.DRIVER_JOY);
+    private final PS5Controller kDriver = new PS5Controller(Constants.DRIVER_JOY);
 
     public PS5ControllerDriverConfig(Drivetrain drive) {
         super(drive);
     }
 
-    @Override
     public void configureControls() {
-
         // reset the yaw forward. Mainly useful for testing/driver practice
         kDriver.get(PS5Button.OPTIONS).onTrue(new InstantCommand(() -> super.getDrivetrain().setYaw(
                 new Rotation2d(DriverStation.getAlliance().get() == Alliance.Blue ? 0 : Math.PI)

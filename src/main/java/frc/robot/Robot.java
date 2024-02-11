@@ -4,13 +4,11 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.constants.globalConst;
+import frc.robot.constants.miscConstants.VisionConstants;
+import frc.robot.constants.swerve.DriveConstants;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -19,9 +17,6 @@ import frc.robot.constants.globalConst;
  * project.
  */
 public class Robot extends TimedRobot {
-
-    private static RobotId ROBOT_ID = null;
-
     private Command autoCommand;
     private RobotContainer robotContainer;
 
@@ -35,10 +30,13 @@ public class Robot extends TimedRobot {
         //   SimGUI: Persistent Values, Preferences, RobotId, then restart Simulation
         //     changes networktables.json, networktables.json.bck (both Untracked)
         //   Uncomment the next line, set the desired RobotId, deploy, and then comment the line out
-         //setRobotId(RobotId.SwerveTest);
+        // RobotId.setRobotId(RobotId.TestBed2);
+        DriveConstants.update(RobotId.getRobotId());
+        // obtain this robot's identity
+        RobotId robotId = RobotId.getRobotId();
 
         // build the RobotContainer with the robot id from preferences
-        robotContainer = new RobotContainer();
+        robotContainer = new RobotContainer(robotId);
     }
 
     /**
@@ -54,7 +52,10 @@ public class Robot extends TimedRobot {
         // commands, running already-scheduled commands, removing finished or interrupted commands,
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
-        // robotContainer.updateShuffleBoard();
+
+        // TODO: why is this here?
+        robotContainer.updateShuffleBoard();
+
         CommandScheduler.getInstance().run();
     }
 
@@ -79,16 +80,14 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-
-//        robotContainer.resetModules();
-
-        // In auto, only use odometry.
-//        robotContainer.setVisionEnabled(false);
+        // TODO: why is this here? A robot may not have vision. The container may not have the method.
+        // Disable vision if the constant is false.
+        robotContainer.setVisionEnabled(VisionConstants.ENABLED_AUTO);
 
         // Get the autonomous command.
         // This access is fast (about 14 microseconds) because the value is already resident in the Network Tables.
         // There was a problem last year because the operation also installed about over a dozen items (taking more than 20 ms).
-        //autoCommand = robotContainer.getAutonomousCommand();
+        autoCommand = robotContainer.getAutonomousCommand();
 
         // If there is an autonomous command, then schedule it
         if (autoCommand != null) {
@@ -109,7 +108,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopInit() {
-//        robotContainer.resetModules();
+        // TODO: why is this here? Robot may not have vision.
+        robotContainer.setVisionEnabled(true);
 
         // This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to
@@ -134,8 +134,6 @@ public class Robot extends TimedRobot {
     public void testInit() {
         // Cancels all running commands at the start of test mode.
         CommandScheduler.getInstance().cancelAll();
-
-        LiveWindow.setEnabled(true);
     }
 
     /**
@@ -149,59 +147,4 @@ public class Robot extends TimedRobot {
     public void simulationPeriodic() {
     }
 
-    /**
-     * Determine the Robot Identity from the RoboRIO's onboard Preferences.
-     *
-     * <p>This method is private.
-     */
-    public static RobotId getRobotId() {
-
-        // Return cached value if available
-        if (ROBOT_ID != null) {
-            return ROBOT_ID;
-        }
-
-        // assume a default identity
-        RobotId robotId = RobotId.Default;
-
-        // check whether Preferences has an entry for the RobotId
-        if (!Preferences.containsKey(globalConst.ROBOT_ID_KEY)) {
-            // There is no such key. Set it to the default identity.
-            setRobotId(RobotId.Default);
-        }
-
-        // Remove the "Default" key if present
-        if (Preferences.containsKey("Default")) {
-            Preferences.remove("Default");
-        }
-
-        // get the RobotId string from the RoboRIO's Preferences
-        String strId = Preferences.getString(globalConst.ROBOT_ID_KEY, RobotId.Default.name());
-
-        // match that string to a RobotId by looking at all possible RobotId enums
-        for (RobotId rid : RobotId.values()) {
-            // does the preference string match the RobotId enum?
-            if (strId.equals(rid.name())) {
-                // yes, this instance is the desired RobotId
-                robotId = rid;
-            }
-        }
-
-        // report the RobotId to the SmartDashboard
-        SmartDashboard.putString("RobotID", robotId.name());
-
-        // return the robot identity
-        return robotId;
-    }
-
-    /**
-     * Set the RobotId in the RoboRIO's preferences.
-     * <p>
-     * This method is private. Calling it after the robot has been constructed does not affect the robot.
-     */
-    private static void setRobotId(RobotId robotId) {
-        // Set the robot identity in the RoboRIO Preferences
-        Preferences.setString(globalConst.ROBOT_ID_KEY, robotId.name());
-        ROBOT_ID = robotId;
-    }
 }
