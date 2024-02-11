@@ -350,15 +350,15 @@ public class Drivetrain extends SubsystemBase {
         */
         // ported from shoot command. it doesn't exist on this pull request
         // TODO: make a public static double in shoot command that gives theta_h, rather than repeating this code
-        // TODO: find actual shooter height (m)
-        final double SHOOTER_HEIGHT = 0;
+        // TODO: find actual shooter height (m), then height_diff is shooter height - speaker height.
+        double height_diff = -1.8; // very tentative
 
         // Set displacement to speaker
         Pose3d speakerPose = DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
                 Pose3d displacement = new Pose3d(
                         getPose().getX(),
                         getPose().getY(),
-                        SHOOTER_HEIGHT,
+                        height_diff,
                         new Rotation3d(
                                 0,
                                 // TODO: taking this out should be fine, right? arm.getAngle(),
@@ -380,10 +380,8 @@ public class Drivetrain extends SubsystemBase {
 
                 // Basic vertical angle calculation (static robot)
                 double phi_v = Math.atan(Math.pow(v_note, 2) / 9.8 / x * (1 - Math.sqrt(1
-                        + 19.6 / Math.pow(v_note, 2) * (SHOOTER_HEIGHT - 4.9 * x * x / Math.pow(v_note, 2)))));
+                        + 19.6 / Math.pow(v_note, 2) * (height_diff - 4.9 * x * x / Math.pow(v_note, 2)))));
                 // Angle to goal
-                // TODO: Should we use the align angle method from the drivetrain?
-                // double phi_h = drivetrain.getAlignAngle();
                 double phi_h = Math.asin(y / x);
 
                 // Random variable to hold recurring code
