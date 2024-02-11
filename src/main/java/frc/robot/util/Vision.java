@@ -29,7 +29,7 @@ import frc.robot.constants.miscConstants.FieldConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
 
-// Vision and it's commands are adapted from Iron Claw's FRC2022, FRC2023, and: https://www.youtube.com/watch?v=TG9KAa2EGzQ&t=1439s
+// Vision and it's commands are adapted from Iron Claw's FRC2023
 public class Vision {
   // The field layout
   private AprilTagFieldLayout m_aprilTagFieldLayout;
