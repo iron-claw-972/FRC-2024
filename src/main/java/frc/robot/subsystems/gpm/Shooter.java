@@ -5,34 +5,47 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.simulation.FlywheelSim;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase {
     // constants for Pids
-    public static final double TOP_P = 0.00005;
-    public static final double TOP_I = 0;
-    public static final double TOP_D = 0;
+    private static final double TOP_P = 0.00005;
+    private static final double TOP_I = 0;
+    private static final double TOP_D = 0;
 
-    public static final double S = 0;
-    public static final double V = 1.0/6000;
+    private static final double S = 0;
+    private static final double V = 1.0/6000;
 
-    public static final double BOTTOM_P = 0.00005;
-    public static final double BOTTOM_I = 0;
-    public static final double BOTTOM_D = 0;
+    private static final double BOTTOM_P = 0.00005;
+    private static final double BOTTOM_I = 0;
+    private static final double BOTTOM_D = 0;
 
     /**
      * In RPM
      */
-    public static final double TOLERANCE = 10;
+    private static final double TOLERANCE = 10;
 
-    private final CANSparkFlex bottomMotor = new CANSparkFlex(ShooterConstants.BOTTOM_MOTOR_ID, MotorType.kBrushless);
+	private static final double massColson = 0.245;
+	private static final double radiusColson = 2.0 * 0.0254;
+	private static final double moiColson = 0.5 * massColson * radiusColson * radiusColson;
+	private static final double moiShaft = moiColson * 4;
+
     private final CANSparkFlex topMotor = new CANSparkFlex(ShooterConstants.TOP_MOTOR_ID, MotorType.kBrushless);
-    private final RelativeEncoder bottomMotorEncoder = bottomMotor.getEncoder();
     private final RelativeEncoder topMotorEncoder = topMotor.getEncoder();
     private final PIDController topPID = new PIDController(TOP_P, TOP_I, TOP_D);
+	private FlywheelSim topFlywheelSim;
+	private double topMotorSpeedSim;
+
+    private final CANSparkFlex bottomMotor = new CANSparkFlex(ShooterConstants.BOTTOM_MOTOR_ID, MotorType.kBrushless);
+    private final RelativeEncoder bottomMotorEncoder = bottomMotor.getEncoder();
     private final PIDController bottomPID = new PIDController(BOTTOM_P, BOTTOM_I, BOTTOM_D);
+	private FlywheelSim bottomFlywheelSim;
+	private double bottomMotorSpeedSim;
 
     // TODO: TUNE THIS
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(S, V);
@@ -41,12 +54,23 @@ public class Shooter extends SubsystemBase {
         topPID.setTolerance(TOLERANCE);
         bottomPID.setTolerance(TOLERANCE);
         bottomMotor.setInverted(true);
+
+		if (RobotBase.isSimulation()) {
+			topFlywheelSim = new FlywheelSim(
+				DCMotor.getNeoVortex(1),
+				1.0,
+				moiShaft);
+			bottomFlywheelSim = new FlywheelSim(
+				DCMotor.getNeoVortex(1),
+				1.0,
+				moiShaft);
+		}
     }
 
     @Override
     public void periodic() {
-        double topSpeed = topMotorEncoder.getVelocity();
-        double bottomSpeed = bottomMotorEncoder.getVelocity();
+        double topSpeed = getTopMotorSpeed();
+        double bottomSpeed = getBottomMotorSpeed();
 
         topMotor.set(topPID.calculate(topSpeed) + feedforward.calculate(topPID.getSetpoint()));
         bottomMotor.set(bottomPID.calculate(bottomSpeed) + feedforward.calculate(bottomPID.getSetpoint()));
@@ -56,6 +80,23 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putBoolean("at setpoint?", atSetpoint());
         System.out.println(shooterRPMToSpeed(topSpeed) + "," + shooterRPMToSpeed(bottomSpeed));
     }
+
+	@Override
+	public void simulationPeriodic() {
+		double voltage = 12.0;
+
+		double topPower = topMotor.get();
+		double bottomPower = bottomMotor.get();
+		
+		topFlywheelSim.setInputVoltage(topPower * voltage);
+		bottomFlywheelSim.setInputVoltage(bottomPower * voltage);
+
+		topFlywheelSim.update(0.020);
+		bottomFlywheelSim.update(0.020);
+
+		topMotorSpeedSim += topFlywheelSim.getAngularVelocityRPM();
+		bottomMotorSpeedSim += bottomFlywheelSim.getAngularVelocityRPM();
+	}
 
 	/**
 	* Converts an RPM to a speed at the surface of the shooter wheels.
@@ -84,9 +125,8 @@ public class Shooter extends SubsystemBase {
 	*
 	* @param speedTop    the speed tho top motor will spin to in RPM
 	* @param speedBottom the speed the bottom motor will spin to in RPM
-	* @see               setTargetRPM
 	*/
-	public void setBothTargetRPMs(double speedTop, double speedBottom) {
+	public void setTargetRPM(double speedTop, double speedBottom) {
 		topPID.setSetpoint(speedTop);
 		bottomPID.setSetpoint(speedBottom);
 	}
@@ -95,11 +135,10 @@ public class Shooter extends SubsystemBase {
 	* Sets the RPM both shooter motors try to spin up to.
 	*
 	* @param speed speed to spin to in RPM
-	* @see         setBothTargetRPMs
 	* @see         setTargetVelocity
 	*/
     public void setTargetRPM(double speed) {
-        setBothTargetRPMs(speed * 0.5, speed);
+        setTargetRPM(speed * 0.5, speed);
     }
 
 	/**
@@ -123,7 +162,7 @@ public class Shooter extends SubsystemBase {
     }
 
 	/**
-	* Gets the RPM of the top motor via the encoder's getVelocity method.
+	* Gets the RPM of the top motor, checking whether this is a simulation.
 	*
 	* @return the top motor's RPM
 	* @see    getBottomMotorRPM
@@ -131,11 +170,15 @@ public class Shooter extends SubsystemBase {
 	* @see    atSetpoint
 	*/
 	public double getTopMotorRPM() {
-		return topMotorEncoder.getVelocity();
+		if (RobotBase.isSimulation()) {
+			return topMotorEncoder.getVelocity();
+		} else {
+			return topMotorSpeedSim;
+		}
 	}
 
 	/**
-	* Gets the RPM of the bottom motor via the encoder's getVelocity method.
+	* Gets the RPM of the bottom motor, checking whether this is a simulation.
 	*
 	* @return the bottom motor's RPM
 	* @see    getTopMotorRPM
@@ -143,7 +186,11 @@ public class Shooter extends SubsystemBase {
 	* @see    atSetpoint
 	*/
 	public double getBottomMotorRPM() {
-		return bottomMotorEncoder.getVelocity();
+		if (RobotBase.isSimulation()) {
+			return bottomMotorEncoder.getVelocity();
+		} else {
+			return bottomMotorSpeedSim;
+		}
 	}
 
 	/**
