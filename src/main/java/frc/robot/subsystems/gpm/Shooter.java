@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ShooterConstants;
+import frc.robot.util.ConversionUtils;
 
 public class Shooter extends SubsystemBase {
     private final CANSparkFlex bottomMotor = new CANSparkFlex(ShooterConstants.BOTTOM_MOTOR_ID, MotorType.kBrushless);
@@ -35,24 +36,75 @@ public class Shooter extends SubsystemBase {
         topMotor.set(topPID.calculate(topSpeed) + feedforward.calculate(topPID.getSetpoint()));
         bottomMotor.set(bottomPID.calculate(bottomSpeed) + feedforward.calculate(bottomPID.getSetpoint()));
 
-        // TODO: Maybe add a method in ConversionUtils to convert from RPM to m/s and etc
-        SmartDashboard.putNumber("top speed",topSpeed/60*4*3.14*2.54/100);
-        SmartDashboard.putNumber("bottom speed",bottomSpeed/60*4*3.14*2.54/100);
+        SmartDashboard.putNumber("top speed", ConversionUtils.shooterRPMToSpeed(topSpeed));
+        SmartDashboard.putNumber("bottom speed", ConversionUtils.shooterRPMToSpeed(bottomSpeed));
         SmartDashboard.putBoolean("at setpoint?", atSetpoint());
-        System.out.println(topSpeed/60*4*3.14*2.54/100+","+bottomSpeed/60*4*3.14*2.54/100);
+        System.out.println(ConversionUtils.shooterRPMToSpeed(topSpeed) + "," + ConversionUtils.shooterRPMToSpeed(bottomSpeed));
     }
 
+	/**
+	* Sets the speed both shooter motors try to spin up to independantly.
+	*
+	* @param speedTop    the speed tho top motor will spin to in RPM
+	* @param speedBottom the speed the bottom motor will spin to in RPM
+	* @see               setTargetRPM
+	*/
+	public void setBothTargetRPMs(double speedTop, double speedBottom) {
+		topPID.setSetpoint(speedTop);
+		bottomPID.setSetpoint(speedBottom);
+	}
+
+	/**
+	* Sets the RPM both shooter motors try to spin up to.
+	*
+	* @param speed speed to spin to in RPM
+	* @see         setBothTargetRPMs
+	* @see         setTargetVelocity
+	*/
     public void setTargetRPM(double speed) {
-        topPID.setSetpoint(speed*.5);
-        bottomPID.setSetpoint(speed);
+        setBothTargetRPMs(speed * 0.5, speed);
     }
 
+	/**
+	* Set the target velocity of a note exiting the shooter.
+	*
+	* @param speed speed to spin to in m/s
+	* @see         setTargetRPM
+	*/
     public void setTargetVelocity(double speed) {
         // convert speed to RPM
-        setTargetRPM(speed*60*100/(4*3.14*2.54));
+        setTargetRPM(ConversionUtils.shooterSpeedToRPM(speed));
     }
 
+	/**
+	* Checks whether both motor PIDs are at their setpoints.
+	*
+	* @return boolean indicating whether both PIDs are at their setpoints
+	*/
     public boolean atSetpoint() {
         return topPID.atSetpoint() && bottomPID.atSetpoint();
     }
+
+	/**
+	* Gets the RPMs of both motors.
+	*
+	* @return a list containing [top motor RPM, bottom motor RPM]
+	* @see    getMotorVelocities
+	* @see    atSetpoint
+	*/
+	public double[] getMotorRPMs() {
+		return new double[] {topMotorEncoder.getVelocity(), bottomMotorEncoder.getVelocity()};
+	}
+
+	/**
+	* Gets the velocities of both motors.
+	*
+	* @return an array containing [top motor velocity, bottom motor velocity]
+	* @see    getMotorRPMs
+	* @see    atSetpoint
+	*/
+	public double[] getMotorVelocities() {
+		double[] rpms = getMotorRPMs();
+		return new double[] {ConversionUtils.shooterRPMToSpeed(rpms[0]), ConversionUtils.shooterRPMToSpeed(rpms[1])};
+	}
 }

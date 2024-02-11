@@ -5,7 +5,31 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.constants.Constants;
 
+import java.lang.Math;
+
 public class ConversionUtils {
+
+	/**
+	* Converts an RPM to a speed at the surface of the shooter wheels.
+	*
+	* @param  rpm the RPM to convert
+	* @return     the converted value in m/s
+	* @see        convertSpeedToShooterRPM
+	*/
+	public static double shooterRPMToSpeed(double rpm) {
+			return (rpm / 60) * (4 * Math.PI * 0.0254);
+	}
+
+	/**
+	* Converts a speed at the surface of the shooter wheels to an RPM value.
+	*
+	* @param  speed the speed to convert in m/s
+	* @return       the converted value in RPM
+	* @see          convertShooterRPMToSpeed
+	*/
+	public static double shooterSpeedToRPM(double speed) {
+			return (speed * 60) / (4 * Math.PI * 0.0254);
+	}
 
     /**
      * @param positionCounts CANCoder Position Counts
