@@ -87,6 +87,7 @@ public class Shooter extends SubsystemBase {
 		double voltage = 12.0;
 
 		double topPower = topMotor.get();
+		SmartDashboard.putNumber("top power", topPower);
 		double bottomPower = bottomMotor.get();
 		
 		topFlywheelSim.setInputVoltage(topPower * voltage);
@@ -95,8 +96,8 @@ public class Shooter extends SubsystemBase {
 		topFlywheelSim.update(0.020);
 		bottomFlywheelSim.update(0.020);
 
-		topMotorSpeedSim += topFlywheelSim.getAngularVelocityRPM();
-		bottomMotorSpeedSim += bottomFlywheelSim.getAngularVelocityRPM();
+		topMotorSpeedSim = topFlywheelSim.getAngularVelocityRPM();
+		bottomMotorSpeedSim = bottomFlywheelSim.getAngularVelocityRPM();
 	}
 
 	/**
