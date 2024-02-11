@@ -13,57 +13,36 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase {
-    // constants for Pids
-    private static final double TOP_P = 0.00005;
-    private static final double TOP_I = 0;
-    private static final double TOP_D = 0;
-
-    private static final double S = 0;
-    private static final double V = 1.0/6000;
-
-    private static final double BOTTOM_P = 0.00005;
-    private static final double BOTTOM_I = 0;
-    private static final double BOTTOM_D = 0;
-
-    /**
-     * In RPM
-     */
-    private static final double TOLERANCE = 10;
-
-	private static final double massColson = 0.245;
-	private static final double radiusColson = 2.0 * 0.0254;
-	private static final double moiColson = 0.5 * massColson * radiusColson * radiusColson;
-	private static final double moiShaft = moiColson * 4;
 
     private final CANSparkFlex topMotor = new CANSparkFlex(ShooterConstants.TOP_MOTOR_ID, MotorType.kBrushless);
     private final RelativeEncoder topMotorEncoder = topMotor.getEncoder();
-    private final PIDController topPID = new PIDController(TOP_P, TOP_I, TOP_D);
+    private final PIDController topPID = new PIDController(ShooterConstants.TOP_P, ShooterConstants.TOP_I, ShooterConstants.TOP_D);
 	private FlywheelSim topFlywheelSim;
 	private double topMotorSpeedSim;
 
     private final CANSparkFlex bottomMotor = new CANSparkFlex(ShooterConstants.BOTTOM_MOTOR_ID, MotorType.kBrushless);
     private final RelativeEncoder bottomMotorEncoder = bottomMotor.getEncoder();
-    private final PIDController bottomPID = new PIDController(BOTTOM_P, BOTTOM_I, BOTTOM_D);
+    private final PIDController bottomPID = new PIDController(ShooterConstants.BOTTOM_P, ShooterConstants.BOTTOM_I, ShooterConstants.BOTTOM_D);
 	private FlywheelSim bottomFlywheelSim;
 	private double bottomMotorSpeedSim;
 
     // TODO: TUNE THIS
-    private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(S, V);
+    private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(ShooterConstants.S, ShooterConstants.V);
 
     public Shooter() {
-        topPID.setTolerance(TOLERANCE);
-        bottomPID.setTolerance(TOLERANCE);
+        topPID.setTolerance(ShooterConstants.TOLERANCE);
+        bottomPID.setTolerance(ShooterConstants.TOLERANCE);
         bottomMotor.setInverted(true);
 
 		if (RobotBase.isSimulation()) {
 			topFlywheelSim = new FlywheelSim(
 				DCMotor.getNeoVortex(1),
 				1.0,
-				moiShaft);
+					ShooterConstants.moiShaft);
 			bottomFlywheelSim = new FlywheelSim(
 				DCMotor.getNeoVortex(1),
 				1.0,
-				moiShaft);
+					ShooterConstants.moiShaft);
 		}
     }
 
