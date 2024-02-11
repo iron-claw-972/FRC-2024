@@ -1,7 +1,7 @@
 package frc.robot.commands.gpm;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.gpm_subsystem.Pivot;
+import frc.robot.subsystems.gpm.Pivot;
 
 public class PositionPivot extends CommandBase {
 

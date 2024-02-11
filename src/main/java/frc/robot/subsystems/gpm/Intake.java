@@ -1,4 +1,4 @@
-package frc.robot.subsystems.gpm_subsystem;
+package frc.robot.subsystems.gpm;
 
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel;
