@@ -4,11 +4,13 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.GoToPose;
 import frc.robot.commands.drive_comm.SetFormationX;
 import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.gpm_subsystem.Intake;
 import frc.robot.util.MathUtils;
 import lib.controllers.GameController;
 import lib.controllers.GameController.Axis;
@@ -19,7 +21,6 @@ import lib.controllers.GameController.Button;
  */
 public class GameControllerDriverConfig extends BaseDriverConfig {  
   private final GameController kDriver = new GameController(Constants.DRIVER_JOY);
-  
   public GameControllerDriverConfig(Drivetrain drive) {
     super(drive);
   }
@@ -49,8 +50,13 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
       DriverStation.getAlliance().get() == Alliance.Blue ? VisionConstants.BLUE_PODIUM_POSE : VisionConstants.RED_PODIUM_POSE,
       getDrivetrain()
     ));
-  }
+        getIsRightTrigger().onTrue(new InstantCommand(()->Intake.setMotorPower()));
 
+  }
+    
+  public Trigger getIsRightTrigger(){
+      return new Trigger(kDriver.RIGHT_TRIGGER_BUTTON);
+    }
   @Override
   public double getRawForwardTranslation() {
       return kDriver.get(Axis.LEFT_Y);
