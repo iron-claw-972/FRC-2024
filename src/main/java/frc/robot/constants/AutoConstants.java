@@ -14,8 +14,8 @@ public class AutoConstants {
     // Pathplanner output folder should be src/main/deploy/pathplanner
     public static final String TRAJECTORY_DIRECTORY = "pathplanner/paths/";
 
-    public static final double MAX_AUTO_SPEED = 4.3; // m/s
-    public static final double MAX_AUTO_ACCEL = 2.1; // m/s^2
+    public static final double MAX_AUTO_SPEED = 5.0; // m/s
+    public static final double MAX_AUTO_ACCEL = 3.5; // m/s^2
 
     public static final PIDConstants translationConstants = new PIDConstants(0,0,0);
     public static final PIDConstants rotationConstants = new PIDConstants(4,0,0);
