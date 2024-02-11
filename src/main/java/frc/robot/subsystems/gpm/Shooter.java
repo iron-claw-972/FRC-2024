@@ -78,7 +78,8 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("top speed", shooterRPMToSpeed(topSpeed));
         SmartDashboard.putNumber("bottom speed", shooterRPMToSpeed(bottomSpeed));
         SmartDashboard.putBoolean("at setpoint?", atSetpoint());
-        System.out.println(shooterRPMToSpeed(topSpeed) + "," + shooterRPMToSpeed(bottomSpeed));
+		// do not print stuff out; look on the SmartDashboard
+        // System.out.println(ConversionUtils.shooterRPMToSpeed(topSpeed) + "," + ConversionUtils.shooterRPMToSpeed(bottomSpeed));
     }
 
 	@Override
