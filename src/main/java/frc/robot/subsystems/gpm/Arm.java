@@ -4,7 +4,13 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.simulation.BatterySim;
+import edu.wpi.first.wpilibj.simulation.DutyCycleEncoderSim;
+import edu.wpi.first.wpilibj.simulation.RoboRioSim;
+import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ArmConstants;
 
@@ -16,6 +22,10 @@ public class Arm extends SubsystemBase {
     private final PIDController pid = new PIDController(ArmConstants.P, ArmConstants.I, ArmConstants.D);
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(ArmConstants.S, ArmConstants.V);
 
+    private DCMotor motorModel;
+    private SingleJointedArmSim simulation;
+    private DutyCycleEncoderSim encoderSim;
+
     public Arm() {
         pid.setTolerance(ArmConstants.TOLERANCE);
         encoder.setDistancePerRotation(ArmConstants.DISTANCE_PER_ROTATION);
@@ -25,6 +35,20 @@ public class Arm extends SubsystemBase {
             slaves[i] = new TalonFX(ArmConstants.SLAVE_IDS[i]);
             slaves[i].setControl(new Follower(motor.getDeviceID(), false));
         }
+
+        if (RobotBase.isSimulation()) {
+            motorModel = DCMotor.getFalcon500(4);
+            simulation = new SingleJointedArmSim(motorModel,
+                    ArmConstants.GEARING,
+                    ArmConstants.MOMENT_OF_INERTIA,
+                    ArmConstants.ARM_LENGTH,
+                    ArmConstants.MIN_ANGLE_RADS,
+                    ArmConstants.MAX_ANGLE_RADS,
+                    true,
+                    ArmConstants.START_ANGLE_RADS
+            );
+            encoderSim = new DutyCycleEncoderSim(encoder);
+        }
     }
 
     @Override
@@ -32,6 +56,16 @@ public class Arm extends SubsystemBase {
         // TODO: To be honest i forgot what should go in the place where the encoder.get() call is,
         // so I just put encoder.get() there for now - Tyrus
         motor.set(pid.calculate(encoder.get()) + feedforward.calculate(pid.getSetpoint()));
+    }
+
+    @Override
+    public void simulationPeriodic() {
+        simulation.setInputVoltage(motor.getSimState().getMotorVoltage());
+        simulation.update(0.02);
+
+        encoderSim.setDistance(simulation.getAngleRads());
+        RoboRioSim.setVInVoltage(
+                BatterySim.calculateDefaultBatteryLoadedVoltage(simulation.getCurrentDrawAmps()));
     }
 
     /**
