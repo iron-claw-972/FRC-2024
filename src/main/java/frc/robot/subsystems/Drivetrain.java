@@ -6,7 +6,9 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -340,11 +342,54 @@ public class Drivetrain extends SubsystemBase {
      * @return The angle in radians
      */
     public double getAlignAngle(){
+        /*
         Pose2d pose = getPose();
         return Math.PI + (DriverStation.getAlliance().get() == Alliance.Blue ?
             Math.atan2(VisionConstants.BLUE_SPEAKER_POSE.getY() - pose.getY(), VisionConstants.BLUE_SPEAKER_POSE.getX() - pose.getX()) :
             Math.atan2(VisionConstants.RED_SPEAKER_POSE.getY() - pose.getY(), VisionConstants.RED_SPEAKER_POSE.getX() - pose.getX()));
-    }
+        */
+        // ported from shoot command. it doesn't exist on this pull request
+        // TODO: make a public static double in shoot command that gives theta_h, rather than repeating this code
+        // TODO: find actual shooter height (m)
+        final double SHOOTER_HEIGHT = 0;
+
+        // Set displacement to speaker
+        Pose3d speakerPose = DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
+                Pose3d displacement = new Pose3d(
+                        getPose().getX(),
+                        getPose().getY(),
+                        SHOOTER_HEIGHT,
+                        new Rotation3d(
+                                0,
+                                // TODO: taking this out should be fine, right? arm.getAngle(),
+                                0,
+                                getPose().getRotation().getRadians()))
+                        .relativeTo(speakerPose);
+
+                // Set the drivetrain velocities
+                double v_ry = getChassisSpeeds().vyMetersPerSecond;
+
+                // TODO: Figure out what v_note is empirically
+                final double v_note = 10;
+
+                // X distance to speaker
+                double x = Math.sqrt((displacement.getX() * displacement.getX())
+                        + displacement.getY() * displacement.getY());
+                // Y distance to speaker (negative intended)
+                double y = -displacement.getZ();
+
+                // Basic vertical angle calculation (static robot)
+                double phi_v = Math.atan(Math.pow(v_note, 2) / 9.8 / x * (1 - Math.sqrt(1
+                        + 19.6 / Math.pow(v_note, 2) * (SHOOTER_HEIGHT - 4.9 * x * x / Math.pow(v_note, 2)))));
+                // Angle to goal
+                // TODO: Should we use the align angle method from the drivetrain?
+                // double phi_h = drivetrain.getAlignAngle();
+                double phi_h = Math.asin(y / x);
+
+                // Random variable to hold recurring code
+                double a = v_note * Math.cos(phi_v) * Math.sin(phi_h);
+                return /*theta_v is */ 1 / Math.atan((a + v_ry) / (v_note * Math.sin(phi_v) * Math.cos(phi_h)));
+        }
 
     /**
      * Resets the swerve modules from the absolute encoders
