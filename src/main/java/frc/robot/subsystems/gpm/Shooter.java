@@ -15,21 +15,18 @@ import frc.robot.constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase {
     // constants for Pids
-    private static final double TOP_P = 0.00005;
-    private static final double TOP_I = 0;
-    private static final double TOP_D = 0;
+    private static final double P = 0.00005;
+    private static final double I = 0.0;
+    private static final double D = 0.0;
 
     private static final double S = 0;
     private static final double V = 1.0/6000;
 
-    private static final double BOTTOM_P = 0.00005;
-    private static final double BOTTOM_I = 0;
-    private static final double BOTTOM_D = 0;
-
     /**
-     * In RPM
+     * Tolerance in RPM.
+	 * Set to 200 now so the simulator will report at the setpoint.
      */
-    private static final double TOLERANCE = 10;
+    private static final double TOLERANCE = 200;
 
 	// 4-inch Colson wheels
 	private static final double massColson = 0.245;
@@ -41,7 +38,7 @@ public class Shooter extends SubsystemBase {
 	// top motor
     private final CANSparkFlex topMotor = new CANSparkFlex(ShooterConstants.TOP_MOTOR_ID, MotorType.kBrushless);
     private final RelativeEncoder topMotorEncoder = topMotor.getEncoder();
-    private final PIDController topPID = new PIDController(TOP_P, TOP_I, TOP_D);
+    private final PIDController topPID = new PIDController(P, I, D);
 	private FlywheelSim topFlywheelSim;
 	private double topMotorSpeedSim;
 	private double topPower = 0.0;
@@ -49,7 +46,7 @@ public class Shooter extends SubsystemBase {
 	// bottom motor
     private final CANSparkFlex bottomMotor = new CANSparkFlex(ShooterConstants.BOTTOM_MOTOR_ID, MotorType.kBrushless);
     private final RelativeEncoder bottomMotorEncoder = bottomMotor.getEncoder();
-    private final PIDController bottomPID = new PIDController(BOTTOM_P, BOTTOM_I, BOTTOM_D);
+    private final PIDController bottomPID = new PIDController(P, I, D);
 	private FlywheelSim bottomFlywheelSim;
 	private double bottomMotorSpeedSim;
 	private double bottomPower = 0.0;
@@ -58,20 +55,14 @@ public class Shooter extends SubsystemBase {
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(S, V);
 
     public Shooter() {
-        topPID.setTolerance(ShooterConstants.TOLERANCE);
-        bottomPID.setTolerance(ShooterConstants.TOLERANCE);
+        topPID.setTolerance(TOLERANCE);
+        bottomPID.setTolerance(TOLERANCE);
         bottomMotor.setInverted(true);
 
 		// are we simulating?
 		if (RobotBase.isSimulation()) {
-			topFlywheelSim = new FlywheelSim(
-				DCMotor.getNeoVortex(1),
-				1.0,
-					ShooterConstants.moiShaft);
-			bottomFlywheelSim = new FlywheelSim(
-				DCMotor.getNeoVortex(1),
-				1.0,
-					ShooterConstants.moiShaft);
+			topFlywheelSim = new FlywheelSim(DCMotor.getNeoVortex(1),	1.0, moiShaft);
+			bottomFlywheelSim = new FlywheelSim(DCMotor.getNeoVortex(1), 1.0, moiShaft);
 		}
     }
 
@@ -87,8 +78,8 @@ public class Shooter extends SubsystemBase {
         topMotor.set(topPower);
         bottomMotor.set(bottomPower);
 
-        SmartDashboard.putNumber("top speed", shooterRPMToSpeed(topSpeed));
-        SmartDashboard.putNumber("bottom speed", shooterRPMToSpeed(bottomSpeed));
+        SmartDashboard.putNumber("top speed", /* shooterRPMToSpeed */ (topSpeed));
+        SmartDashboard.putNumber("bottom speed", /* shooterRPMToSpeed */ (bottomSpeed));
         SmartDashboard.putBoolean("at setpoint?", atSetpoint());
     }
 
@@ -96,8 +87,8 @@ public class Shooter extends SubsystemBase {
 	public void simulationPeriodic() {
 		double voltage = 12.0;
 
+		// topPower and bottomPower are now member variables; cannot read them from simulated encoder
 		// double topPower = topMotor.get();
-		SmartDashboard.putNumber("top power", topPower);
 		// double bottomPower = bottomMotor.get();
 		
 		// set the system inputs
@@ -153,7 +144,7 @@ public class Shooter extends SubsystemBase {
 	* @see         setTargetVelocity
 	*/
     public void setTargetRPM(double speed) {
-        setTargetRPM(speed * 0.5, speed);
+        setTargetRPM(speed, speed);
     }
 
 	/**
