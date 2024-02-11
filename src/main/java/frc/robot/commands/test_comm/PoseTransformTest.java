@@ -6,14 +6,14 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.TestConstants;
 import frc.robot.subsystems.Drivetrain;
 
 /**
  * Tests the odometry of the robot by driving a certain distance and calculating the error.
  */
-public class PoseTransformTest extends CommandBase {
+public class PoseTransformTest extends Command {
 
     private final Drivetrain drive;
 

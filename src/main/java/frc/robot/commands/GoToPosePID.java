@@ -3,14 +3,14 @@ package frc.robot.commands;
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
 
 /**
  * Runs the chassis PIDs to move the robot to a specific pose. 
  */
-public class GoToPosePID extends CommandBase {
+public class GoToPosePID extends Command {
 
   private Drivetrain drive; 
   

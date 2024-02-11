@@ -1,6 +1,7 @@
 package frc.robot.constants.swerve;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -62,22 +63,22 @@ public class DriveConstants {
    public static int kDriveFrontLeft = 1;
     public static int kSteerFrontLeft = 2;
     public static int kEncoderFrontLeft = 3;
-    public static double kSteerOffsetFrontLeft = 4.972265625;//0.058291152119637;//-3.060285486280918+Math.PI;
+    public static double kSteerOffsetFrontLeft = 4.185;//0.058291152119637;//-3.060285486280918+Math.PI;
 
     public static int kDriveFrontRight = 10;
     public static int kSteerFrontRight = 11;
     public static int kEncoderFrontRight = 12;
-    public static double kSteerOffsetFrontRight = 189.353906250000023;//-2.994324445724487;//-3.001994334161282;
+    public static double kSteerOffsetFrontRight = 101.519+90;//-2.994324445724487;//-3.001994334161282;
 
     public static int kDriveBackLeft = 7;
     public static int kSteerBackLeft = 8;
     public static int kEncoderBackLeft = 9;
-    public static double kSteerOffsetBackLeft = 215.87343750000002;//-2.540267050266266;//0.650406539440155+Math.PI;
+    public static double kSteerOffsetBackLeft = 38.997+180;//-2.540267050266266;//0.650406539440155+Math.PI;
 
     public static int kDriveBackRight = 4;
     public static int kSteerBackRight = 5;
     public static int kEncoderBackRight = 6;
-    public static double kSteerOffsetBackRight = 151.65117187500002;//2.626169800758362;//2.771897681057453;
+    public static double kSteerOffsetBackRight = 242.847-90;//2.626169800758362;//2.771897681057453;
 
     // heading PID
     public static double kHeadingP = 4.6;
@@ -119,8 +120,8 @@ public class DriveConstants {
     public static final boolean kAngleMotorInvert = kModuleConstants.angleMotorInvert;
 
     /* Neutral Modes */
-    public static final NeutralMode kDriveNeutralMode = NeutralMode.Brake;
-    public static final NeutralMode kAngleNeutralMode = NeutralMode.Brake;
+    public static final NeutralModeValue kDriveNeutralMode = NeutralModeValue.Brake;
+    public static final NeutralModeValue kAngleNeutralMode = NeutralModeValue.Brake;
 
     /* Drive Motor PID Values */
     public static final double kDriveP = 0.05;
@@ -153,26 +154,19 @@ public class DriveConstants {
           kTrackWidth = Units.inchesToMeters(22.75); //22.75 swerve bot, 20.75 comp bot
 
             kPigeon = 13;
+        
+            kSteerOffsetFrontLeft = -448.91;
 
-            kDriveFrontLeft = 1;
-            kSteerFrontLeft = 2;
-            kEncoderFrontLeft = 3;
-            kSteerOffsetFrontLeft = 271.367;
+            kSteerOffsetFrontRight = 112.473;
+            // kSteerOffsetFrontRight = 10.957+90;
 
-            kDriveFrontRight = 10;
-            kSteerFrontRight = 11;
-            kEncoderFrontRight = 12;
-            kSteerOffsetFrontRight = 292.972-180;
+            kSteerOffsetBackLeft = 180;
+            // [new one] kSteerOffsetBackLeft = 339.689;
 
-            kDriveBackLeft = 7;
-            kSteerBackLeft = 8;
-            kEncoderBackLeft = 9;
-            kSteerOffsetBackLeft = 179.033;
+            kSteerOffsetBackRight = 333.241;
 
-            kDriveBackRight = 4;
-            kSteerBackRight = 5;
-            kEncoderBackRight = 6;
-            kSteerOffsetBackRight = 154.809+180;
+            // CAN
+            kDriveMotorCAN = Constants.CANIVORE_CAN;
         }
     }
 }
