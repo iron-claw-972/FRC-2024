@@ -13,7 +13,7 @@ import frc.robot.subsystems.gpm.Arm;
 public class Shoot extends Command {
 
         private static final Pose3d SPEAKER_POSE = new Pose3d(0, 0, 2.055, new Rotation3d());
-        private static final double SHOOTER_HEIGHT = 0;
+        private static final double HEIGHT_DIFF = 0; // shooter height - speaker height
 
         private final Shooter shooter;
         private final Arm arm;
@@ -41,7 +41,7 @@ public class Shoot extends Command {
                 displacement = new Pose3d(
                         drivetrain.getPose().getX(),
                         drivetrain.getPose().getY(),
-                        SHOOTER_HEIGHT,
+                        HEIGHT_DIFF,
                         new Rotation3d(
                                 0,
                                 arm.getAngle(),
@@ -63,7 +63,7 @@ public class Shoot extends Command {
 
                 // Basic vertical angle calculation (static robot)
                 double phi_v = Math.atan(Math.pow(v_note, 2) / 9.8 / x * (1 - Math.sqrt(1
-                        + 19.6 / Math.pow(v_note, 2) * (SHOOTER_HEIGHT - 4.9 * x * x / Math.pow(v_note, 2)))));
+                        + 19.6 / Math.pow(v_note, 2) * (HEIGHT_DIFF - 4.9 * x * x / Math.pow(v_note, 2)))));
                 // Angle to goal
                 // TODO: Should we use the align angle method from the drivetrain?
                 // double phi_h = drivetrain.getAlignAngle();
