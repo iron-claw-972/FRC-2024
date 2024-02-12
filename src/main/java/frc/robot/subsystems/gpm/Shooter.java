@@ -3,22 +3,24 @@ package frc.robot.subsystems.gpm;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.simulation.FlywheelSim;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase {
-    // constants for Pids
+    // PID constants
     private static final double P = 0.00005;
     private static final double I = 0.0;
     private static final double D = 0.0;
 
+	// FeedForward constants
     private static final double S = 0;
     private static final double V = 1.0/6000;
 
@@ -29,11 +31,11 @@ public class Shooter extends SubsystemBase {
     private static final double TOLERANCE = 200;
 
 	// 4-inch Colson wheels
-	private static final double massColson = 0.245;
-	private static final double radiusColson = Units.inchesToMeters(2.0);
-	private static final double moiColson = 0.5 * massColson * radiusColson * radiusColson;
+	private static final double MASS_COLSON = 0.245;
+	private static final double RADIUS_COLSON = Units.inchesToMeters(2.0);
+	private static final double MOI_COLSON = 0.5 * MASS_COLSON * RADIUS_COLSON * RADIUS_COLSON;
 	// each motor spins 4 Colson wheels
-	private static final double moiShaft = moiColson * 4;
+	private static final double MOI_SHAFT = MOI_COLSON * 4;
 
 	// top motor
     private final CANSparkFlex topMotor = new CANSparkFlex(ShooterConstants.TOP_MOTOR_ID, MotorType.kBrushless);
@@ -50,10 +52,10 @@ public class Shooter extends SubsystemBase {
 	private FlywheelSim bottomFlywheelSim;
 	private double bottomMotorSpeedSim;
 	private double bottomPower = 0.0;
-
+	
     // TODO: TUNE THIS
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(S, V);
-
+	
     public Shooter() {
         topPID.setTolerance(TOLERANCE);
         bottomPID.setTolerance(TOLERANCE);
@@ -61,8 +63,8 @@ public class Shooter extends SubsystemBase {
 
 		// are we simulating?
 		if (RobotBase.isSimulation()) {
-			topFlywheelSim = new FlywheelSim(DCMotor.getNeoVortex(1),	1.0, moiShaft);
-			bottomFlywheelSim = new FlywheelSim(DCMotor.getNeoVortex(1), 1.0, moiShaft);
+			topFlywheelSim = new FlywheelSim(DCMotor.getNeoVortex(1),	1.0, MOI_SHAFT);
+			bottomFlywheelSim = new FlywheelSim(DCMotor.getNeoVortex(1), 1.0, MOI_SHAFT);
 		}
     }
 
@@ -75,8 +77,12 @@ public class Shooter extends SubsystemBase {
 		// TODO: having problems: a set and get do not match, so keep powers around for simulation
 		topPower = topPID.calculate(topSpeed) + feedforward.calculate(topPID.getSetpoint());
 		bottomPower = bottomPID.calculate(bottomSpeed) + feedforward.calculate(bottomPID.getSetpoint());
-        topMotor.set(topPower);
-        bottomMotor.set(bottomPower);
+
+		// Spin the motors if it is not a simulation
+		if(RobotBase.isReal()){
+        	topMotor.set(topPower);
+        	bottomMotor.set(bottomPower);
+		}
 
         SmartDashboard.putNumber("top speed", /* shooterRPMToSpeed */ (topSpeed));
         SmartDashboard.putNumber("bottom speed", /* shooterRPMToSpeed */ (bottomSpeed));
@@ -112,7 +118,7 @@ public class Shooter extends SubsystemBase {
 	* @see        shooterSpeedToRPM
 	*/
 	public static double shooterRPMToSpeed(double rpm) {
-			return (rpm / 60) * (4 * Math.PI * 0.0254);
+			return (rpm / 60) * (RADIUS_COLSON * 2 * Math.PI);
 	}
 
 	/**
@@ -123,7 +129,7 @@ public class Shooter extends SubsystemBase {
 	* @see          shooterRPMToSpeed
 	*/
 	public static double shooterSpeedToRPM(double speed) {
-			return (speed * 60) / (4 * Math.PI * 0.0254);
+			return (speed * 60) / (RADIUS_COLSON * 2 * Math.PI);
 	}
 
 	/**
