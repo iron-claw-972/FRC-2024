@@ -3,7 +3,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.subsystems.Drivetrain;
@@ -34,7 +33,6 @@ public class DefaultDriveCommand extends Command {
 
         double forwardTranslation = driver.getForwardTranslation();
         double sideTranslation = driver.getSideTranslation();
-        // Negative because counterclockwise is positive for the robot and right is positive on the controller
         double rotation = -driver.getRotation();
 
         double slowFactor = driver.getIsSlowMode() ? DriveConstants.kSlowDriveFactor : 1;
@@ -52,19 +50,17 @@ public class DefaultDriveCommand extends Command {
             swerve.driveHeading(
                     forwardTranslation,
                     sideTranslation,
-                    DriverStation.getAlliance().get() == Alliance.Blue ?
-                        Math.atan2(VisionConstants.BLUE_SPEAKER_POSE.getY() - swerve.getPose().getY(), VisionConstants.BLUE_SPEAKER_POSE.getX() - swerve.getPose().getX()) :
-                        Math.atan2(VisionConstants.RED_SPEAKER_POSE.getY() - swerve.getPose().getY(), VisionConstants.RED_SPEAKER_POSE.getX() - swerve.getPose().getX()),
+                    swerve.getAlignAngle(),
                     true
                 );
         } else {
             swerve.drive(
-                    forwardTranslation,
-                    sideTranslation,
-                    rotation,
-                    true,
-                    false
-                        );
+                forwardTranslation,
+                sideTranslation,
+                rotation,
+                true,
+                false
+            );
         }
     }
 }
