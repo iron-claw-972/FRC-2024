@@ -25,6 +25,9 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     super(drive);
   }
 
+  public Trigger getIsRightTrigger(){
+      return new Trigger(kDriver.RIGHT_TRIGGER_BUTTON);
+    }
   @Override
   public void configureControls() {
     // Reset yaw to be away from driver
@@ -54,9 +57,6 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
 
   }
     
-  public Trigger getIsRightTrigger(){
-      return new Trigger(kDriver.RIGHT_TRIGGER_BUTTON);
-    }
   @Override
   public double getRawForwardTranslation() {
       return kDriver.get(Axis.LEFT_Y);
