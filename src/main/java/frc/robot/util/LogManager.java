@@ -57,17 +57,6 @@ public class LogManager {
   }
 
   /**
-   * @deprecated Use {@link #addDouble(String, double)} with a single value instead.
-   */
-  @Deprecated
-  public static void addDouble(String name, DoubleSupplier logged) {
-    DoubleLogEntry myDoubleLog = new DoubleLogEntry(log, name);
-    doubleLogs.add(myDoubleLog);
-    doubleValues.add(logged);
-    
-  }
-
-  /**
    * Logs a single double value to the log. Do not use with the other addDouble() that takes a double supplier.
    * This will only log the value once, so it should be called periodically or when needed. If you have a function that consistently 
    * returns values, it may be easier to use the double supplier log.
@@ -84,16 +73,7 @@ public class LogManager {
     }
   }
 
-  /**
-   * @deprecated Use {@link #addDoubleArray(String, double[])} with a single value instead.
-   */
-  @Deprecated
-  public static void addDoubleArray(String name, DoubleSupplier[] logged) {
-    DoubleArrayLogEntry myDoubleLog = new DoubleArrayLogEntry(log, name);
-    doubleArrayLogs.add(myDoubleLog);
-    doubleArrayValues.add(logged);
-    
-  }
+
 
   /**
    * Logs a single double array to the log. Do not use with the other addDoubleArray() that takes a double array supplier.
@@ -112,15 +92,6 @@ public class LogManager {
     }
   }
 
-  /**
-   * @deprecated Use {@link #addInt(String, int)} with a single value instead.
-   */
-  @Deprecated
-  public static void addInt(String name, IntSupplier logged) {
-    IntegerLogEntry IntegerLog = new IntegerLogEntry(log, name);
-    intLogs.add(IntegerLog);
-    intValues.add(logged);
-  }
 
   /**
    * Logs a single int to the log. Do not use with the other addInt() that takes a int supplier.
@@ -139,15 +110,7 @@ public class LogManager {
     }
   }
 
-  /**
-   * @deprecated Use {@link #addBoolean(String, boolean)} with a single value instead.
-   */
-  @Deprecated
-  public static void addBoolean(String name, BooleanSupplier logged) {
-    BooleanLogEntry BooleanLog = new BooleanLogEntry(log, name);
-    booleanLogs.add(BooleanLog);
-    booleanValues.add(logged);
-  }
+
 
   /**
    * Logs a single boolean to the log. Do not use with the other addBoolean() that takes a boolean supplier.
@@ -179,6 +142,7 @@ public class LogManager {
         values[j] = doubleArrayValues.get(i)[j].getAsDouble();
       }
       doubleArrayLogs.get(i).append(values);
+      doubleLogs.get(i).append(doubleValues.get(i).getAsDouble());
     }
     for (int i = 0; i < intLogs.size(); i++) {
       intLogs.get(i).append(intValues.get(i).getAsInt());
