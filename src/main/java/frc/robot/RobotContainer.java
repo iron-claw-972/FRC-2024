@@ -5,13 +5,16 @@ import java.util.function.BooleanSupplier;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.constants.AutoConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
@@ -27,6 +30,7 @@ public class RobotContainer {
     // The robot's subsystems are defined here...
     private Drivetrain drive = null;
     private Vision vision = null;
+    private Shooter shooter = null;
 
     // Controllers are defined here
     private BaseDriverConfig driver = null;
@@ -43,6 +47,9 @@ public class RobotContainer {
       switch (robotId) {
 
       case TestBed1:
+        shooter = new Shooter();
+        SmartDashboard.putData("shoot", new InstantCommand(() -> shooter.setTargetRPM(1500)));
+        SmartDashboard.putData("shoot off", new InstantCommand(() -> shooter.setTargetRPM(0)));
         break;
 
       case TestBed2:
