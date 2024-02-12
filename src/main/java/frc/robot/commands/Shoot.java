@@ -17,7 +17,7 @@ public class Shoot extends Command {
 
         private final Shooter shooter;
         private final Arm arm;
-        private final Drivetrain drivetrain;
+        private final Drivetrain drive;
 
         private Pose3d displacement;
         private double v_rx;
@@ -26,31 +26,31 @@ public class Shoot extends Command {
         public Shoot(Shooter shooter, Arm arm, Drivetrain drivetrain) {
                 this.shooter = shooter;
                 this.arm = arm;
-                this.drivetrain = drivetrain;
+                this.drive = drivetrain;
                 addRequirements(shooter);
         }
 
         @Override
         public void initialize() {
-                drivetrain.setIsAlign(true);
+                drive.setIsAlign(true);
         }
 
         @Override
         public void execute() {
                 // Set displacement to speaker
                 displacement = new Pose3d(
-                        drivetrain.getPose().getX(),
-                        drivetrain.getPose().getY(),
+                        drive.getPose().getX(),
+                        drive.getPose().getY(),
                         SHOOTER_HEIGHT,
                         new Rotation3d(
                                 0,
                                 arm.getAngle(),
-                                drivetrain.getPose().getRotation().getRadians()))
+                                drive.getPose().getRotation().getRadians()))
                         .relativeTo(SPEAKER_POSE);
 
                 // Set the drivetrain velocities
-                v_rx = drivetrain.getChassisSpeeds().vxMetersPerSecond;
-                v_ry = drivetrain.getChassisSpeeds().vyMetersPerSecond;
+                v_rx = drive.getChassisSpeeds().vxMetersPerSecond;
+                v_ry = drive.getChassisSpeeds().vyMetersPerSecond;
 
                 // TODO: Figure out what v_note is empirically
                 double v_note = 10;
@@ -65,7 +65,6 @@ public class Shoot extends Command {
                 double phi_v = Math.atan(Math.pow(v_note, 2) / 9.8 / x * (1 - Math.sqrt(1
                         + 19.6 / Math.pow(v_note, 2) * (SHOOTER_HEIGHT - 4.9 * x * x / Math.pow(v_note, 2)))));
                 // Angle to goal
-                // TODO: Should we use the align angle method from the drivetrain?
                 // double phi_h = drivetrain.getAlignAngle();
                 double phi_h = Math.asin(y / x);
 
@@ -76,7 +75,7 @@ public class Shoot extends Command {
                 double v_shoot = v_note * Math.sin(phi_v) / Math.sin(theta_v);
 
                 arm.setAngle(theta_v);
-                drivetrain.driveHeading(v_rx, v_ry, theta_h, true);
+                drive.setAlignAngle(theta_h);
                 shooter.setTargetVelocity(v_shoot);
 
                 // Set the outtake velocity
@@ -95,6 +94,7 @@ public class Shoot extends Command {
         @Override
         public void end(boolean interrupted) {
                 shooter.setTargetVelocity(0);
-                drivetrain.setIsAlign(false);
+                drive.setIsAlign(false);
+                drive.setAlignAngle(null);
         }
 }
