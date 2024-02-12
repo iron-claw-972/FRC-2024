@@ -12,6 +12,7 @@ import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.gpm.Intake;
 import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
@@ -33,6 +34,8 @@ public class RobotContainer {
 
     ShuffleBoardManager shuffleboardManager = null;
 
+    private Intake intake;
+
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      * <p>
@@ -43,6 +46,7 @@ public class RobotContainer {
       switch (robotId) {
 
       case TestBed1:
+        intake = new Intake();
         break;
 
       case TestBed2:

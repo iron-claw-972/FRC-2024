@@ -4,7 +4,7 @@ public final class IntakeConstants {
 
     // motor port
     public static final int MOTOR_ID = 9;
-    public static final int SENSOR_ID = 0;
+    public static final int SENSOR_ID = 4;
 
     // intake speeds
     public static final double INTAKE_POWER = 0.8;
