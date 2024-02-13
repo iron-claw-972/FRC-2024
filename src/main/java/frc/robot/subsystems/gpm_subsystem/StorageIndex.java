@@ -22,6 +22,12 @@ public class StorageIndex extends SubsystemBase {
 
   private final CANSparkFlex m_indexmotor;
   DigitalInput m_indexBeamBreak;
+  
+  /**
+   * Indicates whether the indexer is in the process of running the motors to take in a note. Once the
+   * beambreak sensor detects a note inside, this boolean becomes false. 
+   */
+  private boolean isIndexing = false;
 
   /**
    * Constructs the StorageIndex subsystem, initializing the motor and beam break
@@ -35,6 +41,23 @@ public class StorageIndex extends SubsystemBase {
     m_indexmotor.setIdleMode(IdleMode.kBrake);
     // Additional setup, possibly related to CAN Frames, could be documented here.
   }
+
+  @Override
+  public void periodic() {
+    if (isIndexing && hasNote()) {
+      isIndexing = false;
+      stopIndex();
+    }
+  }
+  /**
+   * Stores a note in the indexer. Runs the index until a note is detected. 
+   */
+  public void storeNote() {
+    if (!hasNote()) {
+      isIndexing = true;
+      runIndex();
+    }
+  } 
 
   /**
    * Runs the storage index mechanism at the specified speed.
@@ -56,6 +79,7 @@ public class StorageIndex extends SubsystemBase {
    * Stops the storage index mechanism.
    */
   public void stopIndex() {
+    isIndexing = false;
     m_indexmotor.set(0);
   }
 
@@ -87,7 +111,7 @@ public class StorageIndex extends SubsystemBase {
    * @return True if a note is present, false otherwise.
    */
   public boolean hasNote() {
-    return m_indexBeamBreak.get();
+    return !m_indexBeamBreak.get();
   }
 
 }
