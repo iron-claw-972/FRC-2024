@@ -29,6 +29,7 @@ public class StorageIndex extends SubsystemBase {
    */
   private boolean isIndexing = false;
 
+
   /**
    * Constructs the StorageIndex subsystem, initializing the motor and beam break
    * sensor.
@@ -63,6 +64,7 @@ public class StorageIndex extends SubsystemBase {
    * Runs the storage index mechanism at the specified speed.
    *
    * @param speed The speed at which to run the storage index mechanism.
+   * TODO: Consider whether to run the motor at a fixed RPM instead of a percentage of power.
    */
   public void runIndex(double speed) {
     m_indexmotor.set(speed);
@@ -70,6 +72,7 @@ public class StorageIndex extends SubsystemBase {
 
   /**
    * Runs the storage index mechanism at the default intake speed.
+   * TODO: Consider whether to run the motor at a fixed RPM instead of a percentage of power.
    */
   public void runIndex() {
     m_indexmotor.set(StorageIndexConstants.intakeSpeed);
@@ -111,7 +114,7 @@ public class StorageIndex extends SubsystemBase {
    * @return True if a note is present, false otherwise.
    */
   public boolean hasNote() {
-    return !m_indexBeamBreak.get();
+    return !m_indexBeamBreak.get(); // Inverted as beambreak sensor returns true when beam not broken and false when beam is broken
   }
 
 }
