@@ -43,8 +43,8 @@ public class SysId {
                     talon.setVoltage(x.magnitude());
                 },
                 x ->{
-                    x.motor(name).linearPosition(Units.Meters.of(ConversionUtils.RPMToMeters(talon.getPosition().getValue(), DriveConstants.kWheelCircumference, DriveConstants.kDriveGearRatio)));
-                    x.motor(name).linearVelocity(Units.MetersPerSecond.of(ConversionUtils.RPMToMPS(talon.getVelocity().getValue(), DriveConstants.kDriveGearRatio, DriveConstants.kWheelCircumference)));
+                    x.motor(name).angularPosition(Units.Revolutions.of(talon.getPosition().getValue()));
+                    x.motor(name).angularVelocity(Units.RevolutionsPerSecond.of(talon.getVelocity().getValue()));
                     x.motor(name).voltage(Units.Volts.of(talon.getMotorVoltage().getValue()));
                 },
                 subsystem,
@@ -69,9 +69,9 @@ public class SysId {
                 },
                 x ->{
                     for (int  i =0; i<4;i++){
-                        x.motor("Module "+i).linearPosition(Units.Meters.of(ConversionUtils.RPMToMeters(talons[i].getPosition().getValue(), DriveConstants.kWheelCircumference, DriveConstants.kDriveGearRatio)));
-                        x.motor("Module "+i).linearVelocity(Units.MetersPerSecond.of(ConversionUtils.RPMToMPS(talons[i].getVelocity().getValue(), DriveConstants.kDriveGearRatio, DriveConstants.kWheelCircumference)));
-                        x.motor("Module "+i).voltage(Units.Volts.of(talons[i].getMotorVoltage().getValue()));
+                        x.motor("Motor "+i).angularPosition(Units.Revolutions.of(talons[i].getPosition().getValue()));
+                        x.motor("Motor "+i).angularVelocity(Units.RevolutionsPerSecond.of(talons[i].getVelocity().getValue()));
+                        x.motor("Motor "+i).voltage(Units.Volts.of(talons[i].getMotorVoltage().getValue()));
                     }
                     
                 },
