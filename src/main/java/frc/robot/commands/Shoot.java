@@ -4,8 +4,8 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.gpm.Shooter;
-import frc.robot.subsystems.gpm.Arm;
+import frc.robot.subsystems.Shooter;
+
 
 /**
  * Shoots on the move.
@@ -39,8 +39,8 @@ public class Shoot extends Command {
         public void execute() {
                 // Set displacement to speaker
                 displacement = new Pose3d(
-                        drivetrain.getPose().getX(),
-                        drivetrain.getPose().getY(),
+                        drive.getPose().getX(),
+                        drive.getPose().getY(),
                         HEIGHT_DIFF,
                         new Rotation3d(
                                 0,
