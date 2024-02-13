@@ -4,22 +4,13 @@
 
 package frc.robot.commands;
 
-import java.util.ArrayList;
-
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.SysId;
 
@@ -28,7 +19,7 @@ public class SysIDDriveCommand extends SequentialCommandGroup {
 
     Drivetrain drive;
     Config config = new Config();
-    SysId<Drivetrain> sysId;
+    SysId sysId;
     public SysIDDriveCommand(Drivetrain drive) {
         this.drive = drive;
         config = new Config(
@@ -55,7 +46,7 @@ public class SysIDDriveCommand extends SequentialCommandGroup {
             Rotation2d.fromDegrees(45+180),
             Rotation2d.fromDegrees(-45),
         };
-        sysId = new SysId<Drivetrain>(
+        sysId = new SysId(
             "Drivetrain",
             driveMotors,
             angleMotors,

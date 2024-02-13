@@ -10,6 +10,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
@@ -18,20 +19,20 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
 import frc.robot.constants.swerve.DriveConstants;
 
 /** Add your docs here. */
-public class SysId<T extends SubsystemBase> {
+public class SysId {
 
 
     SysIdRoutine sysIdRoutine;
 
-    public SysId(String name, TalonFX talon, TalonFX talon2, T subsystem, Rotation2d angle){
+    public SysId(String name, TalonFX talon, TalonFX talon2, Subsystem subsystem, Rotation2d angle){
         this(name, talon, talon2,subsystem,new Config(),angle);
     }
     
-    public SysId(String name,TalonFX talon, T subsystem, Config config){
+    public SysId(String name,TalonFX talon, Subsystem subsystem, Config config){
         this(name, talon, null,subsystem,config,null);
     }
     
-    public SysId(String name,TalonFX talon, TalonFX talon2, T subsystem, Config config, Rotation2d angle){
+    public SysId(String name,TalonFX talon, TalonFX talon2, Subsystem subsystem, Config config, Rotation2d angle){
         sysIdRoutine = new SysIdRoutine(
             config,
             new Mechanism(
@@ -51,7 +52,7 @@ public class SysId<T extends SubsystemBase> {
             )
         );
     }
-    public SysId(String name, TalonFX[] talons, TalonFX[] angleTalons, T subsystem, Config config, Rotation2d[] angle){
+    public SysId(String name, TalonFX[] talons, TalonFX[] angleTalons, Subsystem subsystem, Config config, Rotation2d[] angle){
         sysIdRoutine = new SysIdRoutine(
             config,
             new Mechanism(
