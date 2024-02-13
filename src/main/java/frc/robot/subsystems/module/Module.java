@@ -254,6 +254,10 @@ public class Module extends SubsystemBase {
         return driveMotor;
     }
 
+    public TalonFX getAngleMotor(){
+        return angleMotor;
+    }
+
     public ModuleType getModuleType(){
         return type;
     }
