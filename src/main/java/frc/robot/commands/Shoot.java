@@ -12,7 +12,7 @@ import frc.robot.subsystems.gpm.Shooter;
 
 
 /**
- * Shoots on the move.
+ * Shoots on the move (instantaneous velocities and pose ver.).
  */
 public class Shoot extends Command {
         private final Shooter shooter;
@@ -22,6 +22,8 @@ public class Shoot extends Command {
         private Pose3d displacement;
         private double v_rx;
         private double v_ry;
+        private final double REST_ANGLE = .55; // TODO: determine average desirable angle in radians.
+        private final double REST_VEL = 4; // TODO: determine the fastest idle note-exit velocity that won't kill the battery.
 
         public Shoot(Shooter shooter, Arm arm, Drivetrain drivetrain) {
                 this.shooter = shooter;
@@ -32,7 +34,7 @@ public class Shoot extends Command {
 
         @Override
         public void initialize() {
-                drive.setIsAlign(true);
+                // drive.setIsAlign(true); // We are already setting drivetrain angle while the command is active. -ben
         }
 
         @Override
@@ -80,26 +82,26 @@ public class Shoot extends Command {
 
                 arm.setAngle(theta_v);
                 drive.setAlignAngle(theta_h);
+                // Set the outtake velocity
                 shooter.setTargetVelocity(v_shoot);
 
-                // Set the outtake velocity
-                // outtake.shoot();
 
         }
 
         @Override
         public boolean isFinished() {
                 // Finishes when the outtake no longer holds the note
-                // TODO: Maybe use a timer?
+                // for timed version, add timer. if it has been .5 seconds but, for whatever reason,
+                        // isn't fully spun up yet, abort command (with interrupted?)
                 // TODO: Maybe use motor currents?
                 return shooter.atSetpoint() && true;
         }
 
         @Override
         public void end(boolean interrupted) {
-                shooter.setTargetVelocity(0);
-                drive.setIsAlign(false);
-                drive.setAlignAngle(null);
+                shooter.setTargetVelocity(REST_VEL);
+                // drive.setIsAlign(false); // We are already setting drivetrain angle while the command is active. -ben
+                drive.setAlignAngle(REST_ANGLE);
         }
 }
 /* ver where it assumes a set amount of time to rev up the note, and locks ALL driver input.
