@@ -67,7 +67,7 @@ public class Shoot extends Command {
 
                 // Basic vertical angle calculation (static robot)
                 double phi_v = Math.atan(Math.pow(v_note, 2) / 9.8 / x * (1 - Math.sqrt(1
-                        + 19.6 / Math.pow(v_note, 2) * (HEIGHT_DIFF - 4.9 * x * x / Math.pow(v_note, 2)))));
+                        + 19.6 / Math.pow(v_note, 2) * (y/*TODO: y or -y?*/ - 4.9 * x * x / Math.pow(v_note, 2)))));
                 // Angle to goal
                 // double phi_h = drivetrain.getAlignAngle();
                 double phi_h = Math.asin(y / x);
