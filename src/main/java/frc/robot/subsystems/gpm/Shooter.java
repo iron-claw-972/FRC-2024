@@ -15,20 +15,25 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase {
-    // PID constants
+	// each of the shooter shafts is driven by one Neo Vortex motor
+	protected static final DCMotor gearbox = DCMotor.getNeoVortex(1);
+	// get the motor freespeed
+	private static final double rpmFreeSpeed = Units.radiansPerSecondToRotationsPerMinute(Shooter.gearbox.freeSpeedRadPerSec);
+
+    // PID constants. PID system measures RPM and outputs motor power [-1,1]
     private static final double P = 0.00005;
     private static final double I = 0.0;
     private static final double D = 0.0;
 
 	// FeedForward constants
     private static final double S = 0;
-    private static final double V = 1.0/6000;
+    private static final double V = 1.0/rpmFreeSpeed;
 
     /**
      * Tolerance in RPM.
-	 * Set to 200 now so the simulator will report at the setpoint.
+	 * At 1500 rpm, the simulator gives 1519 rpm.
      */
-    private static final double TOLERANCE = 200;
+    private static final double TOLERANCE = 40;
 
 	// 4-inch Colson wheels
 	private static final double MASS_COLSON = 0.245;
@@ -63,8 +68,8 @@ public class Shooter extends SubsystemBase {
 
 		// are we simulating?
 		if (RobotBase.isSimulation()) {
-			topFlywheelSim = new FlywheelSim(DCMotor.getNeoVortex(1),	1.0, MOI_SHAFT);
-			bottomFlywheelSim = new FlywheelSim(DCMotor.getNeoVortex(1), 1.0, MOI_SHAFT);
+			topFlywheelSim = new FlywheelSim(gearbox, 1.0, MOI_SHAFT);
+			bottomFlywheelSim = new FlywheelSim(gearbox, 1.0, MOI_SHAFT);
 		}
     }
 
@@ -78,12 +83,11 @@ public class Shooter extends SubsystemBase {
 		topPower = topPID.calculate(topSpeed) + feedforward.calculate(topPID.getSetpoint());
 		bottomPower = bottomPID.calculate(bottomSpeed) + feedforward.calculate(bottomPID.getSetpoint());
 
-		// Spin the motors if it is not a simulation
-		if(RobotBase.isReal()){
-        	topMotor.set(topPower);
-        	bottomMotor.set(bottomPower);
-		}
+		// set motor powers
+        topMotor.set(topPower);
+        bottomMotor.set(bottomPower);
 
+		// report some values to the Dashboard
         SmartDashboard.putNumber("top speed", /* shooterRPMToSpeed */ (topSpeed));
         SmartDashboard.putNumber("bottom speed", /* shooterRPMToSpeed */ (bottomSpeed));
         SmartDashboard.putBoolean("at setpoint?", atSetpoint());
@@ -91,6 +95,7 @@ public class Shooter extends SubsystemBase {
 
 	@Override
 	public void simulationPeriodic() {
+		// assume the battery voltage is 12 volts
 		double voltage = 12.0;
 
 		// topPower and bottomPower are now member variables; cannot read them from simulated encoder
@@ -101,13 +106,15 @@ public class Shooter extends SubsystemBase {
 		topFlywheelSim.setInputVoltage(topPower * voltage);
 		bottomFlywheelSim.setInputVoltage(bottomPower * voltage);
 
-		// simulate the linear system
+		// simulate the linear system (sets current motor angular velocity)
 		topFlywheelSim.update(0.020);
 		bottomFlywheelSim.update(0.020);
 
 		// get the results
 		topMotorSpeedSim = topFlywheelSim.getAngularVelocityRPM();
 		bottomMotorSpeedSim = bottomFlywheelSim.getAngularVelocityRPM();
+
+		// we would like to set the encoder velocities to those values, but REV does not let us do that
 	}
 
 	/**
@@ -118,7 +125,7 @@ public class Shooter extends SubsystemBase {
 	* @see        shooterSpeedToRPM
 	*/
 	public static double shooterRPMToSpeed(double rpm) {
-			return (rpm / 60) * (RADIUS_COLSON * 2 * Math.PI);
+		return (rpm / 60) * (RADIUS_COLSON * 2 * Math.PI);
 	}
 
 	/**
@@ -129,7 +136,7 @@ public class Shooter extends SubsystemBase {
 	* @see          shooterRPMToSpeed
 	*/
 	public static double shooterSpeedToRPM(double speed) {
-			return (speed * 60) / (RADIUS_COLSON * 2 * Math.PI);
+		return (speed * 60) / (RADIUS_COLSON * 2 * Math.PI);
 	}
 
 	/**
@@ -139,7 +146,10 @@ public class Shooter extends SubsystemBase {
 	* @param speedBottom the speed the bottom motor will spin to in RPM
 	*/
 	public void setTargetRPM(double speedTop, double speedBottom) {
+		topPID.reset();
 		topPID.setSetpoint(speedTop);
+
+		bottomPID.reset();
 		bottomPID.setSetpoint(speedBottom);
 	}
 
@@ -182,6 +192,7 @@ public class Shooter extends SubsystemBase {
 	* @see    atSetpoint
 	*/
 	public double getTopMotorRPM() {
+		// REV does not let us set the encoder velocity in a simulation, so use simulated value
 		if (RobotBase.isSimulation()) {
 			return topMotorSpeedSim;
 		} else {
@@ -198,6 +209,7 @@ public class Shooter extends SubsystemBase {
 	* @see    atSetpoint
 	*/
 	public double getBottomMotorRPM() {
+		// REV does not let us set the encoder velocity in a simulation, so use simulated value
 		if (RobotBase.isSimulation()) {
 			return bottomMotorSpeedSim;
 		} else {
