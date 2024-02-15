@@ -95,9 +95,7 @@ public class StorageIndex extends SubsystemBase {
    * @param speed The speed at which to eject notes backward.
    */
   public void ejectBack() {
-    if (hasNote()) {
-      this.runIndex((-1.0) * StorageIndexConstants.intakeSpeed);
-    }
+    this.runIndex((-1.0) * StorageIndexConstants.intakeSpeed);
   }
 
   /**
@@ -106,21 +104,15 @@ public class StorageIndex extends SubsystemBase {
    * @param speed The speed at which to eject notes forward.
    */
   public void ejectAmpFront() {
-    if (hasNote()) {
-      this.runIndex(StorageIndexConstants.ejectAmpFrontSpeed);
-    }
+    this.runIndex(StorageIndexConstants.ejectAmpFrontSpeed);
   }
 
   public void ejectAmpBack() {
-    if (hasNote()) {
-      this.runIndex(StorageIndexConstants.ejectAmpBackSpeed);
-    }
+    this.runIndex(StorageIndexConstants.ejectAmpBackSpeed);
   }
 
   public void ejectTrap() {
-    if (hasNote()) {
-      this.runIndex(StorageIndexConstants.ejectTrapSpeed);
-    }
+    this.runIndex(StorageIndexConstants.ejectTrapSpeed);
   }
 
   /**
