@@ -7,6 +7,8 @@ package frc.robot.util.ShuffleBoard.Tabs;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.commands.auto_comm.FollowPathCommand;
 import frc.robot.subsystems.Drivetrain;
@@ -35,6 +37,14 @@ public class AutoTab extends ShuffleBoardTabs {
         autoCommand.addOption("Test", new FollowPathCommand("Test", true, drive));
         autoCommand.addOption("Test 2", new FollowPathCommand("Test 2", true, drive));
         autoCommand.addOption("Test with Rotations", new FollowPathCommand("Test", true, drive));
+
+        // Example of running multiple commands.
+        autoCommand.addOption("Multi",
+            Commands.sequence(
+                new FollowPathCommand("Test", true, drive),
+                new InstantCommand(() -> System.out.println("Instant command."))
+            )
+        );
 
         tab.add(autoCommand);
     }
