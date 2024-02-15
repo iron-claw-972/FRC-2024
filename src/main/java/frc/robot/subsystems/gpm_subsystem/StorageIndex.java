@@ -22,13 +22,13 @@ public class StorageIndex extends SubsystemBase {
 
   private final CANSparkFlex m_indexmotor;
   DigitalInput m_indexBeamBreak;
-  
+
   /**
-   * Indicates whether the indexer is in the process of running the motors to take in a note. Once the
-   * beambreak sensor detects a note inside, this boolean becomes false. 
+   * Indicates whether the indexer is in the process of running the motors to take
+   * in a note. Once the
+   * beambreak sensor detects a note inside, this boolean becomes false.
    */
   private boolean isIndexing = false;
-
 
   /**
    * Constructs the StorageIndex subsystem, initializing the motor and beam break
@@ -39,7 +39,7 @@ public class StorageIndex extends SubsystemBase {
     m_indexBeamBreak = new DigitalInput(StorageIndexConstants.indexBeamBreak);
     m_indexmotor.setInverted(false);
 
-    m_indexmotor.setIdleMode(IdleMode.kBrake);
+    m_indexmotor.setIdleMode(StorageIndexConstants.idleMode);
     // Additional setup, possibly related to CAN Frames, could be documented here.
   }
 
@@ -50,21 +50,23 @@ public class StorageIndex extends SubsystemBase {
       stopIndex();
     }
   }
+
   /**
-   * Stores a note in the indexer. Runs the index until a note is detected. 
+   * Stores a note in the indexer. Runs the index until a note is detected.
    */
   public void storeNote() {
     if (!hasNote()) {
       isIndexing = true;
       runIndex();
     }
-  } 
+  }
 
   /**
    * Runs the storage index mechanism at the specified speed.
    *
    * @param speed The speed at which to run the storage index mechanism.
-   * TODO: Consider whether to run the motor at a fixed RPM instead of a percentage of power.
+   *              TODO: Consider whether to run the motor at a fixed RPM instead
+   *              of a percentage of power.
    */
   public void runIndex(double speed) {
     m_indexmotor.set(speed);
@@ -72,7 +74,8 @@ public class StorageIndex extends SubsystemBase {
 
   /**
    * Runs the storage index mechanism at the default intake speed.
-   * TODO: Consider whether to run the motor at a fixed RPM instead of a percentage of power.
+   * TODO: Consider whether to run the motor at a fixed RPM instead of a
+   * percentage of power.
    */
   public void runIndex() {
     m_indexmotor.set(StorageIndexConstants.intakeSpeed);
@@ -91,9 +94,9 @@ public class StorageIndex extends SubsystemBase {
    *
    * @param speed The speed at which to eject notes backward.
    */
-  public void ejectBack(double speed) {
+  public void ejectBack() {
     if (hasNote()) {
-      this.runIndex((-1.0) * speed);
+      this.runIndex((-1.0) * StorageIndexConstants.intakeSpeed);
     }
   }
 
@@ -102,9 +105,21 @@ public class StorageIndex extends SubsystemBase {
    *
    * @param speed The speed at which to eject notes forward.
    */
-  public void ejectFront(double speed) {
+  public void ejectAmpFront() {
     if (hasNote()) {
-      this.runIndex(speed);
+      this.runIndex(StorageIndexConstants.ejectAmpFrontSpeed);
+    }
+  }
+
+  public void ejectAmpBack() {
+    if (hasNote()) {
+      this.runIndex(StorageIndexConstants.ejectAmpBackSpeed);
+    }
+  }
+
+  public void ejectTrap() {
+    if (hasNote()) {
+      this.runIndex(StorageIndexConstants.ejectTrapSpeed);
     }
   }
 
@@ -114,7 +129,8 @@ public class StorageIndex extends SubsystemBase {
    * @return True if a note is present, false otherwise.
    */
   public boolean hasNote() {
-    return !m_indexBeamBreak.get(); // Inverted as beambreak sensor returns true when beam not broken and false when beam is broken
+    return !m_indexBeamBreak.get(); // Inverted as beambreak sensor returns true when beam not broken and false when
+                                    // beam is broken
   }
 
 }
