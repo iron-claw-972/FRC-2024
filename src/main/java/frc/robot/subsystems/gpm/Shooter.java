@@ -45,6 +45,7 @@ public class Shooter extends SubsystemBase {
 	// top motor
     private final CANSparkFlex topMotor = new CANSparkFlex(ShooterConstants.TOP_MOTOR_ID, MotorType.kBrushless);
     private final RelativeEncoder topMotorEncoder = topMotor.getEncoder();
+	/** PID controller uses RPM as input and outputs motor power */
     private final PIDController topPID = new PIDController(P, I, D);
 	private FlywheelSim topFlywheelSim;
 	private double topMotorSpeedSim;
@@ -53,6 +54,7 @@ public class Shooter extends SubsystemBase {
 	// bottom motor
     private final CANSparkFlex bottomMotor = new CANSparkFlex(ShooterConstants.BOTTOM_MOTOR_ID, MotorType.kBrushless);
     private final RelativeEncoder bottomMotorEncoder = bottomMotor.getEncoder();
+	/** PID controller uses RPM as input and outputs motor power */
     private final PIDController bottomPID = new PIDController(P, I, D);
 	private FlywheelSim bottomFlywheelSim;
 	private double bottomMotorSpeedSim;
@@ -62,8 +64,10 @@ public class Shooter extends SubsystemBase {
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(S, V);
 	
     public Shooter() {
+		// set the RPM tolerance of the PID controllers
         topPID.setTolerance(TOLERANCE);
         bottomPID.setTolerance(TOLERANCE);
+		// invert the bottom motor so +power sends the note out
         bottomMotor.setInverted(true);
 
 		// are we simulating?
@@ -115,6 +119,14 @@ public class Shooter extends SubsystemBase {
 		bottomMotorSpeedSim = bottomFlywheelSim.getAngularVelocityRPM();
 
 		// we would like to set the encoder velocities to those values, but REV does not let us do that
+	}
+
+	/**
+	 * Close the resources used by this instance.
+	 */
+	public void close() {
+		topMotor.close();
+		bottomMotor.close();
 	}
 
 	/**
