@@ -35,19 +35,21 @@ public class Shoot extends Command {
         @Override
         public void initialize() {
                 // drive.setIsAlign(true); // We are already setting drivetrain angle while the command is active. -ben
+                // No need to freeze driver controls. driver is mature enough to know not to mess with shoot-while-moving.
         }
 
         @Override
         public void execute() {
                 Pose3d speakerPose = DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
                 //TODO: Add this and make it change with arm angle
-                double shooterHeight = 1;
+                double shooterHeight = .5;
+                double speakerHeight = 2.055;
 
                 // Set displacement to speaker
                 displacement = new Pose3d(
                         drive.getPose().getX(),
                         drive.getPose().getY(),
-                        shooterHeight,
+                        speakerHeight-shooterHeight,
                         new Rotation3d(
                                 0,
                                 arm.getAngle(),
@@ -69,7 +71,7 @@ public class Shoot extends Command {
 
                 // Basic vertical angle calculation (static robot)
                 double phi_v = Math.atan(Math.pow(v_note, 2) / 9.8 / x * (1 - Math.sqrt(1
-                        + 19.6 / Math.pow(v_note, 2) * (y/*TODO: y or -y?*/ - 4.9 * x * x / Math.pow(v_note, 2)))));
+                        + 19.6 / Math.pow(v_note, 2) * (y - 4.9 * x * x / Math.pow(v_note, 2)))));
                 // Angle to goal
                 // double phi_h = drivetrain.getAlignAngle();
                 double phi_h = Math.asin(y / x);
@@ -93,6 +95,7 @@ public class Shoot extends Command {
                 // Finishes when the outtake no longer holds the note
                 // for timed version, add timer. if it has been .5 seconds but, for whatever reason,
                         // isn't fully spun up yet, abort command (with interrupted?)
+                        // or do we just send-it and shoot?
                 // TODO: Maybe use motor currents?
                 return shooter.atSetpoint() && true;
         }
@@ -101,6 +104,7 @@ public class Shoot extends Command {
         public void end(boolean interrupted) {
                 shooter.setTargetVelocity(REST_VEL);
                 // drive.setIsAlign(false); // We are already setting drivetrain angle while the command is active. -ben
+                // no need to unfreeze drive control
                 drive.setAlignAngle(REST_ANGLE);
         }
 }
@@ -134,6 +138,7 @@ public class Shoot extends Command {
         @Override
         public void initialize() {
                 drivetrain.setIsAlign(true);
+                drive.setDefaultCommand(null); // would freeze controls
         }
 
         @Override
