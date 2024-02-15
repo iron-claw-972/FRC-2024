@@ -92,7 +92,6 @@ public class StorageIndex extends SubsystemBase {
   /**
    * Ejects notes backward at the specified speed, if a note is present.
    *
-   * @param speed The speed at which to eject notes backward.
    */
   public void ejectBack() {
     this.runIndex((-1.0) * StorageIndexConstants.intakeSpeed);
@@ -101,7 +100,6 @@ public class StorageIndex extends SubsystemBase {
   /**
    * Ejects notes forward at the specified speed, if a note is present.
    *
-   * @param speed The speed at which to eject notes forward.
    */
   public void ejectAmpFront() {
     this.runIndex(StorageIndexConstants.ejectAmpFrontSpeed);
