@@ -15,5 +15,9 @@ public class StorageIndexConstants {
     public static final double ejectAmpBackSpeed = 0;
     public static final double ejectTrapSpeed = 0;
 
+    public static final double intakeTimeout = 0;
+    public static final double ejectAmpFrontTimeout = 0;
+    public static final double ejectAmpBackTimeout = 0;
+
     public static final IdleMode idleMode = IdleMode.kBrake;
 }
