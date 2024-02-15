@@ -12,6 +12,7 @@ import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.gpm.Arm;
 import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
@@ -27,6 +28,7 @@ public class RobotContainer {
     // The robot's subsystems are defined here...
     private Drivetrain drive = null;
     private Vision vision = null;
+    private Arm arm;
 
     // Controllers are defined here
     private BaseDriverConfig driver = null;
@@ -39,6 +41,7 @@ public class RobotContainer {
      * Different robots may have different subsystems.
      */
     public RobotContainer(RobotId robotId) {
+      arm = new Arm();
       // dispatch on the robot
       switch (robotId) {
 
@@ -52,6 +55,7 @@ public class RobotContainer {
       case SwerveCompetition:
       case SwerveTest:
         vision = new Vision(VisionConstants.CAMERAS);
+
 
         drive = new Drivetrain(vision);
         driver = new GameControllerDriverConfig(drive);

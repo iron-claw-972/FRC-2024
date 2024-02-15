@@ -1,30 +1,36 @@
 package frc.robot.constants;
 
+import edu.wpi.first.math.util.Units;
+
 public class ArmConstants {
 
     public static final int MOTOR_ID = 0;
     public static final int[] SLAVE_IDS = new int[] {
             0, 1, 2
     };
-    public static final int ENCODER_ID = 0;
+    // TODO use real encoder id
+    public static final int ENCODER_ID = 1;
 
     public static final double S = 0;
     public static final double V = 0;
-    public static final double P = 0;
+    public static final double P = 2.0;
     public static final double I = 0;
-    public static final double D = 0;
+    public static final double D = .001;
 
     // All angle measurements in radians
     public static final double OFFSET = 0;
-    public static final double TOLERANCE = 0;
+    public static final double TOLERANCE = Units.degreesToRadians(1.0);
     public static final double DISTANCE_PER_ROTATION = 2 * Math.PI;
 
-    public static final double GEARING = 0;
-    public static final double MOMENT_OF_INERTIA = 0;
-    public static final double ARM_LENGTH = 0;
-    public static final double MIN_ANGLE_RADS = 0;
-    public static final double MAX_ANGLE_RADS = 0;
-    public static final double START_ANGLE_RADS = 0;
+    // TODO use the real gearing
+    public static final double GEARING = 175.0;
+    // TODO use the real moi
+    // guess the MOI as radius = 0.5 meter and the mass is 10 kg
+    public static final double MOMENT_OF_INERTIA = 2.5;
+    public static final double ARM_LENGTH = .5;
+    public static final double MIN_ANGLE_RADS = Units.degreesToRadians(-20.0);
+    public static final double MAX_ANGLE_RADS = Units.degreesToRadians(120.0);
+    public static final double START_ANGLE_RADS = 0.0;
 
     
 }
