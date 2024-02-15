@@ -9,19 +9,22 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import frc.robot.constants.miscConstants.FieldConstants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.subsystems.Drivetrain;
 
 /** Add your docs here. */
 public class Field {
     private Drivetrain drive;
-    private Field2d feild = new Field2d();
+    private Field2d field = new Field2d();
     private Pose2d chassisPose = new Pose2d();
     private Pose2d[] modulePositions = new Pose2d[4];
+    private Pose2d[] aprilTagPoses;
     
     public Field(Drivetrain drive){
         this.drive = drive;
-        Shuffleboard.getTab("Swerve").add(feild);
+        Shuffleboard.getTab("Swerve").add(field);
+        aprilTagPoses = getTagPoses();
     } 
     
     public void updateModulePositions(){
@@ -49,10 +52,19 @@ public class Field {
         }
     }
 
+    public Pose2d[] getTagPoses(){
+        Pose2d[] poses = new Pose2d[FieldConstants.APRIL_TAGS.size()];
+        for(int i = 0; i < FieldConstants.APRIL_TAGS.size(); i++){
+            poses[i] = FieldConstants.APRIL_TAGS.get(i).pose.toPose2d();
+        }
+        return poses;
+    }
+
     public void updateFeild(){
         updateModulePositions();
-        feild.setRobotPose(chassisPose);
-        feild.getObject("modules").setPoses(modulePositions);     
+        field.setRobotPose(chassisPose);
+        field.getObject("modules").setPoses(modulePositions);
+        field.getObject("april tags").setPoses(aprilTagPoses);
     }
 
 }
