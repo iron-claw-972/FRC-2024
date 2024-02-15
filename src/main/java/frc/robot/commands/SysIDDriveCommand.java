@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -22,11 +24,12 @@ public class SysIDDriveCommand extends SequentialCommandGroup {
     SysId sysId;
     public SysIDDriveCommand(Drivetrain drive) {
         this.drive = drive;
+
         config = new Config(
-            Units.Volts.of(0.5).per(Units.Seconds.of(1)),
+            Units.Volts.of(1).per(Units.Seconds.of(1)),
             Units.Volts.of(7),
-            Units.Seconds.of(20),
-            null
+            Units.Seconds.of(10),
+            (x)->SignalLogger.writeString("state", x.toString())
         );
         TalonFX[] driveMotors = {
             drive.getModules()[0].getDriveMotor(),
@@ -46,6 +49,15 @@ public class SysIDDriveCommand extends SequentialCommandGroup {
             Rotation2d.fromDegrees(45+180),
             Rotation2d.fromDegrees(-45),
         };
+        for (int i = 0;i<driveMotors.length; i++){
+            BaseStatusSignal.setUpdateFrequencyForAll(250,
+            driveMotors[i].getPosition(),
+            driveMotors[i].getVelocity(),
+            driveMotors[i].getMotorVoltage());
+
+        /* Optimize out the other signals, since they're not particularly helpful for us */
+        driveMotors[i].optimizeBusUtilization();
+        }
         sysId = new SysId(
             "Drivetrain",
             driveMotors,
@@ -55,7 +67,10 @@ public class SysIDDriveCommand extends SequentialCommandGroup {
             angles
         );
         addCommands(
-            sysId.runQuasisStatic(Direction.kForward)
+            sysId.runQuasisStatic(Direction.kForward),
+            sysId.runQuasisStatic(Direction.kReverse),
+            sysId.runDynamic(Direction.kForward),
+            sysId.runDynamic(Direction.kReverse)
             );
     }
 

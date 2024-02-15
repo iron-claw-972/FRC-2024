@@ -6,6 +6,7 @@ package frc.robot.util;
 
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.fasterxml.jackson.databind.cfg.ConstructorDetector.SingleArgConstructor;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
@@ -17,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
 import frc.robot.constants.swerve.DriveConstants;
+import com.ctre.phoenix6.SignalLogger;
 
 /** Add your docs here. */
 public class SysId {
@@ -67,14 +69,7 @@ public class SysId {
                     }
                     
                 },
-                x ->{
-                    for (int  i =0; i<4;i++){
-                        x.motor("Motor "+i).angularPosition(Units.Revolutions.of(talons[i].getPosition().getValue()));
-                        x.motor("Motor "+i).angularVelocity(Units.RevolutionsPerSecond.of(talons[i].getVelocity().getValue()));
-                        x.motor("Motor "+i).voltage(Units.Volts.of(talons[i].getMotorVoltage().getValue()));
-                    }
-                    
-                },
+                null,
                 subsystem,
                 name
             )
