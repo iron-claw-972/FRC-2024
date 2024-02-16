@@ -104,5 +104,4 @@ public class Intake extends SubsystemBase {
      public void close() {
             sensor.close();
     }
-
 }
