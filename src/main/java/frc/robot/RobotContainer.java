@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.gpm.IntakeNote;
 import frc.robot.constants.AutoConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
@@ -16,6 +17,7 @@ import frc.robot.controls.GameControllerDriverConfig;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Intake;
 import frc.robot.subsystems.gpm.Shooter;
+import frc.robot.subsystems.gpm.StorageIndex;
 import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
@@ -32,13 +34,13 @@ public class RobotContainer {
     private Drivetrain drive = null;
     private Vision vision = null;
     private Shooter shooter = null;
+    private Intake intake = null;
+    private StorageIndex index = null;
 
     // Controllers are defined here
     private BaseDriverConfig driver = null;
 
     ShuffleBoardManager shuffleboardManager = null;
-
-    private Intake intake;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -51,7 +53,9 @@ public class RobotContainer {
 
       case TestBed1:
         intake = new Intake();
+        index = new StorageIndex();
         shooter = new Shooter();
+        SmartDashboard.putData("Intake", new IntakeNote(intake, index));
         SmartDashboard.putData("shoot", new InstantCommand(() -> shooter.setTargetRPM(1500)));
         SmartDashboard.putData("shoot off", new InstantCommand(() -> shooter.setTargetRPM(0)));
         break;

@@ -4,16 +4,19 @@ import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.IntakeConstants;
 import frc.robot.subsystems.gpm.Intake;
+import frc.robot.subsystems.gpm.StorageIndex;
 
 public class IntakeNote extends Command {
 
     private final Intake intake;
+    private final StorageIndex index;
     private final Debouncer stallDebouncer;
 
 
-    public IntakeNote(Intake intake) {
+    public IntakeNote(Intake intake, StorageIndex index) {
         addRequirements(intake);
         this.intake = intake;
+        this.index = index;
         this.stallDebouncer = new Debouncer(IntakeConstants.INTAKE_STALL_TIME, Debouncer.DebounceType.kBoth);
     }
 
