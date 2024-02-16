@@ -1,10 +1,8 @@
 package frc.robot.subsystems;
-import java.util.Arrays;
 
 import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -14,6 +12,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -22,9 +22,11 @@ import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
-import frc.robot.subsystems.module.ModuleSim;
 import frc.robot.subsystems.module.Module;
+import frc.robot.subsystems.module.ModuleSim;
 import frc.robot.util.Vision;
+
+import java.util.Arrays;
 
 /**
  * Represents a swerve drive style drivetrain.
@@ -58,6 +60,8 @@ public class Drivetrain extends SubsystemBase {
 
     // If the robot should aim at the speaker
     private boolean isAlign = false;
+    // Angle to align to, null for directly toward speaker
+    private Double alignAngle = null;
 
     /**
      * Creates a new Swerve Style Drivetrain.
@@ -329,7 +333,29 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /**
-     * TODO: Comment
+     * Sets the angle to align to for the speaker
+     * @param newAngle The new angle in radians, set to null to aim directly at the speaker
+     */
+    public void setAlignAngle(Double newAngle){
+        alignAngle = newAngle;
+    }
+
+    /**
+     * Gets the angle to align to for the speaker
+     * @return The angle in radians
+     */
+    public double getAlignAngle(){
+        if(alignAngle != null){
+            return alignAngle;
+        }
+        Pose2d pose = getPose();
+        return Math.PI + (DriverStation.getAlliance().get() == Alliance.Blue ?
+            Math.atan2(VisionConstants.BLUE_SPEAKER_POSE.getY() - pose.getY(), VisionConstants.BLUE_SPEAKER_POSE.getX() - pose.getX()) :
+            Math.atan2(VisionConstants.RED_SPEAKER_POSE.getY() - pose.getY(), VisionConstants.RED_SPEAKER_POSE.getX() - pose.getX()));
+    }
+
+    /**
+     * Resets the swerve modules from the absolute encoders
      */
     public void resetModulesToAbsolute() {
         Arrays.stream(modules).forEach(Module::resetToAbsolute);
