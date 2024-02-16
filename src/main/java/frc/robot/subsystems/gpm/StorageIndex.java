@@ -105,6 +105,10 @@ public class StorageIndex extends SubsystemBase {
     this.runIndex(StorageIndexConstants.ejectTrapSpeed);
   }
 
+  public void ejectIntoShooter(){
+    runIndex(StorageIndexConstants.ejectShootSpeed);
+  }
+
   /**
    * Checks if a note is present using the beam break sensor.
    *
