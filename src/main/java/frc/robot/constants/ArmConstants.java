@@ -5,12 +5,12 @@ import edu.wpi.first.math.util.Units;
 
 public class ArmConstants {
 
-    public static final int MOTOR_ID = 0;
+    public static final int MOTOR_ID = -1;
     public static final int[] SLAVE_IDS = new int[] {
-            0, 1, 2
+            -1, -1, -1
     };
     // TODO use real encoder id
-    public static final int ENCODER_ID = 1;
+    public static final int ENCODER_ID = -1;
 
     public static final double S = 0;
     public static final double V = 0;

@@ -2,16 +2,14 @@ package frc.robot.subsystems.gpm;
 
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.DutyCycleEncoderSim;
-import edu.wpi.first.wpilibj.simulation.EncoderSim;
-import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
@@ -22,22 +20,8 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ArmConstants;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class Arm extends SubsystemBase {
-
-    private Mechanism2d m_wristDisplay = new Mechanism2d(90, 90);
-    private MechanismRoot2d m_pivot = m_wristDisplay.getRoot("ArmPivot", 45, 45);
-    // private MechanismLigament2d m_stationary = m_pivot.append(new
-    // MechanismLigament2d("Stationary", 60,
-    // -180));
-    private MechanismLigament2d m_moving = m_pivot.append(
-            new MechanismLigament2d(
-                    "Moving",
-                    30,
-                    Units.radiansToDegrees(/* m_wristPhysicsSim */ simulation.getAngleRads()),
-                    6,
-                    new Color8Bit(Color.kYellow)));
 
     /** the master motor */
     private final TalonFX motor = new TalonFX(ArmConstants.MOTOR_ID);
@@ -47,9 +31,18 @@ public class Arm extends SubsystemBase {
     private final PIDController pid = new PIDController(ArmConstants.P, ArmConstants.I, ArmConstants.D);
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(ArmConstants.S, ArmConstants.V);
 
-    private DCMotor motorModel;
     private SingleJointedArmSim simulation;
     private DutyCycleEncoderSim encoderSim;
+
+    private Mechanism2d wristDisplay = new Mechanism2d(90, 90);
+    private MechanismRoot2d pivot = wristDisplay.getRoot("ArmPivot", 45, 45);
+    private MechanismLigament2d moving = pivot.append(
+            new MechanismLigament2d(
+                    "Moving",
+                    30,
+                    Units.radiansToDegrees(/* m_wristPhysicsSim */ simulation.getAngleRads()),
+                    6,
+                    new Color8Bit(Color.kYellow)));
 
     public Arm() {
         motor.setNeutralMode(ArmConstants.neutralMode);
@@ -72,7 +65,7 @@ public class Arm extends SubsystemBase {
 
         if (RobotBase.isSimulation()) {
             // DCMotor model is 4 Falcon 500s
-            motorModel = DCMotor.getFalcon500(4);
+            DCMotor motorModel = DCMotor.getFalcon500(4);
 
             simulation = new SingleJointedArmSim(motorModel,
                     ArmConstants.GEARING,
@@ -86,7 +79,7 @@ public class Arm extends SubsystemBase {
             // encodersim allows us to set the encoder values
             encoderSim = new DutyCycleEncoderSim(encoder);
 
-            SmartDashboard.putData("ArmSim", m_wristDisplay);
+            SmartDashboard.putData("ArmSim", wristDisplay);
             SmartDashboard.putData(pid);
 
         }
@@ -94,15 +87,16 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putData("Set Angle to 1.0 Rad/57 degrees", new InstantCommand(() -> setAngle(1.0)));
     }
 
-    public double convertDegreesToRadians(double degrees) {
-        // 1 degree = π / 180 radians
-        return degrees * Math.PI / 180.0;
-    }
-
     @Override
     public void periodic() {
         // use the scaled distance (which is radians)
-        motor.set(pid.calculate(encoder.getDistance()) + feedforward.calculate(pid.getSetpoint()));
+        motor.set(
+                MathUtil.clamp(
+                        pid.calculate(encoder.getDistance()) + feedforward.calculate(pid.getSetpoint()),
+                        -1,
+                        1
+                )
+        );
     }
 
     @Override
@@ -114,7 +108,7 @@ public class Arm extends SubsystemBase {
 
         simulation.update(0.02);
 
-        m_moving.setAngle(Units.radiansToDegrees(simulation.getAngleRads()));
+        moving.setAngle(Units.radiansToDegrees(simulation.getAngleRads()));
         // update the DutyCycleEncoder
         encoderSim.setDistance(simulation.getAngleRads());
     }
