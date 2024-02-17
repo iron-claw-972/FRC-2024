@@ -118,14 +118,14 @@ public class Arm extends SubsystemBase {
      */
     public void setAngle(double angle) {
         pid.reset();
-        pid.setSetpoint(angle);
+        pid.setSetpoint(angle * ArmConstants.GEARING);
     }
 
     /**
      * Returns the angle of the wrist in radians.
      */
     public double getAngleRad() {
-        return encoder.getDistance();
+        return encoder.getDistance() / ArmConstants.GEARING;
     }
 
     public boolean atSetpoint() {
