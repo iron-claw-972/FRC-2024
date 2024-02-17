@@ -3,7 +3,7 @@ package frc.robot.constants;
 public final class IntakeConstants {
 
     // motor port
-    public static final int MOTOR_ID = 9;
+    public static final int MOTOR_ID = 13; 
     public static final int SENSOR_ID = 4;
 
     // intake speeds

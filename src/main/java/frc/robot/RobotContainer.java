@@ -4,12 +4,15 @@ import java.util.function.BooleanSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PS5Controller;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.commands.gpm.IntakeNote;
 import frc.robot.constants.AutoConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
@@ -21,6 +24,7 @@ import frc.robot.subsystems.gpm.StorageIndex;
 import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
+import lib.controllers.GameController;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -41,6 +45,7 @@ public class RobotContainer {
     private BaseDriverConfig driver = null;
 
     ShuffleBoardManager shuffleboardManager = null;
+    // private XboxController gc;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -52,15 +57,17 @@ public class RobotContainer {
       switch (robotId) {
 
       case TestBed1:
-        intake = new Intake();
         index = new StorageIndex();
         shooter = new Shooter();
-        SmartDashboard.putData("Intake", new IntakeNote(intake, index));
         SmartDashboard.putData("shoot", new InstantCommand(() -> shooter.setTargetRPM(1500)));
         SmartDashboard.putData("shoot off", new InstantCommand(() -> shooter.setTargetRPM(0)));
         break;
 
       case TestBed2:
+        // gc = new XboxController(0);
+        intake = new Intake(); //gc
+        // SmartDashboard.putData("Rumble on", new InstantCommand(() -> intake.noteRumble(1)));
+        // SmartDashboard.putData("Rumble off", new InstantCommand(() -> intake.noteRumble(0)));
         break;
 
       default:

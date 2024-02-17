@@ -2,6 +2,7 @@ package frc.robot.controls;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.GoToPose;
@@ -9,6 +10,8 @@ import frc.robot.commands.drive_comm.SetFormationX;
 import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.gpm.Intake;
+import frc.robot.subsystems.gpm.Intake.Mode;
 import frc.robot.util.MathUtils;
 import lib.controllers.GameController;
 import lib.controllers.GameController.Axis;
@@ -19,6 +22,7 @@ import lib.controllers.GameController.Button;
  */
 public class GameControllerDriverConfig extends BaseDriverConfig {  
   private final GameController kDriver = new GameController(Constants.DRIVER_JOY);
+  private final XboxController xbox = new XboxController(5);
   
   public GameControllerDriverConfig(Drivetrain drive) {
     super(drive);
@@ -49,6 +53,9 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
       DriverStation.getAlliance().get() == Alliance.Blue ? VisionConstants.BLUE_PODIUM_POSE : VisionConstants.RED_PODIUM_POSE,
       getDrivetrain()
     ));
+
+    
+
   }
 
   @Override
@@ -85,4 +92,5 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     public boolean getIsAlign() {
         return kDriver.LEFT_TRIGGER_BUTTON.getAsBoolean();
     }
+
 }

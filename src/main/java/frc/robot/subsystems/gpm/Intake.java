@@ -1,7 +1,8 @@
 package frc.robot.subsystems.gpm;
 
-import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel;
+import com.revrobotics.CANSparkMax;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.simulation.DIOSim;
@@ -27,20 +28,24 @@ public class Intake extends SubsystemBase {
         }
     }
 
-    private final CANSparkFlex motor;
+    public final CANSparkMax motor;
     private final DigitalInput sensor;
 
     private int countSim = 0;
     private DIOSim IntakeSensorDioSim;
     private  boolean foo = true;
 
+    // private XboxController m_gc;
+
     private Mode mode;
 
 
-    public Intake() {
-        motor = new CANSparkFlex(IntakeConstants.MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
+    public Intake() { //XboxController gc
+        motor = new CANSparkMax(IntakeConstants.MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
         sensor = new DigitalInput(IntakeConstants.SENSOR_ID);
-        mode = Mode.DISABLED;
+        mode = Mode.INTAKE;
+
+        // m_gc = gc;
 
         //digital inputs
         addChild("Intake sensor", sensor);
@@ -68,19 +73,7 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        motor.set(mode.getPower());
-
          publish();
-
-        if (!sensor.get()) {
-            System.out.println("Object detected");
-
-        } else if (sensor.get()) {
-            System.out.println("No object detected");
-
-        } else {
-            System.out.println("=P");
-        }
     }
 
     public double getCurrent() {
