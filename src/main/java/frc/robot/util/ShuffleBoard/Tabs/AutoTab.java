@@ -4,11 +4,17 @@
 
 package frc.robot.util.ShuffleBoard.Tabs;
 
+import javax.sound.midi.VoiceStatus;
+
+import com.revrobotics.CANSparkFlex;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.commands.auto_comm.FollowPathCommand;
 import frc.robot.subsystems.Drivetrain;
@@ -24,7 +30,14 @@ public class AutoTab extends ShuffleBoardTabs {
     public AutoTab(Drivetrain drive){
         this.drive = drive;
     }
-    
+    public void intake(CANSparkFlex motor1, double speed){
+        motor1.set(speed);
+    }
+    public void LineIntake(){
+        new ParallelCommandGroup(
+            new FollowPathCommand("Line", true, drive),
+            new InstantCommand(() -> intake(new CANSparkFlex(5, MotorType.kBrushless), -0.5)));
+    }
     public void createEntries(){  
         tab = Shuffleboard.getTab("Auto");
         
@@ -37,6 +50,7 @@ public class AutoTab extends ShuffleBoardTabs {
         autoCommand.addOption("Test", new FollowPathCommand("Test", true, drive));
         autoCommand.addOption("Test 2", new FollowPathCommand("Test 2", true, drive));
         autoCommand.addOption("Test with Rotations", new FollowPathCommand("Test", true, drive));
+        autoCommand.addOption("Line", new InstantCommand(() -> LineIntake()));
 
         // Example of running multiple commands.
         autoCommand.addOption("Multi",
