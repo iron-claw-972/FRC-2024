@@ -22,13 +22,22 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ArmConstants;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class Arm extends SubsystemBase {
-    
-    private Mechanism2d m_wristDisplay; 
-    private MechanismRoot2d m_pivot;
-    private MechanismLigament2d m_stationary;
-    private MechanismLigament2d m_moving;
+
+    private Mechanism2d m_wristDisplay = new Mechanism2d(90, 90);
+    private MechanismRoot2d m_pivot = m_wristDisplay.getRoot("ArmPivot", 45, 45);
+    // private MechanismLigament2d m_stationary = m_pivot.append(new
+    // MechanismLigament2d("Stationary", 60,
+    // -180));
+    private MechanismLigament2d m_moving = m_pivot.append(
+            new MechanismLigament2d(
+                    "Moving",
+                    30,
+                    Units.radiansToDegrees(/* m_wristPhysicsSim */ simulation.getAngleRads()),
+                    6,
+                    new Color8Bit(Color.kYellow)));
 
     /** the master motor */
     private final TalonFX motor = new TalonFX(ArmConstants.MOTOR_ID);
@@ -43,16 +52,22 @@ public class Arm extends SubsystemBase {
     private DutyCycleEncoderSim encoderSim;
 
     public Arm() {
+        motor.setNeutralMode(ArmConstants.neutralMode);
+        motor.setInverted(ArmConstants.inverted);
+
         // setting the PID tolerance
         pid.setTolerance(ArmConstants.TOLERANCE);
 
         // encoder reports arm angle in radians
         encoder.setDistancePerRotation(ArmConstants.DISTANCE_PER_ROTATION);
         encoder.setPositionOffset(ArmConstants.OFFSET);
+        encoder.setDutyCycleRange(ArmConstants.Duty_Cycle_Min, ArmConstants.Duty_Cycle_Max);
 
         for (int i = 0; i < slaves.length; i++) {
             slaves[i] = new TalonFX(ArmConstants.SLAVE_IDS[i]);
             slaves[i].setControl(new Follower(motor.getDeviceID(), false));
+            slaves[i].setNeutralMode(ArmConstants.neutralMode);
+            slaves[i].setInverted(ArmConstants.inverted);
         }
 
         if (RobotBase.isSimulation()) {
@@ -66,31 +81,22 @@ public class Arm extends SubsystemBase {
                     ArmConstants.MIN_ANGLE_RADS,
                     ArmConstants.MAX_ANGLE_RADS,
                     true,
-                    ArmConstants.START_ANGLE_RADS
-            );
+                    ArmConstants.START_ANGLE_RADS);
 
             // encodersim allows us to set the encoder values
             encoderSim = new DutyCycleEncoderSim(encoder);
 
-            m_wristDisplay = new Mechanism2d(90, 90);
-            m_pivot = m_wristDisplay.getRoot("ArmPivot", 45, 45);
-            // m_stationary = m_pivot.append(new MechanismLigament2d("Stationary", 60, -180));
-            
-            m_moving = m_pivot.append(
-                new MechanismLigament2d(
-                    "Moving",
-                    30,
-                    Units.radiansToDegrees(/*m_wristPhysicsSim*/ simulation.getAngleRads()),
-                    6,
-                    new Color8Bit(Color.kYellow)));
-
-            SmartDashboard.putData("ArmSim", m_wristDisplay); 
+            SmartDashboard.putData("ArmSim", m_wristDisplay);
             SmartDashboard.putData(pid);
 
-            SmartDashboard.putData("Set Angle to 0.0", new InstantCommand(()-> setAngle(0.0)));
-            SmartDashboard.putData("Set Angle to 1.0 Rad", new InstantCommand(()-> setAngle(1.0)));
-
         }
+        SmartDashboard.putData("Set Angle to 0.0", new InstantCommand(() -> setAngle(0.0)));
+        SmartDashboard.putData("Set Angle to 1.0 Rad/57 degrees", new InstantCommand(() -> setAngle(1.0)));
+    }
+
+    public double convertDegreesToRadians(double degrees) {
+        // 1 degree = π / 180 radians
+        return degrees * Math.PI / 180.0;
     }
 
     @Override
@@ -102,7 +108,7 @@ public class Arm extends SubsystemBase {
     @Override
     public void simulationPeriodic() {
         // Assuming the volts
-        double voltsBattery = 12.0;
+        double voltsBattery = 12.8;
 
         simulation.setInputVoltage(motor.get() * voltsBattery);
 
@@ -116,7 +122,7 @@ public class Arm extends SubsystemBase {
     /**
      * Sets the angle of the wrist in radians.
      */
-    public void setAngle(double angle) { 
+    public void setAngle(double angle) {
         pid.reset();
         pid.setSetpoint(angle);
     }
