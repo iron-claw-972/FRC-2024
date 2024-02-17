@@ -44,7 +44,7 @@ public class Module extends SubsystemBase {
 
     protected boolean stateDeadband = true;
 
-    SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(DriveConstants.DRIVE_KS, DriveConstants.DRIVE_KV, DriveConstants.DRIVE_KA);
+    SimpleMotorFeedforward feedforward;
     
     final VelocityVoltage m_VelocityVoltage = new VelocityVoltage(0);
     
@@ -56,7 +56,7 @@ public class Module extends SubsystemBase {
         this.moduleConstants = moduleConstants;
 
         type = moduleConstants.getType();
-
+        feedforward = new SimpleMotorFeedforward(moduleConstants.getKs(), moduleConstants.getKv(), moduleConstants.getKa());
         //angleOffset = new Rotation2d(constants.getSteerOffset());
         angleOffset = moduleConstants.getSteerOffset();
 
@@ -98,7 +98,7 @@ public class Module extends SubsystemBase {
             double velocity = ConversionUtils.falconToRPM(ConversionUtils.MPSToFalcon(desiredState.speedMetersPerSecond, DriveConstants.kWheelCircumference,
                 DriveConstants.kDriveGearRatio), 1)/60;
             // TODO: This curently doesn't use the feedforward.
-            driveMotor.setControl(new VelocityDutyCycle(velocity).withEnableFOC(true));
+            driveMotor.setControl(new VelocityVoltage(velocity).withEnableFOC(true).withFeedForward(feedforward.calculate(velocity)));
         }
         if (Constants.DO_LOGGING) {
             double motorSpeed = ConversionUtils.falconToMPS(ConversionUtils.RPMToFalcon(driveMotor.getVelocity().getValue()/60, 1), DriveConstants.kWheelCircumference,
@@ -212,9 +212,9 @@ public class Module extends SubsystemBase {
         config.SupplyTimeThreshold = DriveConstants.kDrivePeakCurrentDuration;
         driveMotor.getConfigurator().apply(config);
         driveMotor.getConfigurator().apply(new Slot0Configs()
-            .withKP(DriveConstants.kDriveP)
-            .withKI(DriveConstants.kDriveI)
-            .withKD(DriveConstants.kDriveD));
+            .withKP(moduleConstants.getDriveP())
+            .withKI(moduleConstants.getDriveI())
+            .withKD(moduleConstants.getDriveD()));
         driveMotor.getConfigurator().apply(new OpenLoopRampsConfigs().withDutyCycleOpenLoopRampPeriod(DriveConstants.kOpenLoopRamp));
         driveMotor.getConfigurator().apply(new ClosedLoopRampsConfigs().withDutyCycleClosedLoopRampPeriod(DriveConstants.kOpenLoopRamp));
         driveMotor.setInverted(DriveConstants.kDriveMotorInvert);

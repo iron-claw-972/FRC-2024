@@ -11,6 +11,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.subsystems.Drivetrain;
@@ -26,9 +27,9 @@ public class SysIDDriveCommand extends SequentialCommandGroup {
         this.drive = drive;
 
         config = new Config(
-            Units.Volts.of(1).per(Units.Seconds.of(1)),
-            Units.Volts.of(7),
-            Units.Seconds.of(10),
+            Units.Volts.of(0.2).per(Units.Seconds.of(1)),
+            Units.Volts.of(3),
+            Units.Seconds.of(5),
             (x)->SignalLogger.writeString("state", x.toString())
         );
         TalonFX[] driveMotors = {
@@ -44,10 +45,10 @@ public class SysIDDriveCommand extends SequentialCommandGroup {
             drive.getModules()[3].getAngleMotor()
         };
         Rotation2d[] angles = {
-            Rotation2d.fromDegrees(-45-180),
-            Rotation2d.fromDegrees(45),
-            Rotation2d.fromDegrees(45+180),
-            Rotation2d.fromDegrees(-45),
+            Rotation2d.fromDegrees(0),//-45-180)
+            Rotation2d.fromDegrees(0),//45
+            Rotation2d.fromDegrees(0),//45+180)
+            Rotation2d.fromDegrees(0),//-45
         };
         for (int i = 0;i<driveMotors.length; i++){
             BaseStatusSignal.setUpdateFrequencyForAll(250,
@@ -68,8 +69,11 @@ public class SysIDDriveCommand extends SequentialCommandGroup {
         );
         addCommands(
             sysId.runQuasisStatic(Direction.kForward),
+            new WaitCommand(0.5),
             sysId.runQuasisStatic(Direction.kReverse),
+            new WaitCommand(0.5),
             sysId.runDynamic(Direction.kForward),
+            new WaitCommand(0.5),
             sysId.runDynamic(Direction.kReverse)
             );
     }
