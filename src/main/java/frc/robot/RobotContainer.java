@@ -57,6 +57,7 @@ public class RobotContainer {
 
       default:
       case SwerveCompetition:
+      case Vertigo:
       case SwerveTest:
         vision = new Vision(VisionConstants.CAMERAS);
 
