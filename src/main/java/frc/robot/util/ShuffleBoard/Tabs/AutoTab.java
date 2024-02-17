@@ -22,6 +22,7 @@ public class AutoTab extends ShuffleBoardTabs {
     public AutoTab(Drivetrain drive){
         this.drive = drive;
     }
+    
     public void createEntries(){  
         tab = Shuffleboard.getTab("Auto");
         
