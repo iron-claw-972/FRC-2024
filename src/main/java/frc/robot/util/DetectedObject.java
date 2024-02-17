@@ -143,7 +143,8 @@ public class DetectedObject {
      * @return True if the object is a note, false otherwise
      */
     public boolean isGamePiece(){
-        return type==ObjectType.NOTE;
+        return true;
+        // return type==ObjectType.NOTE;
     }
     /**
      * Returns if the object is a robot

@@ -56,8 +56,8 @@ public class VisionTab extends ShuffleBoardTabs {
         tab.add("Align to tag", new AlignToTag(drive));
         SmartDashboard.putData("Acquire game piece PID", new AcquireGamePiecePID(drive, vision));
         tab.add("Acquire game piece PID", new AcquireGamePiecePID(drive, vision));
-        SmartDashboard.putData("Acquire game piece", new AcquireGamePiece(()->vision.getBestGamePiece(Math.PI/2), drive));
-        tab.add("Acquire game piece", new AcquireGamePiece(()->vision.getBestGamePiece(Math.PI/2), drive));
+        SmartDashboard.putData("Acquire game piece", new AcquireGamePiece(()->vision.getBestGamePiece(Math.PI), drive));
+        tab.add("Acquire game piece", new AcquireGamePiece(()->vision.getBestGamePiece(Math.PI), drive));
         SmartDashboard.putData("Return visin data", new ReturnData(vision));
         tab.add("Return data", new ReturnData(vision));
     }
