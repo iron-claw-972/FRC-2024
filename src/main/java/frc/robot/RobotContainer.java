@@ -57,7 +57,15 @@ public class RobotContainer {
       case TestBed1:
         index = new StorageIndex();
         shooter = new Shooter();
-        SmartDashboard.putData("shoot", new InstantCommand(() -> shooter.setTargetRPM(1500)));
+        // add some motor rpm
+        SmartDashboard.setDefaultNumber("RPM top", 1500.0);
+        SmartDashboard.setDefaultNumber("RPM bottom", 1500.0);
+        // add shooter commands
+        SmartDashboard.putData("shoot",
+          new InstantCommand(() -> 
+            shooter.setTargetRPM(
+              SmartDashboard.getNumber("RPM top", 1500.0), 
+              SmartDashboard.getNumber("RPM bottom", 1500.0))));
         SmartDashboard.putData("shoot off", new InstantCommand(() -> shooter.setTargetRPM(0)));
         break;
 
@@ -67,6 +75,7 @@ public class RobotContainer {
 
       default:
       case SwerveCompetition:
+      case Vertigo:
       case SwerveTest:
         vision = new Vision(VisionConstants.CAMERAS);
 
