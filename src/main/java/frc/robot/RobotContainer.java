@@ -8,9 +8,7 @@ import edu.wpi.first.wpilibj.PS5Controller;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.constants.AutoConstants;
@@ -27,34 +25,37 @@ import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
 import lib.controllers.GameController;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
 
-    // The robot's subsystems are defined here...
-    private Drivetrain drive = null;
-    private Vision vision = null;
-    private Shooter shooter = null;
-    private Intake intake = null;
-    private StorageIndex index = null;
+  // The robot's subsystems are defined here...
+  private Drivetrain drive = null;
+  private Vision vision = null;
+  private Shooter shooter = null;
+  private Intake intake = null;
+  private StorageIndex index = null;
 
-    // Controllers are defined here
-    private BaseDriverConfig driver = null;
+  // Controllers are defined here
+  private BaseDriverConfig driver = null;
 
-    ShuffleBoardManager shuffleboardManager = null;
-    // private XboxController gc;
+  ShuffleBoardManager shuffleboardManager = null;
+  // private XboxController gc;
 
-    /**
-     * The container for the robot. Contains subsystems, OI devices, and commands.
-     * <p>
-     * Different robots may have different subsystems.
-     */
-    public RobotContainer(RobotId robotId) {
-      // dispatch on the robot
-      switch (robotId) {
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   * <p>
+   * Different robots may have different subsystems.
+   */
+  public RobotContainer(RobotId robotId) {
+    // dispatch on the robot
+    switch (robotId) {
 
       case TestBed1:
         index = new StorageIndex();
@@ -64,10 +65,7 @@ public class RobotContainer {
         break;
 
       case TestBed2:
-        // gc = new XboxController(0);
-        intake = new Intake(); //gc
-        // SmartDashboard.putData("Rumble on", new InstantCommand(() -> intake.noteRumble(1)));
-        // SmartDashboard.putData("Rumble off", new InstantCommand(() -> intake.noteRumble(0)));
+        intake = new Intake();
         break;
 
       default:
@@ -86,60 +84,64 @@ public class RobotContainer {
 
         shuffleboardManager = new ShuffleBoardManager(drive, vision);
         break;
-      }
-
-      // This is really annoying so it's disabled
-      DriverStation.silenceJoystickConnectionWarning(true);
-
-      // TODO: verify this claim.
-      // LiveWindow is causing periodic loop overruns
-      LiveWindow.disableAllTelemetry();
-      LiveWindow.setEnabled(false);
     }
 
-    /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
-     *
-     * @return the command to run in autonomous
-     */
-    public Command getAutonomousCommand() {
-        return shuffleboardManager.getSelectedCommand();
-    }
+    // This is really annoying so it's disabled
+    DriverStation.silenceJoystickConnectionWarning(true);
 
-    public void updateShuffleBoard(){
-      if (shuffleboardManager != null)
-        shuffleboardManager.update();
-    }
+    // TODO: verify this claim.
+    // LiveWindow is causing periodic loop overruns
+    LiveWindow.disableAllTelemetry();
+    LiveWindow.setEnabled(false);
+  }
 
-    /**
-     * Sets whether the drivetrain uses vision to update odometry
-     */
-   public void setVisionEnabled(boolean enabled) {
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
+  public Command getAutonomousCommand() {
+    return shuffleboardManager.getSelectedCommand();
+  }
+
+  public void updateShuffleBoard() {
+    if (shuffleboardManager != null)
+      shuffleboardManager.update();
+  }
+
+  /**
+   * Sets whether the drivetrain uses vision to update odometry
+   */
+  public void setVisionEnabled(boolean enabled) {
     if (drive != null)
       drive.setVisionEnabled(enabled);
-   }
+  }
 
-   public void initializeAutoBuilder(){
+  public void initializeAutoBuilder() {
     AutoBuilder.configureHolonomic(
-      ()->drive.getPose(),
-      (pose) -> {drive.resetOdometry(pose);},
-      ()->drive.getChassisSpeeds(),
-      (chassisSpeeds) -> {drive.setChassisSpeeds(chassisSpeeds,false);},
-      AutoConstants.config,
-      getAllianceColorBooleanSupplier(),
-      drive
-    );
-   }
+        () -> drive.getPose(),
+        (pose) -> {
+          drive.resetOdometry(pose);
+        },
+        () -> drive.getChassisSpeeds(),
+        (chassisSpeeds) -> {
+          drive.setChassisSpeeds(chassisSpeeds, false);
+        },
+        AutoConstants.config,
+        getAllianceColorBooleanSupplier(),
+        drive);
+  }
 
-   public static BooleanSupplier getAllianceColorBooleanSupplier(){
+  public static BooleanSupplier getAllianceColorBooleanSupplier() {
     return () -> {
-      // Boolean supplier that controls when the path will be mirrored for the red alliance
+      // Boolean supplier that controls when the path will be mirrored for the red
+      // alliance
       // This will flip the path being followed to the red side of the field.
       // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
       var alliance = DriverStation.getAlliance();
       if (alliance.isPresent()) {
-          return alliance.get() == DriverStation.Alliance.Red;
+        return alliance.get() == DriverStation.Alliance.Red;
       }
       return false;
     };

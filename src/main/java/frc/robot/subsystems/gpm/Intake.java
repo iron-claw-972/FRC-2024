@@ -2,6 +2,7 @@ package frc.robot.subsystems.gpm;
 
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkFlex;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -10,47 +11,51 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.IntakeConstants;
 
-
 public class Intake extends SubsystemBase {
 
     public enum Mode {
-        INTAKE(IntakeConstants.INTAKE_POWER), DISABLED(0)
-        ;
+        INTAKE(IntakeConstants.INTAKE_POWER, IntakeConstants.CENTERING_POWER),
+        DISABLED(0, 0);
 
         private double power;
+        private double centeringPower;
 
-        Mode(double power) {
+        Mode(double power, double centeringPower) {
             this.power = power;
+            this.centeringPower = centeringPower;
         }
 
         public double getPower() {
             return power;
         }
+
+        public double getCenteringPower() {
+            return centeringPower;
+        }
     }
 
-    public final CANSparkMax motor;
+    private final CANSparkFlex motor;
+    private final CANSparkMax centeringMotor;
     private final DigitalInput sensor;
 
     private int countSim = 0;
     private DIOSim IntakeSensorDioSim;
-    private  boolean foo = true;
+    private boolean simDIOValue = true;
 
     // private XboxController m_gc;
 
     private Mode mode;
 
-
-    public Intake() { //XboxController gc
-        motor = new CANSparkMax(IntakeConstants.MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
+    public Intake() {
+        motor = new CANSparkFlex(IntakeConstants.MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
+        centeringMotor = new CANSparkMax(IntakeConstants.CENTERING_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
         sensor = new DigitalInput(IntakeConstants.SENSOR_ID);
-        mode = Mode.INTAKE;
+        mode = Mode.DISABLED;
 
-        // m_gc = gc;
-
-        //digital inputs
+        // digital inputs
         addChild("Intake sensor", sensor);
 
-//         //Simulation objects
+        // //Simulation objects
         if (RobotBase.isSimulation()) {
             IntakeSensorDioSim = new DIOSim(sensor);
         }
@@ -58,7 +63,7 @@ public class Intake extends SubsystemBase {
         publish();
     }
 
-     //publish sensor to Smart Dashboard
+    // publish sensor to Smart Dashboard
     private void publish() {
         SmartDashboard.putBoolean("Intake Sensor", sensor.get());
     }
@@ -68,33 +73,40 @@ public class Intake extends SubsystemBase {
     }
 
     public boolean hasNote() {
-        return sensor.get();
+        return !sensor.get();
     }
 
     @Override
     public void periodic() {
-         publish();
+        motor.set(mode.getPower());
+        centeringMotor.set(mode.getCenteringPower());
+
+        publish();
     }
 
     public double getCurrent() {
         return Math.abs(motor.getOutputCurrent());
     }
 
+    public double getCenteringCurrent() {
+        return Math.abs(centeringMotor.getOutputCurrent());
+    }
+
     @Override
     public void simulationPeriodic() {
 
-        //change values every 1/2 secound
-         if (countSim++ > 25) {
+        // change values every 1/2 secound
+        if (countSim++ > 25) {
             countSim = 0;
 
-            IntakeSensorDioSim.setValue(foo);
+            IntakeSensorDioSim.setValue(simDIOValue);
 
-            foo = ! foo;
-         }
+            simDIOValue = !simDIOValue;
+        }
 
     }
 
-     public void close() {
-            sensor.close();
+    public void close() {
+        sensor.close();
     }
 }

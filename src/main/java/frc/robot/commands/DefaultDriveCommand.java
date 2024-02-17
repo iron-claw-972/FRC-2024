@@ -16,8 +16,7 @@ public class DefaultDriveCommand extends Command {
 
     public DefaultDriveCommand(
             Drivetrain swerve,
-            BaseDriverConfig driver
-                              ) {
+            BaseDriverConfig driver) {
         this.swerve = swerve;
         this.driver = driver;
         addRequirements(swerve);
@@ -41,26 +40,25 @@ public class DefaultDriveCommand extends Command {
         sideTranslation *= slowFactor;
         rotation *= driver.getIsSlowMode() ? DriveConstants.kSlowRotFactor : 1;
 
-        int allianceReversal = DriverStation.getAlliance().get() == Alliance.Blue ? 1 : -1;
+        int allianceReversal = DriverStation.getAlliance().get() == Alliance.Red ? 1 : -1;
         forwardTranslation *= allianceReversal;
         sideTranslation *= allianceReversal;
 
-        // If the driver is pressing the align button or a command set the drivetrain to align, then align to speaker
+        // If the driver is pressing the align button or a command set the drivetrain to
+        // align, then align to speaker
         if (driver.getIsAlign() || swerve.getIsAlign()) {
             swerve.driveHeading(
                     forwardTranslation,
                     sideTranslation,
                     swerve.getAlignAngle(),
-                    true
-                );
+                    true);
         } else {
             swerve.drive(
-                forwardTranslation,
-                sideTranslation,
-                rotation,
-                true,
-                false
-            );
+                    forwardTranslation,
+                    sideTranslation,
+                    rotation,
+                    true,
+                    false);
         }
     }
 }
