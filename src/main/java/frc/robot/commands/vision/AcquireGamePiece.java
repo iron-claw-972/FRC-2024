@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.GoToPose;
+import frc.robot.commands.GoToPosePID;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.DetectedObject;
@@ -18,7 +19,7 @@ public class AcquireGamePiece extends SequentialCommandGroup{
      */
     public AcquireGamePiece(Supplier<DetectedObject> gamePiece, Drivetrain drive){
         //TODO: Add code to move intake after deciding on a design in 2024
-        addCommands(new GoToPose(()->getPose(gamePiece), drive));
+        addCommands(new GoToPosePID(()->getPose(gamePiece), drive));
     }
     
     /**
