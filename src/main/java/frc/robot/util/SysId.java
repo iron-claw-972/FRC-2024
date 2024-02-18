@@ -29,64 +29,9 @@ import com.ctre.phoenix6.SignalLogger;
 /** Add your docs here. */
 public class SysId {
 
-
     SysIdRoutine sysIdRoutine;
 
-    public SysId(String name, TalonFX talon, TalonFX talon2, Subsystem subsystem, Rotation2d angle){
-        this(name, talon, talon2,subsystem,new Config(),angle);
-    }
-    
-    public SysId(String name,TalonFX talon, Subsystem subsystem, Config config){
-        this(name, talon, null,subsystem,config,null);
-    }
-    
-    public SysId(String name,TalonFX talon, TalonFX talon2, Subsystem subsystem, Config config, Rotation2d angle){
-        sysIdRoutine = new SysIdRoutine(
-            config,
-            new Mechanism(
-                x ->{
-                    if (talon2 !=null){
-                        talon2.setControl(new PositionDutyCycle(angle.getRotations()*DriveConstants.kModuleConstants.angleGearRatio));
-                    }
-                    talon.setVoltage(x.magnitude());
-                },
-                x ->{
-                    x.motor(name).angularPosition(Units.Revolutions.of(talon.getPosition().getValue()));
-                    x.motor(name).angularVelocity(Units.RevolutionsPerSecond.of(talon.getVelocity().getValue()));
-                    x.motor(name).voltage(Units.Volts.of(talon.getMotorVoltage().getValue()));
-                },
-                subsystem,
-                name
-            )
-        );
-    }
-    public SysId(String name, TalonFX[] talons, TalonFX[] angleTalons, Subsystem subsystem, Config config, Rotation2d[] angle){
-        sysIdRoutine = new SysIdRoutine(
-            config,
-            new Mechanism(
-                x ->{
-                    if (angleTalons !=null){
-                        for (int i =0; i<4;i++){ 
-                        angleTalons[i].setControl(new PositionDutyCycle(angle[i].getRotations()*DriveConstants.kModuleConstants.angleGearRatio));
-                    }
-                }
-                    for (TalonFX motor: talons){
-                        motor.setVoltage(x.magnitude());
-                    }
-                    
-                },
-                x ->{
-                    for (int i = 0; i<talons.length;i++){
-                    x.motor(name).angularPosition(Units.Revolutions.of(talons[i].getPosition().getValue()));
-                    x.motor(name).angularVelocity(Units.RevolutionsPerSecond.of(talons[i].getVelocity().getValue()));
-                    x.motor(name).voltage(Units.Volts.of(talons[i].getMotorVoltage().getValue()));
-                }},
-                subsystem,
-                name
-            )
-        );
-    }
-    public SysId(String name, Consumer<Measure<Voltage>> driveConsumer,Consumer<SysIdRoutineLog> logConsumer, Subsystem subsystem, Config config, Rotation2d angle){
+    public SysId(String name, Consumer<Measure<Voltage>> driveConsumer, Consumer<SysIdRoutineLog> logConsumer, Subsystem subsystem, Config config){
         sysIdRoutine = new SysIdRoutine(
             config,
             new Mechanism(
@@ -97,8 +42,8 @@ public class SysId {
             )
         );
     }
-    public SysId(String name, Consumer<Measure<Voltage>> driveConsumer, Subsystem subsystem, Config config, Rotation2d angle){
-        this(name,driveConsumer,null,subsystem,config,angle);
+    public SysId(String name, Consumer<Measure<Voltage>> driveConsumer, Subsystem subsystem, Config config){
+        this(name,driveConsumer,null,subsystem,config);
     }
 
     public Command runQuasisStatic(Direction direction){

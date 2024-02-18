@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.SignalLogger;
+import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -14,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.SysId;
 
@@ -45,27 +47,25 @@ public class SysIDDriveCommand extends SequentialCommandGroup {
             drive.getModules()[3].getAngleMotor()
         };
         Rotation2d[] angles = {
-            Rotation2d.fromDegrees(0),//-45-180)
+            Rotation2d.fromDegrees(0),//-45-180
             Rotation2d.fromDegrees(0),//45
-            Rotation2d.fromDegrees(0),//45+180)
+            Rotation2d.fromDegrees(0),//45+180
             Rotation2d.fromDegrees(0),//-45
         };
-        for (int i = 0;i<driveMotors.length; i++){
-            BaseStatusSignal.setUpdateFrequencyForAll(250,
-            driveMotors[i].getPosition(),
-            driveMotors[i].getVelocity(),
-            driveMotors[i].getMotorVoltage());
-
-        /* Optimize out the other signals, since they're not particularly helpful for us */
-        driveMotors[i].optimizeBusUtilization();
-        }
         sysId = new SysId(
             "Drivetrain",
-            driveMotors,
-            angleMotors,
+            x ->{
+                    for (int i =0; i<angleMotors.length;i++){ 
+                        angleMotors[i].setControl(new PositionDutyCycle(angles[i].getRotations()*DriveConstants.kModuleConstants.angleGearRatio));
+                    }
+                
+                    for (TalonFX motor: driveMotors){
+                        motor.setVoltage(x.magnitude());
+                    }
+                    
+                },
             drive,
-            config,
-            angles
+            config
         );
         addCommands(
             sysId.runQuasisStatic(Direction.kForward),
