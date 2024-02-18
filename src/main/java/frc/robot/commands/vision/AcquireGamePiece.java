@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.GoToPose;
+import frc.robot.commands.GoToPosePID;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.DetectedObject;
@@ -18,8 +19,9 @@ public class AcquireGamePiece extends SequentialCommandGroup{
      */
     public AcquireGamePiece(Supplier<DetectedObject> gamePiece, Drivetrain drive){
         //TODO: Add code to move intake after deciding on a design in 2024
-        addCommands(new GoToPose(()->getPose(gamePiece), drive));
+        addCommands(new GoToPosePID(()->getPose(gamePiece), drive));
     }
+    
     /**
      * Gets the pose to move to, which is the game piece's pose with the angle between the robot and game piece
      * @param gamePieceSupplier The supplier for the game piece to move to
@@ -33,6 +35,13 @@ public class AcquireGamePiece extends SequentialCommandGroup{
             return null;
         }
         double angle = gamePiece.getAngle();
+        
+        System.out.println("dist: " + gamePiece.getDistance());
+        System.out.println("x: "+ (gamePiece.pose.getX()));
+        System.out.println("y: "+ (gamePiece.pose.getY()));
+        System.out.println("angle: " + angle);
+
+
         return new Pose2d(
             gamePiece.pose.getX()-dist*Math.cos(angle),
             gamePiece.pose.getY()-dist*Math.sin(angle),

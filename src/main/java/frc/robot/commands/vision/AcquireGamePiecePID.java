@@ -69,7 +69,7 @@ public class AcquireGamePiecePID extends CommandBase {
     distanceOutput = MathUtil.clamp(distanceOutput, -DriveConstants.kMaxSpeed, DriveConstants.kMaxSpeed); 
     
     // Use 3 m/s instead of the calculated output
-    distanceOutput = 3;
+    distanceOutput = 0;
     
     double xSpeed = distanceOutput*Math.cos(xOffset);
     double ySpeed = distanceOutput*Math.sin(xOffset);
