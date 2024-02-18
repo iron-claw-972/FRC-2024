@@ -79,7 +79,7 @@ public class RobotContainer {
         vision = new Vision(VisionConstants.CAMERAS);
 
         drive = new Drivetrain(vision);
-        driver = new GameControllerDriverConfig(drive);
+        driver = new GameControllerDriverConfig(drive, vision);
 
         // Detected objects need access to the drivetrain
         DetectedObject.setDrive(drive);
