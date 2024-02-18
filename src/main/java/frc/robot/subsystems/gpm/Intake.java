@@ -75,7 +75,8 @@ public class Intake extends SubsystemBase {
     private Mode mode;
 
     private int hasNoteCounter;
-    private int waitCounter;
+    private int waitTimeCounter;
+    private int noteWaitTime = 50; //50*20 = 1000 = 1 sec
 
     public Intake() {
         motor = new CANSparkFlex(IntakeConstants.MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
@@ -147,20 +148,20 @@ public class Intake extends SubsystemBase {
             case PickedUpNote:
                 if(sensor.get()) {
                     setMode(Mode.Wait);
-                    waitCounter = 0;
+                    waitTimeCounter = 0;
                 }
 //
-                if (hasNoteCounter++ > 25){ //500 ms -- does that happen automatically or are there conversion that need to be done? my logic: 500/20 = 25
+                if (hasNoteCounter++ > noteWaitTime){ //500 ms -- does that happen automatically or are there conversion that need to be done? my logic: 500/20 = 25
                     setMode(Mode.ReverseMotors);
                     motor.set(-motorPower);
                     centeringMotor.set(-centeringMotorPower);
-                }
+                } 
                 break;
 
             case Wait:
-                waitCounter++;
+                waitTimeCounter++;
 
-                if(waitCounter > 5) { //100ms / 20 ms = 5
+                if(waitTimeCounter > 5) { //100ms / 20 ms = 5
                     setMode(Mode.DISABLED);
                 }
                 break;
