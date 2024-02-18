@@ -43,7 +43,7 @@ public class Shooter extends SubsystemBase {
 	// each motor spins 4 Colson wheels
 	private static final double MOI_SHAFT = MOI_COLSON * 4;
 
-	// top motor
+	// left motor
 	private final CANSparkFlex leftMotor = new CANSparkFlex(ShooterConstants.LEFT_MOTOR_ID, MotorType.kBrushless);
 	private final RelativeEncoder leftMotorEncoder = leftMotor.getEncoder();
 	/** PID controller uses RPM as input and outputs motor power */
@@ -52,7 +52,7 @@ public class Shooter extends SubsystemBase {
 	private double leftMotorSpeedSim;
 	private double leftPower = 0.0;
 
-	// bottrightor
+	// right motor
 	private final CANSparkFlex rightMotor = new CANSparkFlex(ShooterConstants.RIGHT_MOTOR_ID, MotorType.kBrushless);
 	private final RelativeEncoder rightMotorEncoder = rightMotor.getEncoder();
 	/** PID controller uses RPM as input and outputs motor power */
@@ -68,7 +68,7 @@ public class Shooter extends SubsystemBase {
 		// set the RPM tolerance of the PID controllers
 		leftPID.setTolerance(TOLERANCE);
 		rightPID.setTolerance(TOLERANCE);
-		// invert the bottom motor so +power sends the note out
+		// invert the right motor so +power sends the note out
 		rightMotor.setInverted(true);
 
 		// are we simulating?
@@ -104,10 +104,8 @@ public class Shooter extends SubsystemBase {
 		// assume the battery voltage is 12 volts
 		double voltage = 12.0;
 
-		// topPower and bottomPower are now member variables; cannot read them from
+		// leftPower and rightPower are now member variables; cannot read them from
 		// simulated encoder
-		// double topPower = topMotor.get();
-		// double bottomPower = bottomMotor.get();
 
 		// set the system inputs
 		leftFlywheelSim.setInputVoltage(leftPower * voltage);
@@ -158,15 +156,15 @@ public class Shooter extends SubsystemBase {
 	/**
 	 * Sets the speed both shooter motors try to spin up to independantly.
 	 *
-	 * @param speedTop    the speed tho top motor will spin to in RPM
-	 * @param speedBottom the speed the bottom motor will spin to in RPM
+	 * @param speedLeft  the speed tho top motor will spin to in RPM
+	 * @param speedRight the speed the bottom motor will spin to in RPM
 	 */
-	public void setTargetRPM(double speedTop, double speedBottom) {
+	public void setTargetRPM(double speedLeft, double speedRight) {
 		leftPID.reset();
-		leftPID.setSetpoint(speedTop);
+		leftPID.setSetpoint(speedLeft);
 
 		rightPID.reset();
-		rightPID.setSetpoint(speedBottom);
+		rightPID.setSetpoint(speedRight);
 	}
 
 	/**
@@ -203,11 +201,11 @@ public class Shooter extends SubsystemBase {
 	 * Gets the RPM of the top motor, checking whether this is a simulation.
 	 *
 	 * @return the top motor's RPM
-	 * @see getBottomMotorRPM
-	 * @see getTopMotorSpeed
+	 * @see getRightMotorRPM
+	 * @see getLeftMotorSpeed
 	 * @see atSetpoint
 	 */
-	public double getTopMotorRPM() {
+	public double getLeftMotorRPM() {
 		// REV does not let us set the encoder velocity in a simulation, so use
 		// simulated value
 		if (RobotBase.isSimulation()) {
@@ -225,7 +223,7 @@ public class Shooter extends SubsystemBase {
 	 * @see getBottomMotorSpeed
 	 * @see atSetpoint
 	 */
-	public double getBottomMotorRPM() {
+	public double getRightMotorRPM() {
 		// REV does not let us set the encoder velocity in a simulation, so use
 		// simulated value
 		if (RobotBase.isSimulation()) {
@@ -243,8 +241,8 @@ public class Shooter extends SubsystemBase {
 	 * @see getTopMotorRPM
 	 * @see atSetpoint
 	 */
-	public double getTopMotorSpeed() {
-		return shooterRPMToSpeed(getTopMotorRPM());
+	public double getLeftMotorSpeed() {
+		return shooterRPMToSpeed(getLeftMotorRPM());
 	}
 
 	/**
@@ -255,8 +253,8 @@ public class Shooter extends SubsystemBase {
 	 * @see getBottomMotorRPM
 	 * @see atSetpoint
 	 */
-	public double getBottomMotorSpeed() {
-		return shooterRPMToSpeed(getBottomMotorRPM());
+	public double getRightMotorSpeed() {
+		return shooterRPMToSpeed(getRightMotorRPM());
 	}
 
 	/**
@@ -269,7 +267,7 @@ public class Shooter extends SubsystemBase {
 	 * @see atSetpoint
 	 */
 	public double getMotorRPMDifference() {
-		return getTopMotorRPM() - getBottomMotorRPM();
+		return getLeftMotorRPM() - getRightMotorRPM();
 	}
 
 	/**
@@ -283,6 +281,6 @@ public class Shooter extends SubsystemBase {
 	 * @see atSetpoint
 	 */
 	public double getMotorSpeedDifference() {
-		return getTopMotorSpeed() - getBottomMotorSpeed();
+		return getLeftMotorSpeed() - getRightMotorSpeed();
 	}
 }
