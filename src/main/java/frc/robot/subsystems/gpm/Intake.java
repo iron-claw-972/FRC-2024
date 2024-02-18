@@ -2,7 +2,6 @@ package frc.robot.subsystems.gpm;
 
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkFlex;
 
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -71,8 +70,6 @@ public class Intake extends SubsystemBase {
     public Intake() {
         motor = new CANSparkFlex(IntakeConstants.MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
         centeringMotor = new CANSparkMax(IntakeConstants.CENTERING_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
-        motor.setIdleMode(IntakeConstants.idleMode);
-        centeringMotor.setIdleMode(IntakeConstants.idleMode);
         sensor = new DigitalInput(IntakeConstants.SENSOR_ID);
         mode = Mode.DISABLED;
 
