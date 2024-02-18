@@ -5,18 +5,18 @@ import edu.wpi.first.math.util.Units;
 
 public class ArmConstants {
 
-    public static final int MOTOR_ID = -1;
+    public static final int MOTOR_ID = 1;
     public static final int[] SLAVE_IDS = new int[] {
-            -1, -1, -1
+            2, 3, 4
     };
     // TODO use real encoder id
-    public static final int ENCODER_ID = -1;
+    public static final int ENCODER_ID = 0;
 
     public static final double S = 0;
     public static final double V = 0;
-    public static final double P = 2.0;
+    public static final double P = 3400;
     public static final double I = 0;
-    public static final double D = .001;
+    public static final double D = 500;
 
     // All angle measurements in radians
     public static final double OFFSET = 0;
@@ -24,7 +24,7 @@ public class ArmConstants {
     public static final double DISTANCE_PER_ROTATION = 2 * Math.PI;
 
     // TODO use the real gearing
-    public static final double GEARING = 175.0;
+    public static final double GEARING = 172.8;
     // TODO use the real moi
     // guess the MOI as radius = 0.5 meter and the mass is 10 kg
     public static final double MOMENT_OF_INERTIA = 2.5;
