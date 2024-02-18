@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public enum RobotId {
     Default,
-    SwerveCompetition, SwerveTest,
+    SwerveCompetition, Vertigo, SwerveTest,
     ClassBot1, ClassBot2, ClassBot3, ClassBot4,
     TestBed1, TestBed2;
 

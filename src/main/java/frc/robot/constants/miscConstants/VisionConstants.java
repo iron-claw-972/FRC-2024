@@ -39,12 +39,12 @@ public class VisionConstants {
   // The number to multiply the distance to the April tag by
   // Only affects manual calculations
   // To find this, set it to 1 and measure the actual distance and the calculated distance
-  public static final double DISTANCE_SCALE = 0.85;
+  public static final double DISTANCE_SCALE = 1.05;
 
   /*
    * The standard deviations to use for the vision
    */
-  public static final Matrix<N3, N1> VISION_STD_DEVS = new MatBuilder<>(Nat.N3(), Nat.N1()).fill(
+  public static final Matrix<N3, N1> VISION_STD_DEVS = MatBuilder.fill(Nat.N3(), Nat.N1(),
     0.00443, // x in meters (default=0.9)
     0.00630, // y in meters (default=0.9)
     1000  // heading in radians. The gyroscope is very accurate, so as long as it is reset correctly it is unnecessary to correct it with vision

@@ -115,7 +115,7 @@ public class DriveConstants {
 
     /* Neutral Modes */
     public static final NeutralModeValue kDriveNeutralMode = NeutralModeValue.Brake;
-    public static final NeutralModeValue kAngleNeutralMode = NeutralModeValue.Coast;
+    public static final NeutralModeValue kAngleNeutralMode = NeutralModeValue.Brake;
 
     /* Drive Motor PID Values */
     public static final double kDriveP = 0.05;
@@ -144,34 +144,40 @@ public class DriveConstants {
      * Updates the constants if the RobotId is not the competition robot.
      */
     public static void update(RobotId robotId) {
-        if (robotId == RobotId.SwerveTest) {
+        if (robotId == RobotId.Vertigo) {
+            kTrackWidth = Units.inchesToMeters(20.75);//22.75 swerve bot, 20.75 comp bot
+            
+            kPigeon = 13;
+
+            kSteerOffsetFrontLeft = 4.185;//0.058291152119637;//-3.060285486280918+Math.PI;
+
+            kSteerOffsetFrontRight = 101.519+90;//-2.994324445724487;//-3.001994334161282;
+
+            kSteerOffsetBackLeft = 38.997+180;//-2.540267050266266;//0.650406539440155+Math.PI;
+
+            kSteerOffsetBackRight = 242.847-90;//2.626169800758362;//2.771897681057453;
+
+            // CAN
+            kDriveMotorCAN = Constants.CANIVORE_CAN;
+        
+        } else if (robotId == RobotId.SwerveTest) {
 
             kTrackWidth = Units.inchesToMeters(22.75); //22.75 swerve bot, 20.75 comp bot
 
             kPigeon = 13;
+        
+            kSteerOffsetFrontLeft = -448.91;
 
-            kDriveFrontLeft = 1;
-            kSteerFrontLeft = 2;
-            kEncoderFrontLeft = 9;
-            kSteerOffsetFrontLeft = -1.58;
+            kSteerOffsetFrontRight = 112.473;
+            // kSteerOffsetFrontRight = 10.957+90;
 
-            kDriveFrontRight = 7;
-            kSteerFrontRight = 8;
-            kEncoderFrontRight = 12;
-            kSteerOffsetFrontRight = 1.935;
+            kSteerOffsetBackLeft = 180;
+            // [new one] kSteerOffsetBackLeft = 339.689;
 
-            kDriveBackLeft = 5;
-            kSteerBackLeft = 6;
-            kEncoderBackLeft = 11;
-            kSteerOffsetBackLeft = -8;
-
-            kDriveBackRight = 3;
-            kSteerBackRight = 4;
-            kEncoderBackRight = 10;
-            kSteerOffsetBackRight = -0.383494421839714;
+            kSteerOffsetBackRight = 333.241;
 
             // CAN
-            kDriveMotorCAN = Constants.RIO_CAN;
+            kDriveMotorCAN = Constants.CANIVORE_CAN;
         }
     }
 }
