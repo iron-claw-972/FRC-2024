@@ -70,6 +70,8 @@ public class Shooter extends SubsystemBase {
 		rightPID.setTolerance(TOLERANCE);
 		// invert the right motor so +power sends the note out
 		rightMotor.setInverted(true);
+		leftMotor.setIdleMode(ShooterConstants.idleMode);
+		rightMotor.setIdleMode(ShooterConstants.idleMode);
 
 		// are we simulating?
 		if (RobotBase.isSimulation()) {
