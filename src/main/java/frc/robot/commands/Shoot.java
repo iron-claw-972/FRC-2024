@@ -10,18 +10,22 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Shooter;
 
-
+//00 is the bottom right corner of blue wall in m
 /**
  * Shoots on the move (instantaneous velocities and pose ver.).
  */
 public class Shoot extends Command {
         private final Shooter shooter;
-        private final Arm arm;
+        public final Arm arm;
         private final Drivetrain drive;
 
-        private Pose3d displacement;
-        private double v_rx;
-        private double v_ry;
+        // for testing sakes
+        public double horiz_angle;
+        public double vert_angle;
+        public double exit_vel;
+        public Pose3d displacement;
+        public double v_rx;
+        public double v_ry;
         private final double REST_ANGLE = .55; // TODO: determine average desirable angle in radians.
         private final double REST_VEL = 4; // TODO: determine the fastest idle note-exit velocity that won't kill the battery.
 
@@ -40,6 +44,8 @@ public class Shoot extends Command {
 
         @Override
         public void execute() {
+                /* temporarily, for testing purposes.
+                // TODO: make this only run once?
                 Pose3d speakerPose = DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
                 //TODO: Add this and make it change with arm angle
                 double shooterHeight = .5;
@@ -59,7 +65,7 @@ public class Shoot extends Command {
                 // Set the drivetrain velocities
                 v_rx = drive.getChassisSpeeds().vxMetersPerSecond;
                 v_ry = drive.getChassisSpeeds().vyMetersPerSecond;
-
+                */
                 // TODO: Figure out what v_note is empirically
                 double v_note = 10;
 
@@ -72,15 +78,23 @@ public class Shoot extends Command {
                 // Basic vertical angle calculation (static robot)
                 double phi_v = Math.atan(Math.pow(v_note, 2) / 9.8 / x * (1 - Math.sqrt(1
                         + 19.6 / Math.pow(v_note, 2) * (y - 4.9 * x * x / Math.pow(v_note, 2)))));
+                System.err.println("pv tracks"+phi_v);
                 // Angle to goal
                 // double phi_h = drivetrain.getAlignAngle();
                 double phi_h = Math.asin(y / x);
+                System.err.println("ph " + phi_h);
 
                 // Random variable to hold recurring code
                 double a = v_note * Math.cos(phi_v) * Math.sin(phi_h);
                 double theta_h = Math.atan((a + v_ry) / (v_note * Math.cos(phi_v) * Math.cos(phi_h) + v_rx));
                 double theta_v = 1 / Math.atan((a + v_ry) / (v_note * Math.sin(phi_v) * Math.cos(phi_h)));
                 double v_shoot = v_note * Math.sin(phi_v) / Math.sin(theta_v);
+                horiz_angle = theta_h;
+                vert_angle = theta_v;
+                exit_vel = v_shoot;               
+                System.err.println(horiz_angle);
+                System.err.println(vert_angle);
+                System.err.println(exit_vel);
 
                 arm.setAngle(theta_v);
                 drive.setAlignAngle(theta_h);
