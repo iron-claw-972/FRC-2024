@@ -172,8 +172,25 @@ public class DriveConstants {
      * Updates the constants if the RobotId is not the competition robot.
      */
     public static void update(RobotId robotId) {
-        if (robotId == RobotId.SwerveTest) {
-          kTrackWidth = Units.inchesToMeters(22.75); //22.75 swerve bot, 20.75 comp bot
+        if (robotId == RobotId.Vertigo) {
+            kTrackWidth = Units.inchesToMeters(20.75);//22.75 swerve bot, 20.75 comp bot
+            
+            kPigeon = 13;
+
+            kSteerOffsetFrontLeft = 4.185;//0.058291152119637;//-3.060285486280918+Math.PI;
+
+            kSteerOffsetFrontRight = 101.519+90;//-2.994324445724487;//-3.001994334161282;
+
+            kSteerOffsetBackLeft = 38.997+180;//-2.540267050266266;//0.650406539440155+Math.PI;
+
+            kSteerOffsetBackRight = 242.847-90;//2.626169800758362;//2.771897681057453;
+
+            // CAN
+            kDriveMotorCAN = Constants.CANIVORE_CAN;
+        
+        } else if (robotId == RobotId.SwerveTest) {
+
+            kTrackWidth = Units.inchesToMeters(22.75); //22.75 swerve bot, 20.75 comp bot
 
             kPigeon = 13;
         
