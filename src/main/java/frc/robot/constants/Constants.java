@@ -34,7 +34,7 @@ public class Constants {
     public static final boolean BREAK_ON_WRONG_FIRMWARE = false; // TODO: fix issue that make the robot break
 
     public static final double RESOLUTION = 2048;
-    //
+    // Kraken Speed
     public static double MAX_RPM = 5800.0; // Rotations per minute
 
 
