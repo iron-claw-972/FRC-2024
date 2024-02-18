@@ -14,6 +14,7 @@ import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
 import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.subsystems.gpm.StorageIndex;
@@ -35,6 +36,7 @@ public class RobotContainer {
   // The robot's subsystems are defined here...
   private Drivetrain drive = null;
   private Vision vision = null;
+  private Arm arm = null;
   private Shooter shooter = null;
   private Intake intake = null;
   private StorageIndex index = null;
@@ -73,7 +75,8 @@ public class RobotContainer {
 
       default:
       case SwerveCompetition:
-      case Vertigo:
+        arm = new Arm();
+
       case SwerveTest:
         vision = new Vision(VisionConstants.CAMERAS);
 
