@@ -37,8 +37,10 @@ public class AutoTab extends ShuffleBoardTabs {
         autoCommand.addOption("Test", new FollowPathCommand("Test", true, drive));
         autoCommand.addOption("Test 2", new FollowPathCommand("Test 2", true, drive));
         autoCommand.addOption("Test with Rotations", new FollowPathCommand("Test", true, drive));
-
-        // Example of running multiple commands.
+        autoCommand.addOption("Under the Stage", new FollowPathCommand("Under the Stage", true, drive));
+        autoCommand.addOption("Double Under the Stage", new FollowPathCommand("Double Under the Stage", true, drive));
+        
+         // Example of running multiple commands.
         autoCommand.addOption("Multi",
             Commands.sequence(
                 new FollowPathCommand("Test", true, drive),
