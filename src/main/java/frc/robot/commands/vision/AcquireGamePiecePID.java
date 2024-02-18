@@ -1,54 +1,38 @@
 package frc.robot.commands.vision;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.constants.swerve.DriveConstants;
+import java.util.function.Supplier;
+
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.util.Vision;
+import frc.robot.util.DetectedObject;
 
 /**
  * Moves toward the detected object
  * <p>Only works with the front camera
  */
-public class AcquireGamePiecePID extends CommandBase {
+public class AcquireGamePiecePID extends Command {
 
-  private Drivetrain m_drive; 
-  private Vision m_vision;
+  private Drivetrain drive; 
+  private Supplier<DetectedObject> objectSupplier;
 
-  private PIDController m_rotationPID; 
-  private PIDController m_distancePID; 
-  
-/**
- * Moves toward the detected object
- * <p>Only works with the front camera
+  /**
+   * Moves toward the detected object
+   * <p>Only works with the front camera
+   * @param detectedObject The supplier for the detected object to use
    * @param drive The drivetrain
-   * @param vision The vision
    */
-  public AcquireGamePiecePID(Drivetrain drive, Vision vision) {
-    m_drive = drive;
-    m_vision = vision;
-
-    // Use similar PIDs to the drivetrain
-    m_rotationPID = new PIDController(DriveConstants.kHeadingP, 0, DriveConstants.kHeadingD);
-    m_rotationPID.setTolerance(Units.degreesToRadians(3)); //3 degree of tolerance
-    m_rotationPID.setSetpoint(0);
-
-    m_distancePID = new PIDController(DriveConstants.kTranslationalP, 0, DriveConstants.kTranslationalD); 
-    m_distancePID.setTolerance(0.02); //2 cm of tolerance
-    m_distancePID.setSetpoint(0);
+  public AcquireGamePiecePID(Supplier<DetectedObject> detectedObject, Drivetrain drive) {
+    this.objectSupplier = detectedObject;
+    this.drive = drive;
 
     addRequirements(drive);
   }
 
   /**
-   * Resets PIDs
+   * Does nothing
    */
   @Override
   public void initialize(){
-    m_rotationPID.reset();
-    m_distancePID.reset();
   }
 
   /**
@@ -56,35 +40,22 @@ public class AcquireGamePiecePID extends CommandBase {
    */
   @Override
   public void execute() {
-    if(m_vision.getHorizontalOffset().length==0){
-      m_drive.stop();
+    DetectedObject object = objectSupplier.get();
+    if(object == null){
+      drive.stop();
       return;
     }
-    //get horizontal offset from cam to center of game piece + distance from cam to game piece from networktables
-    double xOffset = -Units.degreesToRadians(m_vision.getHorizontalOffset()[0]);
-    double distance = m_vision.getDistance()[0];
-        
-    //calculate the output speed we need to move the robot to the target
-    double distanceOutput = -m_distancePID.calculate(distance, 0); 
-    distanceOutput = MathUtil.clamp(distanceOutput, -DriveConstants.kMaxSpeed, DriveConstants.kMaxSpeed); 
-    
-    // Use 3 m/s instead of the calculated output
-    distanceOutput = 0;
-    
-    double xSpeed = distanceOutput*Math.cos(xOffset);
-    double ySpeed = distanceOutput*Math.sin(xOffset);
 
-    m_drive.driveHeading(xSpeed, ySpeed, xOffset + m_drive.getYaw().getRadians(), false);
+    drive.driveWithPID(object.pose.getX(), object.pose.getY(), object.getAngle());
   }
 
   /**
    * If the command is finished
-   * @return If both PIDs are at the setpoints
+   * @return Always false
    */
   @Override
   public boolean isFinished() { 
     return false;
-    // return m_rotationPID.atSetpoint() && m_distancePID.atSetpoint();
   }
 
   /**
@@ -93,6 +64,6 @@ public class AcquireGamePiecePID extends CommandBase {
    */
   @Override
   public void end(boolean interrupted) {
-    m_drive.stop();
+    drive.stop();
   }
 }
