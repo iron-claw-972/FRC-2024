@@ -81,8 +81,8 @@ public class Shooter extends SubsystemBase {
 	@Override
 	public void periodic() {
 		// PID loop uses RPM
-		double leftSpeed = getTopMotorRPM();
-		double rightSpeed = getBottomMotorRPM();
+		double leftSpeed = getLeftMotorRPM();
+		double rightSpeed = getRightMotorRPM();
 
 		// TODO: having problems: a set and get do not match, so keep powers around for
 		// simulation
@@ -94,8 +94,8 @@ public class Shooter extends SubsystemBase {
 		rightMotor.set(rightPower);
 
 		// report some values to the Dashboard
-		SmartDashboard.putNumber("top speed", /* shooterRPMToSpeed */ (leftSpeed));
-		SmartDashboard.putNumber("bottom speed", /* shooterRPMToSpeed */ (rightSpeed));
+		SmartDashboard.putNumber("left speed", /* shooterRPMToSpeed */ (leftSpeed));
+		SmartDashboard.putNumber("right speed", /* shooterRPMToSpeed */ (rightSpeed));
 		SmartDashboard.putBoolean("at setpoint?", atSetpoint());
 	}
 
@@ -156,8 +156,8 @@ public class Shooter extends SubsystemBase {
 	/**
 	 * Sets the speed both shooter motors try to spin up to independantly.
 	 *
-	 * @param speedLeft  the speed tho top motor will spin to in RPM
-	 * @param speedRight the speed the bottom motor will spin to in RPM
+	 * @param speedLeft  the speed tho left motor will spin to in RPM
+	 * @param speedRight the speed the right motor will spin to in RPM
 	 */
 	public void setTargetRPM(double speedLeft, double speedRight) {
 		leftPID.reset();
@@ -198,9 +198,9 @@ public class Shooter extends SubsystemBase {
 	}
 
 	/**
-	 * Gets the RPM of the top motor, checking whether this is a simulation.
+	 * Gets the RPM of the left motor, checking whether this is a simulation.
 	 *
-	 * @return the top motor's RPM
+	 * @return the left motor's RPM
 	 * @see getRightMotorRPM
 	 * @see getLeftMotorSpeed
 	 * @see atSetpoint
@@ -216,11 +216,11 @@ public class Shooter extends SubsystemBase {
 	}
 
 	/**
-	 * Gets the RPM of the bottom motor, checking whether this is a simulation.
+	 * Gets the RPM of the right motor, checking whether this is a simulation.
 	 *
-	 * @return the bottom motor's RPM
-	 * @see getTopMotorRPM
-	 * @see getBottomMotorSpeed
+	 * @return the right motor's RPM
+	 * @see getLeftMotorRPM
+	 * @see getRightMotorSpeed
 	 * @see atSetpoint
 	 */
 	public double getRightMotorRPM() {
@@ -234,11 +234,11 @@ public class Shooter extends SubsystemBase {
 	}
 
 	/**
-	 * Gets the speed at the surface of the top wheels.
+	 * Gets the speed at the surface of the left wheels.
 	 *
-	 * @return the top wheel's speed in m/s
-	 * @see getBottomMotorSpeed
-	 * @see getTopMotorRPM
+	 * @return the left wheel's speed in m/s
+	 * @see getLeftMotorSpeed
+	 * @see getRightMotorRPM
 	 * @see atSetpoint
 	 */
 	public double getLeftMotorSpeed() {
@@ -246,11 +246,11 @@ public class Shooter extends SubsystemBase {
 	}
 
 	/**
-	 * Gets the speed at the surface of the bottom wheels.
+	 * Gets the speed at the surface of the right wheels.
 	 *
-	 * @return the bottom wheel's speed in m/s
-	 * @see getTopMotorSpeed
-	 * @see getBottomMotorRPM
+	 * @return the right wheel's speed in m/s
+	 * @see getLeftMotorSpeed
+	 * @see getRightMotorRPM
 	 * @see atSetpoint
 	 */
 	public double getRightMotorSpeed() {
@@ -258,12 +258,12 @@ public class Shooter extends SubsystemBase {
 	}
 
 	/**
-	 * Gets the difference in RPM between the top motor and bottom motor.
+	 * Gets the difference in RPM between the left motor and right motor.
 	 * 
-	 * @return the top motor's RPM - the bottom motor-s RPM
+	 * @return the left motor's RPM - the right motor-s RPM
 	 * @see getMotorSpeedDifference
-	 * @see getTopMotorRPM
-	 * @see getBottomMotorRPM
+	 * @see getLeftMotorRPM
+	 * @see getRightMotorRPM
 	 * @see atSetpoint
 	 */
 	public double getMotorRPMDifference() {
@@ -272,12 +272,12 @@ public class Shooter extends SubsystemBase {
 
 	/**
 	 * Gets the difference in speed at the circumference of the motor's wheels
-	 * between the top motor and bottom motor.
+	 * between the left motor and right motor.
 	 * 
-	 * @return the top motor's speed - the bottom motor's speed
+	 * @return the left motor's speed - the right motor's speed
 	 * @see getMotorRPMDifference
-	 * @see getTopMotorSpeed
-	 * @see getBottomMotorSpeed
+	 * @see getLeftMotorSpeed
+	 * @see getRightMotorSpeed
 	 * @see atSetpoint
 	 */
 	public double getMotorSpeedDifference() {
