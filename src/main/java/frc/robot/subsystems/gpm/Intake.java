@@ -19,7 +19,13 @@ public class Intake extends SubsystemBase {
 
     public enum Mode {
         INTAKE(IntakeConstants.INTAKE_POWER, IntakeConstants.CENTERING_POWER),
-        DISABLED(0, 0);
+        DISABLED(0, 0
+        ),
+        Idle(0,0),
+        WaitingForNote(.8,.3),
+        PickedUpNote(.8,.3),
+        Wait(.8,.3),
+        ReverseMotors(-.8,-.3);
 
         private double power;
         private double centeringPower;
@@ -67,6 +73,9 @@ public class Intake extends SubsystemBase {
     private FlywheelSim centeringFlywheelSim;
 
     private Mode mode;
+
+    private int hasNoteCounter;
+    private int waitCounter;
 
     public Intake() {
         motor = new CANSparkFlex(IntakeConstants.MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
@@ -121,6 +130,44 @@ public class Intake extends SubsystemBase {
         }
 
         publish();
+
+        /* */
+        switch (mode) {
+            case DISABLED:
+                
+                break;
+
+            case INTAKE:
+                if(!sensor.get()){
+                    setMode(Mode.PickedUpNote);
+                    hasNoteCounter = 0;
+                }
+                break;
+
+            case PickedUpNote:
+                if(sensor.get()) {
+                    setMode(Mode.Wait);
+                    waitCounter = 0;
+                }
+//
+                if (hasNoteCounter++ > 25){ //500 ms -- does that happen automatically or are there conversion that need to be done? my logic: 500/20 = 25
+                    setMode(Mode.ReverseMotors);
+                    motor.set(-motorPower);
+                    centeringMotor.set(-centeringMotorPower);
+                }
+                break;
+
+            case Wait:
+                waitCounter++;
+
+                if(waitCounter > 5) { //100ms / 20 ms = 5
+                    setMode(Mode.DISABLED);
+                }
+                break;
+
+            default:
+                break;
+        }
     }
 
     public double getCurrent() {
@@ -160,6 +207,13 @@ public class Intake extends SubsystemBase {
         }
 
     }
+
+    // public void intakeJam(){
+    //     if (!sensor.get() > 5 sec) {
+    //         motor.set(-motorPower);
+    //         centeringMotor.set(-centeringMotorPower); 
+    //     }
+    // }
 
     public void close() {
         sensor.close();
