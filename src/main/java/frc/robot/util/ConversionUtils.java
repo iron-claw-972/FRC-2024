@@ -26,6 +26,24 @@ public class ConversionUtils {
     }
 
     /**
+     * @param positionCounts CANCoder Position Counts
+     * @param gearRatio      Gear Ratio between CANCoder and Mechanism
+     * @return Radians of Rotation of Mechanism
+     */
+    public static double CANcoderToRadians(double positionCounts, double gearRatio) {
+        return Math.toRadians(CANcoderToDegrees(positionCounts, gearRatio));
+    }
+
+    /**
+     * @param radians   Radians of rotation of Mechanism
+     * @param gearRatio Gear Ratio between CANCoder and Mechanism
+     * @return CANCoder Position Counts
+     */
+    public static double radiansToCANcoder(double radians, double gearRatio) {
+        return degreesToCANcoder(Math.toDegrees(radians), gearRatio);
+    }
+
+    /**
      * @param positionCounts Falcon Position Counts
      * @param gearRatio      Gear Ratio between Falcon and Mechanism
      * @return Degrees of Rotation of Mechanism
