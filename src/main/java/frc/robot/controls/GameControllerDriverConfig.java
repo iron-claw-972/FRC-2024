@@ -39,7 +39,7 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     // Enable state deadband after setting formation to X
     kDriver.get(Button.X).onFalse(new InstantCommand(() -> getDrivetrain().setStateDeadband(true)));
 
-    kDriver.get(Button.B).whileTrue(new GoToPose(()->(vision.getBestGamePiece(2*Math.PI).pose.toPose2d()), getDrivetrain()));
+    kDriver.get(Button.B).whileTrue(new AcquireGamePiece(()->vision.getBestGamePiece(Math.PI), getDrivetrain()));
 
     // Resets the modules to absolute if they are having the unresolved zeroing
     // error
