@@ -70,12 +70,12 @@ public class Arm extends SubsystemBase {
                     true,
                     ArmConstants.START_ANGLE_RADS);
             moving = pivot.append(
-            new MechanismLigament2d(
-                    "Moving",
-                    30,
-                    Units.radiansToDegrees(/* m_wristPhysicsSim */ simulation.getAngleRads()),
-                    6,
-                    new Color8Bit(Color.kYellow)));
+                    new MechanismLigament2d(
+                            "Moving",
+                            30,
+                            Units.radiansToDegrees(/* m_wristPhysicsSim */ simulation.getAngleRads()),
+                            6,
+                            new Color8Bit(Color.kYellow)));
             // encodersim allows us to set the encoder values
             encoderSim = new DutyCycleEncoderSim(encoder);
 
@@ -84,7 +84,6 @@ public class Arm extends SubsystemBase {
 
         }
         SmartDashboard.putData("Set Angle to 0.0", new InstantCommand(() -> setAngle(0.0)));
-        SmartDashboard.putData("Set Angle to 0.001 Rad", new InstantCommand(() -> setAngle(0.001)));
         SmartDashboard.putData("Set Angle to 1.0 Rad", new InstantCommand(() -> setAngle(1.0)));
     }
 
@@ -95,9 +94,7 @@ public class Arm extends SubsystemBase {
                 MathUtil.clamp(
                         pid.calculate(encoder.getDistance()) + feedforward.calculate(pid.getSetpoint()),
                         -1,
-                        1
-                )
-        );
+                        1));
     }
 
     @Override
@@ -119,7 +116,7 @@ public class Arm extends SubsystemBase {
      */
     public void setAngle(double angle) {
         pid.reset();
-        pid.setSetpoint(angle * ArmConstants.GEARING);
+        pid.setSetpoint(angle);
     }
 
     /**
