@@ -51,7 +51,7 @@ public class DetectedObjectTest {
   public void testObjectPoseWithoutDistance(){
     DetectedObject object = new DetectedObject(
       0,
-      Units.degreesToRadians(-20),
+      Units.degreesToRadians(20),
       "test object",
       new Transform3d(new Translation3d(0, 0, 1), new Rotation3d(0, Units.degreesToRadians(25), 0))
     );
@@ -69,7 +69,7 @@ public class DetectedObjectTest {
     Random random = new Random();
     DetectedObject object = new DetectedObject(
       random.nextDouble(-Math.PI, Math.PI),
-      random.nextDouble(-Math.PI/4, -0.001),
+      random.nextDouble(0.001, Math.PI/4),
       "test object",
       new Transform3d(new Translation3d(
         random.nextDouble(0, 100),
