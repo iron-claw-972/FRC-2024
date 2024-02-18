@@ -20,6 +20,7 @@ public class AcquireGamePiece extends SequentialCommandGroup{
         //TODO: Add code to move intake after deciding on a design in 2024
         addCommands(new GoToPose(()->getPose(gamePiece), drive));
     }
+    
     /**
      * Gets the pose to move to, which is the game piece's pose with the angle between the robot and game piece
      * @param gamePieceSupplier The supplier for the game piece to move to
@@ -33,6 +34,13 @@ public class AcquireGamePiece extends SequentialCommandGroup{
             return null;
         }
         double angle = gamePiece.getAngle();
+        
+        System.out.println("dist: " + gamePiece.getDistance());
+        System.out.println("x: "+ (gamePiece.pose.getX()));
+        System.out.println("y: "+ (gamePiece.pose.getY()));
+        System.out.println("angle: " + angle);
+
+
         return new Pose2d(
             gamePiece.pose.getX()-dist*Math.cos(angle),
             gamePiece.pose.getY()-dist*Math.sin(angle),
