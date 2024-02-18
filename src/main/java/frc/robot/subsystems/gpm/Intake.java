@@ -86,8 +86,6 @@ public class Intake extends SubsystemBase {
         }
 		
         publish();
-
-		setMode(Mode.INTAKE);
     }
 
     // publish sensor to Smart Dashboard
