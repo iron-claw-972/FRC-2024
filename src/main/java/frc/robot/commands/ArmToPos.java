@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.gpm.Arm;
+import edu.wpi.first.wpilibj2.command.Command;
 
 //for use with IntakeNote, OuttakeAmp, and Shoot commands
 public class ArmToPos extends Command {
