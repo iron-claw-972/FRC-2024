@@ -41,30 +41,29 @@ public class Intake extends SubsystemBase {
     private final CANSparkMax centeringMotor;
     private final DigitalInput sensor;
 
-	private final double MASS_SHAFT = 0.4; // in kilograms
-	private final double RADIUS_SHAFT = Units.inchesToMeters(25.5); // definitely not radius, but I don't know what it actually is
-	private final double MOI_SHAFT = (1.0/12.0) * MASS_SHAFT * RADIUS_SHAFT * RADIUS_SHAFT;
-	private final double MOI_TOTAL = MOI_SHAFT * 4;
+    private final double MASS_SHAFT = 0.4; // in kilograms
+    private final double LENGTH_SHAFT = Units.inchesToMeters(25.5);
+    private final double MOI_SHAFT = (1.0 / 12.0) * MASS_SHAFT * LENGTH_SHAFT * LENGTH_SHAFT;
+    private final double MOI_TOTAL = MOI_SHAFT * 4;
 
-	private final double MASS_CENTERING_WHEELS = 0.1; // in kilograms
-	private final double RADIUS_CENTERING_WHEELS = Units.inchesToMeters(2);
-	private final double MOI_CENTERING_WHEEL = 0.5 * MASS_CENTERING_WHEELS * RADIUS_CENTERING_WHEELS * RADIUS_CENTERING_WHEELS;
-	private final double MOI_CENTERING_TOTAL = MOI_CENTERING_WHEEL * 4;
+    private final double MASS_CENTERING_WHEELS = 0.1; // in kilograms
+    private final double RADIUS_CENTERING_WHEELS = Units.inchesToMeters(2);
+    private final double MOI_CENTERING_WHEEL = 0.5 * MASS_CENTERING_WHEELS * RADIUS_CENTERING_WHEELS
+            * RADIUS_CENTERING_WHEELS;
+    private final double MOI_CENTERING_TOTAL = MOI_CENTERING_WHEEL * 4;
 
-	private final double motorVoltage = 12.0;
+    private final double motorVoltage = 12.0;
 
-	private double motorRPMSim;
-	private double motorPower;
-	private double centeringMotorPower;
-	private double centeringMotorRPMSim;
+    private double motorRPMSim;
+    private double motorPower;
+    private double centeringMotorPower;
+    private double centeringMotorRPMSim;
 
     private int countSim = 0;
     private DIOSim IntakeSensorDioSim;
     private boolean simDIOValue = true;
-	private FlywheelSim flywheelSim;
-	private FlywheelSim centeringFlywheelSim;
-
-    // private XboxController m_gc;
+    private FlywheelSim flywheelSim;
+    private FlywheelSim centeringFlywheelSim;
 
     private Mode mode;
 
@@ -80,21 +79,24 @@ public class Intake extends SubsystemBase {
         // Simulation objects
         if (RobotBase.isSimulation()) {
             IntakeSensorDioSim = new DIOSim(sensor);
-			// assuming gearing is 1:1 for both
-			flywheelSim = new FlywheelSim(DCMotor.getNeoVortex(1), 1.0, MOI_TOTAL);
-			centeringFlywheelSim = new FlywheelSim(DCMotor.getNeo550(1), 1.0, MOI_CENTERING_TOTAL); // change the motor from neo550 to whatever it actually is
+            // assuming gearing is 1:1 for both
+            flywheelSim = new FlywheelSim(DCMotor.getNeoVortex(1), 1.0, MOI_TOTAL);
+            centeringFlywheelSim = new FlywheelSim(DCMotor.getNeo550(1), 1.0, MOI_CENTERING_TOTAL); // change the motor
+                                                                                                    // from neo550 to
+                                                                                                    // whatever it
+                                                                                                    // actually is
         }
-		
+
         publish();
     }
 
     // publish sensor to Smart Dashboard
     private void publish() {
         SmartDashboard.putBoolean("Intake Sensor", sensor.get());
-		if (RobotBase.isSimulation()) {
-			SmartDashboard.putNumber("Intake motor RPM", motorRPMSim);
-			SmartDashboard.putNumber("Intake centering motor RPM", centeringMotorRPMSim);
-		}
+        if (RobotBase.isSimulation()) {
+            SmartDashboard.putNumber("Intake motor RPM", motorRPMSim);
+            SmartDashboard.putNumber("Intake centering motor RPM", centeringMotorRPMSim);
+        }
     }
 
     public void setMode(Mode mode) {
@@ -110,40 +112,40 @@ public class Intake extends SubsystemBase {
         motorPower = mode.getPower();
         centeringMotorPower = mode.getCenteringPower();
 
-		if (RobotBase.isReal()) {
-			motor.set(motorPower);
-			centeringMotor.set(centeringMotorPower);
-		}
+        if (RobotBase.isReal()) {
+            motor.set(motorPower);
+            centeringMotor.set(centeringMotorPower);
+        }
 
         publish();
     }
 
     public double getCurrent() {
-		if (RobotBase.isReal()) {
-			return Math.abs(motor.getOutputCurrent());
-		} else {
-			return motorPower / motorVoltage;
-		}
+        if (RobotBase.isReal()) {
+            return Math.abs(motor.getOutputCurrent());
+        } else {
+            return motorPower / motorVoltage;
+        }
     }
 
     public double getCenteringCurrent() {
-		if (RobotBase.isReal()) {
-			return Math.abs(centeringMotor.getOutputCurrent());
-		} else {
-			return centeringMotorPower / motorVoltage;
-		}
+        if (RobotBase.isReal()) {
+            return Math.abs(centeringMotor.getOutputCurrent());
+        } else {
+            return centeringMotorPower / motorVoltage;
+        }
     }
 
     @Override
     public void simulationPeriodic() {
-		flywheelSim.setInputVoltage(motorPower * motorVoltage);
-		centeringFlywheelSim.setInputVoltage(centeringMotorPower * motorVoltage);
+        flywheelSim.setInputVoltage(motorPower * motorVoltage);
+        centeringFlywheelSim.setInputVoltage(centeringMotorPower * motorVoltage);
 
-		flywheelSim.update(0.020);
-		centeringFlywheelSim.update(0.020);
+        flywheelSim.update(0.020);
+        centeringFlywheelSim.update(0.020);
 
-		motorRPMSim = flywheelSim.getAngularVelocityRPM();
-		centeringMotorRPMSim = centeringFlywheelSim.getAngularVelocityRPM();
+        motorRPMSim = flywheelSim.getAngularVelocityRPM();
+        centeringMotorRPMSim = centeringFlywheelSim.getAngularVelocityRPM();
 
         // change values every 1/2 second
         if (countSim++ > 25) {
