@@ -4,11 +4,15 @@
 
 package frc.robot.util.ShuffleBoard.Tabs;
 
+import com.revrobotics.CANSparkFlex;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.commands.auto_comm.FollowPathCommand;
 import frc.robot.subsystems.Drivetrain;
@@ -24,6 +28,17 @@ public class AutoTab extends ShuffleBoardTabs {
     public AutoTab(Drivetrain drive){
         this.drive = drive;
     }
+
+    public void intake(CANSparkFlex Motor1, double Speed){
+        Motor1.set(Speed);
+    }
+
+    public void LineCommands() {
+        new ParallelRaceGroup(
+            new FollowPathCommand("Line",true, drive),
+            new InstantCommand(() -> intake(new CANSparkFlex(5, MotorType.kBrushless), -0.5))
+        );
+    }
     
     public void createEntries(){  
         tab = Shuffleboard.getTab("Auto");
@@ -32,15 +47,14 @@ public class AutoTab extends ShuffleBoardTabs {
         autoCommand.addOption("Example Path", new FollowPathCommand("Example Path",true, drive));
         autoCommand.addOption("7 Piece Auto Realistic", new FollowPathCommand("7 Piece Auto Realistic",true, drive));
         autoCommand.addOption("7 Piece Auto", new FollowPathCommand("7 Piece Auto",true, drive));       
-        autoCommand.addOption("Bottom 4 Piece 4 5 (No Shooting On The Move)", new FollowPathCommand("Bottom 4 Piece 4 5 (No Shooting On The Move)",true, drive));       
+        autoCommand.addOption("Bottom 4 Piece 4 5 (No Shooting On The Move)", new FollowPathCommand("Bottom 4 Piece 4 5 (No Shooting On The Move)",true, drive));
         autoCommand.addOption("Dream Bottom 4 Piece 4 5", new FollowPathCommand("Dream Bottom 4 Piece 4 5",true, drive));
         autoCommand.addOption("Test", new FollowPathCommand("Test", true, drive));
         autoCommand.addOption("Test 2", new FollowPathCommand("Test 2", true, drive));
         autoCommand.addOption("Test with Rotations", new FollowPathCommand("Test", true, drive));
-        autoCommand.addOption("Under the Stage", new FollowPathCommand("Under the Stage", true, drive));
-        autoCommand.addOption("Double Under the Stage", new FollowPathCommand("Double Under the Stage", true, drive));
-        
-         // Example of running multiple commands.
+        autoCommand.addOption("Line", new InstantCommand(() -> LineCommands()));
+
+        // Example of running multiple commands.
         autoCommand.addOption("Multi",
             Commands.sequence(
                 new FollowPathCommand("Test", true, drive),
