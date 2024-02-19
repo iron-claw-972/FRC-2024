@@ -33,7 +33,7 @@ public class Shoot extends Command {
                 this.shooter = shooter;
                 this.arm = arm;
                 this.drive = drivetrain;
-                addRequirements(shooter);
+                addRequirements(shooter,drivetrain);
         }
 
         @Override
@@ -57,7 +57,7 @@ public class Shoot extends Command {
                 displacement = new Pose3d(
                         drive.getPose().getX(),
                         drive.getPose().getY(),
-                        speakerHeight-shooterHeight,
+                        shooterHeight,
                         new Rotation3d(
                                 0,
                                 arm.getAngleRad(),
@@ -68,28 +68,38 @@ public class Shoot extends Command {
                 v_rx = drive.getChassisSpeeds().vxMetersPerSecond;
                 v_ry = drive.getChassisSpeeds().vyMetersPerSecond;
                 */
+                
                 // TODO: Figure out what v_note is empirically
                 double v_note = 10;
 
                 // X distance to speaker
                 double x = Math.sqrt((displacement.getX() * displacement.getX())
                         + displacement.getY() * displacement.getY());
-                // Y distance to speaker (negative intended)
-                double y = -displacement.getZ();
+                // Y distance to speaker
+                double y = displacement.getZ();
 
                 // Basic vertical angle calculation (static robot)
                 double phi_v = Math.atan(Math.pow(v_note, 2) / 9.8 / x * (1 - Math.sqrt(1
                         + 19.6 / Math.pow(v_note, 2) * (y - 4.9 * x * x / Math.pow(v_note, 2)))));
-                System.err.println("pv tracks"+phi_v);
+                System.err.println("*pv "+phi_v);
                 // Angle to goal
                 // double phi_h = drivetrain.getAlignAngle();
                 double phi_h = Math.atan2(displacement.getY(),displacement.getX());
-                System.err.println("ph " + phi_h);
+                System.err.println("*ph " + phi_h);
                         ;
                 // Random variable to hold recurring code
                 double a = v_note * Math.cos(phi_v) * Math.sin(phi_h);
-                double theta_h = Math.atan((a + v_ry) / (v_note * Math.cos(phi_v) * Math.cos(phi_h) + v_rx));
-                double theta_v = Math.atan(1/(((a + v_rx) / (v_note * Math.sin(phi_v) * Math.cos(theta_h)))));
+                double theta_h = Math.atan((a + v_ry) / (v_note * Math.cos(phi_v) * Math.cos(phi_h) - v_rx)); // random quirk that using -v_rx works
+                // theta_h conversion (i.e. pi-theta_h if necessary)
+                // if the mirrored angle is the same-ish direction??? logic may break at high v_rx and v_ry but don't worry about it
+
+                if (Math.signum(Math.sin(theta_h)) != Math.signum(Math.sin(phi_h)) || Math.signum(Math.cos(theta_h)) != Math.signum(Math.cos(theta_h))) {
+                        theta_h +=Math.PI;
+                }
+                double theta_v = Math.atan(
+                 (v_note * Math.sin(phi_v) * Math.cos(theta_h))/
+                ((v_note * Math.cos(phi_v) * Math.cos(phi_h) - v_rx)
+                 ));
                 double v_shoot = v_note * Math.sin(phi_v) / Math.sin(theta_v);
                 horiz_angle = theta_h;
                 vert_angle = theta_v;
@@ -99,6 +109,9 @@ public class Shoot extends Command {
                 System.err.println(exit_vel);
 
                 arm.setAngle(theta_v);
+                // theta_h is relative to the horizontal, so
+                // drive.setAlignAngle switches from theta_h to pi/2-theta_h
+                // depending on if it's relative to the horizontal or the vertical.
                 drive.setAlignAngle(theta_h);
                 // Set the outtake velocity
                 shooter.setTargetVelocity(v_shoot);
