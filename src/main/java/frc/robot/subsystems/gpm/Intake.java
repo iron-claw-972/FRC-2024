@@ -2,10 +2,12 @@ package frc.robot.subsystems.gpm;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
@@ -50,11 +52,13 @@ public class Intake extends SubsystemBase {
 
     /** Intake motor is a Vortex*/
     private final CANSparkFlex motor = new CANSparkFlex(IntakeConstants.MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
+    private static DCMotor dcMotor = DCMotor.getNeoVortex(1);
 
     // change the motor from neo550 to whatever it actually is
 
     /** Centering motor is a NEO */
     private final CANSparkMax centeringMotor = new CANSparkMax(IntakeConstants.CENTERING_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
+    private static DCMotor dcMotorCentering = DCMotor.getNEO(1);
     
     /** beam break sensor detects whether a note is present */
     private final DigitalInput sensor  = new DigitalInput(IntakeConstants.SENSOR_ID);
@@ -65,6 +69,20 @@ public class Intake extends SubsystemBase {
     private FlywheelSim flywheelSim;
     private FlywheelSim centeringFlywheelSim;
 
+    // MOI stuff
+    // Intake rollers are 1.5 inch polycarb. We are ignoring the weight of the black tape.
+    public static final double MASS_SHAFT = 0.4; // in kilograms
+    public static final double RADIUS_SHAFT = Units.inchesToMeters(0.75);
+    public static final double MOI_SHAFT = MASS_SHAFT * RADIUS_SHAFT * RADIUS_SHAFT;
+    public static final double MOI_TOTAL = MOI_SHAFT * 4;
+   
+    // The centering rollers are compliant wheels. Assume 1/2 the mass is at the rim.
+    public static final double MASS_CENTERING_WHEELS = 0.1018; // in kilograms
+    public static final double RADIUS_CENTERING_WHEELS = Units.inchesToMeters(2);
+    public static final double MOI_CENTERING_WHEEL = (0.5 * MASS_CENTERING_WHEELS) * RADIUS_CENTERING_WHEELS
+               * RADIUS_CENTERING_WHEELS;
+    public static final double MOI_CENTERING_TOTAL = MOI_CENTERING_WHEEL * 4;
+   
     private Mode mode;
 
     public Intake() {
@@ -82,8 +100,8 @@ public class Intake extends SubsystemBase {
         // Simulation objects
         if (RobotBase.isSimulation()) {
             // assuming gearing is 1:1 for both
-            flywheelSim = new FlywheelSim(IntakeConstants.dcMotor, 1.0, IntakeConstants.MOI_TOTAL);
-            centeringFlywheelSim = new FlywheelSim(IntakeConstants.dcMotorCentering ,  1.0, IntakeConstants.MOI_CENTERING_TOTAL);
+            flywheelSim = new FlywheelSim(dcMotor, 1.0, MOI_TOTAL);
+            centeringFlywheelSim = new FlywheelSim(dcMotorCentering ,  2.0, MOI_CENTERING_TOTAL);
         }
 
         publish();
