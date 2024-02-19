@@ -7,8 +7,6 @@ package frc.robot.commands;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
-import com.ctre.phoenix6.hardware.TalonFX;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -34,18 +32,6 @@ public class SysIDDriveCommand extends SequentialCommandGroup {
             Units.Seconds.of(5),
             (x)->SignalLogger.writeString("state", x.toString())
         );
-        TalonFX[] driveMotors = {
-            drive.getModules()[0].getDriveMotor(),
-            drive.getModules()[1].getDriveMotor(),
-            drive.getModules()[2].getDriveMotor(),
-            drive.getModules()[3].getDriveMotor()
-        };
-        TalonFX[] angleMotors = {
-            drive.getModules()[0].getAngleMotor(),
-            drive.getModules()[1].getAngleMotor(),
-            drive.getModules()[2].getAngleMotor(),
-            drive.getModules()[3].getAngleMotor()
-        };
         Rotation2d[] angles = {
             Rotation2d.fromDegrees(0),//-45-180
             Rotation2d.fromDegrees(0),//45
@@ -55,14 +41,13 @@ public class SysIDDriveCommand extends SequentialCommandGroup {
         sysId = new SysId(
             "Drivetrain",
             x ->{
-                    for (int i =0; i<angleMotors.length;i++){ 
-                        angleMotors[i].setControl(new PositionDutyCycle(angles[i].getRotations()*DriveConstants.kModuleConstants.angleGearRatio));
+                    for (int i =0; i<drive.getModules().length;i++){ 
+                        drive.getModules()[i].getAngleMotor().setControl(new PositionDutyCycle(angles[i].getRotations()*DriveConstants.kModuleConstants.angleGearRatio));
                     }
                 
-                    for (TalonFX motor: driveMotors){
-                        motor.setVoltage(x.magnitude());
+                    for (int i = 0; i<drive.getModules().length;i++){
+                        drive.getModules()[i].getDriveMotor().setVoltage(x.magnitude());
                     }
-                    
                 },
             drive,
             config
