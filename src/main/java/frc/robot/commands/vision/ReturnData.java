@@ -2,7 +2,7 @@ package frc.robot.commands.vision;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.util.DetectedObject;
 import frc.robot.util.Vision;
@@ -10,7 +10,7 @@ import frc.robot.util.Vision;
 /**
  * Adds data from object detection vision to SmartDashboard
  */
-public class ReturnData extends CommandBase{
+public class ReturnData extends Command{
   private final Vision m_vision; 
 
   /**

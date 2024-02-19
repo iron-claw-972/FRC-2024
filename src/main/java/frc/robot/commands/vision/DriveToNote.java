@@ -11,7 +11,7 @@ import frc.robot.util.DetectedObject;
  * Moves toward the detected object
  * <p>Only works with the front camera
  */
-public class AcquireGamePiecePID extends Command {
+public class DriveToNote extends Command {
 
   private Drivetrain drive; 
   private Supplier<DetectedObject> objectSupplier;
@@ -23,7 +23,7 @@ public class AcquireGamePiecePID extends Command {
    * @param detectedObject The supplier for the detected object to use
    * @param drive The drivetrain
    */
-  public AcquireGamePiecePID(Supplier<DetectedObject> detectedObject, Drivetrain drive) {
+  public DriveToNote(Supplier<DetectedObject> detectedObject, Drivetrain drive) {
     this.objectSupplier = detectedObject;
     this.drive = drive;
 
