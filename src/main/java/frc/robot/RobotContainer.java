@@ -13,6 +13,7 @@ import frc.robot.constants.AutoConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
+import frc.robot.controls.Operator;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
@@ -43,6 +44,7 @@ public class RobotContainer {
 
   // Controllers are defined here
   private BaseDriverConfig driver = null;
+  private Operator operator = null;
 
   ShuffleBoardManager shuffleboardManager = null;
 
@@ -76,6 +78,11 @@ public class RobotContainer {
       default:
       case SwerveCompetition:
         arm = new Arm();
+        intake = new Intake();
+
+        operator = new Operator();
+
+        operator.configureControls(intake);
 
       case SwerveTest:
         vision = new Vision(VisionConstants.CAMERAS);
