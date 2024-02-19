@@ -20,6 +20,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.swerve.DriveConstants;
@@ -42,19 +44,20 @@ public class Module extends SubsystemBase {
 
     protected boolean stateDeadband = true;
 
-    SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(DriveConstants.DRIVE_KS, DriveConstants.DRIVE_KV, DriveConstants.DRIVE_KA);
+    private SimpleMotorFeedforward feedforward;
     
     final VelocityVoltage m_VelocityVoltage = new VelocityVoltage(0);
     
     private boolean optimizeStates = true;
 
-    ModuleConstants moduleConstants;
+    private ModuleConstants moduleConstants;
+
 
     public Module(ModuleConstants moduleConstants) {
         this.moduleConstants = moduleConstants;
 
         type = moduleConstants.getType();
-
+        feedforward = new SimpleMotorFeedforward(moduleConstants.getKs(), moduleConstants.getKv(), moduleConstants.getKa());
         //angleOffset = new Rotation2d(constants.getSteerOffset());
         angleOffset = moduleConstants.getSteerOffset();
 
@@ -96,7 +99,7 @@ public class Module extends SubsystemBase {
             double velocity = ConversionUtils.falconToRPM(ConversionUtils.MPSToFalcon(desiredState.speedMetersPerSecond, DriveConstants.kWheelCircumference,
                 DriveConstants.kDriveGearRatio), 1)/60;
             // TODO: This curently doesn't use the feedforward.
-            driveMotor.setControl(new VelocityDutyCycle(velocity).withEnableFOC(true));
+            driveMotor.setControl(m_VelocityVoltage.withVelocity(velocity).withEnableFOC(true).withFeedForward(feedforward.calculate(velocity)));
         }
         if (Constants.DO_LOGGING) {
             double motorSpeed = ConversionUtils.falconToMPS(ConversionUtils.RPMToFalcon(driveMotor.getVelocity().getValue()/60, 1), DriveConstants.kWheelCircumference,
@@ -124,6 +127,13 @@ public class Module extends SubsystemBase {
         }
         // angleMotor.setControl(new PositionDutyCycle(3));
         angleMotor.setControl(new PositionDutyCycle(desiredState.angle.getRotations()*DriveConstants.kModuleConstants.angleGearRatio));
+    }
+
+    public void setDriveVoltage(Measure<Voltage> voltage){
+        driveMotor.setVoltage(voltage.baseUnitMagnitude());
+    }
+    public void setAngle(Rotation2d angle){
+        angleMotor.setControl(new PositionDutyCycle(angle.getRotations()*DriveConstants.kModuleConstants.angleGearRatio));
     }
 
     public void setOptimize(boolean enable) {
@@ -206,9 +216,9 @@ public class Module extends SubsystemBase {
         config.SupplyTimeThreshold = DriveConstants.kDrivePeakCurrentDuration;
         driveMotor.getConfigurator().apply(config);
         driveMotor.getConfigurator().apply(new Slot0Configs()
-            .withKP(DriveConstants.kDriveP)
-            .withKI(DriveConstants.kDriveI)
-            .withKD(DriveConstants.kDriveD));
+            .withKP(moduleConstants.getDriveP())
+            .withKI(moduleConstants.getDriveI())
+            .withKD(moduleConstants.getDriveD()));
         driveMotor.getConfigurator().apply(new OpenLoopRampsConfigs().withDutyCycleOpenLoopRampPeriod(DriveConstants.kOpenLoopRamp));
         driveMotor.getConfigurator().apply(new ClosedLoopRampsConfigs().withDutyCycleClosedLoopRampPeriod(DriveConstants.kOpenLoopRamp));
         driveMotor.setInverted(DriveConstants.kDriveMotorInvert);
@@ -246,6 +256,10 @@ public class Module extends SubsystemBase {
 
     public TalonFX getDriveMotor(){
         return driveMotor;
+    }
+
+    public TalonFX getAngleMotor(){
+        return angleMotor;
     }
 
     public ModuleType getModuleType(){
