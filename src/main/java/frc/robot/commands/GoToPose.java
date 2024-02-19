@@ -61,6 +61,9 @@ public class GoToPose extends SequentialCommandGroup {
    */
   public Command createCommand() {
     Pose2d pose = poseSupplier.get();
+    if(pose==null){
+      return new DoNothing();
+    }
     Command command = AutoBuilder.pathfindToPose(
       pose,
       new PathConstraints(maxSpeed, maxAccel, DriveConstants.kMaxAngularSpeed, DriveConstants.kMaxAngularAccel),
