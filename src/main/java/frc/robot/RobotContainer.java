@@ -2,6 +2,7 @@ package frc.robot;
 
 import java.util.function.BooleanSupplier;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -86,8 +87,9 @@ public class RobotContainer {
         vision = new Vision(VisionConstants.CAMERAS);
 
         drive = new Drivetrain(vision);
-        driver = new GameControllerDriverConfig(drive);
-        operater = new Operater(intake);
+        driver = new GameControllerDriverConfig(drive);        
+        SignalLogger.start();
+
         driver.configureControls();
         operater.configureControls();
         initializeAutoBuilder();
