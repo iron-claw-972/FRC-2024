@@ -51,16 +51,18 @@ public class Intake extends SubsystemBase {
     /** beam break sensor detects whether a note is present */
     private final DigitalInput sensor  = new DigitalInput(IntakeConstants.SENSOR_ID);
 
+    // Polycarb cylinders; two are wrapped with tape. I don't think the black tape has been considered.
     private final double MASS_SHAFT = 0.4; // in kilograms
-    private final double LENGTH_SHAFT = Units.inchesToMeters(25.5);
-    private final double MOI_SHAFT = (1.0 / 12.0) * MASS_SHAFT * LENGTH_SHAFT * LENGTH_SHAFT;
+    private final double RADIUS_SHAFT = Units.inchesToMeters(0.75);
+    private final double MOI_SHAFT = MASS_SHAFT * RADIUS_SHAFT * RADIUS_SHAFT;
     private final double MOI_TOTAL = MOI_SHAFT * 4;
 
-    private final double MASS_CENTERING_WHEELS = 0.1; // in kilograms
+    // these are compliant wheels. Most of the important mass is at the rim. Assume 0.5 mass is at the rim; ignore the rest.
+    private final double MASS_CENTERING_WHEELS = 0.1018; // in kilograms
     private final double RADIUS_CENTERING_WHEELS = Units.inchesToMeters(2);
-    private final double MOI_CENTERING_WHEEL = 0.5 * MASS_CENTERING_WHEELS * RADIUS_CENTERING_WHEELS
+    private final double MOI_CENTERING_WHEEL = (0.5 * MASS_CENTERING_WHEELS) * RADIUS_CENTERING_WHEELS
             * RADIUS_CENTERING_WHEELS;
-    private final double MOI_CENTERING_TOTAL = MOI_CENTERING_WHEEL * 4;
+    private final double MOI_CENTERING_TOTAL = 4 * MOI_CENTERING_WHEEL;
 
     private final double motorVoltage = 12.0;
 
@@ -69,7 +71,6 @@ public class Intake extends SubsystemBase {
 
     private int countSim = 0;
     private DIOSim intakeSensorDioSim;
-    private boolean simulatedNotePresent = false;
 
     // private XboxController m_gc;
 
@@ -98,12 +99,13 @@ public class Intake extends SubsystemBase {
         // Simulation objects
         if (RobotBase.isSimulation()) {
             intakeSensorDioSim = new DIOSim(sensor);
+            // the beam is present....
+            intakeSensorDioSim.setValue(true);
+
             // assuming gearing is 1:1 for both
             flywheelSim = new FlywheelSim(dcMotor, 1.0, MOI_TOTAL);
             centeringFlywheelSim = new FlywheelSim(dcMotorCentering ,  1.0, MOI_CENTERING_TOTAL);
         }
-
-        
 
         publish();
     }
@@ -214,24 +216,26 @@ public class Intake extends SubsystemBase {
         motorRPMSim = flywheelSim.getAngularVelocityRPM();
         centeringMotorRPMSim = centeringFlywheelSim.getAngularVelocityRPM();
 
-        // When the intake is on it takes ≈one second to reach the note (no note present). 
-        // After ≈one second, note is in the intake (note present).
-        // After ≈one and a half seconds note has passed through intake (note not present).
+        // When the intake is on it takes one second to reach the note (no note present). 
+        // After one second, the note is in the intake (note present).
+        // After one and a half seconds, the note has passed through intake (note not present).
 
-        if (mode == Mode.INTAKE) {
+        if (mode != Mode.DISABLED) {
             countSim++;
-        }
-
-        if (countSim == 50) {
-            simulatedNotePresent = true;
-            intakeSensorDioSim.setValue(simulatedNotePresent);
-        }
-
-        if (countSim >= 75) {
-            simulatedNotePresent = false;
+        } else {
             countSim = 0;
         }
 
+        // 50 counts is one second
+        if (countSim == 50) {
+            // beam is no longer present
+            intakeSensorDioSim.setValue(false);
+        }
+
+        if (countSim == 75) {
+            // beam is present
+            intakeSensorDioSim.setValue(true);
+        }
     }
 
     public void close() {
