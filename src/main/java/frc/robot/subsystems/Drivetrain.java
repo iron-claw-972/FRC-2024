@@ -237,6 +237,12 @@ public class Drivetrain extends SubsystemBase {
         }
     }
 
+    public void setAngleMotors(Rotation2d[] angles){
+        for (int i = 0;i<modules.length;i++){
+            modules[i].setAngle(angles[i]);
+        }
+    }
+
     /**
      * Returns the angular rate from the pigeon.
      *

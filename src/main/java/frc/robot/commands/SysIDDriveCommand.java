@@ -20,12 +20,9 @@ import frc.robot.util.SysId;
 /** Add your docs here. */
 public class SysIDDriveCommand extends SequentialCommandGroup {
 
-    Drivetrain drive;
-    Config config = new Config();
-    SysId sysId;
+    private Config config = new Config();
+    private SysId sysId;
     public SysIDDriveCommand(Drivetrain drive) {
-        this.drive = drive;
-
         config = new Config(
             Units.Volts.of(0.5).per(Units.Seconds.of(1)),
             Units.Volts.of(3),
@@ -41,13 +38,8 @@ public class SysIDDriveCommand extends SequentialCommandGroup {
         sysId = new SysId(
             "Drivetrain",
             x ->{
-                    for (int i =0; i<drive.getModules().length;i++){ 
-                        drive.getModules()[i].getAngleMotor().setControl(new PositionDutyCycle(angles[i].getRotations()*DriveConstants.kModuleConstants.angleGearRatio));
-                    }
-                
-                    for (int i = 0; i<drive.getModules().length;i++){
-                        drive.getModules()[i].getDriveMotor().setVoltage(x.magnitude());
-                    }
+                    drive.setAngleMotors(angles);
+                    drive.setDriveVoltages(x);
                 },
             drive,
             config

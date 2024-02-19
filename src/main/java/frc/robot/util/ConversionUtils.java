@@ -81,14 +81,6 @@ public class ConversionUtils {
         return motorRPM * (2048.0 / 600.0);
     }
 
-    public static double RPMToMeters(double RPM, double circumference, double gearRatio){
-        return falconToMeters(RPMToFalcon(RPM,gearRatio),circumference,gearRatio);
-    }
-
-    public static double RPMToMPS(double RPM, double gearRatio,double circumference){
-        return falconToMPS(RPMToFalcon(RPM, gearRatio),circumference,gearRatio);
-    }
-
     /**
      * @param velocitycounts Falcon Velocity Counts
      * @param circumference  Circumference of Wheel

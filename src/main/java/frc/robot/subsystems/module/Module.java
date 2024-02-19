@@ -44,13 +44,13 @@ public class Module extends SubsystemBase {
 
     protected boolean stateDeadband = true;
 
-    SimpleMotorFeedforward feedforward;
+    private SimpleMotorFeedforward feedforward;
     
     final VelocityVoltage m_VelocityVoltage = new VelocityVoltage(0);
     
     private boolean optimizeStates = true;
 
-    ModuleConstants moduleConstants;
+    private ModuleConstants moduleConstants;
 
     public Module(ModuleConstants moduleConstants) {
         this.moduleConstants = moduleConstants;
@@ -98,7 +98,7 @@ public class Module extends SubsystemBase {
             double velocity = ConversionUtils.falconToRPM(ConversionUtils.MPSToFalcon(desiredState.speedMetersPerSecond, DriveConstants.kWheelCircumference,
                 DriveConstants.kDriveGearRatio), 1)/60;
             // TODO: This curently doesn't use the feedforward.
-            driveMotor.setControl(new VelocityVoltage(velocity).withEnableFOC(true).withFeedForward(feedforward.calculate(velocity)));
+            driveMotor.setControl(m_VelocityVoltage.withVelocity(velocity).withEnableFOC(true).withFeedForward(feedforward.calculate(velocity)));
         }
         if (Constants.DO_LOGGING) {
             double motorSpeed = ConversionUtils.falconToMPS(ConversionUtils.RPMToFalcon(driveMotor.getVelocity().getValue()/60, 1), DriveConstants.kWheelCircumference,
@@ -130,6 +130,9 @@ public class Module extends SubsystemBase {
 
     public void setDriveVoltage(Measure<Voltage> voltage){
         driveMotor.setVoltage(voltage.baseUnitMagnitude());
+    }
+    public void setAngle(Rotation2d angle){
+        angleMotor.setControl(new PositionDutyCycle(angle.getRotations()*DriveConstants.kModuleConstants.angleGearRatio));
     }
 
     public void setOptimize(boolean enable) {
