@@ -9,13 +9,11 @@ public class IntakeNote extends Command{
 
     private final Intake m_intake;
     private final StorageIndex m_storageIndex;
-    // private final XboxController m_tempGC;
 
 
     public IntakeNote(Intake intake, StorageIndex storageIndex) {
         this.m_intake = intake;
         this.m_storageIndex = storageIndex;
-        // this.m_tempGC = tempGC;
         addRequirements(m_intake, m_storageIndex);
 
        
@@ -42,8 +40,6 @@ public class IntakeNote extends Command{
     public void end(boolean interupted){
         m_intake.setMode(Mode.DISABLED);
         m_storageIndex.stopIndex();
-        // m_tempGC.setRumble(GenericHID.RumbleType.kRightRumble, 1);
-
     }
     
 }
