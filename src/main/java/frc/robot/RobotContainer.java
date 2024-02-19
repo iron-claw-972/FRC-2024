@@ -18,6 +18,7 @@ import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
 import frc.robot.controls.Operator;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.util.DetectedObject;
 import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
 import frc.robot.subsystems.gpm.Shooter;
@@ -88,8 +89,12 @@ public class RobotContainer {
         vision = new Vision(VisionConstants.CAMERAS);
 
         drive = new Drivetrain(vision);
-        driver = new GameControllerDriverConfig(drive);
+        driver = new GameControllerDriverConfig(drive, vision);
         operator = new Operator(intake);
+
+        // Detected objects need access to the drivetrain
+        DetectedObject.setDrive(drive);
+        
         SignalLogger.start();
 
         driver.configureControls();
