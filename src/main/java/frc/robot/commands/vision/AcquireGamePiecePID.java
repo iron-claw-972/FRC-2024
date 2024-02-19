@@ -3,6 +3,7 @@ package frc.robot.commands.vision;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.DetectedObject;
 
@@ -14,6 +15,7 @@ public class AcquireGamePiecePID extends Command {
 
   private Drivetrain drive; 
   private Supplier<DetectedObject> objectSupplier;
+  private DetectedObject object;
 
   /**
    * Moves toward the detected object
@@ -33,6 +35,7 @@ public class AcquireGamePiecePID extends Command {
    */
   @Override
   public void initialize(){
+    object = objectSupplier.get();
   }
 
   /**
@@ -40,13 +43,15 @@ public class AcquireGamePiecePID extends Command {
    */
   @Override
   public void execute() {
-    DetectedObject object = objectSupplier.get();
+    // DetectedObject object = objectSupplier.get();
     if(object == null){
       drive.stop();
       return;
     }
+    double angle = object.getAngle();
+    double speed = DriveConstants.kMaxSpeed;
 
-    drive.driveWithPID(object.pose.getX(), object.pose.getY(), object.getAngle());
+    drive.driveHeading(speed*Math.cos(angle), speed*Math.sin(angle), angle, true);
   }
 
   /**

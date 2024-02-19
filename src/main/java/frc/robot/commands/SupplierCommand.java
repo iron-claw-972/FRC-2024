@@ -34,7 +34,6 @@ public class SupplierCommand extends Command {
 
     @Override
     public final void execute() {
-        System.out.println(command.getName());
         command.execute();
     }
 

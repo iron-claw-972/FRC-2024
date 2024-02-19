@@ -75,8 +75,8 @@ public class DriveConstants {
     public static double kSteerOffsetBackRight = 242.847-90;//2.626169800758362;//2.771897681057453;
 
     // heading PID
-    public static double kHeadingP = 4.6;
-    public static double kHeadingD = 0;
+    public static double kHeadingP = 5.5;
+    public static double kHeadingD = 0.2;
 
     //translational PID
     public static double kTranslationalP = 1;
