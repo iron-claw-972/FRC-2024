@@ -8,9 +8,9 @@ import edu.wpi.first.math.util.Units;
 public final class IntakeConstants {
 
     // motor port
-    public static final int MOTOR_ID = 13;
+    public static final int MOTOR_ID = 2;
     public static final int SENSOR_ID = 4;
-    public static final int CENTERING_MOTOR_ID = 3;
+    public static final int CENTERING_MOTOR_ID = 1;
 
     // intake speeds
     public static final double INTAKE_POWER = 0.8;
