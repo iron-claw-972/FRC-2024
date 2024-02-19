@@ -15,11 +15,13 @@ import lib.controllers.GameController.Axis;
 import lib.controllers.GameController.Button;
 
 /** Add your docs here. */
-public class Operater extends BaseDriverConfig{
+public class Operater{
+    
     private final GameController kDriver = new GameController(Constants.OPERATOR_JOY);
+    
     Intake intake;
-    public Operater(Drivetrain drive,Intake intake){
-        super(drive);
+    
+    public Operater(Intake intake){
         this.intake = intake;
     }
 
@@ -31,32 +33,26 @@ public class Operater extends BaseDriverConfig{
     return kDriver.get(Axis.LEFT_Y);
   }
 
-  @Override
   public double getRawSideTranslation() {
     return kDriver.get(Axis.LEFT_X);
   }
 
-  @Override
   public double getRawRotation() {
     return kDriver.get(Axis.RIGHT_X);
   }
 
-  @Override
   public double getRawHeadingAngle() {
     return Math.atan2(kDriver.get(Axis.RIGHT_X), -kDriver.get(Axis.RIGHT_Y)) - Math.PI / 2;
   }
 
-  @Override
   public double getRawHeadingMagnitude() {
     return MathUtils.calculateHypotenuse(kDriver.get(Axis.RIGHT_X), kDriver.get(Axis.RIGHT_Y));
   }
 
-  @Override
   public boolean getIsSlowMode() {
     return kDriver.RIGHT_TRIGGER_BUTTON.getAsBoolean();
   }
 
-  @Override
   public boolean getIsAlign() {
     return kDriver.LEFT_TRIGGER_BUTTON.getAsBoolean();
   }
