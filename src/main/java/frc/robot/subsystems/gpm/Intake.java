@@ -1,8 +1,9 @@
 package frc.robot.subsystems.gpm;
 
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkFlex;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
@@ -10,15 +11,20 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.simulation.DIOSim;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.gpm.IntakeNote;
 import frc.robot.constants.IntakeConstants;
+import lib.controllers.GameController.Button;
 
 public class Intake extends SubsystemBase {
 
     public enum Mode {
-        INTAKE(IntakeConstants.INTAKE_POWER, IntakeConstants.CENTERING_POWER),
-        DISABLED(0, 0);
+        DISABLED(0,0),
+        INTAKE(.8,.3),
+        PickedUpNote(.8,.3),
+        Wait(.8,.3),
+        ReverseMotors(-.8,-.3);
 
         private double power;
         private double centeringPower;
@@ -37,9 +43,16 @@ public class Intake extends SubsystemBase {
         }
     }
 
-    private final CANSparkFlex motor;
-    private final CANSparkMax centeringMotor;
-    private final DigitalInput sensor;
+    /** Intake motor is a Vortex*/
+    private final TalonFX motor = new TalonFX(41);
+    private static final DCMotor dcMotor = DCMotor.getNeoVortex(1);
+
+    /** Centering motor is a NEO */
+    private final CANSparkMax centeringMotor = new CANSparkMax(IntakeConstants.CENTERING_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
+    private static final DCMotor dcMotorCentering = DCMotor.getNEO(1);
+    
+    /** beam break sensor detects whether a note is present */
+    private final DigitalInput sensor  = new DigitalInput(IntakeConstants.SENSOR_ID);
 
     private final double MASS_SHAFT = 0.4; // in kilograms
     private final double LENGTH_SHAFT = Units.inchesToMeters(25.5);
@@ -55,8 +68,6 @@ public class Intake extends SubsystemBase {
     private final double motorVoltage = 12.0;
 
     private double motorRPMSim;
-    private double motorPower;
-    private double centeringMotorPower;
     private double centeringMotorRPMSim;
 
     private int countSim = 0;
@@ -70,23 +81,32 @@ public class Intake extends SubsystemBase {
 
     private Mode mode;
 
+    private int hasNoteCounter;
+    private int waitTimeCounter;
+    private int noteWaitTime = 50; //50*20 = 1000 = 1 sec
+
     public Intake() {
-        motor = new CANSparkFlex(IntakeConstants.MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
-        centeringMotor = new CANSparkMax(IntakeConstants.CENTERING_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
-        sensor = new DigitalInput(IntakeConstants.SENSOR_ID);
-        mode = Mode.DISABLED;
+        // set the motor parameters
+        // motor.setIdleMode(IntakeConstants.idleMode);***
+        centeringMotor.setIdleMode(IntakeConstants.idleMode);
+
+        // set the mode to Idle; this will turn off the motors
+        setMode(Mode.DISABLED);
 
         // digital inputs
+        // addChild("Intake motor", motor);
+        // addchild("Centering motor", centeringMotor);
         addChild("Intake sensor", sensor);
 
         // Simulation objects
         if (RobotBase.isSimulation()) {
             intakeSensorDioSim = new DIOSim(sensor);
             // assuming gearing is 1:1 for both
-            flywheelSim = new FlywheelSim(DCMotor.getNeoVortex(1), 1.0, MOI_TOTAL);
-            centeringFlywheelSim = new FlywheelSim(DCMotor.getNeo550(1), 1.0, MOI_CENTERING_TOTAL);
-                // change the motor from neo550 to whatever it actually is
+            flywheelSim = new FlywheelSim(dcMotor, 1.0, MOI_TOTAL);
+            centeringFlywheelSim = new FlywheelSim(dcMotorCentering ,  1.0, MOI_CENTERING_TOTAL);
         }
+
+        
 
         publish();
     }
@@ -102,6 +122,10 @@ public class Intake extends SubsystemBase {
 
     public void setMode(Mode mode) {
         this.mode = mode;
+
+        // set the motor powers to be the value appropriate for this mode
+        motor.set(mode.power);
+        centeringMotor.set(mode.centeringPower);
     }
 
     public boolean hasNote() {
@@ -110,37 +134,82 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        motorPower = mode.getPower();
-        centeringMotorPower = mode.getCenteringPower();
-
-        if (RobotBase.isReal()) {
-            motor.set(motorPower);
-            centeringMotor.set(centeringMotorPower);
-        }
-
         publish();
-    }
 
-    public double getCurrent() {
-        if (RobotBase.isReal()) {
-            return Math.abs(motor.getOutputCurrent());
-        } else {
-            return motorPower / motorVoltage;
+        /* */
+        switch (mode) {
+            case DISABLED:
+                // don't have to do anything
+                break;
+
+            case INTAKE:
+                // motors are spinning and we are waiting to pick up a note
+                if (hasNote()){
+                    setMode(Mode.PickedUpNote);
+                    hasNoteCounter = 0;
+                }
+                break;
+
+            case PickedUpNote:
+                if (!hasNote()) {
+                    setMode(Mode.Wait);
+                    waitTimeCounter = 0;
+                }
+//
+                if (hasNoteCounter++ > noteWaitTime) {
+                    setMode(Mode.ReverseMotors);
+                } 
+                break;
+
+            case ReverseMotors:
+                if(!hasNote()){
+                    setMode(Mode.Wait);
+                    waitTimeCounter = 0;
+                }
+                break;
+
+            case Wait:
+                if (waitTimeCounter++ > 5) { //100ms / 20 ms = 5
+                    setMode(Mode.DISABLED);
+                }
+                break;
+
+            default:
+                break;
         }
     }
 
+    /**
+     * Get the intake motor current
+     * @return motor current
+     * @Deprecated This method is not used, and the simulation value is wrong
+     */
+    // @Deprecated
+    // public double getCurrent() {
+    //     if (RobotBase.isReal()) {
+    //         return Math.abs(motor.getOutputCurrent());
+    //     } else {
+    //         return mode.power / motorVoltage;
+    //     }
+    // }***
+
+    /**
+     * Get the centering motor current
+     * @return motor current
+     * @Deprecated This method is not used, and the simulatin value is wrong.
+     */
     public double getCenteringCurrent() {
         if (RobotBase.isReal()) {
             return Math.abs(centeringMotor.getOutputCurrent());
         } else {
-            return centeringMotorPower / motorVoltage;
+            return mode.centeringPower / motorVoltage;
         }
     }
 
     @Override
     public void simulationPeriodic() {
-        flywheelSim.setInputVoltage(motorPower * motorVoltage);
-        centeringFlywheelSim.setInputVoltage(centeringMotorPower * motorVoltage);
+        flywheelSim.setInputVoltage(mode.power * motorVoltage);
+        centeringFlywheelSim.setInputVoltage(mode.centeringPower * motorVoltage);
 
         flywheelSim.update(0.020);
         centeringFlywheelSim.update(0.020);

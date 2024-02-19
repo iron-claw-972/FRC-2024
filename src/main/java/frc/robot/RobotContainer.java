@@ -3,6 +3,8 @@ package frc.robot;
 import java.util.function.BooleanSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,6 +22,7 @@ import frc.robot.subsystems.gpm.StorageIndex;
 import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
+import frc.robot.commands.gpm.IntakeNote;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -69,6 +72,8 @@ public class RobotContainer {
 
       case TestBed2:
         intake = new Intake();
+        index = new StorageIndex();
+        SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index));
         break;
 
       default:
@@ -78,7 +83,7 @@ public class RobotContainer {
         vision = new Vision(VisionConstants.CAMERAS);
 
         drive = new Drivetrain(vision);
-        driver = new GameControllerDriverConfig(drive);
+        driver = new GameControllerDriverConfig(drive, intake, index);
 
         driver.configureControls();
         initializeAutoBuilder();

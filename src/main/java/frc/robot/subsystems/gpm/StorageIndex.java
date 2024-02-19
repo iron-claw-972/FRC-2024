@@ -1,6 +1,7 @@
 package frc.robot.subsystems.gpm;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkFlex;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -12,7 +13,8 @@ import frc.robot.constants.StorageIndexConstants;
  */
 public class StorageIndex extends SubsystemBase {
 
-  private final CANSparkFlex m_indexmotor;
+  // private final CANSparkFlex m_indexmotor;***
+  private final TalonFX m_indexmotor;
   DigitalInput m_indexBeamBreak;
 
   /**
@@ -27,11 +29,14 @@ public class StorageIndex extends SubsystemBase {
    * sensor.
    */
   public StorageIndex() {
-    m_indexmotor = new CANSparkFlex(StorageIndexConstants.indexMotorID, MotorType.kBrushless);
+    // m_indexmotor = new CANSparkFlex(StorageIndexConstants.indexMotorID, MotorType.kBrushless);***
+    m_indexmotor = new TalonFX(2);
     m_indexBeamBreak = new DigitalInput(StorageIndexConstants.indexBeamBreak);
     m_indexmotor.setInverted(false);
 
-    m_indexmotor.setIdleMode(StorageIndexConstants.idleMode);
+    // m_indexmotor.setIdleMode(StorageIndexConstants.idleMode); ***
+
+
     // Additional setup, possibly related to CAN Frames, could be documented here.
   }
 
