@@ -3,7 +3,6 @@ package frc.robot.subsystems.gpm;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
@@ -89,7 +88,7 @@ public class Intake extends SubsystemBase {
         if (RobotBase.isSimulation()) {
             // assuming gearing is 1:1 for both
             flywheelSim = new FlywheelSim(dcMotor, 1.0, MOI_TOTAL);
-            centeringFlywheelSim = new FlywheelSim(dcMotorCentering ,  1.0, MOI_CENTERING_TOTAL);
+            centeringFlywheelSim = new FlywheelSim(dcMotorCentering , 2.0, MOI_CENTERING_TOTAL);
         }
 
         publish();
