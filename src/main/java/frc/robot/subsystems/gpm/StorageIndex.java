@@ -34,7 +34,7 @@ public class StorageIndex extends SubsystemBase {
     m_indexBeamBreak = new DigitalInput(StorageIndexConstants.indexBeamBreak);
     m_indexmotor.setInverted(false);
 
-    // m_indexmotor.setIdleMode(StorageIndexConstants.idleMode); ***
+    m_indexmotor.setIdleMode(StorageIndexConstants.idleMode);
 
 
     // Additional setup, possibly related to CAN Frames, could be documented here.
