@@ -46,7 +46,7 @@ public class RobotContainer {
 
   // Controllers are defined here
   private BaseDriverConfig driver = null;
-  private BaseDriverConfig operater =null;
+  private Operater operater =null;
   ShuffleBoardManager shuffleboardManager = null;
 
   /**
@@ -87,7 +87,7 @@ public class RobotContainer {
 
         drive = new Drivetrain(vision);
         driver = new GameControllerDriverConfig(drive);
-        operater = new Operater(drive, intake);
+        operater = new Operater(intake);
         driver.configureControls();
         operater.configureControls();
         initializeAutoBuilder();
