@@ -75,8 +75,8 @@ public class Intake extends SubsystemBase {
     private Mode mode;
 
     public Intake() {
-        motor.setIdleMode(IdleMode.kBrake);
-        centeringMotor.setIdleMode(IdleMode.kBrake);
+        motor.setIdleMode(IntakeConstants.IDLE_MODE);
+        centeringMotor.setIdleMode(IntakeConstants.IDLE_MODE);
 
         setMode(Mode.DISABLED);
 

@@ -1,5 +1,7 @@
 package frc.robot.constants;
 
+import com.revrobotics.CANSparkBase.IdleMode;
+
 public final class IntakeConstants {
 
     // motor port
@@ -19,5 +21,6 @@ public final class IntakeConstants {
 
     public static final double INTAKE_STALL_TIME = 0.2;
     public static final double INTAKE_CURRENT_STOP = 10;
-
+    
+    public static final IdleMode IDLE_MODE = IdleMode.kBrake;
 }
