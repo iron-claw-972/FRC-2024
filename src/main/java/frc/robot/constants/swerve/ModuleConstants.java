@@ -17,9 +17,9 @@ public enum ModuleConstants {
             DriveConstants.DRIVE_KS_Values[0],
             DriveConstants.DRIVE_KV_Values[0],
             DriveConstants.DRIVE_KA_Values[0],
-            DriveConstants.pValues[0],
-            DriveConstants.iValues[0],
-            DriveConstants.dValues[0]
+            DriveConstants.P_Values[0],
+            DriveConstants.I_Values[0],
+            DriveConstants.D_Values[0]
     ),
     FRONT_RIGHT(
             DriveConstants.kDriveFrontRight,
@@ -30,9 +30,9 @@ public enum ModuleConstants {
             DriveConstants.DRIVE_KS_Values[1],
             DriveConstants.DRIVE_KV_Values[1],
             DriveConstants.DRIVE_KA_Values[1],
-            DriveConstants.pValues[1],
-            DriveConstants.iValues[1],
-            DriveConstants.dValues[1]
+            DriveConstants.P_Values[1],
+            DriveConstants.I_Values[1],
+            DriveConstants.D_Values[1]
     ),
     BACK_LEFT(
             DriveConstants.kDriveBackLeft,
@@ -43,9 +43,9 @@ public enum ModuleConstants {
             DriveConstants.DRIVE_KS_Values[2],
             DriveConstants.DRIVE_KV_Values[2],
             DriveConstants.DRIVE_KA_Values[2],
-            DriveConstants.pValues[2],
-            DriveConstants.iValues[2],
-            DriveConstants.dValues[2]
+            DriveConstants.P_Values[2],
+            DriveConstants.I_Values[2],
+            DriveConstants.D_Values[2]
     ),
     BACK_RIGHT(
             DriveConstants.kDriveBackRight,
@@ -56,9 +56,9 @@ public enum ModuleConstants {
             DriveConstants.DRIVE_KS_Values[3],
             DriveConstants.DRIVE_KV_Values[3],
             DriveConstants.DRIVE_KA_Values[3],
-            DriveConstants.pValues[3],
-            DriveConstants.iValues[3],
-            DriveConstants.dValues[3]
+            DriveConstants.P_Values[3],
+            DriveConstants.I_Values[3],
+            DriveConstants.D_Values[3]
     ),
 
     NONE(0, 0, 0, 0.0, ModuleType.NONE,0,0,0,0,0,0);

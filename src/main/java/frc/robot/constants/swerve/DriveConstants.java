@@ -112,20 +112,20 @@ public class DriveConstants {
     public static final NeutralModeValue kAngleNeutralMode = NeutralModeValue.Brake;
 
     /* Drive Motor PID Values */
-    public static final double[] pValues= {
+    public static final double[] P_Values= {
         0.035524,
         0.075025,
         0.1088,
         0.085856
         
     };
-    public static final double[] iValues= {
+    public static final double[] I_Values= {
         0,
         0,
         0,
         0
     };
-    public static final double[] dValues= {
+    public static final double[] D_Values= {
         0,
         0,
         0,

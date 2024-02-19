@@ -4,7 +4,7 @@
 
 package frc.robot.commands;
 
-import com.ctre.phoenix6.BaseStatusSignal;
+
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -29,7 +29,7 @@ public class SysIDDriveCommand extends SequentialCommandGroup {
         this.drive = drive;
 
         config = new Config(
-            Units.Volts.of(0.2).per(Units.Seconds.of(1)),
+            Units.Volts.of(0.5).per(Units.Seconds.of(1)),
             Units.Volts.of(3),
             Units.Seconds.of(5),
             (x)->SignalLogger.writeString("state", x.toString())
