@@ -149,7 +149,7 @@ public class Shooter extends SubsystemBase {
 	 * @see shooterSpeedToRPM
 	 */
 	public static double shooterRPMToSpeed(double rpm) {
-		return (rpm / 60) * (RADIUS_COLSON * 2 * Math.PI);
+		return (rpm / 60) * (RADIUS_STEALTH * 2 * Math.PI);
 	}
 
 	/**
@@ -160,7 +160,7 @@ public class Shooter extends SubsystemBase {
 	 * @see shooterRPMToSpeed
 	 */
 	public static double shooterSpeedToRPM(double speed) {
-		return (speed * 60) / (RADIUS_COLSON * 2 * Math.PI);
+		return (speed * 60) / (RADIUS_STEALTH * 2 * Math.PI);
 	}
 
 	/**
