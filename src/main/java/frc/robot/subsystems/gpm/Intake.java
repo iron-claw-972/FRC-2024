@@ -74,11 +74,9 @@ public class Intake extends SubsystemBase {
     private Mode mode;
 
     public Intake() {
-        // set the motor parameters
-        motor.setIdleMode(IntakeConstants.idleMode);
-        centeringMotor.setIdleMode(IntakeConstants.idleMode);
-
-        // set the mode to Idle; this will turn off the motors
+        motor = new CANSparkFlex(IntakeConstants.MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
+        centeringMotor = new CANSparkMax(IntakeConstants.CENTERING_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
+        sensor = new DigitalInput(IntakeConstants.SENSOR_ID);
         setMode(Mode.DISABLED);
 
         // digital inputs
