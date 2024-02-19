@@ -168,9 +168,6 @@ networktables.json.bck
 # Simulation puts log files in root of repo
 *.wpilog
 
-# Don't commit ctre_sim directory
-ctre_sim/*
-
 # File that has git and version data
 src/main/java/frc/robot/util/BuildData.java
 

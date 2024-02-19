@@ -56,25 +56,20 @@ public abstract class BaseDriverConfig {
     }
 
     public double getForwardTranslation() {
-        return MathUtils.expoMS(MathUtil.applyDeadband(getRawForwardTranslation(), Constants.DEADBAND), 2)
-                * DriveConstants.kMaxSpeed * 1;
+        return MathUtils.expoMS(MathUtil.applyDeadband(getRawForwardTranslation(), Constants.DEADBAND), 2) * DriveConstants.kMaxSpeed * 1;
     }
 
     public double getSideTranslation() {
-        return MathUtils.expoMS(MathUtil.applyDeadband(getRawSideTranslation(), Constants.DEADBAND), 2)
-                * DriveConstants.kMaxSpeed * 1;
+        return MathUtils.expoMS(MathUtil.applyDeadband(getRawSideTranslation(), Constants.DEADBAND), 2) * DriveConstants.kMaxSpeed * 1;
     }
 
     public double getRotation() {
-        return MathUtils.expoMS(MathUtil.applyDeadband(getRawRotation(), Constants.DEADBAND), 2)
-                * DriveConstants.kMaxAngularSpeed * 1;
+        return MathUtils.expoMS(MathUtil.applyDeadband(getRawRotation(), Constants.DEADBAND), 2) * DriveConstants.kMaxAngularSpeed * 1;
     }
 
     public double getHeading() {
-        if (getRawHeadingMagnitude() <= headingDeadband)
-            return headingLimiter.calculate(previousHeading, 1e-6);
-        previousHeading = headingLimiter.calculate(getRawHeadingAngle(),
-                MathUtils.expoMS(getRawHeadingMagnitude(), headingExpo) * headingSensitivity);
+        if (getRawHeadingMagnitude() <= headingDeadband) return headingLimiter.calculate(previousHeading, 1e-6);
+        previousHeading = headingLimiter.calculate(getRawHeadingAngle(), MathUtils.expoMS(getRawHeadingMagnitude(), headingExpo) * headingSensitivity);
         return previousHeading;
     }
 
@@ -100,5 +95,4 @@ public abstract class BaseDriverConfig {
     public abstract boolean getIsSlowMode();
 
     public abstract boolean getIsAlign();
-
 }

@@ -43,7 +43,6 @@ public class PS5ControllerDriverConfig extends BaseDriverConfig {
         kDriver.get(PS5Button.CROSS).onTrue(new InstantCommand(() ->
                 getDrivetrain().resetModulesToAbsolute()
         ));
-
     }
 
 
