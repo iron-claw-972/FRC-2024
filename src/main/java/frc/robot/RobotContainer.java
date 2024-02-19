@@ -4,6 +4,7 @@ import java.util.function.BooleanSupplier;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.pathplanner.lib.auto.AutoBuilder;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -14,6 +15,7 @@ import frc.robot.constants.AutoConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
+import frc.robot.controls.Operater;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
@@ -22,6 +24,7 @@ import frc.robot.subsystems.gpm.StorageIndex;
 import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
+import frc.robot.commands.gpm.IntakeNote;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -44,7 +47,7 @@ public class RobotContainer {
 
   // Controllers are defined here
   private BaseDriverConfig driver = null;
-
+  private Operater operater =null;
   ShuffleBoardManager shuffleboardManager = null;
 
   /**
@@ -72,11 +75,26 @@ public class RobotContainer {
 
       case TestBed2:
         intake = new Intake();
+        index = new StorageIndex();
+        SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index));
         break;
 
       default:
       case SwerveCompetition:
-        arm = new Arm();
+        vision = new Vision(VisionConstants.CAMERAS);
+        intake = new Intake();
+        drive = new Drivetrain(vision);
+        driver = new GameControllerDriverConfig(drive);        
+        SignalLogger.start();
+
+        driver.configureControls();
+        operater.configureControls();
+        initializeAutoBuilder();
+        drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
+
+        PathGroupLoader.loadPathGroups();
+
+        shuffleboardManager = new ShuffleBoardManager(drive, vision);
 
       case SwerveTest:
         vision = new Vision(VisionConstants.CAMERAS);
@@ -86,6 +104,7 @@ public class RobotContainer {
         SignalLogger.start();
 
         driver.configureControls();
+        operater.configureControls();
         initializeAutoBuilder();
         drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
 

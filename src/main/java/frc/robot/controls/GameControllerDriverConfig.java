@@ -51,7 +51,6 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
             () -> DriverStation.getAlliance().get() == Alliance.Blue ? VisionConstants.BLUE_PODIUM_POSE
                 : VisionConstants.RED_PODIUM_POSE,
             getDrivetrain()));
-
   }
 
   @Override
