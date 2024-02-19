@@ -45,6 +45,8 @@ public class Shoot extends Command {
         @Override
         public void execute() {
                 /* temporarily, for testing purposes.
+                // Positive x displacement means we are to the left of the speaker
+                // Positive y displacement means we are below the speaker.
                 // TODO: make this only run once?
                 Pose3d speakerPose = DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
                 //TODO: Add this and make it change with arm angle
@@ -58,7 +60,7 @@ public class Shoot extends Command {
                         speakerHeight-shooterHeight,
                         new Rotation3d(
                                 0,
-                                arm.getAngle(),
+                                arm.getAngleRad(),
                                 drive.getPose().getRotation().getRadians()))
                         .relativeTo(speakerPose);
 
@@ -81,13 +83,13 @@ public class Shoot extends Command {
                 System.err.println("pv tracks"+phi_v);
                 // Angle to goal
                 // double phi_h = drivetrain.getAlignAngle();
-                double phi_h = Math.asin(y / x);
+                double phi_h = Math.atan2(displacement.getY(),displacement.getX());
                 System.err.println("ph " + phi_h);
-
+                        ;
                 // Random variable to hold recurring code
                 double a = v_note * Math.cos(phi_v) * Math.sin(phi_h);
                 double theta_h = Math.atan((a + v_ry) / (v_note * Math.cos(phi_v) * Math.cos(phi_h) + v_rx));
-                double theta_v = 1 / Math.atan((a + v_ry) / (v_note * Math.sin(phi_v) * Math.cos(phi_h)));
+                double theta_v = Math.atan(1/(((a + v_rx) / (v_note * Math.sin(phi_v) * Math.cos(theta_h)))));
                 double v_shoot = v_note * Math.sin(phi_v) / Math.sin(theta_v);
                 horiz_angle = theta_h;
                 vert_angle = theta_v;
