@@ -39,8 +39,8 @@ public class Intake extends SubsystemBase {
     private final DigitalInput sensor;
 
     private int countSim = 0;
-    private DIOSim IntakeSensorDioSim;
-    private boolean simDIOValue = true;
+    private DIOSim intakeSensorDioSim;
+    private boolean simulatedNotePresent = false;
 
     // private XboxController m_gc;
 
@@ -57,7 +57,7 @@ public class Intake extends SubsystemBase {
 
         // //Simulation objects
         if (RobotBase.isSimulation()) {
-            IntakeSensorDioSim = new DIOSim(sensor);
+            intakeSensorDioSim = new DIOSim(sensor);
         }
 
         publish();
@@ -95,13 +95,23 @@ public class Intake extends SubsystemBase {
     @Override
     public void simulationPeriodic() {
 
-        // change values every 1/2 secound
-        if (countSim++ > 25) {
+        // When the intake is on it takes ≈one second to reach the note (no note present). 
+        // After ≈one second, note is in the intake (note present).
+        // After ≈one and a half seconds note has passed through intake (note not present).
+
+        if (mode == Mode.INTAKE) {
+            countSim++;
+        }
+
+        if (countSim == 50) {
+            simulatedNotePresent = true;
+            intakeSensorDioSim.setValue(simulatedNotePresent);
+        }
+
+        if (countSim >= 75) {
+            simulatedNotePresent = false;
+            intakeSensorDioSim.setValue(simulatedNotePresent);
             countSim = 0;
-
-            IntakeSensorDioSim.setValue(simDIOValue);
-
-            simDIOValue = !simDIOValue;
         }
 
     }
