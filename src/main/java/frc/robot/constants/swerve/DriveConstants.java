@@ -69,12 +69,12 @@ public class DriveConstants {
     public static double kSteerOffsetBackRight = 201.177;//2.626169800758362;//2.771897681057453;
 
     // heading PID
-    public static double kHeadingP = 4.6;
-    public static double kHeadingD = 0;
+    public static double kHeadingP = 5.5;
+    public static double kHeadingD = 0.2;
 
     //translational PID
-    public static double kTranslationalP = 0.25;
-    public static double kTranslationalD = 0;//0.001
+    public static double kTranslationalP = 1;
+    public static double kTranslationalD = 0.001;//0.001
 
     //The PIDs for PathPlanner Command
     public static double kPathplannerHeadingP = 3.5;
