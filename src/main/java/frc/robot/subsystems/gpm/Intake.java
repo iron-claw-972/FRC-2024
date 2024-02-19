@@ -1,6 +1,6 @@
 package frc.robot.subsystems.gpm;
 
-import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 
@@ -8,7 +8,6 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.simulation.DIOSim;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,9 +18,7 @@ public class Intake extends SubsystemBase {
     public enum Mode {
         DISABLED(0,0),
         INTAKE(.8,.3),
-        PickedUpNote(.8,.3),
-        Wait(.8,.3),
-        ReverseMotors(-.8,-.3);
+        REVERSE(-.8,-.3);
 
         private double power;
         private double centeringPower;
@@ -41,7 +38,9 @@ public class Intake extends SubsystemBase {
     }
 
     /** Intake motor is a Vortex*/
-    private final TalonFX motor = new TalonFX(41);
+    private final CANSparkFlex motor = new CANSparkFlex(IntakeConstants.MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
+
+    // change the motor from neo550 to whatever it actually is
     private static final DCMotor dcMotor = DCMotor.getNeoVortex(1);
 
     /** Centering motor is a NEO */
@@ -69,23 +68,14 @@ public class Intake extends SubsystemBase {
     private double motorRPMSim;
     private double centeringMotorRPMSim;
 
-    private int countSim = 0;
-    private DIOSim intakeSensorDioSim;
-
-    // private XboxController m_gc;
-
     private FlywheelSim flywheelSim;
     private FlywheelSim centeringFlywheelSim;
 
     private Mode mode;
 
-    private int hasNoteCounter;
-    private int waitTimeCounter;
-    private int noteWaitTime = 50; //50*20 = 1000 = 1 sec
-
     public Intake() {
         // set the motor parameters
-        // motor.setIdleMode(IntakeConstants.idleMode);***
+        motor.setIdleMode(IntakeConstants.idleMode);
         centeringMotor.setIdleMode(IntakeConstants.idleMode);
 
         // set the mode to Idle; this will turn off the motors
@@ -98,10 +88,6 @@ public class Intake extends SubsystemBase {
 
         // Simulation objects
         if (RobotBase.isSimulation()) {
-            intakeSensorDioSim = new DIOSim(sensor);
-            // the beam is present....
-            intakeSensorDioSim.setValue(true);
-
             // assuming gearing is 1:1 for both
             flywheelSim = new FlywheelSim(dcMotor, 1.0, MOI_TOTAL);
             centeringFlywheelSim = new FlywheelSim(dcMotorCentering ,  1.0, MOI_CENTERING_TOTAL);
@@ -113,10 +99,8 @@ public class Intake extends SubsystemBase {
     // publish sensor to Smart Dashboard
     private void publish() {
         SmartDashboard.putBoolean("Intake Sensor", sensor.get());
-        if (RobotBase.isSimulation()) {
-            SmartDashboard.putNumber("Intake motor RPM", motorRPMSim);
-            SmartDashboard.putNumber("Intake centering motor RPM", centeringMotorRPMSim);
-        }
+        SmartDashboard.putNumber("Intake motor RPM", motorRPMSim);
+        SmartDashboard.putNumber("Intake centering motor RPM", centeringMotorRPMSim);
     }
 
     public void setMode(Mode mode) {
@@ -134,75 +118,6 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         publish();
-
-        /* */
-        switch (mode) {
-            case DISABLED:
-                // don't have to do anything
-                break;
-
-            case INTAKE:
-                // motors are spinning and we are waiting to pick up a note
-                if (hasNote()){
-                    setMode(Mode.PickedUpNote);
-                    hasNoteCounter = 0;
-                }
-                break;
-
-            case PickedUpNote:
-                if (!hasNote()) {
-                    setMode(Mode.Wait);
-                    waitTimeCounter = 0;
-                }
-//
-                if (hasNoteCounter++ > noteWaitTime) {
-                    setMode(Mode.ReverseMotors);
-                } 
-                break;
-
-            case ReverseMotors:
-                if(!hasNote()){
-                    setMode(Mode.Wait);
-                    waitTimeCounter = 0;
-                }
-                break;
-
-            case Wait:
-                if (waitTimeCounter++ > 5) { //100ms / 20 ms = 5
-                    setMode(Mode.DISABLED);
-                }
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    /**
-     * Get the intake motor current
-     * @return motor current
-     * @Deprecated This method is not used, and the simulation value is wrong
-     */
-    // @Deprecated
-    // public double getCurrent() {
-    //     if (RobotBase.isReal()) {
-    //         return Math.abs(motor.getOutputCurrent());
-    //     } else {
-    //         return mode.power / motorVoltage;
-    //     }
-    // }***
-
-    /**
-     * Get the centering motor current
-     * @return motor current
-     * @Deprecated This method is not used, and the simulatin value is wrong.
-     */
-    public double getCenteringCurrent() {
-        if (RobotBase.isReal()) {
-            return Math.abs(centeringMotor.getOutputCurrent());
-        } else {
-            return mode.centeringPower / motorVoltage;
-        }
     }
 
     @Override
@@ -215,27 +130,6 @@ public class Intake extends SubsystemBase {
 
         motorRPMSim = flywheelSim.getAngularVelocityRPM();
         centeringMotorRPMSim = centeringFlywheelSim.getAngularVelocityRPM();
-
-        // When the intake is on it takes one second to reach the note (no note present). 
-        // After one second, the note is in the intake (note present).
-        // After one and a half seconds, the note has passed through intake (note not present).
-
-        if (mode != Mode.DISABLED) {
-            countSim++;
-        } else {
-            countSim = 0;
-        }
-
-        // 50 counts is one second
-        if (countSim == 50) {
-            // beam is no longer present
-            intakeSensorDioSim.setValue(false);
-        }
-
-        if (countSim == 75) {
-            // beam is present
-            intakeSensorDioSim.setValue(true);
-        }
     }
 
     public void close() {
