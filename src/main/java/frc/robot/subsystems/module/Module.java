@@ -52,6 +52,7 @@ public class Module extends SubsystemBase {
 
     private ModuleConstants moduleConstants;
 
+
     public Module(ModuleConstants moduleConstants) {
         this.moduleConstants = moduleConstants;
 
