@@ -3,8 +3,14 @@ package frc.robot.constants;
 public class ShooterConstants {
 
     // motor Ids
-    public static final int BOTTOM_MOTOR_ID = 5;
-    public static final int TOP_MOTOR_ID = 6;
+    public static final int RIGHT_MOTOR_ID = 1;
+    public static final int LEFT_MOTOR_ID = 2;
 
-    // DO NOT PUT LOCAL CONSTANTS HERE. THEY BELONG TO THE SUBSYSTEM.
+    // RPMs
+
+    public static final double LEFT_SHOOT_RPM = 6000;
+    public static final double RIGHT_SHOOT_RPM = 4000;
+    public static final double INTAKE_RPM = 0; // may not be neccessary if indexer spins fast enough
+    public static final double EJECT_RMP = 0; // may not be neccessary if indexer spins fast enough
+
 }
