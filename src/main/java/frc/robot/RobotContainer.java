@@ -84,7 +84,8 @@ public class RobotContainer {
         vision = new Vision(VisionConstants.CAMERAS);
         intake = new Intake();
         drive = new Drivetrain(vision);
-        driver = new GameControllerDriverConfig(drive);        
+        driver = new GameControllerDriverConfig(drive, vision);
+        operater = new Operater(intake);
         SignalLogger.start();
 
         driver.configureControls();
