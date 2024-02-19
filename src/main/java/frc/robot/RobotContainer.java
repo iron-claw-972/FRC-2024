@@ -1,5 +1,6 @@
 package frc.robot;
 
+import java.rmi.server.Operation;
 import java.util.function.BooleanSupplier;
 
 import com.ctre.phoenix6.SignalLogger;
@@ -15,7 +16,7 @@ import frc.robot.constants.AutoConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
-import frc.robot.controls.Operater;
+import frc.robot.controls.Operator;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
@@ -47,7 +48,7 @@ public class RobotContainer {
 
   // Controllers are defined here
   private BaseDriverConfig driver = null;
-  private Operater operater =null;
+  private Operator operator =null;
   ShuffleBoardManager shuffleboardManager = null;
 
   /**
@@ -81,30 +82,18 @@ public class RobotContainer {
 
       default:
       case SwerveCompetition:
-        vision = new Vision(VisionConstants.CAMERAS);
         intake = new Intake();
-        drive = new Drivetrain(vision);
-        driver = new GameControllerDriverConfig(drive);        
-        SignalLogger.start();
-
-        driver.configureControls();
-        operater.configureControls();
-        initializeAutoBuilder();
-        drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
-
-        PathGroupLoader.loadPathGroups();
-
-        shuffleboardManager = new ShuffleBoardManager(drive, vision);
 
       case SwerveTest:
         vision = new Vision(VisionConstants.CAMERAS);
 
         drive = new Drivetrain(vision);
-        driver = new GameControllerDriverConfig(drive);        
+        driver = new GameControllerDriverConfig(drive);
+        operator = new Operator(intake);
         SignalLogger.start();
 
         driver.configureControls();
-        operater.configureControls();
+        operator.configureControls();
         initializeAutoBuilder();
         drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
 
@@ -112,7 +101,7 @@ public class RobotContainer {
 
         shuffleboardManager = new ShuffleBoardManager(drive, vision);
         break;
-    }
+      }
 
     // This is really annoying so it's disabled
     DriverStation.silenceJoystickConnectionWarning(true);
