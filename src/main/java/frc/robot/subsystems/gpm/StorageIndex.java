@@ -30,7 +30,7 @@ public class StorageIndex extends SubsystemBase {
    * sensor.
    */
   public StorageIndex() {
-     m_indexmotor = new CANSparkFlex(StorageIndexConstants.indexMotorID, MotorType.kBrushless);
+    m_indexmotor = new CANSparkFlex(StorageIndexConstants.indexMotorID, MotorType.kBrushless);
     m_indexBeamBreak = new DigitalInput(StorageIndexConstants.indexBeamBreak);
     m_indexmotor.setInverted(false);
 
