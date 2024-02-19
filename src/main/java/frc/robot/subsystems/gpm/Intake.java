@@ -1,6 +1,7 @@
 package frc.robot.subsystems.gpm;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 
@@ -15,6 +16,16 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
+    // Current limits -- not used
+    // private static final int CONTINUOUS_CURRENT_LIMIT = 25;
+    // private static final int PEAK_CURRENT_LIMIT = 55;
+    // private static final double PEAK_CURRENT_DURATION = 0.1;
+    // private static final boolean ENABLE_CURRENT_LIMIT = true;
+
+    // private static final double INTAKE_STALL_TIME = 0.2;
+    // private static final double INTAKE_CURRENT_STOP = 10;
+
+    private static final IdleMode idleMode = IdleMode.kBrake;
 
     public enum Mode {
         DISABLED(0,0),
@@ -85,8 +96,8 @@ public class Intake extends SubsystemBase {
 
     public Intake() {
         // set the motor parameters
-        // motor.setIdleMode(IntakeConstants.idleMode);***
-        centeringMotor.setIdleMode(IntakeConstants.idleMode);
+        // motor.setIdleMode(idleMode);
+        centeringMotor.setIdleMode(idleMode);
 
         // set the mode to Idle; this will turn off the motors
         setMode(Mode.DISABLED);
