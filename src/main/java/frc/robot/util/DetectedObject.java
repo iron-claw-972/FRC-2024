@@ -72,7 +72,7 @@ public class DetectedObject {
      * @param type What type of object it is
      * @param robotToCamera The transformation form the robot to the camera
      */
-    public DetectedObject(double xOffset, double yOffset, double distance, String type, Transform3d robotToCamera){
+    public DetectedObject(double xOffset, double yOffset, double distance, long type, Transform3d robotToCamera){
         this(xOffset, yOffset, distance, getType(type), robotToCamera);
     }
     /**
@@ -120,7 +120,7 @@ public class DetectedObject {
      * @param type What type of object it is
      * @param robotToCamera The transformation form the robot to the camera
      */
-    public DetectedObject(double xOffset, double yOffset, String type, Transform3d robotToCamera){
+    public DetectedObject(double xOffset, double yOffset, long type, Transform3d robotToCamera){
         this(xOffset, yOffset, getType(type), robotToCamera);
     }
 
@@ -129,12 +129,11 @@ public class DetectedObject {
      * @param type The type as a String
      * @return The type as an ObjectType
      */
-    public static ObjectType getType(String type){
+    public static ObjectType getType(long type){
         return
-            type==null?ObjectType.NONE:
-            type.toLowerCase().equals("note")?ObjectType.NOTE:
-            type.toLowerCase().equals("red robot")?ObjectType.RED_ROBOT:
-            type.toLowerCase().equals("blue robot")?ObjectType.BLUE_ROBOT:
+            type==0?ObjectType.NOTE:
+            type==1?ObjectType.RED_ROBOT:
+            type==2?ObjectType.BLUE_ROBOT:
             ObjectType.NONE;
     }
 
@@ -143,8 +142,7 @@ public class DetectedObject {
      * @return True if the object is a note, false otherwise
      */
     public boolean isGamePiece(){
-        return true;
-        // return type==ObjectType.NOTE;
+        return type==ObjectType.NOTE;
     }
     /**
      * Returns if the object is a robot

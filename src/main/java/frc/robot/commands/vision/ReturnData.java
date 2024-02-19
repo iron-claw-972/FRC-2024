@@ -28,7 +28,7 @@ public class ReturnData extends CommandBase{
   public void execute() {
     double[] xOffset = m_vision.getHorizontalOffset();
     double[] yOffset = m_vision.getVerticalOffset();
-    String[] objectClass = m_vision.getDetectedObjectClass();
+    long[] objectClass = m_vision.getDetectedObjectClass();
 
     //put the offsets and area on SmartDashboard for testing 
     SmartDashboard.putNumberArray("Object X offsets degrees", xOffset); 
@@ -41,7 +41,7 @@ public class ReturnData extends CommandBase{
       System.out.println("Best game piece: "+bestGamePiece);
     }
     for(int i = 0; i < xOffset.length; i++){
-      System.out.printf("\nx: %.2f, y: %.2f, type: %s\n", xOffset[i], yOffset[i], objectClass[i]);
+      System.out.printf("\nx: %.2f, y: %.2f, type: %s\n", xOffset[i], yOffset[i], DetectedObject.getType(objectClass[i]));
       DetectedObject object = new DetectedObject(Units.degreesToRadians(xOffset[i]), Units.degreesToRadians(yOffset[i]), objectClass[i], VisionConstants.CAMERAS.get(0).getSecond());
       System.out.printf("Object: %s\nDistance: %.2f, Angle: %.2f\n", object, object.getDistance(), Units.radiansToDegrees(object.getAngle()));
     }

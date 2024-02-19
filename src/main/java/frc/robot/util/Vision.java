@@ -89,7 +89,6 @@ public class Vision {
    */
   public double[] getHorizontalOffset(){
     return m_xOffset.getDoubleArray(new double[0]);
-    // return new double[]{60};
   }
 
   /**
@@ -98,7 +97,6 @@ public class Vision {
    */
   public double[] getVerticalOffset(){
     return m_yOffset.getDoubleArray(new double[0]);
-    // return new double[]{-20};
   }
 
   /**
@@ -107,7 +105,6 @@ public class Vision {
    */
   public double[] getDistance(){
     return m_objectDistance.getDoubleArray(new double[0]);
-    // return new double[]{1};
   }
 
   /**
@@ -122,9 +119,8 @@ public class Vision {
    * Returns what types of object are detected
    * @return The object types as a String array
    */
-  public String[] getDetectedObjectClass(){
-    return m_objectClass.getStringArray(new String[0]);
-    // return new String[]{"note"};
+  public long[] getDetectedObjectClass(){
+    return m_objectClass.getIntegerArray(new long[0]);
   }
 
   /**
@@ -144,7 +140,7 @@ public class Vision {
     double[] xOffset = getHorizontalOffset();
     double[] yOffset = getVerticalOffset();
     double[] distance = getDistance();
-    String[] objectClass = getDetectedObjectClass();
+    long[] objectClass = getDetectedObjectClass();
     long[] cameraIndex = getCameraIndex();
     DetectedObject[] objects = new DetectedObject[xOffset.length];
     for(int i = 0; i < objects.length; i++){
