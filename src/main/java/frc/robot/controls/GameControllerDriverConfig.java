@@ -9,8 +9,6 @@ import frc.robot.commands.drive_comm.SetFormationX;
 import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.gpm.Intake;
-import frc.robot.subsystems.gpm.StorageIndex;
 import frc.robot.util.MathUtils;
 import lib.controllers.GameController;
 import lib.controllers.GameController.Axis;
@@ -22,13 +20,8 @@ import lib.controllers.GameController.Button;
 public class GameControllerDriverConfig extends BaseDriverConfig {
   private final GameController kDriver = new GameController(Constants.DRIVER_JOY);
 
-  private final Intake m_intake;
-  private final StorageIndex m_storageIndex;
-
-  public GameControllerDriverConfig(Drivetrain drive, Intake intake, StorageIndex storageIndex) {
+  public GameControllerDriverConfig(Drivetrain drive) {
     super(drive);
-    this.m_intake = intake;
-    this.m_storageIndex = storageIndex;
   }
 
   @Override

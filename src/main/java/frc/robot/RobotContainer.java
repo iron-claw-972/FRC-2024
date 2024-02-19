@@ -14,6 +14,7 @@ import frc.robot.constants.AutoConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
+import frc.robot.controls.Operater;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
@@ -45,7 +46,7 @@ public class RobotContainer {
 
   // Controllers are defined here
   private BaseDriverConfig driver = null;
-
+  private BaseDriverConfig operater =null;
   ShuffleBoardManager shuffleboardManager = null;
 
   /**
@@ -85,9 +86,10 @@ public class RobotContainer {
         vision = new Vision(VisionConstants.CAMERAS);
 
         drive = new Drivetrain(vision);
-        driver = new GameControllerDriverConfig(drive, intake, index);
-
+        driver = new GameControllerDriverConfig(drive);
+        operater = new Operater(drive, intake);
         driver.configureControls();
+        operater.configureControls();
         initializeAutoBuilder();
         drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
 
