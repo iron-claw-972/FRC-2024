@@ -49,7 +49,7 @@ public class AcquireGamePiecePID extends Command {
       return;
     }
     double angle = object.getAngle();
-    double speed = DriveConstants.kMaxSpeed;
+    double speed = DriveConstants.kMaxSpeed/2;
 
     drive.driveHeading(speed*Math.cos(angle), speed*Math.sin(angle), angle, true);
   }
