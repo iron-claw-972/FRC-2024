@@ -11,6 +11,8 @@ import frc.robot.constants.ArmConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.DetectedObject;
 import frc.robot.subsystems.gpm.Arm;
+import frc.robot.subsystems.gpm.Intake;
+
 import frc.robot.subsystems.gpm.StorageIndex;
 
 public class AcquireGamePiece extends SequentialCommandGroup {
