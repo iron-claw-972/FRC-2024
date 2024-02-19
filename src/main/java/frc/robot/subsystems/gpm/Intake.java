@@ -3,6 +3,7 @@ package frc.robot.subsystems.gpm;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
@@ -74,9 +75,9 @@ public class Intake extends SubsystemBase {
     private Mode mode;
 
     public Intake() {
-        motor = new CANSparkFlex(IntakeConstants.MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
-        centeringMotor = new CANSparkMax(IntakeConstants.CENTERING_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
-        sensor = new DigitalInput(IntakeConstants.SENSOR_ID);
+        motor.setIdleMode(IdleMode.kBrake);
+        centeringMotor.setIdleMode(IdleMode.kBrake);
+
         setMode(Mode.DISABLED);
 
         // digital inputs
