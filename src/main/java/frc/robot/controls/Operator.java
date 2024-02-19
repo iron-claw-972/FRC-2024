@@ -8,19 +8,17 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.gpm.Intake;
 import frc.robot.subsystems.gpm.Intake.Mode;
-import frc.robot.util.MathUtils;
 import lib.controllers.GameController;
-import lib.controllers.GameController.Axis;
 import lib.controllers.GameController.Button;
 
 /** Add your docs here. */
-public class Operater{
+public class Operator{
     
     private final GameController kDriver = new GameController(Constants.OPERATOR_JOY);
     
     Intake intake;
     
-    public Operater(Intake intake){
+    public Operator(Intake intake){
         this.intake = intake;
     }
 
