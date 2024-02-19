@@ -1,7 +1,6 @@
 package frc.robot.subsystems.gpm;
 
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 
@@ -13,9 +12,7 @@ import edu.wpi.first.wpilibj.simulation.DIOSim;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.gpm.IntakeNote;
 import frc.robot.constants.IntakeConstants;
-import lib.controllers.GameController.Button;
 
 public class Intake extends SubsystemBase {
 

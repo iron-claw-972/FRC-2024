@@ -15,7 +15,6 @@ import frc.robot.util.MathUtils;
 import lib.controllers.GameController;
 import lib.controllers.GameController.Axis;
 import lib.controllers.GameController.Button;
-import frc.robot.commands.gpm.IntakeNote;
 
 /**
  * Driver controls for the generic game controller.

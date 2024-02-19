@@ -1,8 +1,6 @@
 package frc.robot.subsystems.gpm;
 
-import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.revrobotics.CANSparkFlex;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.StorageIndexConstants;
