@@ -1,5 +1,6 @@
 package frc.robot.subsystems.gpm;
 
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
@@ -12,7 +13,9 @@ import edu.wpi.first.wpilibj.simulation.DIOSim;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.gpm.IntakeNote;
 import frc.robot.constants.IntakeConstants;
+import lib.controllers.GameController.Button;
 
 public class Intake extends SubsystemBase {
 
@@ -41,7 +44,9 @@ public class Intake extends SubsystemBase {
     }
 
     /** Intake motor is a Vortex*/
-    private final CANSparkFlex motor = new CANSparkFlex(IntakeConstants.MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
+    // private final CANSparkFlex motor = new CANSparkFlex(IntakeConstants.MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);***
+
+    private final TalonFX motor = new TalonFX(41);
     // change the motor from neo550 to whatever it actually is
     private static final DCMotor dcMotor = DCMotor.getNeoVortex(1);
 
@@ -82,7 +87,7 @@ public class Intake extends SubsystemBase {
 
     public Intake() {
         // set the motor parameters
-        motor.setIdleMode(IntakeConstants.idleMode);
+        // motor.setIdleMode(IntakeConstants.idleMode);***
         centeringMotor.setIdleMode(IntakeConstants.idleMode);
 
         // set the mode to Idle; this will turn off the motors
@@ -100,6 +105,8 @@ public class Intake extends SubsystemBase {
             flywheelSim = new FlywheelSim(dcMotor, 1.0, MOI_TOTAL);
             centeringFlywheelSim = new FlywheelSim(dcMotorCentering ,  1.0, MOI_CENTERING_TOTAL);
         }
+
+        
 
         publish();
     }
@@ -154,6 +161,13 @@ public class Intake extends SubsystemBase {
                 } 
                 break;
 
+            case ReverseMotors:
+                if(!hasNote()){
+                    setMode(Mode.Wait);
+                    waitTimeCounter = 0;
+                }
+                break;
+
             case Wait:
                 if (waitTimeCounter++ > 5) { //100ms / 20 ms = 5
                     setMode(Mode.DISABLED);
@@ -170,14 +184,14 @@ public class Intake extends SubsystemBase {
      * @return motor current
      * @Deprecated This method is not used, and the simulation value is wrong
      */
-    @Deprecated
-    public double getCurrent() {
-        if (RobotBase.isReal()) {
-            return Math.abs(motor.getOutputCurrent());
-        } else {
-            return mode.power / motorVoltage;
-        }
-    }
+    // @Deprecated
+    // public double getCurrent() {
+    //     if (RobotBase.isReal()) {
+    //         return Math.abs(motor.getOutputCurrent());
+    //     } else {
+    //         return mode.power / motorVoltage;
+    //     }
+    // }***
 
     /**
      * Get the centering motor current
