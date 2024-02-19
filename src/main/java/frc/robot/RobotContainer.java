@@ -81,7 +81,20 @@ public class RobotContainer {
 
       default:
       case SwerveCompetition:
-        arm = new Arm();
+        vision = new Vision(VisionConstants.CAMERAS);
+        intake = new Intake();
+        drive = new Drivetrain(vision);
+        driver = new GameControllerDriverConfig(drive);        
+        SignalLogger.start();
+
+        driver.configureControls();
+        operater.configureControls();
+        initializeAutoBuilder();
+        drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
+
+        PathGroupLoader.loadPathGroups();
+
+        shuffleboardManager = new ShuffleBoardManager(drive, vision);
 
       case SwerveTest:
         vision = new Vision(VisionConstants.CAMERAS);
