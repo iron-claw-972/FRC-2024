@@ -12,6 +12,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -229,6 +231,18 @@ public class Drivetrain extends SubsystemBase {
         setModuleStates(swerveModuleStates, isOpenLoop);
     }
 
+    public void setDriveVoltages(Measure<Voltage> voltage){
+        for (int i = 0; i<modules.length;i++){
+            modules[i].setDriveVoltage(voltage);
+        }
+    }
+
+    public void setAngleMotors(Rotation2d[] angles){
+        for (int i = 0;i<modules.length;i++){
+            modules[i].setAngle(angles[i]);
+        }
+    }
+
     /**
      * Returns the angular rate from the pigeon.
      *
@@ -268,6 +282,9 @@ public class Drivetrain extends SubsystemBase {
      */
     public void setStateDeadband(boolean stateDeadBand) {
         Arrays.stream(modules).forEach(module -> module.setStateDeadband(stateDeadBand));
+    }
+    public void setOptimized(boolean optimized) {
+        Arrays.stream(modules).forEach(module -> module.setOptimize(optimized));
     }
 
     public void setVisionEnabled(boolean enabled){

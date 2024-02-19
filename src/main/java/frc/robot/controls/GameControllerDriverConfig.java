@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.GoToPose;
+import frc.robot.commands.SysIDDriveCommand;
 import frc.robot.commands.drive_comm.SetFormationX;
 import frc.robot.commands.vision.AcquireGamePiecePID;
 import frc.robot.constants.Constants;
@@ -37,7 +38,7 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     // set the wheels to X
     kDriver.get(Button.X).whileTrue(new SetFormationX(super.getDrivetrain()));
     // Enable state deadband after setting formation to X
-    kDriver.get(Button.X).onFalse(new InstantCommand(() -> getDrivetrain().setStateDeadband(true)));
+    kDriver.get(Button.X).onFalse(new InstantCommand(()->getDrivetrain().setStateDeadband(true)));
 
     kDriver.get(Button.B).whileTrue(new AcquireGamePiecePID(()->vision.getBestGamePiece(Math.PI), getDrivetrain()));
 
