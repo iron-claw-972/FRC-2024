@@ -43,7 +43,6 @@ public class RobotContainer {
   private BaseDriverConfig driver = null;
 
   ShuffleBoardManager shuffleboardManager = null;
-  // private XboxController gc;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -62,10 +61,9 @@ public class RobotContainer {
         SmartDashboard.setDefaultNumber("RPM bottom", 1500.0);
         // add shooter commands
         SmartDashboard.putData("shoot",
-          new InstantCommand(() -> 
-            shooter.setTargetRPM(
-              SmartDashboard.getNumber("RPM top", 1500.0), 
-              SmartDashboard.getNumber("RPM bottom", 1500.0))));
+            new InstantCommand(() -> shooter.setTargetRPM(
+                SmartDashboard.getNumber("RPM top", 1500.0),
+                SmartDashboard.getNumber("RPM bottom", 1500.0))));
         SmartDashboard.putData("shoot off", new InstantCommand(() -> shooter.setTargetRPM(0)));
         break;
 

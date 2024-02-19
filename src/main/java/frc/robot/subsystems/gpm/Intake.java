@@ -4,9 +4,12 @@ import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkFlex;
 
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.simulation.DIOSim;
+import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.IntakeConstants;
@@ -38,11 +41,32 @@ public class Intake extends SubsystemBase {
     private final CANSparkMax centeringMotor;
     private final DigitalInput sensor;
 
+    private final double MASS_SHAFT = 0.4; // in kilograms
+    private final double LENGTH_SHAFT = Units.inchesToMeters(25.5);
+    private final double MOI_SHAFT = (1.0 / 12.0) * MASS_SHAFT * LENGTH_SHAFT * LENGTH_SHAFT;
+    private final double MOI_TOTAL = MOI_SHAFT * 4;
+
+    private final double MASS_CENTERING_WHEELS = 0.1; // in kilograms
+    private final double RADIUS_CENTERING_WHEELS = Units.inchesToMeters(2);
+    private final double MOI_CENTERING_WHEEL = 0.5 * MASS_CENTERING_WHEELS * RADIUS_CENTERING_WHEELS
+            * RADIUS_CENTERING_WHEELS;
+    private final double MOI_CENTERING_TOTAL = MOI_CENTERING_WHEEL * 4;
+
+    private final double motorVoltage = 12.0;
+
+    private double motorRPMSim;
+    private double motorPower;
+    private double centeringMotorPower;
+    private double centeringMotorRPMSim;
+
     private int countSim = 0;
     private DIOSim intakeSensorDioSim;
     private boolean simulatedNotePresent = false;
 
     // private XboxController m_gc;
+
+    private FlywheelSim flywheelSim;
+    private FlywheelSim centeringFlywheelSim;
 
     private Mode mode;
 
@@ -55,9 +79,13 @@ public class Intake extends SubsystemBase {
         // digital inputs
         addChild("Intake sensor", sensor);
 
-        // //Simulation objects
+        // Simulation objects
         if (RobotBase.isSimulation()) {
             intakeSensorDioSim = new DIOSim(sensor);
+            // assuming gearing is 1:1 for both
+            flywheelSim = new FlywheelSim(DCMotor.getNeoVortex(1), 1.0, MOI_TOTAL);
+            centeringFlywheelSim = new FlywheelSim(DCMotor.getNeo550(1), 1.0, MOI_CENTERING_TOTAL);
+                // change the motor from neo550 to whatever it actually is
         }
 
         publish();
@@ -66,6 +94,10 @@ public class Intake extends SubsystemBase {
     // publish sensor to Smart Dashboard
     private void publish() {
         SmartDashboard.putBoolean("Intake Sensor", sensor.get());
+        if (RobotBase.isSimulation()) {
+            SmartDashboard.putNumber("Intake motor RPM", motorRPMSim);
+            SmartDashboard.putNumber("Intake centering motor RPM", centeringMotorRPMSim);
+        }
     }
 
     public void setMode(Mode mode) {
@@ -78,22 +110,43 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        motor.set(mode.getPower());
-        centeringMotor.set(mode.getCenteringPower());
+        motorPower = mode.getPower();
+        centeringMotorPower = mode.getCenteringPower();
+
+        if (RobotBase.isReal()) {
+            motor.set(motorPower);
+            centeringMotor.set(centeringMotorPower);
+        }
 
         publish();
     }
 
     public double getCurrent() {
-        return Math.abs(motor.getOutputCurrent());
+        if (RobotBase.isReal()) {
+            return Math.abs(motor.getOutputCurrent());
+        } else {
+            return motorPower / motorVoltage;
+        }
     }
 
     public double getCenteringCurrent() {
-        return Math.abs(centeringMotor.getOutputCurrent());
+        if (RobotBase.isReal()) {
+            return Math.abs(centeringMotor.getOutputCurrent());
+        } else {
+            return centeringMotorPower / motorVoltage;
+        }
     }
 
     @Override
     public void simulationPeriodic() {
+        flywheelSim.setInputVoltage(motorPower * motorVoltage);
+        centeringFlywheelSim.setInputVoltage(centeringMotorPower * motorVoltage);
+
+        flywheelSim.update(0.020);
+        centeringFlywheelSim.update(0.020);
+
+        motorRPMSim = flywheelSim.getAngularVelocityRPM();
+        centeringMotorRPMSim = centeringFlywheelSim.getAngularVelocityRPM();
 
         // When the intake is on it takes ≈one second to reach the note (no note present). 
         // After ≈one second, note is in the intake (note present).
@@ -110,7 +163,6 @@ public class Intake extends SubsystemBase {
 
         if (countSim >= 75) {
             simulatedNotePresent = false;
-            intakeSensorDioSim.setValue(simulatedNotePresent);
             countSim = 0;
         }
 
