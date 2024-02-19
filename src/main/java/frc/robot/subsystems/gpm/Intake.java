@@ -11,14 +11,15 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.Constants;
 import frc.robot.constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
 
     public enum Mode {
         DISABLED(0,0),
-        INTAKE(.8,.3),
-        REVERSE(-.8,-.3);
+        INTAKE(.3,.3),
+        REVERSE(-.3,-.3);
 
         private double power;
         private double centeringPower;
@@ -50,19 +51,6 @@ public class Intake extends SubsystemBase {
     /** beam break sensor detects whether a note is present */
     private final DigitalInput sensor  = new DigitalInput(IntakeConstants.SENSOR_ID);
 
-    private final double MASS_SHAFT = 0.4; // in kilograms
-    private final double LENGTH_SHAFT = Units.inchesToMeters(25.5);
-    private final double MOI_SHAFT = (1.0 / 12.0) * MASS_SHAFT * LENGTH_SHAFT * LENGTH_SHAFT;
-    private final double MOI_TOTAL = MOI_SHAFT * 4;
-
-    private final double MASS_CENTERING_WHEELS = 0.1; // in kilograms
-    private final double RADIUS_CENTERING_WHEELS = Units.inchesToMeters(2);
-    private final double MOI_CENTERING_WHEEL = 0.5 * MASS_CENTERING_WHEELS * RADIUS_CENTERING_WHEELS
-            * RADIUS_CENTERING_WHEELS;
-    private final double MOI_CENTERING_TOTAL = MOI_CENTERING_WHEEL * 4;
-
-    private final double motorVoltage = 12.0;
-
     private double motorRPMSim;
     private double centeringMotorRPMSim;
 
@@ -87,8 +75,8 @@ public class Intake extends SubsystemBase {
         // Simulation objects
         if (RobotBase.isSimulation()) {
             // assuming gearing is 1:1 for both
-            flywheelSim = new FlywheelSim(dcMotor, 1.0, MOI_TOTAL);
-            centeringFlywheelSim = new FlywheelSim(dcMotorCentering ,  1.0, MOI_CENTERING_TOTAL);
+            flywheelSim = new FlywheelSim(dcMotor, 1.0, IntakeConstants.MOI_TOTAL);
+            centeringFlywheelSim = new FlywheelSim(dcMotorCentering ,  1.0, IntakeConstants.MOI_CENTERING_TOTAL);
         }
 
         
@@ -122,8 +110,8 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void simulationPeriodic() {
-        flywheelSim.setInputVoltage(mode.power * motorVoltage);
-        centeringFlywheelSim.setInputVoltage(mode.centeringPower * motorVoltage);
+        flywheelSim.setInputVoltage(mode.power * Constants.ROBOT_VOLTAGE);
+        centeringFlywheelSim.setInputVoltage(mode.centeringPower * Constants.ROBOT_VOLTAGE);
 
         flywheelSim.update(0.020);
         centeringFlywheelSim.update(0.020);

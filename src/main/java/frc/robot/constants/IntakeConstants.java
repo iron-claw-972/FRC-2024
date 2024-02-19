@@ -2,6 +2,8 @@ package frc.robot.constants;
 
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.util.Units;
+
 public final class IntakeConstants {
 
     // motor port
@@ -23,5 +25,15 @@ public final class IntakeConstants {
     public static final double INTAKE_CURRENT_STOP = 10;
 
     public static final IdleMode idleMode = IdleMode.kBrake;
+    //
+    public static final double MASS_SHAFT = 0.4; // in kilograms
+    public static final double LENGTH_SHAFT = Units.inchesToMeters(25.5);
+    public static final double MOI_SHAFT = (1.0 / 12.0) * MASS_SHAFT * LENGTH_SHAFT * LENGTH_SHAFT;
+    public static final double MOI_TOTAL = MOI_SHAFT * 4;
 
+    public static final double MASS_CENTERING_WHEELS = 0.1; // in kilograms
+    public static final double RADIUS_CENTERING_WHEELS = Units.inchesToMeters(2);
+    public static final double MOI_CENTERING_WHEEL = 0.5 * MASS_CENTERING_WHEELS * RADIUS_CENTERING_WHEELS
+            * RADIUS_CENTERING_WHEELS;
+    public static final double MOI_CENTERING_TOTAL = MOI_CENTERING_WHEEL * 4;
 }

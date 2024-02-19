@@ -23,13 +23,8 @@ import frc.robot.commands.gpm.IntakeNote;
 public class GameControllerDriverConfig extends BaseDriverConfig {
   private final GameController kDriver = new GameController(Constants.DRIVER_JOY);
 
-  private final Intake m_intake;
-  private final StorageIndex m_storageIndex;
-
-  public GameControllerDriverConfig(Drivetrain drive, Intake intake, StorageIndex storageIndex) {
+  public GameControllerDriverConfig(Drivetrain drive) {
     super(drive);
-    this.m_intake = intake;
-    this.m_storageIndex = storageIndex;
   }
 
   @Override
