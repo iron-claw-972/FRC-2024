@@ -9,13 +9,10 @@ import frc.robot.commands.drive_comm.SetFormationX;
 import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.gpm.Intake;
-import frc.robot.subsystems.gpm.StorageIndex;
 import frc.robot.util.MathUtils;
 import lib.controllers.GameController;
 import lib.controllers.GameController.Axis;
 import lib.controllers.GameController.Button;
-import frc.robot.commands.gpm.IntakeNote;
 
 /**
  * Driver controls for the generic game controller.

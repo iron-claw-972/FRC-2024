@@ -5,7 +5,6 @@ import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
@@ -42,11 +41,9 @@ public class Intake extends SubsystemBase {
     private final CANSparkFlex motor = new CANSparkFlex(IntakeConstants.MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
 
     // change the motor from neo550 to whatever it actually is
-    private static final DCMotor dcMotor = DCMotor.getNeoVortex(1);
 
     /** Centering motor is a NEO */
     private final CANSparkMax centeringMotor = new CANSparkMax(IntakeConstants.CENTERING_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
-    private static final DCMotor dcMotorCentering = DCMotor.getNEO(1);
     
     /** beam break sensor detects whether a note is present */
     private final DigitalInput sensor  = new DigitalInput(IntakeConstants.SENSOR_ID);
@@ -75,8 +72,8 @@ public class Intake extends SubsystemBase {
         // Simulation objects
         if (RobotBase.isSimulation()) {
             // assuming gearing is 1:1 for both
-            flywheelSim = new FlywheelSim(dcMotor, 1.0, IntakeConstants.MOI_TOTAL);
-            centeringFlywheelSim = new FlywheelSim(dcMotorCentering ,  1.0, IntakeConstants.MOI_CENTERING_TOTAL);
+            flywheelSim = new FlywheelSim(IntakeConstants.dcMotor, 1.0, IntakeConstants.MOI_TOTAL);
+            centeringFlywheelSim = new FlywheelSim(IntakeConstants.dcMotorCentering ,  1.0, IntakeConstants.MOI_CENTERING_TOTAL);
         }
 
         
