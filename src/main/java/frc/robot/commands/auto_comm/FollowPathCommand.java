@@ -26,6 +26,7 @@ public class FollowPathCommand extends SequentialCommandGroup {
     public FollowPathCommand(String pathName, boolean resetOdemetry, Drivetrain drive){
         this.drive = drive;
         this.path = PathGroupLoader.getPathGroup(pathName);
+        AutoBuilder.
         addCommands(
             new InstantCommand(()->resetOdemetry(resetOdemetry)),
             new SupplierCommand(()->AutoBuilder.followPath(path), drive)

@@ -4,43 +4,32 @@
 
 package frc.robot.commands;
 
-
-import com.ctre.phoenix6.SignalLogger;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.util.SysId;
 
 /** Add your docs here. */
-public class SysIDDriveCommand extends SequentialCommandGroup {
-
+public class ShooterSysIDCommand extends SequentialCommandGroup {
     private Config config = new Config();
-    private SysId sysId;
-    
-    public SysIDDriveCommand(Drivetrain drive) {
-        config = new Config(
-            Units.Volts.of(0.5).per(Units.Seconds.of(1)),
-            Units.Volts.of(3),
-            Units.Seconds.of(5),
-            (x)->SignalLogger.writeString("state", x.toString())
-        );
-        Rotation2d[] angles = {
-            Rotation2d.fromDegrees(0),//-45-180
-            Rotation2d.fromDegrees(0),//45
-            Rotation2d.fromDegrees(0),//45+180
-            Rotation2d.fromDegrees(0),//-45
-        };
+    SysId sysId;
+    public ShooterSysIDCommand(Shooter shooter){
         sysId = new SysId(
-            "Drivetrain",
+            "Shooter",
             x ->{
-                    drive.setAngleMotors(angles);
-                    drive.setDriveVoltages(x);
+                    shooter.setVoltage(x);
                 },
-            drive,
+            x->{
+                x.motor("left").angularPosition(shooter.getLeftShooterPosition());
+                x.motor("left").angularVelocity(shooter.getLeftShooterSpeed());
+                x.motor("left").voltage(shooter.getLeftShooterVoltage());
+                x.motor("right").angularPosition(shooter.getRightShooterPosition());
+                x.motor("right").angularVelocity(shooter.getRightShooterSpeed());
+                x.motor("right").voltage(shooter.getRightShooterVoltage());
+            },
+            shooter,
             config
         );
         addCommands(
@@ -53,7 +42,4 @@ public class SysIDDriveCommand extends SequentialCommandGroup {
             sysId.runDynamic(Direction.kReverse)
             );
     }
-
-    
-
 }

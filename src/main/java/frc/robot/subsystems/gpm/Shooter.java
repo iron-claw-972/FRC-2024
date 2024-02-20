@@ -8,6 +8,10 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -282,5 +286,29 @@ public class Shooter extends SubsystemBase {
 	 */
 	public double getMotorSpeedDifference() {
 		return getLeftMotorSpeed() - getRightMotorSpeed();
+	}
+
+	public void setVoltage(Measure<Voltage> voltage){
+		leftMotor.setVoltage(voltage.magnitude());
+		rightMotor.setVoltage(voltage.magnitude());
+	}
+
+	public Measure<Angle> getLeftShooterPosition(){
+		return edu.wpi.first.units.Units.Rotations.of(leftMotorEncoder.getPosition());
+	}
+	public Measure<Velocity<Angle>> getLeftShooterSpeed(){
+		return edu.wpi.first.units.Units.RevolutionsPerSecond.of(getLeftMotorRPM()/60);
+	}
+	public Measure<Voltage> getLeftShooterVoltage(){
+		return edu.wpi.first.units.Units.Volts.of(leftMotor.getBusVoltage() * leftMotor.getAppliedOutput());
+	}
+	public Measure<Angle> getRightShooterPosition(){
+		return edu.wpi.first.units.Units.Rotations.of(rightMotorEncoder.getPosition());
+	}
+	public Measure<Velocity<Angle>> getRightShooterSpeed(){
+		return edu.wpi.first.units.Units.RevolutionsPerSecond.of(getRightMotorRPM()/60);
+	}
+	public Measure<Voltage> getRightShooterVoltage(){
+		return edu.wpi.first.units.Units.Volts.of(rightMotor.getBusVoltage() * rightMotor.getAppliedOutput());
 	}
 }
