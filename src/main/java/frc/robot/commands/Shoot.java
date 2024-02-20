@@ -41,7 +41,7 @@ public class Shoot extends Command {
                 this.arm = arm;
                 this.drive = drivetrain;
                 this.index = index;
-                addRequirements(shooter,drivetrain, arm, index);
+                addRequirements(shooter, arm, index);
         }
 
         @Override
