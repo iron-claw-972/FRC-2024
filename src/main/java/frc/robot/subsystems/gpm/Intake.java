@@ -115,10 +115,6 @@ public class Intake extends SubsystemBase {
 
     public void setMode(Mode mode) {
         this.mode = mode;
-
-        // set the motor powers to be the value appropriate for this mode
-        motor.set(mode.power);
-        centeringMotor.set(mode.centeringPower);
     }
 
     public boolean hasNote() {
@@ -128,6 +124,10 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         publish();
+
+        // set the motor powers to be the value appropriate for this mode
+        motor.set(mode.power);
+        centeringMotor.set(mode.centeringPower);
     }
 
     @Override
