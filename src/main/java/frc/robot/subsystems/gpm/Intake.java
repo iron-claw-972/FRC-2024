@@ -30,7 +30,9 @@ public class Intake extends SubsystemBase {
     public enum Mode {
         DISABLED(0,0),
         INTAKE(.3,.3),
-        REVERSE(-.3,-.3);
+        REVERSE(-.3,-.3),
+        PickedUpNote (.3, .3),
+        Wait(.3, .3);
 
         private double power;
         private double centeringPower;
@@ -67,6 +69,10 @@ public class Intake extends SubsystemBase {
 
     private FlywheelSim flywheelSim;
     private FlywheelSim centeringFlywheelSim;
+
+    private int hasNoteCounter;
+    private int waitTimeCounter;
+    private int noteWaitTime = 50;
 
     // MOI stuff
     // Intake rollers are 1.5 inch polycarb. We are ignoring the weight of the black tape.
@@ -128,6 +134,49 @@ public class Intake extends SubsystemBase {
         // set the motor powers to be the value appropriate for this mode
         motor.set(mode.power);
         centeringMotor.set(mode.centeringPower);
+
+                /* */
+        switch (mode) {
+            case DISABLED:
+            // don't have to do anything
+                break;
+        
+            case INTAKE:
+            // motors are spinning and we are waiting to pick up a note
+                if (hasNote()){
+                    setMode(Mode.PickedUpNote);
+                    hasNoteCounter = 0;
+                }
+                break;
+        
+            case PickedUpNote:
+                if (!hasNote()) {
+                    setMode(Mode.Wait);
+                    waitTimeCounter = 0;
+                }
+
+                if (hasNoteCounter++ > noteWaitTime) {
+                     setMode(Mode.REVERSE);
+                } 
+                break;
+        
+            case REVERSE:
+                if(!hasNote()){
+                    setMode(Mode.Wait);
+                    waitTimeCounter = 0;
+                }
+                break;
+        
+            case Wait:
+                if (waitTimeCounter++ > 5) { //100ms / 20 ms = 5
+                    setMode(Mode.DISABLED);
+                }
+                break;
+        
+             default:
+                break;
+        }
+  
     }
 
     @Override
