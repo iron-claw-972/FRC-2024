@@ -86,6 +86,7 @@ public class RobotContainer {
         intake = new Intake();
 
       case SwerveTest:
+      case Vertigo:
         vision = new Vision(VisionConstants.CAMERAS);
 
         drive = new Drivetrain(vision);
