@@ -33,6 +33,9 @@ public class AutoTab extends ShuffleBoardTabs {
         autoCommand.addOption("Bottom 4 Piece 4 5 (No Shooting On The Move)", new FollowPathCommand("Bottom 4 Piece 4 5 (No Shooting On The Move)",true, drive));       
         autoCommand.addOption("Dream Bottom 4 Piece 4 5", new FollowPathCommand("Dream Bottom 4 Piece 4 5",true, drive));
 
+        autoCommand.addOption("Test", new FollowPathCommand("Test",true, drive));
+
+
         tab.add(autoCommand);
     }
 
