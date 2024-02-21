@@ -1,9 +1,6 @@
 package frc.robot.util;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
@@ -24,6 +21,7 @@ public class SWMTest {
         {2 ,1.5 ,1.7, 0, 0},
         {1.5 ,2 ,1.7, 0, 0},
         {1 ,3 ,1.7, 0, 0},
+
         {2 ,1.5 ,1.7, 3, 0},
         {-2 ,1.5 ,1.7, 3, 0},//
         {2 ,-1.5 ,1.7, 3, 0},
@@ -31,9 +29,31 @@ public class SWMTest {
         {1.5 ,2 ,1.7, 3, 0},
         {-1.5 ,2 ,1.7, 3, 0},
         {1.5 ,-2 ,1.7, 3, 0},
+
         {-1.5 ,-2 ,1.7, 3, 0},
+        {2 ,1.5 ,1.7, 0, 3},
+        {-2 ,1.5 ,1.7, 0, 3},
+        {2 ,-1.5 ,1.7, 0, 3},
+        {-2 ,-1.5 ,1.7, 0, 3},
+        {1.5 ,2 ,1.7, 0, 3},
+        {-1.5 ,2 ,1.7, 0, 3},
+        {1.5 ,-2 ,1.7, 0, 3},
+        {-1.5 ,-2 ,1.7, 0, 3},
+        {2 ,1.5 ,1.7, 3, 2},
+
+        {-2 ,1.5 ,1.7, 3, 2},
+        {2 ,-1.5 ,1.7, 3, 2},
+        {-2 ,-1.5 ,1.7, 3, 2},
+        {1.5 ,2 ,1.7, 3, 2},
+        {-1.5 ,2 ,1.7, 3, 2},
+        {1.5 ,-2 ,1.7, 3, 2},
+        {-1.5 ,-2 ,1.7, 3, 2},
+
+        {.2, 3 ,1.7, 1, 1},
+
+
     };
-    public final int NUM = 11; // num test cases
+    public final int NUM = 28; // num test cases
 
     @AfterEach
     public void cleanup() {
@@ -51,9 +71,8 @@ public class SWMTest {
 
         sh.execute();
         double vz = sh.exit_vel*Math.sin(sh.vert_angle);
-        double tx= Math.abs(sh.displacement.getX()/(sh.exit_vel*Math.cos(sh.vert_angle)*Math.cos(sh.horiz_angle)+sh.v_rx)),
-        ty = Math.abs(sh.displacement.getY()/(sh.exit_vel*Math.cos(sh.vert_angle)*Math.sin(sh.horiz_angle)+sh.v_ry)),
-        // tx, ty could switch sin(horiz) and cos(horiz) depending if horiz is relative to the vertical or horizontal axis (x-cos, y-sin is horizontal).
+        double tx= Math.abs(sh.displacement.getX()/(sh.exit_vel*Math.cos(sh.vert_angle)*Math.sin(sh.horiz_angle)+sh.v_rx)),
+        ty = Math.abs(sh.displacement.getY()/(sh.exit_vel*Math.cos(sh.vert_angle)*Math.cos(sh.horiz_angle)+sh.v_ry)),
         tz = (vz-Math.sqrt(vz*vz+19.6*sh.displacement.getZ()))/9.8;
         // NOTE:+ instead of -
         System.err.println(tx+", " + ty + ", " + tz+"vz"+vz);

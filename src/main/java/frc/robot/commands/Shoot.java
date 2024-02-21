@@ -99,7 +99,8 @@ public class Shoot extends Command {
                 System.err.println("*ph " + phi_h);
                 // Random variable to hold recurring code
                 double a = v_note * Math.cos(phi_v) * Math.sin(phi_h);
-                double theta_h = Math.atan((a + v_ry) / (v_note * Math.cos(phi_v) * Math.cos(phi_h) - v_rx)); // random quirk that using -v_rx works
+                double theta_h = Math.atan((a - v_ry) / (v_note * Math.cos(phi_v) * Math.cos(phi_h) - v_rx));
+                // random quirk that using -v_rx, -v_ry works instead of +v_rx, +v_ry
                 // theta_h conversion (i.e. pi-theta_h if necessary)
                 // if the mirrored angle is the same-ish direction??? logic may break at high v_rx and v_ry but don't worry about it
 
@@ -110,7 +111,13 @@ public class Shoot extends Command {
                  (v_note * Math.sin(phi_v) * Math.cos(theta_h))/
                 ((v_note * Math.cos(phi_v) * Math.cos(phi_h) - v_rx)
                  ));
+                 // also here
                 double v_shoot = v_note * Math.sin(phi_v) / Math.sin(theta_v);
+                // theta_h is relative to the horizontal, so
+                // drive.setAlignAngle would switch from theta_h to pi/2-theta_h
+                // depending on if it's relative to the horizontal or the vertical.
+                // and I'm kinda sure it is relative to vertical, so...
+                theta_h = Math.PI/2-theta_h;
                 horiz_angle = theta_h;
                 vert_angle = theta_v;
                 exit_vel = v_shoot;               
