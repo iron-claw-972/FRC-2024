@@ -80,6 +80,10 @@ public class VisionConstants {
     BLUE_AMP_POSE.getRotation()
   );
 
+  // How close we have to get to the amp before scoring in it (meters and radians)
+  public static final double AMP_TOLERANCE_DISTANCE = 0.3;
+  public static final double AMP_TOLERANCE_ANGLE = Units.degreesToRadians(15);
+
   // The podium poses to align to
   public static final Pose2d BLUE_PODIUM_POSE = new Pose2d(
     FieldConstants.APRIL_TAGS.get(13).pose.getX() - Units.inchesToMeters(82.75) - DriveConstants.kRobotWidthWithBumpers/2,
