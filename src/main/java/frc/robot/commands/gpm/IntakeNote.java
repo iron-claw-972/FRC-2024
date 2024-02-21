@@ -1,28 +1,32 @@
 package frc.robot.commands.gpm;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.ArmConstants;
+import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
 import frc.robot.subsystems.gpm.StorageIndex;
 import frc.robot.subsystems.gpm.Intake.Mode;
 
 public class IntakeNote extends Command{
 
-    private final Intake m_intake;
-    private final StorageIndex m_storageIndex;
+    private final Intake intake;
+    private final StorageIndex storageIndex;
+    private final Arm arm;
 
-
-    public IntakeNote(Intake intake, StorageIndex storageIndex) {
-        this.m_intake = intake;
-        this.m_storageIndex = storageIndex;
-        addRequirements(m_intake, m_storageIndex);
+    public IntakeNote(Intake intake, StorageIndex storageIndex, Arm arm) {
+        this.intake = intake;
+        this.storageIndex = storageIndex;
+        this.arm = arm;
+        addRequirements(intake, storageIndex, arm);
 
        
     }
 
     @Override
     public void initialize() {
-        m_intake.setMode(Mode.INTAKE);
-        m_storageIndex.runIndex(.5);
+        intake.setMode(Mode.INTAKE);
+        storageIndex.runIndex();
+        arm.setAngle(ArmConstants.intakeSetpoint);
     }
 
     @Override
@@ -32,14 +36,14 @@ public class IntakeNote extends Command{
 
     @Override
     public boolean isFinished(){
-        return m_storageIndex.hasNote(); 
-
+        return storageIndex.hasNote(); 
     }
 
     @Override
     public void end(boolean interupted){
-        m_intake.setMode(Mode.DISABLED);
-        m_storageIndex.stopIndex();
+        intake.setMode(Mode.DISABLED);
+        storageIndex.stopIndex();
+        arm.setAngle(ArmConstants.stowedSetpoint);
     }
     
 }
