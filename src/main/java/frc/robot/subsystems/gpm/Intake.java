@@ -29,8 +29,8 @@ public class Intake extends SubsystemBase {
 
     public enum Mode {
         DISABLED(0,0),
-        INTAKE(.3,.3),
-        REVERSE(-.3,-.3);
+        INTAKE(.7,.5),
+        REVERSE(-.7,-.5);
 
         private double power;
         private double centeringPower;
@@ -90,6 +90,9 @@ public class Intake extends SubsystemBase {
         centeringMotor.setIdleMode(idleMode);
 
         setMode(Mode.DISABLED);
+
+        motor.setInverted(true);
+        centeringMotor.setInverted(true);
 
         // digital inputs
         // addChild("Intake motor", motor);

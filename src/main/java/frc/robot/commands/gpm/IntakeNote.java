@@ -36,7 +36,8 @@ public class IntakeNote extends Command{
 
     @Override
     public boolean isFinished(){
-        return storageIndex.hasNote(); 
+        // return storageIndex.hasNote();
+        return false; 
     }
 
     @Override

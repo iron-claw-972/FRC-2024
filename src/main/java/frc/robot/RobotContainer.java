@@ -5,6 +5,7 @@ import java.util.function.BooleanSupplier;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -85,6 +86,8 @@ public class RobotContainer {
       default:
       case SwerveCompetition:
         intake = new Intake();
+        index = new StorageIndex();
+        arm = new Arm();
 
       case SwerveTest:
         vision = new Vision(VisionConstants.CAMERAS);
@@ -92,6 +95,8 @@ public class RobotContainer {
         drive = new Drivetrain(vision);
         driver = new GameControllerDriverConfig(drive, vision);
         operator = new Operator(intake);
+
+        registerCommands();
 
         // Detected objects need access to the drivetrain
         DetectedObject.setDrive(drive);
@@ -153,6 +158,10 @@ public class RobotContainer {
         AutoConstants.config,
         getAllianceColorBooleanSupplier(),
         drive);
+  }
+
+  public void registerCommands() {
+    NamedCommands.registerCommand("IntakeNote", new IntakeNote(intake, index, arm));
   }
 
   public static BooleanSupplier getAllianceColorBooleanSupplier() {
