@@ -55,18 +55,17 @@ public class OuttakeAmp extends SequentialCommandGroup {
   public OuttakeAmp(Arm arm, StorageIndex index, Shooter shooter, Drivetrain drive){
     Pose2d ampPose = DriverStation.getAlliance().get()==Alliance.Red?VisionConstants.RED_AMP_POSE:VisionConstants.BLUE_AMP_POSE;
     addCommands(
-      new ParallelCommandGroup(
-        // Go to the pose and stay at it the whole time
+      new SequentialCommandGroup(
+        // Wait until the robot is close enough to the amp to start scoring
+        new WaitUntilCommand((()->{
+          Transform2d dist = drive.getPose().minus(ampPose);
+          return dist.getTranslation().getNorm() < VisionConstants.AMP_TOLERANCE_DISTANCE && Math.abs(dist.getRotation().getRadians()) < VisionConstants.AMP_TOLERANCE_ANGLE;
+        })),
+        // Run the other version of this command to score in the amp
+        new OuttakeAmp(arm, index, shooter)
+      ).deadlineWith(
+        // Go to the pose and stay at it until the command finishes
         new GoToPose(ampPose,drive),
-        new SequentialCommandGroup(
-          // Wait until the robot is close enough to the amp to start scoring
-          new WaitUntilCommand((()->{
-            Transform2d dist = drive.getPose().minus(ampPose);
-            return dist.getTranslation().getNorm() < VisionConstants.AMP_TOLERANCE_DISTANCE && Math.abs(dist.getRotation().getRadians()) < VisionConstants.AMP_TOLERANCE_ANGLE;
-          })),
-          // Run the other version of this command to score in the amp
-          new OuttakeAmp(arm, index, shooter)
-        )
       )
     );
   }
