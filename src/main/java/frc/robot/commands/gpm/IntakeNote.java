@@ -21,6 +21,7 @@ public class IntakeNote extends Command{
 
     @Override
     public void initialize() {
+        // start running the motors
         m_intake.setMode(Mode.INTAKE);
         m_storageIndex.runIndex(.5);
     }
@@ -32,8 +33,8 @@ public class IntakeNote extends Command{
 
     @Override
     public boolean isFinished(){
+        // TODO: this will not detect a note in simulation yet.
         return m_storageIndex.hasNote(); 
-
     }
 
     @Override
