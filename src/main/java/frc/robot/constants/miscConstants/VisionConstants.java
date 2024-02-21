@@ -109,4 +109,7 @@ public class VisionConstants {
       )
     )
   ));
+
+  //how many frames ago to pull position from (latency calculation)
+  public static final int objectLatencyFrames = 50;
 }

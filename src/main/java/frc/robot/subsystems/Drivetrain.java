@@ -28,6 +28,7 @@ import frc.robot.subsystems.module.Module;
 import frc.robot.subsystems.module.ModuleSim;
 import frc.robot.util.Vision;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -64,6 +65,10 @@ public class Drivetrain extends SubsystemBase {
     private boolean isAlign = false;
     // Angle to align to, null for directly toward speaker
     private Double alignAngle = null;
+
+    // Latency calculation
+    private int maxFramesStored = 51; //max number of past frames to store
+    private ArrayList<Pose2d> pastPositions; //list of past positions
 
     /**
      * Creates a new Swerve Style Drivetrain.
@@ -118,11 +123,14 @@ public class Drivetrain extends SubsystemBase {
         rotationController.enableContinuousInput(-Math.PI, Math.PI);
         rotationController.setTolerance(Units.degreesToRadians(0.25), Units.degreesToRadians(0.25));
 
+        // setup latency list
+        pastPositions = new ArrayList<Pose2d>();
     }
 
     @Override
     public void periodic() {
         updateOdometry();
+        updateLatencyList();
     }
 
     // DRIVE
@@ -388,4 +396,26 @@ public class Drivetrain extends SubsystemBase {
     public PIDController getRotationController() {
         return rotationController;
     }
+
+    // Adds the current pos to the latency list
+    public void updateLatencyList() {
+        pastPositions.add(getPose());
+
+        // remove first if list is too long
+        if(pastPositions.size() > maxFramesStored) {
+            pastPositions.remove(0);
+        }
+    }
+
+    // gets the latency position from n frames ago
+    public Pose2d getNthLatencyPos(int framesAgo) {
+        // return first frame if there arent enough
+        if (pastPositions.size() < framesAgo + 1) {
+            return pastPositions.get(0);
+        }
+
+        return pastPositions.get(maxFramesStored - framesAgo - 1);
+    }
+
+
 }

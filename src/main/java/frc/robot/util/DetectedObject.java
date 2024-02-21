@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
 
 /**
@@ -55,7 +56,7 @@ public class DetectedObject {
                 0,
                 drive.getYaw().getRadians()
             ));
-            Translation2d drivePose = drive.getPose().getTranslation();
+            Translation2d drivePose = drive.getNthLatencyPos(VisionConstants.objectLatencyFrames).getTranslation();
             translation = translation.plus(new Translation3d(
                 drivePose.getX(),
                 drivePose.getY(),
@@ -104,7 +105,7 @@ public class DetectedObject {
                 0,
                 drive.getYaw().getRadians()
             ));
-            Translation2d drivePose = drive.getPose().getTranslation();
+            Translation2d drivePose = drive.getNthLatencyPos(VisionConstants.objectLatencyFrames).getTranslation();
             translation = translation.plus(new Translation3d(
                 drivePose.getX(),
                 drivePose.getY(),
