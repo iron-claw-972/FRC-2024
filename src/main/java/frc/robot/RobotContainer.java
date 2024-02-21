@@ -78,8 +78,7 @@ public class RobotContainer {
       case TestBed2:
         intake = new Intake();
         index = new StorageIndex();
-        arm = new Arm();
-        SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index, arm));
+        SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index));
         break;
 
       default:
