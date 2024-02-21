@@ -1,5 +1,6 @@
 package frc.robot;
 
+import java.rmi.server.Operation;
 import java.util.function.BooleanSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -13,7 +14,15 @@ import frc.robot.constants.AutoConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
+<<<<<<< HEAD
 import frc.robot.subsystems.Drivetrain;
+=======
+import frc.robot.controls.Operator;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.util.DetectedObject;
+import frc.robot.subsystems.gpm.Arm;
+import frc.robot.subsystems.gpm.Intake;
+>>>>>>> main
 import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
@@ -32,8 +41,15 @@ public class RobotContainer {
     private Vision vision = null;
     private Shooter shooter = null;
 
+<<<<<<< HEAD
     // Controllers are defined here
     private BaseDriverConfig driver = null;
+=======
+  // Controllers are defined here
+  private BaseDriverConfig driver = null;
+  private Operator operator =null;
+  ShuffleBoardManager shuffleboardManager = null;
+>>>>>>> main
 
     ShuffleBoardManager shuffleboardManager = null;
 
@@ -57,13 +73,31 @@ public class RobotContainer {
 
       default:
       case SwerveCompetition:
+<<<<<<< HEAD
+=======
+        intake = new Intake();
+
+>>>>>>> main
       case SwerveTest:
         vision = new Vision(VisionConstants.CAMERAS);
 
         drive = new Drivetrain(vision);
+<<<<<<< HEAD
         driver = new GameControllerDriverConfig(drive);
 
         driver.configureControls();
+=======
+        driver = new GameControllerDriverConfig(drive, vision);
+        operator = new Operator(intake);
+
+        // Detected objects need access to the drivetrain
+        DetectedObject.setDrive(drive);
+        
+        SignalLogger.start();
+
+        driver.configureControls();
+        operator.configureControls();
+>>>>>>> main
         initializeAutoBuilder();
         drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
 
@@ -72,6 +106,7 @@ public class RobotContainer {
         shuffleboardManager = new ShuffleBoardManager(drive, vision);
         break;
       }
+<<<<<<< HEAD
 
       // This is really annoying so it's disabled
       DriverStation.silenceJoystickConnectionWarning(true);
@@ -81,6 +116,8 @@ public class RobotContainer {
       LiveWindow.disableAllTelemetry();
       LiveWindow.setEnabled(false);
     }
+=======
+>>>>>>> main
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
