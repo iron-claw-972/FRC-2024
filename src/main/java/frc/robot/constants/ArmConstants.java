@@ -5,9 +5,9 @@ import edu.wpi.first.math.util.Units;
 
 public class ArmConstants {
 
-    public static final int MOTOR_ID = 1;
+    public static final int MOTOR_ID = 0;
     public static final int[] SLAVE_IDS = new int[] {
-            2, 3, 4
+            0, 0, 0
     };
     // TODO use real encoder id
     public static final int ENCODER_ID = 0;

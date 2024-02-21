@@ -26,12 +26,6 @@ public class DriveConstants {
     public static double kDriveGearRatio = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
     public static double kSteerGearRatio = 150.0 / 7.0;
 
-    /* Drive Motor Characterization Values
-     * Divide SYSID values by 12 to convert from volts to percent output for CTRE */
-    public static final double DRIVE_KS = 0.32 / 12.0; // 0.65559
-    public static final double DRIVE_KV = 1.51 / 12.0; // 1.93074
-    public static final double DRIVE_KA = 0.27 / 12.0; // 0.00214
-
     public static double kMaxSpeed = (Constants.MAX_RPM / 60.0) * kWheelRadius * 2 * Math.PI / kDriveGearRatio;
 
     // Need to convert tangential velocity (the m/s of the edge of the robot) to angular velocity (the radians/s of the robot)
@@ -75,12 +69,12 @@ public class DriveConstants {
     public static double kSteerOffsetBackRight = 201.177;//2.626169800758362;//2.771897681057453;
 
     // heading PID
-    public static double kHeadingP = 4.6;
-    public static double kHeadingD = 0;
+    public static double kHeadingP = 5.5;
+    public static double kHeadingD = 0.2;
 
     //translational PID
-    public static double kTranslationalP = 0.25;
-    public static double kTranslationalD = 0;//0.001
+    public static double kTranslationalP = 1;
+    public static double kTranslationalD = 0.001;//0.001
 
     //The PIDs for PathPlanner Command
     public static double kPathplannerHeadingP = 3.5;
@@ -118,11 +112,45 @@ public class DriveConstants {
     public static final NeutralModeValue kAngleNeutralMode = NeutralModeValue.Brake;
 
     /* Drive Motor PID Values */
-    public static final double kDriveP = 0.05;
-    public static final double kDriveI = 0.0;
-    public static final double kDriveD = 0.0;
-    public static final double kDriveF = 0.0;
-
+    public static final double[] P_Values= {
+        0.035524,
+        0.075025,
+        0.1088,
+        0.085856
+        
+    };
+    public static final double[] I_Values= {
+        0,
+        0,
+        0,
+        0
+    };
+    public static final double[] D_Values= {
+        0,
+        0,
+        0,
+        0
+    };
+    /* Drive Motor Characterization Values
+     * Divide SYSID values by 12 to convert from volts to percent output for CTRE */
+    public static final double[] DRIVE_KS_Values= {
+        0.11079,
+        0.1117,
+        0.11257,
+        0.075667
+    };
+    public static final double[] DRIVE_KV_Values= {
+        0.11079,
+        0.10718,
+        0.11009,
+        0.1164
+    };
+    public static final double[] DRIVE_KA_Values= {
+        0.005482,
+        0.0049593,
+        0.010156,
+        0.0065708
+    };
     /* Ramp values for drive motors in open and closed loop driving. */
     // Open loop prevents throttle from changing too quickly.
     // It will limit it to time given (in seconds) to go from zero to full throttle.

@@ -25,7 +25,7 @@ public class VisionConstants {
   /**
    * If April tag vision is enabled on the robot
    */
-  public static final boolean ENABLED = true;
+  public static final boolean ENABLED = false;
 
   // If odometry should be updated using vision during auto
   public static final boolean ENABLED_AUTO = false;
@@ -102,8 +102,8 @@ public class VisionConstants {
     new Pair<String, Transform3d>(
       "Camera1",
       new Transform3d(
-        new Translation3d(Units.inchesToMeters(8.996), Units.inchesToMeters(6.48), Units.inchesToMeters(37.44)),
-        new Rotation3d(0, Units.degreesToRadians(18), 0)
+        new Translation3d(Units.inchesToMeters(-11), Units.inchesToMeters(0), Units.inchesToMeters(24)),
+        new Rotation3d(0, Units.degreesToRadians(0), 0)
       )),
     new Pair<String, Transform3d>(
       "Camera2",
