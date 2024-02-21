@@ -83,15 +83,16 @@ public class RobotContainer {
 
       default:
       case SwerveCompetition:
-        intake = new Intake();
+      intake = new Intake();
+      operator = new Operator(intake);
+      operator.configureControls();
 
       case SwerveTest:
       case Vertigo:
         vision = new Vision(VisionConstants.CAMERAS);
-
+        
         drive = new Drivetrain(vision);
         driver = new GameControllerDriverConfig(drive, vision);
-        operator = new Operator(intake);
 
         // Detected objects need access to the drivetrain
         DetectedObject.setDrive(drive);
@@ -99,7 +100,6 @@ public class RobotContainer {
         SignalLogger.start();
 
         driver.configureControls();
-        operator.configureControls();
         initializeAutoBuilder();
         drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
 
