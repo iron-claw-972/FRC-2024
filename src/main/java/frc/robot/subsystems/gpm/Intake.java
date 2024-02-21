@@ -70,8 +70,8 @@ public class Intake extends SubsystemBase {
     private FlywheelSim flywheelSim;
     private FlywheelSim centeringFlywheelSim;
 
-    private int hasNoteCounter;
-    private int waitTimeCounter;
+    /** How long this mode has been active (20 ms clock ticks) */
+    private int counter = 0;
     private int noteWaitTime = 50;
 
     // MOI stuff
@@ -121,6 +121,13 @@ public class Intake extends SubsystemBase {
 
     public void setMode(Mode mode) {
         this.mode = mode;
+
+        // set the motor powers to be the value appropriate for this mode
+        motor.set(mode.power);
+        centeringMotor.set(mode.centeringPower);
+
+        // reset the counter that says how long we have been in this mode
+        counter = 0;
     }
 
     public boolean hasNote() {
@@ -131,11 +138,9 @@ public class Intake extends SubsystemBase {
     public void periodic() {
         publish();
 
-        // set the motor powers to be the value appropriate for this mode
-        motor.set(mode.power);
-        centeringMotor.set(mode.centeringPower);
+        // increment the number of clicks that we have been in this mode
+        counter++;
 
-                /* */
         switch (mode) {
             case DISABLED:
             // don't have to do anything
@@ -145,17 +150,15 @@ public class Intake extends SubsystemBase {
             // motors are spinning and we are waiting to pick up a note
                 if (hasNote()){
                     setMode(Mode.PickedUpNote);
-                    hasNoteCounter = 0;
                 }
                 break;
         
             case PickedUpNote:
                 if (!hasNote()) {
                     setMode(Mode.Wait);
-                    waitTimeCounter = 0;
                 }
 
-                if (hasNoteCounter++ > noteWaitTime) {
+                if (counter > noteWaitTime) {
                      setMode(Mode.REVERSE);
                 } 
                 break;
@@ -163,12 +166,11 @@ public class Intake extends SubsystemBase {
             case REVERSE:
                 if(!hasNote()){
                     setMode(Mode.Wait);
-                    waitTimeCounter = 0;
                 }
                 break;
         
             case Wait:
-                if (waitTimeCounter++ > 5) { //100ms / 20 ms = 5
+                if (counter > 5) { //100ms / 20 ms = 5
                     setMode(Mode.DISABLED);
                 }
                 break;
