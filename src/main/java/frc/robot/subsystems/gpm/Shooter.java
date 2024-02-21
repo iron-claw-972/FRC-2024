@@ -200,6 +200,12 @@ public class Shooter extends SubsystemBase {
 	public boolean atSetpoint() {
 		return leftPID.atSetpoint() && rightPID.atSetpoint();
 	}
+	public double getLeftSetpoint(){
+		return leftPID.getSetpoint();
+	}
+	public double getRightSetpoint(){
+		return rightPID.getSetpoint();
+	}
 
 	/**
 	 * Gets the RPM of the left motor, checking whether this is a simulation.

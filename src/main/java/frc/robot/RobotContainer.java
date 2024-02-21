@@ -85,7 +85,9 @@ public class RobotContainer {
         vision = new Vision(VisionConstants.CAMERAS);
         intake = new Intake();
         drive = new Drivetrain(vision);
+        shooter = new Shooter();
         driver = new GameControllerDriverConfig(drive, vision);
+        operater = new Operater(intake, shooter);
         SignalLogger.start();
 
         driver.configureControls();
@@ -95,27 +97,27 @@ public class RobotContainer {
 
         PathGroupLoader.loadPathGroups();
 
-        shuffleboardManager = new ShuffleBoardManager(drive, vision);
+        shuffleboardManager = new ShuffleBoardManager(drive, vision,shooter);
 
       case SwerveTest:
-        vision = new Vision(VisionConstants.CAMERAS);
+        // vision = new Vision(VisionConstants.CAMERAS);
 
-        drive = new Drivetrain(vision);
-        driver = new GameControllerDriverConfig(drive, vision);
+        // drive = new Drivetrain(vision);
+        // driver = new GameControllerDriverConfig(drive, vision);
 
-        // Detected objects need access to the drivetrain
-        DetectedObject.setDrive(drive);
+        // // Detected objects need access to the drivetrain
+        // DetectedObject.setDrive(drive);
         
-        SignalLogger.start();
+        // SignalLogger.start();
 
-        driver.configureControls();
-        operater.configureControls();
-        initializeAutoBuilder();
-        drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
+        // driver.configureControls();
+        // operater.configureControls();
+        // initializeAutoBuilder();
+        // drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
 
-        PathGroupLoader.loadPathGroups();
+        // PathGroupLoader.loadPathGroups();
 
-        shuffleboardManager = new ShuffleBoardManager(drive, vision);
+        // shuffleboardManager = new ShuffleBoardManager(drive, vision,shooter);
         break;
     }
 

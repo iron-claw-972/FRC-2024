@@ -7,8 +7,10 @@ package frc.robot.util.ShuffleBoard;
 import java.util.ArrayList;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.Tabs.AutoTab;
+import frc.robot.util.ShuffleBoard.Tabs.ShooterTab;
 import frc.robot.util.ShuffleBoard.Tabs.SwerveTab;
 import frc.robot.util.ShuffleBoard.Tabs.VisionTab;
 
@@ -22,16 +24,17 @@ public class ShuffleBoardManager {
     private SwerveTab swerveTab;
     private AutoTab autoTab;
     private VisionTab visionTab;
-
-    public ShuffleBoardManager(Drivetrain drive, Vision vision){
+    private ShooterTab shooterTab;
+    public ShuffleBoardManager(Drivetrain drive, Vision vision,Shooter shooter){
         
         swerveTab = new SwerveTab(drive);
         autoTab = new AutoTab(drive);
         visionTab = new VisionTab(drive, vision);
+        shooterTab = new ShooterTab(shooter);
         tabs.add(swerveTab);
         tabs.add(autoTab);
         tabs.add(visionTab);
-
+        tabs.add(shooterTab);
         for (ShuffleBoardTabs tab : tabs){
             tab.createEntries();
         }

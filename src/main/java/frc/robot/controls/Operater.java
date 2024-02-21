@@ -5,8 +5,10 @@
 package frc.robot.controls;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.commands.ShooterSysIDCommand;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.gpm.Intake;
+import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.subsystems.gpm.Intake.Mode;
 import frc.robot.util.MathUtils;
 import lib.controllers.GameController;
@@ -19,9 +21,10 @@ public class Operater{
     private final GameController kDriver = new GameController(Constants.OPERATOR_JOY);
     
     Intake intake;
-    
-    public Operater(Intake intake){
+    Shooter shooter;
+    public Operater(Intake intake,Shooter shooter){
         this.intake = intake;
+        this.shooter = shooter;
     }
 
     public void configureControls(){
@@ -29,5 +32,6 @@ public class Operater{
         kDriver.get(Button.X).onFalse(new InstantCommand(()->intake.setMode(Mode.DISABLED)));
         kDriver.get(Button.B).onTrue(new InstantCommand(()->intake.setMode(Mode.REVERSE)));
         kDriver.get(Button.B).onFalse(new InstantCommand(()->intake.setMode(Mode.DISABLED)));
+        kDriver.get(Button.Y).onTrue(new ShooterSysIDCommand(shooter));
     }
 }
