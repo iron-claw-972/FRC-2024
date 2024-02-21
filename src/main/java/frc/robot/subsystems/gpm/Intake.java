@@ -1,6 +1,7 @@
 package frc.robot.subsystems.gpm;
 
 import com.revrobotics.CANSparkBase.IdleMode;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
@@ -32,6 +33,7 @@ public class Intake extends SubsystemBase {
         INTAKE(.3,.3),
         REVERSE(-.3,-.3),
         PickedUpNote (.3, .3),
+        Pause(0,0),
         Wait(.3, .3);
 
         private double power;
@@ -92,7 +94,7 @@ public class Intake extends SubsystemBase {
 
     public Intake() {
         // set the motor parameters
-        // motor.setIdleMode(idleMode);
+        motor.setIdleMode(idleMode);
         centeringMotor.setIdleMode(idleMode);
 
         setMode(Mode.DISABLED);
@@ -159,12 +161,21 @@ public class Intake extends SubsystemBase {
                 }
 
                 if (counter > noteWaitTime) {
-                     setMode(Mode.REVERSE);
+                     setMode(Mode.Pause);
                 } 
                 break;
+
+            case Pause:
+                if (counter > 2) {
+                    setMode(Mode.REVERSE);
+                } 
         
             case REVERSE:
                 if(!hasNote()){
+                    setMode(Mode.Wait);
+                }
+
+                if (counter > 150) { //  3s = 3000 ms / 20 = 150
                     setMode(Mode.Wait);
                 }
                 break;
