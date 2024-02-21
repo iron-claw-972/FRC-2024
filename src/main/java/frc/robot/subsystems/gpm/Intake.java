@@ -10,6 +10,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.simulation.DIOSim;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -43,14 +44,6 @@ public class Intake extends SubsystemBase {
             this.power = power;
             this.centeringPower = centeringPower;
         }
-
-        public double getPower() {
-            return power;
-        }
-
-        public double getCenteringPower() {
-            return centeringPower;
-        }
     }
 
     /** Intake motor is a Vortex*/
@@ -65,6 +58,8 @@ public class Intake extends SubsystemBase {
     
     /** beam break sensor detects whether a note is present */
     private final DigitalInput sensor  = new DigitalInput(IntakeConstants.SENSOR_ID);
+    /** Allows us to simulate the beam break sensor */
+    private DIOSim sensorSim;
 
     private double motorRPMSim;
     private double centeringMotorRPMSim;
@@ -109,6 +104,10 @@ public class Intake extends SubsystemBase {
             // assuming gearing is 1:1 for both
             flywheelSim = new FlywheelSim(dcMotor, 1.0, MOI_TOTAL);
             centeringFlywheelSim = new FlywheelSim(dcMotorCentering ,  2.0, MOI_CENTERING_TOTAL);
+            // code to fake the beam break sensor
+            sensorSim = new DIOSim(sensor);
+            // the beam is present.
+            sensorSim.setValue(true);
         }
 
         publish();
@@ -202,6 +201,26 @@ public class Intake extends SubsystemBase {
 
         motorRPMSim = flywheelSim.getAngularVelocityRPM();
         centeringMotorRPMSim = centeringFlywheelSim.getAngularVelocityRPM();
+
+        switch (mode) {
+            case INTAKE:
+                // after 2 seconds, report a note sensed
+                if (counter > 100) {
+                    // fake a note breaking the beam
+                    sensorSim.setValue(false);
+                }
+                break;
+
+            case PickedUpNote:
+                // after 200 ms, assume the note has passed
+                if (counter > 10) {
+                    sensorSim.setValue(true);
+                }
+                break;
+
+            default:
+                break;
+        }
     }
 
     public void close() {
