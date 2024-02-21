@@ -161,7 +161,7 @@ public class RobotContainer {
   }
 
   public void registerCommands() {
-    NamedCommands.registerCommand("IntakeNote", new IntakeNote(intake, index, arm));
+    NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index, arm).withTimeout(1));
   }
 
   public static BooleanSupplier getAllianceColorBooleanSupplier() {
