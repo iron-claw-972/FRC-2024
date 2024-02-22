@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.simulation.DIOSim;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.IntakeConstants;
@@ -82,6 +84,8 @@ public class Intake extends SubsystemBase {
 
     private Debouncer noteDebouncer = new Debouncer(2, DebounceType.kRising);
     private Debouncer reverseDebouncer = new Debouncer(0.5, DebounceType.kFalling);
+    private Command jamCommand = new PrintCommand("A NOTE IS JAMMED IN THE INTAKE");
+    private boolean jammed = false;
 
     // MOI stuff
     // Intake rollers are 1.5 inch polycarb. We are ignoring the weight of the black
@@ -154,13 +158,20 @@ public class Intake extends SubsystemBase {
             // Only reverse in auto
             if(DriverStation.isAutonomousEnabled()){
                 setMode(Mode.REVERSE);
-            }else{
-                // TODO: do something else for teleop
+            }else if(!jammed){
+                jamCommand.schedule();
+                jammed = true;
             }
         // If it doesn't have a note for a different amount of time and it's in reverse, stop intake
         }else if(!reverseDebouncer.calculate(hasNote()) && mode == Mode.REVERSE && DriverStation.isAutonomousEnabled()){
             setMode(Mode.DISABLED);
+        }else{
+            jammed = false;
         }
+    }
+
+    public void setJamCommand(Command newJamCommand){
+        jamCommand = newJamCommand;
     }
 
     @Override

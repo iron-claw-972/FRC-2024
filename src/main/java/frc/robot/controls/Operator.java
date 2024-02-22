@@ -5,6 +5,7 @@
 package frc.robot.controls;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.commands.RumbleCommand;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.gpm.Intake;
 import frc.robot.subsystems.gpm.Intake.Mode;
@@ -14,7 +15,7 @@ import lib.controllers.GameController.Button;
 /** Add your docs here. */
 public class Operator{
     
-    private final GameController kDriver = new GameController(Constants.OPERATOR_JOY);
+    private final GameController kController = new GameController(Constants.OPERATOR_JOY);
     
     Intake intake;
     
@@ -23,9 +24,11 @@ public class Operator{
     }
 
     public void configureControls(){
-        kDriver.get(Button.X).onTrue(new InstantCommand(()->intake.setMode(Mode.INTAKE)));
-        kDriver.get(Button.X).onFalse(new InstantCommand(()->intake.setMode(Mode.DISABLED)));
-        kDriver.get(Button.B).onTrue(new InstantCommand(()->intake.setMode(Mode.REVERSE)));
-        kDriver.get(Button.B).onFalse(new InstantCommand(()->intake.setMode(Mode.DISABLED)));
+        intake.setJamCommand(new RumbleCommand(kController, 1));
+
+        kController.get(Button.X).onTrue(new InstantCommand(()->intake.setMode(Mode.INTAKE)));
+        kController.get(Button.X).onFalse(new InstantCommand(()->intake.setMode(Mode.DISABLED)));
+        kController.get(Button.B).onTrue(new InstantCommand(()->intake.setMode(Mode.REVERSE)));
+        kController.get(Button.B).onFalse(new InstantCommand(()->intake.setMode(Mode.DISABLED)));
     }
 }
