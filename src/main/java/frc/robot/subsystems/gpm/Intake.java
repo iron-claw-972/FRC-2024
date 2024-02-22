@@ -153,20 +153,24 @@ public class Intake extends SubsystemBase {
         motor.set(mode.power);
         centeringMotor.set(mode.centeringPower);
 
-        // If it has a note for too long, reverse intake
+        // If it has a note for too long
         if(noteDebouncer.calculate(hasNote())){
-            // Only reverse in auto
+            // Reverse intake in auto
             if(DriverStation.isAutonomousEnabled()){
                 setMode(Mode.REVERSE);
             }else if(!jammed){
+                // Run jamCommand once when first jammed
                 jamCommand.schedule();
                 jammed = true;
             }
-        // If it doesn't have a note for a different amount of time and it's in reverse, stop intake
-        }else if(!reverseDebouncer.calculate(hasNote()) && mode == Mode.REVERSE && DriverStation.isAutonomousEnabled()){
-            setMode(Mode.DISABLED);
-        }else{
+        // If it doesn't have a note for a different amount of time
+        }else if(!reverseDebouncer.calculate(hasNote())){
+            // Reset jamming for next note
             jammed = false;
+            // Disable if it reversed in auto
+            if(mode == Mode.REVERSE && DriverStation.isAutonomousEnabled()){
+                setMode(Mode.DISABLED);
+            }
         }
     }
 
