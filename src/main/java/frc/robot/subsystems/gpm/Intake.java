@@ -10,6 +10,7 @@ import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.simulation.DIOSim;
@@ -147,12 +148,16 @@ public class Intake extends SubsystemBase {
         motor.set(mode.power);
         centeringMotor.set(mode.centeringPower);
 
-        //TODO: We probably don't want to automatically reverse the intake
         // If it has a note for too long, reverse intake
         if(noteDebouncer.calculate(hasNote())){
-            setMode(Mode.REVERSE);
+            // Only reverse in auto
+            if(DriverStation.isAutonomousEnabled()){
+                setMode(Mode.REVERSE);
+            }else{
+                // TODO: do something else for teleop
+            }
         // If it doesn't have a note for the same amount of time and it's in reverse, stop intake
-        }else if(mode == Mode.REVERSE){
+        }else if(mode == Mode.REVERSE && DriverStation.isAutonomousEnabled()){
             setMode(Mode.DISABLED);
         }
     }
