@@ -5,10 +5,13 @@ import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.simulation.DIOSim;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -31,10 +34,7 @@ public class Intake extends SubsystemBase {
     public enum Mode {
         DISABLED(0, 0),
         INTAKE(.3, .3),
-        REVERSE(-.3, -.3),
-        PickedUpNote(.3, .3),
-        Pause(0, 0),
-        Wait(.3, .3);
+        REVERSE(-.3, -.3);
 
         private double power;
         private double centeringPower;
@@ -70,15 +70,16 @@ public class Intake extends SubsystemBase {
     /** Allows us to simulate the beam break sensor */
     private DIOSim sensorSim;
 
+    // Timer for simulator
+    private Timer simTimer = new Timer();
+
     private double motorRPMSim;
     private double centeringMotorRPMSim;
 
     private FlywheelSim flywheelSim;
     private FlywheelSim centeringFlywheelSim;
 
-    /** How long this mode has been active (20 ms clock ticks) */
-    private int counter = 0;
-    private int noteWaitTime = 50;
+    private Debouncer noteDebouncer = new Debouncer(1, DebounceType.kBoth);
 
     // MOI stuff
     // Intake rollers are 1.5 inch polycarb. We are ignoring the weight of the black
@@ -100,7 +101,7 @@ public class Intake extends SubsystemBase {
 
     public Intake() {
         // set the motor parameters
-        // motor.setIdleMode(idleMode);
+        motor.setIdleMode(idleMode);
         centeringMotor.setIdleMode(idleMode);
 
         setMode(Mode.DISABLED);
@@ -133,11 +134,6 @@ public class Intake extends SubsystemBase {
 
     public void setMode(Mode mode) {
         this.mode = mode;
-
-        // set the motor powers to be the value appropriate for this mode
-
-        // reset the counter that says how long we have been in this mode
-        counter = 0;
     }
 
     public boolean hasNote() {
@@ -151,63 +147,14 @@ public class Intake extends SubsystemBase {
         motor.set(mode.power);
         centeringMotor.set(mode.centeringPower);
 
-        // increment the number of clicks that we have been in this mode
-        counter++;
-
-        switch (mode) {
-            case DISABLED:
-                // don't have to do anything
-                break;
-
-            case INTAKE:
-                // motors are spinning and we are waiting to pick up a note
-                if (hasNote()) {
-                    // intake has detected a note
-                    setMode(Mode.PickedUpNote);
-                }
-                break;
-
-            case PickedUpNote:
-                if (!hasNote()) {
-                    // this means that the note passed through the intake and on to the indexer
-                    setMode(Mode.Wait);
-                }
-
-                if (counter > noteWaitTime) {
-                    // the note has been in the intake for too long, time to eject
-                    setMode(Mode.Pause);
-                }
-                break;
-
-            case Pause:
-                // we pause before reversing
-                if (counter > 2) {
-                    setMode(Mode.REVERSE);
-                }
-
-            case REVERSE:
-                if (!hasNote()) {
-                    // reverse succeeded
-                    setMode(Mode.Wait);
-                }
-
-                if (counter > 150) { // 3s = 3000 ms / 20 = 150
-                    // its been trying to outtake for 3s
-                    setMode(Mode.Wait);
-                }
-                break;
-
-            case Wait:
-                // in between state before disabling instake
-                if (counter > 5) { // 100ms / 20 ms = 5
-                    setMode(Mode.DISABLED);
-                }
-                break;
-
-            default:
-                break;
+        //TODO: We probably don't want to automatically reverse the intake
+        // If it has a note for too long, reverse intake
+        if(noteDebouncer.calculate(hasNote())){
+            setMode(Mode.REVERSE);
+        // If it doesn't have a note for the same amount of time and it's in reverse, stop intake
+        }else if(mode == Mode.REVERSE){
+            setMode(Mode.DISABLED);
         }
-
     }
 
     @Override
@@ -221,24 +168,12 @@ public class Intake extends SubsystemBase {
         motorRPMSim = flywheelSim.getAngularVelocityRPM();
         centeringMotorRPMSim = centeringFlywheelSim.getAngularVelocityRPM();
 
-        switch (mode) {
-            case INTAKE:
-                // after 2 seconds, report a note sensed
-                if (counter > 100) {
-                    // fake a note breaking the beam
-                    sensorSim.setValue(false);
-                }
-                break;
-
-            case PickedUpNote:
-                // after 200 ms, assume the note has passed
-                if (counter > 10) {
-                    sensorSim.setValue(true);
-                }
-                break;
-
-            default:
-                break;
+        if(mode == Mode.INTAKE){
+            simTimer.start();
+            sensorSim.setValue(!simTimer.hasElapsed(1.5) || simTimer.hasElapsed(2));
+        }else{
+            simTimer.reset();
+            simTimer.stop();
         }
     }
 
