@@ -80,7 +80,8 @@ public class Intake extends SubsystemBase {
     private FlywheelSim flywheelSim;
     private FlywheelSim centeringFlywheelSim;
 
-    private Debouncer noteDebouncer = new Debouncer(1, DebounceType.kBoth);
+    private Debouncer noteDebouncer = new Debouncer(2, DebounceType.kRising);
+    private Debouncer reverseDebouncer = new Debouncer(0.5, DebounceType.kFalling);
 
     // MOI stuff
     // Intake rollers are 1.5 inch polycarb. We are ignoring the weight of the black
@@ -156,8 +157,8 @@ public class Intake extends SubsystemBase {
             }else{
                 // TODO: do something else for teleop
             }
-        // If it doesn't have a note for the same amount of time and it's in reverse, stop intake
-        }else if(mode == Mode.REVERSE && DriverStation.isAutonomousEnabled()){
+        // If it doesn't have a note for a different amount of time and it's in reverse, stop intake
+        }else if(!reverseDebouncer.calculate(hasNote()) && mode == Mode.REVERSE && DriverStation.isAutonomousEnabled()){
             setMode(Mode.DISABLED);
         }
     }
