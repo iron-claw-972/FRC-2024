@@ -9,26 +9,23 @@ import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.subsystems.gpm.StorageIndex; 
 
 public class ShootKnownPos extends SequentialCommandGroup {
-	private final Shooter shooter;
-	private final Arm arm;
-	private final StorageIndex storageIndex;
-	private final double armAngle;
-	private final double shooterSpeed;
 	
+	/**
+	* This command performs a shot from a known position
+	* 
+	* @param shooter      the shooter to use
+	* @param arm          the arm to use
+	* @param storageIndex the indexer to use
+	* @param armAngle     the angle to send the arm to
+	* @param shooterSpeed the speed to set the shooter to
+	*/
 	public ShootKnownPos(Shooter shooter, Arm arm, StorageIndex storageIndex, double armAngle, double shooterSpeed) {
-		this.shooter = shooter;
-		this.arm = arm;
-		this.storageIndex = storageIndex;
-
-		this.armAngle = armAngle;
-		this.shooterSpeed = shooterSpeed;
-
 		addRequirements(shooter, arm, storageIndex);
 
 		addCommands(
 			new ParallelCommandGroup(
 				new ArmToPos(arm, armAngle),
-				new SetShooterSpeed(shooter, shooterSpeed))
+				new SetShooterSpeed(shooter, shooterSpeed)),
 			new IndexerFeed(storageIndex),
 			new ParallelCommandGroup(
 				new ArmToPos(arm, ArmConstants.stowedSetpoint),
