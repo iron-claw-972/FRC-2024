@@ -1,5 +1,6 @@
 package frc.robot.constants;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.util.Units;
 
@@ -48,5 +49,9 @@ public class ArmConstants {
     public static final double Duty_Cycle_Min = 0;
 
     public static final boolean inverted = false;
+
+    public static CurrentLimitsConfigs currentConfig = new CurrentLimitsConfigs();
+    currentConfig.SupplyCurrentLimit = 40;
+
 
 }
