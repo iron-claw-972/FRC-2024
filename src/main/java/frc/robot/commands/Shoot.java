@@ -19,6 +19,8 @@ import edu.wpi.first.math.MathUtil;
 /**
  * Shoots on the move (instantaneous velocities and pose ver.).
  */
+
+// TODO make the version with delay have correct math
 public class Shoot extends Command {
         private final Shooter shooter;
         public final Arm arm;
