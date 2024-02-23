@@ -17,5 +17,5 @@ public class ShooterConstants {
     public static final double AMP_OUTTAKE_RPM = 0; // may not be neccessary if indexer spins fast enough
 
     // The angle the shooter is at when the arm is at 0 degrees
-    public static final double ANGLE_OFFSET = Units.degreesToRadians(45);
+    public static final double ANGLE_OFFSET = Units.degreesToRadians(43.58322);
 }

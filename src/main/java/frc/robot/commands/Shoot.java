@@ -131,7 +131,7 @@ public class Shoot extends Command {
                 System.err.println(vert_angle);
                 System.err.println(exit_vel);
 
-                arm.setAngle(theta_v);
+                arm.setAngle(ShooterConstants.ANGLE_OFFSET - theta_v);
                 // theta_h is relative to the horizontal, so
                 // drive.setAlignAngle switches from theta_h to pi/2-theta_h
                 // depending on if it's relative to the horizontal or the vertical.
