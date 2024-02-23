@@ -136,6 +136,7 @@ public class Vision {
    * Stores all of the detected objects in an array
    * @return The array of DetectedObjects
    */
+  @SuppressWarnings("unused")
   public DetectedObject[] getDetectedObjects(){
     double[] xOffset = getHorizontalOffset();
     double[] yOffset = getVerticalOffset();

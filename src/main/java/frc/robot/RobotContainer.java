@@ -1,6 +1,5 @@
 package frc.robot;
 
-import java.rmi.server.Operation;
 import java.util.function.BooleanSupplier;
 
 import com.ctre.phoenix6.SignalLogger;

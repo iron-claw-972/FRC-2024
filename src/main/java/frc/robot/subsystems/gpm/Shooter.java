@@ -1,7 +1,5 @@
 package frc.robot.subsystems.gpm;
 
-import javax.swing.plaf.basic.BasicBorders.RadioButtonBorder;
-
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
