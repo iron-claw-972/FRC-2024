@@ -61,10 +61,8 @@ public class Shoot extends Command {
         public void execute() {
                 // Positive x displacement means we are to the left of the speaker
                 // Positive y displacement means we are below the speaker.
-                // TODO: make this only run once?
                 Pose3d speakerPose = DriverStation.getAlliance().get() == Alliance.Red ?
                 VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
-                //TODO: Add this and make it change with arm angle
                 double shooterHeight = ArmConstants.ARM_LENGTH*Math.sin(arm.getAngleRad()) + ArmConstants.PIVOT_HEIGHT;
                 double shooterOffset = ArmConstants.PIVOT_X + ArmConstants.ARM_LENGTH * Math.cos(arm.getAngleRad());
                 Rotation2d driveYaw = drive.getYaw();
@@ -160,7 +158,6 @@ public class Shoot extends Command {
                 drive.setIsAlign(false); // Use normal driver controls
                 // no need to unfreeze drive control
                 drive.setAlignAngle(null);
-                // TODO: ascertain best pos for arm
                 arm.setAngle(ArmConstants.stowedSetpoint);
                 index.stopIndex();
         }
