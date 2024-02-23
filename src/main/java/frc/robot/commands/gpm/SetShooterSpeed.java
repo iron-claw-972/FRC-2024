@@ -16,7 +16,7 @@ public class SetShooterSpeed {
 	*/
     public SetShooterSpeed(Shooter shooter, double targetSpeed) {
 
-        this.m_shooter = shooter;
+        m_shooter = shooter;
         this.targetSpeed = targetSpeed;
 
     }
@@ -35,6 +35,8 @@ public class SetShooterSpeed {
     }
 
     public void end(boolean interupted){
-
+        if (interupted){
+            m_shooter.setTargetVelocity(0);
+        }
     }
 }
