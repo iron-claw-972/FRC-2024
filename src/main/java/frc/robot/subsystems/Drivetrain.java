@@ -67,8 +67,8 @@ public class Drivetrain extends SubsystemBase {
     private Double alignAngle = null;
 
     // Latency calculation
-    private int maxFramesStored = 51; //max number of past frames to store
-    private ArrayList<Pose2d> pastPositions; //list of past positions
+    private int maxSecondsStored = 1; //max number of past frames to store
+    private ArrayList<Pair<double, Pose2d>> pastPositions; //list of past positions
 
     /**
      * Creates a new Swerve Style Drivetrain.
@@ -403,23 +403,71 @@ public class Drivetrain extends SubsystemBase {
 
     // Adds the current pos to the latency list
     public void updateLatencyList() {
-        pastPositions.add(getPose());
+        // add timestamp pair
+        double currentTime = Timer.get();
+        pastPositions.add(new Pair<>(currentTime, getPose()));
 
-        // remove first if list is too long
-        if(pastPositions.size() > maxFramesStored) {
+        // remove first until maxSecondsStored is met
+        while (pastPositions.size() > 0 && currentTime - pastPositions[0].getKey() > maxSecondsStored) {
             pastPositions.remove(0);
         }
     }
 
-    // gets the latency position from n frames ago
-    public Pose2d getNthLatencyPos(int framesAgo) {
-        // return first frame if there arent enough
-        if (pastPositions.size() < framesAgo + 1) {
-            return pastPositions.get(0);
+    // util for latency calculation
+    // taken from https://www.geeksforgeeks.org/java-equivalent-of-cpp-lower_bound-method/ (slightly modified)
+    private int lowerBoundOfPastPos(double seconds) {
+        int lowerBound = 0;
+        while (lowerBound < array.length) {
+            if (key > pastPositions[lowerBound].getKey()) {
+                lowerBound++;
+            } else {
+                return lowerBound;
+            }
         }
-
-        return pastPositions.get(maxFramesStored - framesAgo - 1);
+        return lowerBound;
     }
 
+    // lienar interpolates between a start and end value
+    private float lerp(float startValue, float endValue, float t) {
+        return (1 - t) * v0 + t * v1;
+    }
 
+    public Pose2d posFromSecondsAgo(double seconds) {
+        // get poses that surround the input time
+        double olderTime;
+        Pose2d olderPos;
+
+        double newerTime;
+        Pose2d newerPos;
+        
+        int lower_bound = lowerBoundOfPastPos(seconds);
+
+        // older pos will be lower bound
+        olderTime = pastPositions[lower_bound].getKey();
+        olderPos = pastPositions[lower_bound].getValue();
+
+        // newer pos will be 1 after lower bound (lower bound is length of list, use current pos and time)
+        if (lower_bound == pastPositions.length-1) {
+            // use current
+            newerTime = Timer.get();
+            newerPos = getPose();
+        } else {
+            newerTime = pastPositions[upper_bound+1].getKey();
+            newerPos = pastPositions[upper_bound+1].getValue();
+        }
+
+        // lerp
+        double t = (seconds - olderTime) / (newerTime - olderTime);
+        
+        double newX = lerp(olderPos.getX(), newerPos.getX(), t);
+        double newY = lerp(olderPos.getY(), newerPos.getY(), t);
+        
+        Rotation2d newRot = Rotation2d.fromDegrees(
+            lerp(olderPos.getRotation().getDegrees(), newerPos.getRotation().getDegrees(), t)
+        );
+
+        return Pose2d(
+            newX, newY, newRot
+        );
+    }
 }
