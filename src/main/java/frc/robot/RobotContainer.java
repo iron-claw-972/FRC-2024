@@ -90,6 +90,7 @@ public class RobotContainer {
         arm = new Arm();
 
       case SwerveTest:
+        System.out.println("INFO: SwerveTest");
         vision = new Vision(VisionConstants.CAMERAS);
 
         drive = new Drivetrain(vision);
