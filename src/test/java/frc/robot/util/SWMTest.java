@@ -9,12 +9,13 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import frc.robot.commands.Shoot;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Shooter;
+import frc.robot.subsystems.gpm.StorageIndex;
 import frc.robot.subsystems.gpm.Arm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SWMTest {
-    public static Shoot sh = new Shoot(new Shooter(), new Arm(), new Drivetrain(null));
+    public static Shoot sh = new Shoot(new Shooter(), new Arm(), new Drivetrain(null), new StorageIndex());
     public static int idx = 0;
     public double[][] test_cases = {
        // x, y, z ,vx, vy

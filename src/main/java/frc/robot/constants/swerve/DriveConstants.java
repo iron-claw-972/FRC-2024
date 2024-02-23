@@ -170,10 +170,6 @@ public class DriveConstants {
     public static final double kSlowDriveFactor = 0.2;
     public static final double kSlowRotFactor = 0.1;
 
-    //constants to clamp speed in shoot command
-    public static final double maxXSpeed = 2
-    public static final double maxYSpeed = 2
-
     /**
      * Updates the constants if the RobotId is not the competition robot.
      */
