@@ -357,7 +357,7 @@ public class Drivetrain extends SubsystemBase {
         alignAngle = newAngle;
     }
 
-    public boolean atAlignAnble(){
+    public boolean atAlignAngle(){
         if(alignAngle == null){
             return false;
         }

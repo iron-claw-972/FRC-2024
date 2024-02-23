@@ -13,6 +13,8 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.subsystems.gpm.StorageIndex;
+import edu.wpi.first.math.MathUtil;
+
 
 //00 is the bottom right corner of blue wall in m
 /**
@@ -50,7 +52,9 @@ public class Shoot extends Command {
                 shootTimer.reset();
                 shootTimer.stop();
                 drive.setIsAlign(true); // Enable alignment mode on the drivetrain
-                // No need to freeze driver controls. driver is mature enough to know not to mess with shoot-while-moving.
+                //clamp speeds to prevent subwoofer crashes
+                //no idea if this is how it works
+                drive.setChassisSpeeds(MathUtil.clamp(drive.getChassisSpeeds().vxMetersPerSecond, DriveConstants.maxXSpeed, -DriveConstants.maxXSpeed), MathUtil.clamp(drive.getChassisSpeeds().vyMetersPerSecond, DriveConstants.maxYSpeed, -DriveConstants.maxYSpeed), 0)
         }
 
         @Override
@@ -75,7 +79,7 @@ public class Shoot extends Command {
                                 drive.getPose().getRotation().getRadians()))
                         .relativeTo(speakerPose);
 
-                // Set the drivetrain velocities
+                // get the drivetrain velocities
                 v_rx = drive.getChassisSpeeds().vxMetersPerSecond;
                 v_ry = drive.getChassisSpeeds().vyMetersPerSecond;
                 */
@@ -85,8 +89,8 @@ public class Shoot extends Command {
 
                 // X distance to speaker
                 double x = Math.sqrt((displacement.getX() * displacement.getX())
-                        + displacement.getY() * displacement.getY());
                 // Y distance to speaker
+                        + displacement.getY() * displacement.getY());
                 double y = displacement.getZ();
 
                 // Basic vertical angle calculation (static robot)
@@ -134,7 +138,7 @@ public class Shoot extends Command {
                 // Set the outtake velocity
                 shooter.setTargetVelocity(v_shoot);
 
-                if(arm.atSetpoint() && shooter.atSetpoint() && drive.atAlignAnble()){
+                if(arm.atSetpoint() && shooter.atSetpoint() && drive.atAlignAngle()){
                         index.ejectIntoShooter();
                         shootTimer.start();
                 }
@@ -152,6 +156,7 @@ public class Shoot extends Command {
                 drive.setIsAlign(false); // Use normal driver controls
                 // no need to unfreeze drive control
                 drive.setAlignAngle(null);
+                // TODO: ascertain best pos for arm
                 arm.setAngle(ArmConstants.stowedSetpoint);
                 index.stopIndex();
         }
