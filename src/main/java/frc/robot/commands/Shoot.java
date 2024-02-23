@@ -80,8 +80,9 @@ public class Shoot extends Command {
                 
                 // get the drivetrain velocities
                 double driveSpeed = Math.hypot(drive.getChassisSpeeds().vxMetersPerSecond, drive.getChassisSpeeds().vyMetersPerSecond);
-                v_rx = driveSpeed * driveYaw.getCos();
-                v_ry = driveSpeed * driveYaw.getSin();
+                double heading = driveYaw.getRadians() + Math.atan2(drive.getChassisSpeeds().vyMetersPerSecond, drive.getChassisSpeeds().vxMetersPerSecond);
+                v_rx = driveSpeed * Math.cos(heading);
+                v_ry = driveSpeed * Math.sin(heading);
 
                 // TODO: Figure out what v_note is empirically
                 double v_note = 10;
