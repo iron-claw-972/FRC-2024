@@ -5,15 +5,17 @@ import frc.robot.subsystems.gpm.Shooter;
 public class SetShooterSpeed {
 
     private final Shooter m_shooter;
+    private final double targetRPM;
 
-    public SetShooterSpeed(Shooter shooter) {
+    public SetShooterSpeed(Shooter shooter, double targetRPM) {
 
         this.m_shooter = shooter;
+        this.targetRPM = targetRPM;
 
     }
-    
+
     public void initialize(){
-        m_shooter.setTargetRPM(1);
+        m_shooter.setTargetRPM(targetRPM);
 
     }
 
