@@ -50,8 +50,5 @@ public class ArmConstants {
 
     public static final boolean inverted = false;
 
-    public static CurrentLimitsConfigs currentConfig = new CurrentLimitsConfigs();
-    currentConfig.SupplyCurrentLimit = 40;
-
-
+    public static CurrentLimitsConfigs currentConfig = new CurrentLimitsConfigs().withSupplyCurrentLimit(40);
 }
