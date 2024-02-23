@@ -9,24 +9,30 @@ import frc.robot.subsystems.gpm.Intake.Mode;
 
 public class IntakeNote extends Command{
 
-    private final Intake intake;
-    private final StorageIndex storageIndex;
-    private final Arm arm;
+    private final boolean IS_COMP_BOT = false;
+
+    private Intake intake = null;
+    private StorageIndex storageIndex = null;
+    private Arm arm = null;
 
     public IntakeNote(Intake intake, StorageIndex storageIndex, Arm arm) {
-        this.intake = intake;
-        this.storageIndex = storageIndex;
-        this.arm = arm;
-        addRequirements(intake, storageIndex, arm);
 
+        if (IS_COMP_BOT) {
+            this.intake = intake;
+            this.storageIndex = storageIndex;
+            this.arm = arm;
+            addRequirements(intake, storageIndex, arm);
+        }
        
     }
 
     @Override
     public void initialize() {
-        intake.setMode(Mode.INTAKE);
-        storageIndex.runIndex();
-        arm.setAngle(ArmConstants.intakeSetpoint);
+        if (IS_COMP_BOT) {
+            intake.setMode(Mode.INTAKE);
+            storageIndex.runIndex();
+            arm.setAngle(ArmConstants.intakeSetpoint);
+        }
     }
 
     @Override
@@ -42,9 +48,11 @@ public class IntakeNote extends Command{
 
     @Override
     public void end(boolean interupted){
-        intake.setMode(Mode.DISABLED);
-        storageIndex.stopIndex();
-        arm.setAngle(ArmConstants.stowedSetpoint);
+        if (IS_COMP_BOT) {
+            intake.setMode(Mode.DISABLED);
+            storageIndex.stopIndex();
+            arm.setAngle(ArmConstants.stowedSetpoint);
+        }
     }
     
 }
