@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.constants.miscConstants.VisionConstants;
+import frc.robot.constants.swerve.DriveConstants;
 
 
 /**
@@ -55,8 +56,8 @@ Logger.start(); // Start logging! No more data receivers, replay sources, or met
         //   SimGUI: Persistent Values, Preferences, RobotId, then restart Simulation
         //     changes networktables.json, networktables.json.bck (both Untracked)
         //   Uncomment the next line, set the desired RobotId, deploy, and then comment the line out
-        // RobotId.setRobotId(RobotId.TestBed2);
-
+        // RobotId.setRobotId(RobotId.Vertigo);
+        DriveConstants.update(RobotId.getRobotId());
         // obtain this robot's identity
         RobotId robotId = RobotId.getRobotId();
 
@@ -90,7 +91,6 @@ Logger.start(); // Start logging! No more data receivers, replay sources, or met
     @Override
     public void disabledInit() {
         CommandScheduler.getInstance().cancelAll();
-        
     }
 
     /**

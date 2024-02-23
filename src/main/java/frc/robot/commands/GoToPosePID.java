@@ -37,6 +37,10 @@ public class GoToPosePID extends Command {
 
   @Override
   public void execute() {
+    if(pose == null) {
+      return;
+    }
+
     drive.driveWithPID(pose.getX(), pose.getY(), pose.getRotation().getRadians()); 
   }
 
