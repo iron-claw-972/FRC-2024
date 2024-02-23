@@ -85,13 +85,16 @@ public class RobotContainer {
       default:
       case SwerveCompetition:
         intake = new Intake();
+        index = new StorageIndex();
+        arm = new Arm();
+        shooter = new Shooter();
 
       case SwerveTest:
         vision = new Vision(VisionConstants.CAMERAS);
 
         drive = new Drivetrain(vision);
         driver = new GameControllerDriverConfig(drive, vision);
-        operator = new Operator(intake);
+        operator = new Operator(intake, arm, index, shooter, drive);
 
         // Detected objects need access to the drivetrain
         DetectedObject.setDrive(drive);
