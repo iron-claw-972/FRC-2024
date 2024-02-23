@@ -1,8 +1,9 @@
 package frc.robot.commands.gpm;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.gpm.Shooter;
 
-public class SetShooterSpeed {
+public class SetShooterSpeed extends Command{
 
     private final Shooter m_shooter;
     private final double targetSpeed;
@@ -21,19 +22,23 @@ public class SetShooterSpeed {
 
     }
 
+    @Override
     public void initialize(){
         m_shooter.setTargetVelocity(targetSpeed);
 
     }
 
+    @Override
     public void execute(){
 
     }
 
+      @Override
     public boolean isFinished(){
         return m_shooter.atSetpoint();
     }
 
+    @Override
     public void end(boolean interupted){
         if (interupted){
             m_shooter.setTargetVelocity(0);
