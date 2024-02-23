@@ -1,19 +1,20 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.ArmConstants;
+import frc.robot.constants.ShooterConstants;
 import frc.robot.constants.StorageIndexConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.subsystems.gpm.StorageIndex;
-import edu.wpi.first.math.MathUtil;
 
 //00 is the bottom right corner of blue wall in m
 /**
@@ -58,32 +59,31 @@ public class Shoot extends Command {
 
         @Override
         public void execute() {
-                /*
-                 * temporarily, for testing purposes.
-                 * // Positive x displacement means we are to the left of the speaker
-                 * // Positive y displacement means we are below the speaker.
-                 * // TODO: make this only run once?
-                 * Pose3d speakerPose = DriverStation.getAlliance().get() == Alliance.Red ?
-                 * VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
-                 * //TODO: Add this and make it change with arm angle
-                 * double shooterHeight = .5;
-                 * double speakerHeight = 2.055;
-                 * 
-                 * // Set displacement to speaker
-                 * displacement = new Pose3d(
-                 * drive.getPose().getX(),
-                 * drive.getPose().getY(),
-                 * shooterHeight,
-                 * new Rotation3d(
-                 * 0,
-                 * arm.getAngleRad(),
-                 * drive.getPose().getRotation().getRadians()))
-                 * .relativeTo(speakerPose);
-                 * 
-                 * // get the drivetrain velocities
-                 * v_rx = drive.getChassisSpeeds().vxMetersPerSecond;
-                 * v_ry = drive.getChassisSpeeds().vyMetersPerSecond;
-                 */
+                // Positive x displacement means we are to the left of the speaker
+                // Positive y displacement means we are below the speaker.
+                // TODO: make this only run once?
+                Pose3d speakerPose = DriverStation.getAlliance().get() == Alliance.Red ?
+                VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
+                //TODO: Add this and make it change with arm angle
+                double shooterHeight = ArmConstants.ARM_LENGTH*Math.sin(arm.getAngleRad()) + ArmConstants.PIVOT_HEIGHT;
+                double shooterOffset = ArmConstants.PIVOT_X + ArmConstants.ARM_LENGTH * Math.cos(arm.getAngleRad());
+                Rotation2d driveYaw = drive.getYaw();
+                
+                // Set displacement to speaker
+                displacement = new Pose3d(
+                        drive.getPose().getX() + shooterOffset * driveYaw.getCos(),
+                        drive.getPose().getY() + shooterOffset * driveYaw.getSin(),
+                        shooterHeight,
+                        new Rotation3d(
+                        0,
+                        ShooterConstants.ANGLE_OFFSET - arm.getAngleRad(),
+                        Math.PI + driveYaw.getRadians()))
+                        .relativeTo(speakerPose).times(-1);
+                
+                // get the drivetrain velocities
+                double driveSpeed = Math.hypot(drive.getChassisSpeeds().vxMetersPerSecond, drive.getChassisSpeeds().vyMetersPerSecond);
+                v_rx = driveSpeed * driveYaw.getCos();
+                v_ry = driveSpeed * driveYaw.getSin();
 
                 // TODO: Figure out what v_note is empirically
                 double v_note = 10;
@@ -137,12 +137,11 @@ public class Shoot extends Command {
                 // depending on if it's relative to the horizontal or the vertical.
                 // Drivetrain angle is relative to positive x (toward red side)
 
-                // TODO set using driveHeading instead
-                drive.setAlignAngle(theta_h);
+                // Sets the angle to align to for the drivetrain, uses driveHeading in DefaultDriveCommand
+                drive.setAlignAngle(Math.PI + theta_h);
                 // Set the outtake velocity
                 shooter.setTargetVelocity(v_shoot);
 
-                // TODO check if you can still use .atAlignAngle with driveHeading
                 if (arm.atSetpoint() && shooter.atSetpoint() && drive.atAlignAngle()) {
                         index.ejectIntoShooter();
                         shootTimer.start();
@@ -167,6 +166,7 @@ public class Shoot extends Command {
         }
 }
 /*
+ * TODO: Make this work if we are going to use it (use setAlignAngle and copy other fixes from ^)
  * ver where it assumes a set amount of time to rev up the note, and locks ALL
  * driver input.
  *
