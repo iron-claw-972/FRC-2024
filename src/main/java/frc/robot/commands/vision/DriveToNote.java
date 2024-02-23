@@ -13,9 +13,11 @@ import frc.robot.util.DetectedObject;
  */
 public class DriveToNote extends Command {
 
+  private double speed = DriveConstants.kMaxSpeed/2;
   private Drivetrain drive; 
   private Supplier<DetectedObject> objectSupplier;
   private DetectedObject object;
+  private double angle;
 
   /**
    * Moves toward the detected object
@@ -31,36 +33,34 @@ public class DriveToNote extends Command {
   }
 
   /**
-   * Does nothing
+   * Gets the object and finds the angle to it
    */
   @Override
   public void initialize(){
     object = objectSupplier.get();
+    angle = object.getAngle();
   }
 
   /**
-   * Gets the x offset and distance and drives toward the object
+   * Drives toward the note
    */
   @Override
   public void execute() {
-    // DetectedObject object = objectSupplier.get();
     if(object == null){
       drive.stop();
       return;
     }
-    double angle = object.getAngle();
-    double speed = DriveConstants.kMaxSpeed/2;
 
     drive.driveHeading(speed*Math.cos(angle), speed*Math.sin(angle), angle, true);
   }
 
   /**
    * If the command is finished
-   * @return Always false
+   * @return True only if the object is null
    */
   @Override
   public boolean isFinished() { 
-    return false;
+    return object == null;
   }
 
   /**
