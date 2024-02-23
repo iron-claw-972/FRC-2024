@@ -38,7 +38,6 @@ public class DriveToNote extends Command {
   @Override
   public void initialize(){
     object = objectSupplier.get();
-    angle = object.getAngle();
   }
 
   /**
@@ -50,6 +49,8 @@ public class DriveToNote extends Command {
       drive.stop();
       return;
     }
+
+    angle = object.getAngle();
 
     drive.driveHeading(speed*Math.cos(angle), speed*Math.sin(angle), angle, true);
   }

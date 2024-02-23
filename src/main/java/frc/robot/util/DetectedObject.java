@@ -1,6 +1,7 @@
 package frc.robot.util;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -52,12 +53,13 @@ public class DetectedObject {
         translation = translation.plus(robotToCamera.getTranslation());
         // If the drivetrain exists, rotate and translate it to get the field relative position
         if(drive != null){
+            Pose2d past = drive.posFromSecondsAgo(VisionConstants.objectLatencySeconds);
             translation = translation.rotateBy(new Rotation3d(
                 0,
                 0,
-                drive.getYaw().getRadians()
+                past.getRotation().getRadians()
             ));
-            Translation2d drivePose = drive.posFromSecondsAgo(VisionConstants.objectLatencySeconds).getTranslation();
+            Translation2d drivePose = past.getTranslation();
             translation = translation.plus(new Translation3d(
                 drivePose.getX(),
                 drivePose.getY(),
@@ -101,12 +103,13 @@ public class DetectedObject {
         translation = translation.plus(robotToCamera.getTranslation());
         // If the drivetrain exists, rotate and translate it to be field relative
         if(drive != null){
+            Pose2d past = drive.posFromSecondsAgo(VisionConstants.objectLatencySeconds);
             translation = translation.rotateBy(new Rotation3d(
                 0,
                 0,
-                drive.getYaw().getRadians()
+                past.getRotation().getRadians()
             ));
-            Translation2d drivePose = drive.posFromSecondsAgo(VisionConstants.objectLatencySeconds).getTranslation();
+            Translation2d drivePose = past.getTranslation();
             translation = translation.plus(new Translation3d(
                 drivePose.getX(),
                 drivePose.getY(),

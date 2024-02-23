@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
+
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -68,7 +70,7 @@ public class Drivetrain extends SubsystemBase {
 
     // Latency calculation
     private int maxSecondsStored = 1; //max number of past frames to store
-    private ArrayList<Pair<double, Pose2d>> pastPositions; //list of past positions
+    private ArrayList<Pair<Double, Pose2d>> pastPositions; //list of past positions
 
     /**
      * Creates a new Swerve Style Drivetrain.
@@ -124,7 +126,7 @@ public class Drivetrain extends SubsystemBase {
         rotationController.setTolerance(Units.degreesToRadians(0.25), Units.degreesToRadians(0.25));
 
         // setup latency list
-        pastPositions = new ArrayList<Pose2d>();
+        pastPositions = new ArrayList<Pair<Double, Pose2d>>();
     }
 
     @Override
@@ -404,11 +406,11 @@ public class Drivetrain extends SubsystemBase {
     // Adds the current pos to the latency list
     public void updateLatencyList() {
         // add timestamp pair
-        double currentTime = Timer.get();
+        double currentTime = Timer.getFPGATimestamp();
         pastPositions.add(new Pair<>(currentTime, getPose()));
 
         // remove first until maxSecondsStored is met
-        while (pastPositions.size() > 0 && currentTime - pastPositions[0].getKey() > maxSecondsStored) {
+        while (pastPositions.size() > 0 && currentTime - pastPositions.get(0).getFirst() > maxSecondsStored) {
             pastPositions.remove(0);
         }
     }
@@ -417,8 +419,8 @@ public class Drivetrain extends SubsystemBase {
     // taken from https://www.geeksforgeeks.org/java-equivalent-of-cpp-lower_bound-method/ (slightly modified)
     private int lowerBoundOfPastPos(double seconds) {
         int lowerBound = 0;
-        while (lowerBound < array.length) {
-            if (key > pastPositions[lowerBound].getKey()) {
+        while (lowerBound < pastPositions.size()) {
+            if (seconds > pastPositions.get(lowerBound).getFirst()) {
                 lowerBound++;
             } else {
                 return lowerBound;
@@ -428,8 +430,8 @@ public class Drivetrain extends SubsystemBase {
     }
 
     // lienar interpolates between a start and end value
-    private float lerp(float startValue, float endValue, float t) {
-        return (1 - t) * v0 + t * v1;
+    private Double lerp(Double startValue, Double endValue, Double t) {
+        return (1 - t) * startValue + t * endValue;
     }
 
     public Pose2d posFromSecondsAgo(double seconds) {
@@ -443,17 +445,17 @@ public class Drivetrain extends SubsystemBase {
         int lower_bound = lowerBoundOfPastPos(seconds);
 
         // older pos will be lower bound
-        olderTime = pastPositions[lower_bound].getKey();
-        olderPos = pastPositions[lower_bound].getValue();
+        olderTime = pastPositions.get(lower_bound).getFirst();
+        olderPos = pastPositions.get(lower_bound).getSecond();
 
         // newer pos will be 1 after lower bound (lower bound is length of list, use current pos and time)
-        if (lower_bound == pastPositions.length-1) {
+        if (lower_bound == pastPositions.size()-1) {
             // use current
-            newerTime = Timer.get();
+            newerTime = Timer.getFPGATimestamp();
             newerPos = getPose();
         } else {
-            newerTime = pastPositions[upper_bound+1].getKey();
-            newerPos = pastPositions[upper_bound+1].getValue();
+            newerTime = pastPositions.get(lower_bound+1).getFirst();
+            newerPos = pastPositions.get(lower_bound+1).getSecond();
         }
 
         // lerp
@@ -466,7 +468,7 @@ public class Drivetrain extends SubsystemBase {
             lerp(olderPos.getRotation().getDegrees(), newerPos.getRotation().getDegrees(), t)
         );
 
-        return Pose2d(
+        return new Pose2d(
             newX, newY, newRot
         );
     }
