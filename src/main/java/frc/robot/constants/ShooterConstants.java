@@ -11,6 +11,7 @@ public class ShooterConstants {
     public static final double LEFT_SHOOT_RPM = 6000;
     public static final double RIGHT_SHOOT_RPM = 4000;
     public static final double INTAKE_RPM = 0; // may not be neccessary if indexer spins fast enough
-    public static final double EJECT_RMP = 0; // may not be neccessary if indexer spins fast enough
+    public static final double EJECT_RPM = 0; // may not be neccessary if indexer spins fast enough
+    public static final double AMP_OUTTAKE_RPM = 0; // may not be neccessary if indexer spins fast enough
 
 }

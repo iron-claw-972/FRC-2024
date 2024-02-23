@@ -25,7 +25,7 @@ public class VisionConstants {
   /**
    * If April tag vision is enabled on the robot
    */
-  public static final boolean ENABLED = true;
+  public static final boolean ENABLED = false;
 
   // If odometry should be updated using vision during auto
   public static final boolean ENABLED_AUTO = false;
@@ -80,6 +80,10 @@ public class VisionConstants {
     BLUE_AMP_POSE.getRotation()
   );
 
+  // How close we have to get to the amp before scoring in it (meters and radians)
+  public static final double AMP_TOLERANCE_DISTANCE = 0.3;
+  public static final double AMP_TOLERANCE_ANGLE = Units.degreesToRadians(15);
+
   // The podium poses to align to
   public static final Pose2d BLUE_PODIUM_POSE = new Pose2d(
     FieldConstants.APRIL_TAGS.get(13).pose.getX() - Units.inchesToMeters(82.75) - DriveConstants.kRobotWidthWithBumpers/2,
@@ -98,8 +102,8 @@ public class VisionConstants {
     new Pair<String, Transform3d>(
       "Camera1",
       new Transform3d(
-        new Translation3d(Units.inchesToMeters(8.996), Units.inchesToMeters(6.48), Units.inchesToMeters(37.44)),
-        new Rotation3d(0, Units.degreesToRadians(18), 0)
+        new Translation3d(Units.inchesToMeters(-11), Units.inchesToMeters(0), Units.inchesToMeters(24)),
+        new Rotation3d(0, Units.degreesToRadians(0), 0)
       )),
     new Pair<String, Transform3d>(
       "Camera2",
