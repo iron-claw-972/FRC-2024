@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.StorageIndexConstants;
 
@@ -34,7 +35,7 @@ public class StorageIndex extends SubsystemBase {
     m_indexBeamBreak = new DigitalInput(StorageIndexConstants.indexBeamBreak);
     m_indexmotor.setInverted(false);
 
-    m_indexmotor.setIdleMode(StorageIndexConstants.idleMode);
+    // sorry m_indexmotor.setIdleMode(StorageIndexConstants.idleMode);
 
 
     // Additional setup, possibly related to CAN Frames, could be documented here.
@@ -42,10 +43,12 @@ public class StorageIndex extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (isIndexing && hasNote()) {
-      isIndexing = false;
-      stopIndex();
-    }
+    // if (isIndexing && hasNote()) {
+    //   isIndexing = false;
+    //   stopIndex();
+    // }
+		//SmartDashboard.putNumber("indexer speed", /* shooterRPMToSpeed */ (m_indexmotor.getEncoder().getVelocity()));
+		SmartDashboard.putBoolean("has note?", hasNote());
   }
 
   /**
@@ -76,6 +79,9 @@ public class StorageIndex extends SubsystemBase {
    */
   public void runIndex() {
     m_indexmotor.set(StorageIndexConstants.intakeSpeed);
+    SmartDashboard.putNumber("indexer speed", /* shooterRPMToSpeed */ (m_indexmotor.get()));
+    
+		SmartDashboard.putBoolean("has run?", true);
   }
 
   /**
