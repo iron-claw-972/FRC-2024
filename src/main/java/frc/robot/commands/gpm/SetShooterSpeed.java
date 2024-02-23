@@ -5,24 +5,24 @@ import frc.robot.subsystems.gpm.Shooter;
 public class SetShooterSpeed {
 
     private final Shooter m_shooter;
-    private final double targetRPM;
+    private final double targetSpeed;
 
 	/**
 	* Spins the shooter up to the target speed, and waits before exiting.
 	*
-	* @param shooter    the shooter to spin up
-	* @param targetRPM  the target speed (in RPM) to spin up to.
-	* @see              frc.robot.commands.gpm.PrepareShooter
+	* @param shooter      the shooter to spin up
+	* @param targetSpeed  the target speed (in m/s) to spin up to.
+	* @see                frc.robot.commands.gpm.PrepareShooter
 	*/
-    public SetShooterSpeed(Shooter shooter, double targetRPM) {
+    public SetShooterSpeed(Shooter shooter, double targetSpeed) {
 
         this.m_shooter = shooter;
-        this.targetRPM = targetRPM;
+        this.targetSpeed = targetSpeed;
 
     }
 
     public void initialize(){
-        m_shooter.setTargetRPM(targetRPM);
+        m_shooter.setTargetVelocity(targetSpeed);
 
     }
 
