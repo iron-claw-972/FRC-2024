@@ -2,6 +2,11 @@ package frc.robot.subsystems.gpm;
 
 import javax.swing.plaf.basic.BasicBorders.RadioButtonBorder;
 
+import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
+// import frc.robot.util.LoggedTunableNumber;
+
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
@@ -17,6 +22,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase {
+	
+	// private static final LoggedTunableNumber kP = new LoggedTunableNumber("Shooter P", gains.kP());
+  	// private static final LoggedTunableNumber kI = new LoggedTunableNumber("Shooter I", gains.kI());
+  	// private static final LoggedTunableNumber kD = new LoggedTunableNumber("Shooter D", gains.kD());
+
+	public ShooterIO shooterIO;
+ 	private final ShooterIOInputsAutoLogged shooterInputs = new ShooterIOInputsAutoLogged();
+ 
 	// each of the shooter shafts is driven by one Neo Vortex motor
 	protected static final DCMotor gearbox = DCMotor.getNeoVortex(1);
 	// get the motor freespeed
@@ -107,6 +120,11 @@ public class Shooter extends SubsystemBase {
 		SmartDashboard.putNumber("left speed", /* shooterRPMToSpeed */ (leftSpeed));
 		SmartDashboard.putNumber("right speed", /* shooterRPMToSpeed */ (rightSpeed));
 		SmartDashboard.putBoolean("at setpoint?", atSetpoint());
+
+		// Update Shooter Inputs
+		shooterIO.updateInputs(shooterInputs);
+		// Send data to logging framework
+    	Logger.processInputs("Shooter", shooterInputs);
 	}
 
 	@Override
@@ -215,6 +233,9 @@ public class Shooter extends SubsystemBase {
 	 * @see getLeftMotorSpeed
 	 * @see atSetpoint
 	 */
+
+	// Log Left Motor RPM
+	@AutoLogOutput(key = "Left Motor RPM")
 	public double getLeftMotorRPM() {
 		// REV does not let us set the encoder velocity in a simulation, so use
 		// simulated value
@@ -233,6 +254,9 @@ public class Shooter extends SubsystemBase {
 	 * @see getRightMotorSpeed
 	 * @see atSetpoint
 	 */
+
+	// Log Right Motor RPM
+	@AutoLogOutput(key = "Right Motor RPM")
 	public double getRightMotorRPM() {
 		// REV does not let us set the encoder velocity in a simulation, so use
 		// simulated value
@@ -276,6 +300,9 @@ public class Shooter extends SubsystemBase {
 	 * @see getRightMotorRPM
 	 * @see atSetpoint
 	 */
+	
+	// Log RPM Difference
+	@AutoLogOutput(key = "RPM Difference")
 	public double getMotorRPMDifference() {
 		return getLeftMotorRPM() - getRightMotorRPM();
 	}
@@ -293,4 +320,5 @@ public class Shooter extends SubsystemBase {
 	public double getMotorSpeedDifference() {
 		return getLeftMotorSpeed() - getRightMotorSpeed();
 	}
+	
 }
