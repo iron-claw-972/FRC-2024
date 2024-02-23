@@ -54,10 +54,6 @@ public class Shoot extends Command {
                 shootTimer.reset();
                 shootTimer.stop();
                 drive.setIsAlign(true); // Enable alignment mode on the drivetrain
-                //clamp speeds to prevent subwoofer crashes
-                //no idea if this is how it works
-                // TODO use driveHeading
-                drive.setChassisSpeeds(MathUtil.clamp(drive.getChassisSpeeds().vxMetersPerSecond, DriveConstants.maxXSpeed, -DriveConstants.maxXSpeed), MathUtil.clamp(drive.getChassisSpeeds().vyMetersPerSecond, DriveConstants.maxYSpeed, -DriveConstants.maxYSpeed), 0)
         }
 
         @Override
