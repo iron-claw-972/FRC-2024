@@ -11,27 +11,51 @@ import frc.robot.subsystems.gpm.StorageIndex;
 public class ShootKnownPos extends SequentialCommandGroup {
 	
 	/**
+	* A preset shot that can be taken by the {@link frc.robot.commands.gpm.ShootKnownPos} command
+	*/
+	public enum ShotPosition {
+		// TODO: add actual values
+		SUBWOOFER_TOP(0.0, 0.0),
+		SUBWOOFER_MIDDLE(0.0, 0.0),
+		SUBWOOFER_BOTTOM(0.0, 0.0);
+		
+		private double armAngle;
+		private double shooterSpeed;
+
+		ShotPosition(double armAngle, double shooterSpeed) {
+			this.armAngle = armAngle;
+			this.shooterSpeed = shooterSpeed;
+		}
+
+        public double getArmAngle() {
+            return armAngle;
+        }
+
+        public double getShooterSpeed() {
+            return shooterSpeed;
+        }
+	}
+	
+	/**
 	* This command performs a shot from a known position
 	* 
 	* @param shooter      the shooter to use
 	* @param arm          the arm to use
 	* @param storageIndex the indexer to use
-	* @param armAngle     the angle to send the arm to
-	* @param shooterSpeed the speed to set the shooter to
+	* @param shot         the preset shot to take
 	*/
-	public ShootKnownPos(Shooter shooter, Arm arm, StorageIndex storageIndex, double armAngle, double shooterSpeed) {
+	public ShootKnownPos(Shooter shooter, Arm arm, StorageIndex storageIndex, ShotPosition shot) {
 		addRequirements(shooter, arm, storageIndex);
 
 		addCommands(
 			new ParallelCommandGroup(
-				new ArmToPos(arm, armAngle),
-				new SetShooterSpeed(shooter, shooterSpeed)),
+				new ArmToPos(arm, shot.getArmAngle()),
+				new SetShooterSpeed(shooter, shot.getShooterSpeed())),
 			new IndexerFeed(storageIndex),
 			new ParallelCommandGroup(
 				new ArmToPos(arm, ArmConstants.stowedSetpoint),
 				new PrepareShooter(shooter, 0)));
 
 	}
-	
 }
 
