@@ -19,7 +19,7 @@ public class AutoConstants {
 
     // TODO: Tune these
     public static final PIDConstants translationConstants = new PIDConstants(1,0,0);
-    public static final PIDConstants rotationConstants = new PIDConstants(0,0,0);
+    public static final PIDConstants rotationConstants = new PIDConstants(5,0,0);
 
     public static final ReplanningConfig replanningConfig = new ReplanningConfig(true, false);
 
