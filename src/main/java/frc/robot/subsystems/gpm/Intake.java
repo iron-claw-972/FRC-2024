@@ -1,9 +1,13 @@
 package frc.robot.subsystems.gpm;
 
 import com.revrobotics.CANSparkBase.IdleMode;
+
+import java.time.Duration;
+
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
@@ -14,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.IntakeConstants;
+import frc.robot.util.LogManager;
 
 public class Intake extends SubsystemBase {
     // Current limits -- not used
@@ -51,12 +56,14 @@ public class Intake extends SubsystemBase {
 
     /** Intake motor is a Vortex*/
     private final CANSparkFlex motor = new CANSparkFlex(IntakeConstants.MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
+    private final RelativeEncoder motorEncoder = motor.getEncoder();
     private static DCMotor dcMotor = DCMotor.getNeoVortex(1);
 
     // change the motor from neo550 to whatever it actually is
 
     /** Centering motor is a NEO */
     private final CANSparkMax centeringMotor = new CANSparkMax(IntakeConstants.CENTERING_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
+    private final RelativeEncoder centeringMotorEncoder = centeringMotor.getEncoder();
     private static DCMotor dcMotorCentering = DCMotor.getNEO(1);
     
     /** beam break sensor detects whether a note is present */
@@ -104,6 +111,9 @@ public class Intake extends SubsystemBase {
         }
 
         publish();
+        if (Constants.DO_LOGGING) {
+            setupLogs();
+        }
     }
 
     // publish sensor to Smart Dashboard
@@ -144,5 +154,19 @@ public class Intake extends SubsystemBase {
 
     public void close() {
         sensor.close();
+    }
+    
+    private void setupLogs() {
+        LogManager.add("Intake/flywheelSimVolts", () -> mode.power * Constants.ROBOT_VOLTAGE);
+        LogManager.add("Intake/centeringFlywheelSimVolts", () -> mode.centeringPower * Constants.ROBOT_VOLTAGE);
+
+        LogManager.add("Intake/motorRPMSim", () -> motorRPMSim, Duration.ofSeconds(1));
+        LogManager.add("Intake/centeringMotorRPMSim", () -> motorRPMSim, Duration.ofSeconds(1));
+
+        LogManager.add("Intake/motorVolts", () -> motor.get() * Constants.ROBOT_VOLTAGE);
+        LogManager.add("Intake/centeringMotorVolts", () -> centeringMotor.get() * Constants.ROBOT_VOLTAGE);
+
+        LogManager.add("Intake/motorRPM", () -> motorEncoder.getVelocity());
+        LogManager.add("Intake/centeringMotorRPM", () -> centeringMotorEncoder.getVelocity());
     }
 }

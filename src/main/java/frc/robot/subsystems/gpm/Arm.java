@@ -1,5 +1,7 @@
 package frc.robot.subsystems.gpm;
 
+import java.time.Duration;
+
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.MathUtil;
@@ -20,8 +22,13 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ArmConstants;
+import frc.robot.constants.Constants;
+import frc.robot.util.LogManager;
 
 public class Arm extends SubsystemBase {
+
+    double voltsBattery = 12.8;
+    private double angle;
 
     /** the master motor */
     private final TalonFX motor = new TalonFX(ArmConstants.MOTOR_ID);
@@ -87,6 +94,10 @@ public class Arm extends SubsystemBase {
         }
         SmartDashboard.putData("Set Angle to 0.0", new InstantCommand(() -> setAngle(0.0)));
         SmartDashboard.putData("Set Angle to 1.0 Rad", new InstantCommand(() -> setAngle(1.0)));
+
+        if (Constants.DO_LOGGING) {
+            setupLogs();
+        }
     }
 
     @Override
@@ -102,8 +113,6 @@ public class Arm extends SubsystemBase {
     @Override
     public void simulationPeriodic() {
         // Assuming the volts
-        double voltsBattery = 12.8;
-
         simulation.setInputVoltage(motor.get() * voltsBattery);
 
         simulation.update(0.02);
@@ -130,5 +139,10 @@ public class Arm extends SubsystemBase {
 
     public boolean atSetpoint() {
         return pid.atSetpoint();
+    }
+
+    private void setupLogs() {
+        LogManager.add("Arm/PositionError", () -> angle - getAngleRad(), Duration.ofSeconds(1));
+        LogManager.add("Arm/Volts", () -> motor.get() * voltsBattery);
     }
 }

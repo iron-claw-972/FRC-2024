@@ -104,18 +104,10 @@ public class Module extends SubsystemBase {
         if (Constants.DO_LOGGING) {
             double motorSpeed = ConversionUtils.falconToMPS(ConversionUtils.RPMToFalcon(driveMotor.getVelocity().getValue()/60, 1), DriveConstants.kWheelCircumference,
                                                             DriveConstants.kDriveGearRatio);
-            LogManager.addDouble("Swerve/Modules/DriveSpeed/" + type.name(),
-                                 motorSpeed
-                                );
-            LogManager.addDouble("Swerve/Modules/DriveSpeedError/" + type.name(),
-                                 motorSpeed - desiredState.speedMetersPerSecond
-                                );
-            LogManager.addDouble("Swerve/Modules/DriveVoltage/" + type.name(),
-                                 driveMotor.getMotorVoltage().getValue()
-                                );
-            LogManager.addDouble("Swerve/Modules/DriveCurrent/" + type.name(),
-                                 driveMotor.getStatorCurrent().getValue()
-                                );
+            LogManager.add("Swerve/Modules/DriveSpeed/" + type.name(), () -> motorSpeed);
+            LogManager.add("Swerve/Modules/DriveSpeedError/" + type.name(), () -> motorSpeed - desiredState.speedMetersPerSecond);
+            LogManager.add("Swerve/Modules/DriveVoltage/" + type.name(), () -> driveMotor.getMotorVoltage().getValue());                                
+            LogManager.add("Swerve/Modules/DriveCurrent/" + type.name(), () -> driveMotor.getStatorCurrent().getValue());
         }
     }
 

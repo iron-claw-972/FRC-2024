@@ -111,10 +111,11 @@ public class CalculateStdDevs extends Command {
     System.out.printf("Standard deviation values:\nX: %.5f\nY: %.5f\nRotation: %.5f\nDistance: %.5f\n",
       stdDevX, stdDevY, stdDevRot, distance);
     if (Constants.DO_LOGGING) {
-      LogManager.addDouble("Vision/StdDevTest/StdDevX", stdDevX);
-      LogManager.addDouble("Vision/StdDevTest/StdDevY", stdDevY);
-      LogManager.addDouble("Vision/StdDevTest/StdDevRotation", stdDevRot);
-      LogManager.addDouble("Vision/StdDevTest/TargetDistance", distance);
+      LogManager.add("Vision/StdDevTest/StdDevX", () -> stdDevX);
+      LogManager.add("Vision/StdDevTest/StdDevY", () -> stdDevY);
+      LogManager.add("Vision/StdDevTest/StdDevRotation", () -> stdDevRot);
+      //TODO log distance cuz i don't know how ;(
+      // LogManager.add("Vision/StdDevTest/TargetDistance", () -> distance);
     }    
   }
 

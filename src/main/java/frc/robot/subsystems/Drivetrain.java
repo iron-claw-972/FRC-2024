@@ -119,7 +119,9 @@ public class Drivetrain extends SubsystemBase {
         rotationController.enableContinuousInput(-Math.PI, Math.PI);
         rotationController.setTolerance(Units.degreesToRadians(0.25), Units.degreesToRadians(0.25));
 
-        setupLogs();
+        if (Constants.DO_LOGGING) {
+            setupLogs();
+        }   
     }
 
     @Override
