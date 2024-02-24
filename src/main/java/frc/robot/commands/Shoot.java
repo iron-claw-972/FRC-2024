@@ -25,7 +25,7 @@ import frc.robot.subsystems.gpm.StorageIndex;
 public class Shoot extends Command {
         private final Shooter shooter;
         public final Arm arm;
-        private final Drivetrain drive;
+        public final Drivetrain drive;
         private final StorageIndex index;
 
         private final Timer shootTimer = new Timer();
@@ -61,12 +61,13 @@ public class Shoot extends Command {
         public void execute() {
                 // Positive x displacement means we are to the left of the speaker
                 // Positive y displacement means we are below the speaker.
-                Pose3d speakerPose = DriverStation.getAlliance().get() == Alliance.Red ?
-                VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
+                Pose3d speakerPose = DriverStation.getAlliance().isPresent() &&
+                                DriverStation.getAlliance().get() == Alliance.Red ?
+                                VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
                 double shooterHeight = ArmConstants.ARM_LENGTH*Math.sin(arm.getAngleRad()) + ArmConstants.PIVOT_HEIGHT;
                 double shooterOffset = ArmConstants.PIVOT_X + ArmConstants.ARM_LENGTH * Math.cos(arm.getAngleRad());
+                // shooterHeight and shooterOffset have an additional offset because the shooter is offset from the arm, right?
                 Rotation2d driveYaw = drive.getYaw();
-                
                 // Set displacement to speaker
                 displacement = new Pose3d(
                         drive.getPose().getX() + shooterOffset * driveYaw.getCos(),
@@ -76,7 +77,8 @@ public class Shoot extends Command {
                         0,
                         ShooterConstants.ANGLE_OFFSET - arm.getAngleRad(),
                         Math.PI + driveYaw.getRadians()))
-                        .relativeTo(speakerPose).times(-1);
+                        .relativeTo(speakerPose);
+                        //.times(-1);
                 
                 // get the drivetrain velocities
                 double driveSpeed = Math.hypot(drive.getChassisSpeeds().vxMetersPerSecond, drive.getChassisSpeeds().vyMetersPerSecond);
@@ -91,39 +93,33 @@ public class Shoot extends Command {
                 double x = Math.sqrt((displacement.getX() * displacement.getX())
                                 // Y distance to speaker
                                 + displacement.getY() * displacement.getY());
+                // height (sorry that it's called y)
                 double y = displacement.getZ();
-
+                System.err.println("dx " + displacement.getX()+" dy "+ displacement.getY());
                 // Basic vertical angle calculation (static robot)
                 double phi_v = Math.atan(Math.pow(v_note, 2) / 9.8 / x * (1 - Math.sqrt(1
                                 + 19.6 / Math.pow(v_note, 2) * (y - 4.9 * x * x / Math.pow(v_note, 2)))));
                 System.err.println("*pv " + phi_v);
                 // Angle to goal
-                // double phi_h = drivetrain.getAlignAngle();
                 double phi_h = Math.atan2(displacement.getY(), displacement.getX());
                 System.err.println("*ph " + phi_h);
-                // Random variable to hold recurring code
-                double a = v_note * Math.cos(phi_v) * Math.sin(phi_h);
-                double theta_h = Math.atan((a - v_ry) / (v_note * Math.cos(phi_v) * Math.cos(phi_h) - v_rx));
+                double theta_h = Math.atan((v_note * Math.cos(phi_v) * Math.sin(phi_h) - v_ry) / (v_note * Math.cos(phi_v) * Math.cos(phi_h) - v_rx));
                 // random quirk that using -v_rx, -v_ry works instead of +v_rx, +v_ry
                 // theta_h conversion (i.e. pi-theta_h if necessary)
                 // if the mirrored angle is the same-ish direction??? logic may break at high
                 // v_rx and v_ry but don't worry about it
-
+                /*
                 if (Math.signum(Math.sin(theta_h)) != Math.signum(Math.sin(phi_h))
                                 || Math.signum(Math.cos(theta_h)) != Math.signum(Math.cos(theta_h))) {
                         theta_h += Math.PI;
                 }
+                */
                 double theta_v = Math.atan(
                                 (v_note * Math.sin(phi_v) * Math.cos(theta_h)) /
-                                                ((v_note * Math.cos(phi_v) * Math.cos(phi_h) - v_rx)));
+                                (v_note * Math.cos(phi_v) * Math.cos(phi_h) - v_rx));
                 // also here
                 double v_shoot = v_note * Math.sin(phi_v) / Math.sin(theta_v);
-                // theta_h is relative to the horizontal, so
-                // drive.setAlignAngle would switch from theta_h to pi/2-theta_h
-                // depending on if it's relative to the horizontal or the vertical.
-                // and I'm kinda sure it is relative to vertical, so...
-                theta_h = Math.PI / 2 - theta_h;
-                horiz_angle = theta_h;
+                horiz_angle = theta_h; // very unlikely, but may need to change to pi/2-theta_h
                 vert_angle = theta_v;
                 exit_vel = v_shoot;
                 System.err.println(horiz_angle);
@@ -137,7 +133,9 @@ public class Shoot extends Command {
                 // Drivetrain angle is relative to positive x (toward red side)
 
                 // Sets the angle to align to for the drivetrain, uses driveHeading in DefaultDriveCommand
-                drive.setAlignAngle(Math.PI + theta_h);
+                // drive.setAlignAngle(Math.PI + theta_h); // would only pause rotational
+                // use driveheading with x, y speed (keep same), angle;
+                drive.driveHeading(v_rx, v_ry, Math.PI+theta_h, true);
                 // Set the outtake velocity
                 shooter.setTargetVelocity(v_shoot);
 
