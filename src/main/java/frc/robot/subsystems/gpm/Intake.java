@@ -166,7 +166,7 @@ public class Intake extends SubsystemBase {
         LogManager.add("Intake/motorVolts", () -> motor.get() * Constants.ROBOT_VOLTAGE);
         LogManager.add("Intake/centeringMotorVolts", () -> centeringMotor.get() * Constants.ROBOT_VOLTAGE);
 
-        LogManager.add("Intake/motorRPM", () -> motorEncoder.getVelocity());
-        LogManager.add("Intake/centeringMotorRPM", () -> centeringMotorEncoder.getVelocity());
+        LogManager.add("Intake/motorRPM", () -> motorEncoder.getVelocity(), Duration.ofSeconds(1));
+        LogManager.add("Intake/centeringMotorRPM", () -> centeringMotorEncoder.getVelocity(), Duration.ofSeconds(1));
     }
 }
