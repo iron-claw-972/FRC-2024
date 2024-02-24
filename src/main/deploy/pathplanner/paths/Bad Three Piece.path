@@ -108,7 +108,13 @@
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.0,
+      "rotationDegrees": -60.0,
+      "rotateFast": true
+    }
+  ],
   "constraintZones": [
     {
       "name": "Outtake 1",

@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.constants.AutoConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
@@ -163,6 +164,7 @@ public class RobotContainer {
 
   public void registerCommands() {
     NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index, arm).withTimeout(1));
+    NamedCommands.registerCommand("Stop", new WaitCommand(2)); // to represent stopping for shooting
   }
 
   public static BooleanSupplier getAllianceColorBooleanSupplier() {
