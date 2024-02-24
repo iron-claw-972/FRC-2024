@@ -392,19 +392,17 @@ public class Drivetrain extends SubsystemBase {
     }
 
     private void setupLogs() {
-        var speeds = getChassisSpeeds();
-        LogManager.addDouble("Drivetrain/Speed/X", speeds.vxMetersPerSecond);
-        LogManager.addDouble("Drdrivetrain/Speed/Y", speeds.vyMetersPerSecond);
-        LogManager.addDouble("Drivetrain/Speed/Rot", speeds.omegaRadiansPerSecond);
+        LogManager.add("Drivetrain/Speed/X", () -> getChassisSpeeds().vxMetersPerSecond);
+        LogManager.add("Drdrivetrain/Speed/Y", () -> getChassisSpeeds().vyMetersPerSecond);
+        LogManager.add("Drivetrain/Speed/Rot", () -> getChassisSpeeds().omegaRadiansPerSecond);
 
-        double[] pose = {
+        LogManager.add("Drivetrain/Pose2d", () -> new Double[]{
                 getPose().getX(),
                 getPose().getY(),
                 getPose().getRotation().getRadians()
-        };
-        LogManager.addDoubleArray("Drivetrain/Pose2d", pose);
+        });
 
-        double[] actualStates = {
+        LogManager.add("Drivetrain/States/Actual", () -> new Double[]{
                 modules[0].getAngle().getRadians(),
                 modules[0].getState().speedMetersPerSecond,
                 modules[1].getAngle().getRadians(),
@@ -413,10 +411,9 @@ public class Drivetrain extends SubsystemBase {
                 modules[2].getState().speedMetersPerSecond,
                 modules[3].getAngle().getRadians(),
                 modules[3].getState().speedMetersPerSecond
-        };
-        LogManager.addDoubleArray("Drivetrain/States/Actual", actualStates);
+        });
 
-        double[] desiredStates = {
+        LogManager.add("Drivetrain/States/Desired", () -> new Double[]{
                 modules[0].getDesiredAngle().getRadians(),
                 modules[0].getDesiredVelocity(),
                 modules[1].getDesiredAngle().getRadians(),
@@ -425,7 +422,6 @@ public class Drivetrain extends SubsystemBase {
                 modules[2].getDesiredVelocity(),
                 modules[3].getDesiredAngle().getRadians(),
                 modules[3].getDesiredVelocity()
-        };
-        LogManager.addDoubleArray("Drivetrain/States/Desired", desiredStates);
+        });
     }
 }
