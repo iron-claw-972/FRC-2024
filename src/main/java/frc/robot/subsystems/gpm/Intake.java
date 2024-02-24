@@ -1,6 +1,5 @@
 package frc.robot.subsystems.gpm;
 
-import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
@@ -13,9 +12,9 @@ import edu.wpi.first.wpilibj.simulation.DIOSim;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.gpm.IntakeNote;
 import frc.robot.constants.IntakeConstants;
-import lib.controllers.GameController.Button;
+import edu.wpi.first.wpilibj.Timer;
+
 
 public class Intake extends SubsystemBase {
 
@@ -24,6 +23,7 @@ public class Intake extends SubsystemBase {
         INTAKE(.8,.3),
         PickedUpNote(.8,.3),
         Wait(.8,.3),
+        Pause (0,0),
         ReverseMotors(-.8,-.3);
 
         private double power;
@@ -44,9 +44,8 @@ public class Intake extends SubsystemBase {
     }
 
     /** Intake motor is a Vortex*/
-    // private final CANSparkFlex motor = new CANSparkFlex(IntakeConstants.MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);***
+    private final CANSparkFlex motor = new CANSparkFlex(IntakeConstants.MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
 
-    private final TalonFX motor = new TalonFX(41);
     // change the motor from neo550 to whatever it actually is
     private static final DCMotor dcMotor = DCMotor.getNeoVortex(1);
 
@@ -81,9 +80,7 @@ public class Intake extends SubsystemBase {
 
     private Mode mode;
 
-    private int hasNoteCounter;
-    private int waitTimeCounter;
-    private int noteWaitTime = 50; //50*20 = 1000 = 1 sec
+    private Timer waitTimer = new Timer();
 
     public Intake() {
         // set the motor parameters
@@ -106,7 +103,7 @@ public class Intake extends SubsystemBase {
             centeringFlywheelSim = new FlywheelSim(dcMotorCentering ,  1.0, MOI_CENTERING_TOTAL);
         }
 
-        
+        waitTimer.start();
 
         publish();
     }
@@ -126,6 +123,9 @@ public class Intake extends SubsystemBase {
         // set the motor powers to be the value appropriate for this mode
         motor.set(mode.power);
         centeringMotor.set(mode.centeringPower);
+
+        // restart the timer
+        waitTimer.reset();
     }
 
     public boolean hasNote() {
@@ -146,30 +146,33 @@ public class Intake extends SubsystemBase {
                 // motors are spinning and we are waiting to pick up a note
                 if (hasNote()){
                     setMode(Mode.PickedUpNote);
-                    hasNoteCounter = 0;
                 }
                 break;
 
             case PickedUpNote:
                 if (!hasNote()) {
                     setMode(Mode.Wait);
-                    waitTimeCounter = 0;
-                }
-//
-                if (hasNoteCounter++ > noteWaitTime) {
-                    setMode(Mode.ReverseMotors);
+                } else if (waitTimer.hasElapsed(2)) {
+                    setMode(Mode.Pause);
                 } 
+                break;
+            
+            case Pause:
+                if (waitTimer.hasElapsed(.2)) {
+                    setMode(Mode.ReverseMotors);
+                }
                 break;
 
             case ReverseMotors:
-                if(!hasNote()){
+                if (!hasNote()){
                     setMode(Mode.Wait);
-                    waitTimeCounter = 0;
+                } else if (waitTimer.hasElapsed(5)) {
+                    setMode(Mode.Wait);
                 }
                 break;
 
             case Wait:
-                if (waitTimeCounter++ > 5) { //100ms / 20 ms = 5
+                if (waitTimer.hasElapsed(0.1)) {
                     setMode(Mode.DISABLED);
                 }
                 break;
