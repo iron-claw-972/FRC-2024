@@ -11,13 +11,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.ShooterSysIDCommand;
 import frc.robot.constants.AutoConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
 import frc.robot.controls.Operater;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.util.DetectedObject;
 import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
 import frc.robot.subsystems.gpm.Shooter;
@@ -63,17 +63,25 @@ public class RobotContainer {
       case TestBed1:
         index = new StorageIndex();
         shooter = new Shooter();
+        vision = new Vision(VisionConstants.CAMERAS);
+        drive = new Drivetrain(vision);
+        new ShuffleBoardManager(drive, vision, shooter);
         // add some motor rpm
         SmartDashboard.setDefaultNumber("RPM top", 1500.0);
         SmartDashboard.setDefaultNumber("RPM bottom", 1500.0);
         // add shooter commands
         SmartDashboard.putData("shoot",
-            new InstantCommand(() -> shooter.setTargetRPM(
+            new InstantCommand(() -> {shooter.setTargetRPM(
                 SmartDashboard.getNumber("RPM top", 1500.0),
-                SmartDashboard.getNumber("RPM bottom", 1500.0))));
-        SmartDashboard.putData("shoot off", new InstantCommand(() -> shooter.setTargetRPM(0)));
+                SmartDashboard.getNumber("RPM bottom", 1500.0));
+                index.runIndex(0.5);
+              }));  
+        SmartDashboard.putData("shoot off", new InstantCommand(() -> {
+          shooter.setTargetRPM(0);
+          index.runIndex(0);
+        }));
+        SmartDashboard.putData(new ShooterSysIDCommand(shooter));
         break;
-
       case TestBed2:
         intake = new Intake();
         index = new StorageIndex();
@@ -88,7 +96,9 @@ public class RobotContainer {
         shooter = new Shooter();
         driver = new GameControllerDriverConfig(drive, vision);
         operater = new Operater(intake, shooter);
-        SignalLogger.start();
+        if (Robot.isReal()){
+          SignalLogger.start();
+        }
 
         driver.configureControls();
         operater.configureControls();

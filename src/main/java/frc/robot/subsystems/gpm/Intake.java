@@ -1,6 +1,9 @@
 package frc.robot.subsystems.gpm;
 
 import com.revrobotics.CANSparkBase.IdleMode;
+
+import java.util.function.Consumer;
+
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;

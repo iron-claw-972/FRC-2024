@@ -14,6 +14,7 @@ import frc.robot.util.MathUtils;
 import lib.controllers.GameController;
 import lib.controllers.GameController.Axis;
 import lib.controllers.GameController.Button;
+import lib.controllers.GameController.RumbleStatus;
 
 /** Add your docs here. */
 public class Operater{
@@ -32,6 +33,5 @@ public class Operater{
         kDriver.get(Button.X).onFalse(new InstantCommand(()->intake.setMode(Mode.DISABLED)));
         kDriver.get(Button.B).onTrue(new InstantCommand(()->intake.setMode(Mode.REVERSE)));
         kDriver.get(Button.B).onFalse(new InstantCommand(()->intake.setMode(Mode.DISABLED)));
-        kDriver.get(Button.Y).onTrue(new ShooterSysIDCommand(shooter));
     }
 }

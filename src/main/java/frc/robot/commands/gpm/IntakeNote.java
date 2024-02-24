@@ -1,5 +1,7 @@
 package frc.robot.commands.gpm;
 
+import java.util.function.Consumer;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.gpm.Intake;
 import frc.robot.subsystems.gpm.StorageIndex;
@@ -27,7 +29,6 @@ public class IntakeNote extends Command{
 
     @Override
     public void execute(){
-
     }
 
     @Override

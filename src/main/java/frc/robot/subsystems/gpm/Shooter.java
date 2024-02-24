@@ -26,13 +26,20 @@ public class Shooter extends SubsystemBase {
 			.radiansPerSecondToRotationsPerMinute(Shooter.gearbox.freeSpeedRadPerSec);
 
 	// PID constants. PID system measures RPM and outputs motor power [-1,1]
-	private static final double P = 0.00005;
-	private static final double I = 0.0;
-	private static final double D = 0.0;
+	private static final double RightP = 0.16572;
+	private static final double RightI = 0.0;
+	private static final double RightD = 0.0;
+	private static final double LeftP = 0.11054;
+	private static final double LeftI = 0.0;
+	private static final double LeftD = 0.0;
 
 	// FeedForward constants
-	private static final double S = 0;
-	private static final double V = 1.0 / rpmFreeSpeed;
+	private static final double RightS = -3.9311;
+	private static final double RightV = 0.17083;
+	private static final double RightA = 0.46242;
+	private static final double LeftS = -6.9956;
+	private static final double LeftV = 0.14629;
+	private static final double LeftA = 0.86883;
 
 	/**
 	 * Tolerance in RPM.
@@ -51,7 +58,7 @@ public class Shooter extends SubsystemBase {
 	private final CANSparkFlex leftMotor = new CANSparkFlex(ShooterConstants.LEFT_MOTOR_ID, MotorType.kBrushless);
 	private final RelativeEncoder leftMotorEncoder = leftMotor.getEncoder();
 	/** PID controller uses RPM as input and outputs motor power */
-	private final PIDController leftPID = new PIDController(P, I, D);
+	private final PIDController leftPID = new PIDController(LeftP, LeftI, LeftD);
 	private FlywheelSim leftFlywheelSim;
 	private double leftMotorSpeedSim;
 	private double leftPower = 0.0;
@@ -60,21 +67,22 @@ public class Shooter extends SubsystemBase {
 	private final CANSparkFlex rightMotor = new CANSparkFlex(ShooterConstants.RIGHT_MOTOR_ID, MotorType.kBrushless);
 	private final RelativeEncoder rightMotorEncoder = rightMotor.getEncoder();
 	/** PID controller uses RPM as input and outputs motor power */
-	private final PIDController rightPID = new PIDController(P, I, D);
+	private final PIDController rightPID = new PIDController(RightP, RightI, RightD);
 	private FlywheelSim rightFlywheelSim;
 	private double rightMotorSpeedSim;
 	private double rightPower = 0.0;
 
 	// TODO: TUNE THIS
-	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(S, V);
+	private final SimpleMotorFeedforward Leftfeedforward = new SimpleMotorFeedforward(LeftS, LeftV,LeftA);
+	private final SimpleMotorFeedforward Rightfeedforward = new SimpleMotorFeedforward(RightS, RightV,RightA);
 
 	public Shooter() {
 		// set the RPM tolerance of the PID controllers
 		leftPID.setTolerance(TOLERANCE);
 		rightPID.setTolerance(TOLERANCE);
 		// invert the right motor so +power sends the note out
-		rightMotor.setInverted(true);
-
+		rightMotor.setInverted(false);
+		leftMotor.setInverted(true);
 		// are we simulating?
 		if (RobotBase.isSimulation()) {
 			leftFlywheelSim = new FlywheelSim(gearbox, 1.0, MOI_SHAFT);
@@ -90,8 +98,8 @@ public class Shooter extends SubsystemBase {
 
 		// TODO: having problems: a set and get do not match, so keep powers around for
 		// simulation
-		leftPower = leftPID.calculate(leftSpeed) + feedforward.calculate(leftPID.getSetpoint());
-		rightPower = rightPID.calculate(rightSpeed) + feedforward.calculate(rightPID.getSetpoint());
+		leftPower = leftPID.calculate(leftSpeed) + Leftfeedforward.calculate(leftPID.getSetpoint());
+		rightPower = rightPID.calculate(rightSpeed) + Rightfeedforward.calculate(rightPID.getSetpoint());
 
 		// set motor powers
 		leftMotor.set(leftPower);
@@ -316,5 +324,23 @@ public class Shooter extends SubsystemBase {
 	}
 	public Measure<Voltage> getRightShooterVoltage(){
 		return edu.wpi.first.units.Units.Volts.of(rightMotor.getBusVoltage() * rightMotor.getAppliedOutput());
+	}
+	public void setRightp(double p){
+		rightPID.setP(p);
+	}
+		public void setRighti(double p){
+		rightPID.setI(p);
+	}
+		public void setRightd(double p){
+		rightPID.setD(p);
+	}
+		public void setLeftp(double p){
+		leftPID.setP(p);
+	}
+		public void setLefti(double p){
+		leftPID.setI(p);
+	}
+		public void setLeftd(double p){
+		leftPID.setD(p);
 	}
 }
