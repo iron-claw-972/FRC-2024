@@ -25,10 +25,10 @@ public class VisionConstants {
   /**
    * If April tag vision is enabled on the robot
    */
-  public static final boolean ENABLED = false;
+  public static final boolean ENABLED = true;
 
   // If odometry should be updated using vision during auto
-  public static final boolean ENABLED_AUTO = false;
+  public static final boolean ENABLED_AUTO = true;
 
   // If odometry should be updated using vision while running the GoToPose and GoToPosePID commands in teleop
   public static final boolean ENABLED_GO_TO_POSE = true;
