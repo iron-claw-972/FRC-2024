@@ -1,5 +1,6 @@
 package frc.robot.constants;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.util.Units;
 
@@ -10,7 +11,8 @@ public class ArmConstants {
             0, 0, 0
     };
     // TODO use real encoder id
-    public static final int ENCODER_ID = 0;
+    //set to 5 to prevent error described by Johann
+    public static final int ENCODER_ID = 5;
 
     public static final double S = 0;
     public static final double V = 0;
@@ -48,4 +50,5 @@ public class ArmConstants {
 
     public static final boolean inverted = false;
 
+    public static CurrentLimitsConfigs currentConfig = new CurrentLimitsConfigs().withSupplyCurrentLimit(40);
 }
