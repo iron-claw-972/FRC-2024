@@ -1,14 +1,10 @@
 package frc.robot.subsystems.gpm;
 
 import com.revrobotics.CANSparkBase.IdleMode;
-
-import java.time.Duration;
-
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -19,6 +15,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.IntakeConstants;
 import frc.robot.util.LogManager;
+
+import java.time.Duration;
 
 public class Intake extends SubsystemBase {
     // Current limits -- not used
@@ -111,6 +109,7 @@ public class Intake extends SubsystemBase {
         }
 
         publish();
+
         if (Constants.DO_LOGGING) {
             setupLogs();
         }
