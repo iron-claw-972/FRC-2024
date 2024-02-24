@@ -41,6 +41,7 @@ public class Arm extends SubsystemBase {
     public Arm() {
         motor.setNeutralMode(ArmConstants.neutralMode);
         motor.setInverted(ArmConstants.inverted);
+        motor.getConfigurator().apply(ArmConstants.currentConfig);
 
         // setting the PID tolerance
         pid.setTolerance(ArmConstants.TOLERANCE);
@@ -55,6 +56,7 @@ public class Arm extends SubsystemBase {
             slaves[i].setControl(new Follower(motor.getDeviceID(), false));
             slaves[i].setNeutralMode(ArmConstants.neutralMode);
             slaves[i].setInverted(ArmConstants.inverted);
+            slaves[i].getConfigurator().apply(ArmConstants.currentConfig);
         }
 
         if (RobotBase.isSimulation()) {
