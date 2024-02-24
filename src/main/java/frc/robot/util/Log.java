@@ -90,6 +90,6 @@ public class Log<T> {
     }
 
     private boolean isDoubleArray() {
-        return value.getClass() == Double[].class || value.getClass() == double[].class;
+        return value.getClass() == Double[].class;
     }
 }
