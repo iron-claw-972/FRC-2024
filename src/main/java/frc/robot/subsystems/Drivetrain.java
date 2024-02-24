@@ -26,6 +26,7 @@ import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
 import frc.robot.subsystems.module.Module;
 import frc.robot.subsystems.module.ModuleSim;
+import frc.robot.util.LogManager;
 import frc.robot.util.Vision;
 
 import java.util.Arrays;
@@ -118,6 +119,7 @@ public class Drivetrain extends SubsystemBase {
         rotationController.enableContinuousInput(-Math.PI, Math.PI);
         rotationController.setTolerance(Units.degreesToRadians(0.25), Units.degreesToRadians(0.25));
 
+        setupLogs();
     }
 
     @Override
@@ -387,5 +389,43 @@ public class Drivetrain extends SubsystemBase {
     }
     public PIDController getRotationController() {
         return rotationController;
+    }
+
+    private void setupLogs() {
+        var speeds = getChassisSpeeds();
+        LogManager.addDouble("Drivetrain/Speed/X", speeds.vxMetersPerSecond);
+        LogManager.addDouble("Drdrivetrain/Speed/Y", speeds.vyMetersPerSecond);
+        LogManager.addDouble("Drivetrain/Speed/Rot", speeds.omegaRadiansPerSecond);
+
+        double[] pose = {
+                getPose().getX(),
+                getPose().getY(),
+                getPose().getRotation().getRadians()
+        };
+        LogManager.addDoubleArray("Drivetrain/Pose2d", pose);
+
+        double[] actualStates = {
+                modules[0].getAngle().getRadians(),
+                modules[0].getState().speedMetersPerSecond,
+                modules[1].getAngle().getRadians(),
+                modules[1].getState().speedMetersPerSecond,
+                modules[2].getAngle().getRadians(),
+                modules[2].getState().speedMetersPerSecond,
+                modules[3].getAngle().getRadians(),
+                modules[3].getState().speedMetersPerSecond
+        };
+        LogManager.addDoubleArray("Drivetrain/States/Actual", actualStates);
+
+        double[] desiredStates = {
+                modules[0].getDesiredAngle().getRadians(),
+                modules[0].getDesiredVelocity(),
+                modules[1].getDesiredAngle().getRadians(),
+                modules[1].getDesiredVelocity(),
+                modules[2].getDesiredAngle().getRadians(),
+                modules[2].getDesiredVelocity(),
+                modules[3].getDesiredAngle().getRadians(),
+                modules[3].getDesiredVelocity()
+        };
+        LogManager.addDoubleArray("Drivetrain/States/Desired", desiredStates);
     }
 }

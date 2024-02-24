@@ -1,18 +1,14 @@
 package frc.robot.util;
 
+import edu.wpi.first.util.datalog.*;
+import edu.wpi.first.wpilibj.DataLogManager;
+import frc.robot.constants.Constants;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.IntSupplier;
-
-import edu.wpi.first.util.datalog.BooleanLogEntry;
-import edu.wpi.first.util.datalog.DataLog;
-import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
-import edu.wpi.first.util.datalog.DoubleLogEntry;
-import edu.wpi.first.util.datalog.IntegerLogEntry;
-import edu.wpi.first.util.datalog.StringLogEntry;
-import edu.wpi.first.wpilibj.DataLogManager;
 
 /**
  * Utilty class for logging data to the DataLogManager.
@@ -170,6 +166,7 @@ public class LogManager {
    * Logs all the values that have been collected. Should be called periodically. 
    */
   public static void log() {
+    if (!Constants.DO_LOGGING) return;
     for (int i = 0; i < doubleLogs.size(); i++) {
       doubleLogs.get(i).append(doubleValues.get(i).getAsDouble());
     }
