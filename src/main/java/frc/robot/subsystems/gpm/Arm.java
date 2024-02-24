@@ -21,48 +21,99 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ArmConstants;
 
+/**
+ * Subsystem that controls the arm.
+ * <p>
+ * The indexer and shooter are at the end of the arm.
+ */
 public class Arm extends SubsystemBase {
 
-    /** the master motor */
-    private final TalonFX motor = new TalonFX(ArmConstants.MOTOR_ID);
-    /** the slave motors */
-    private final TalonFX[] slaves = new TalonFX[ArmConstants.SLAVE_IDS.length];
+    /**
+     * The motors are stored in an array.
+     * <p>
+     * The first entry is the master motor.
+     * <p>
+     * The first set of entries are the left side motors, and the second set are the right side.
+     */
+    private final TalonFX[] motors = new TalonFX[ArmConstants.MOTOR_IDS.length];
+    // DCMotor model is 4 Kraken X60
+    private static final DCMotor motorModel = DCMotor.getKrakenX60(ArmConstants.MOTOR_IDS.length);
+
+    /**
+     * REV absolute encoder.
+     * <p>
+     *  It is mounted on the right hand side. CCW rotation is arm raises.
+     */
     private final DutyCycleEncoder encoder = new DutyCycleEncoder(ArmConstants.ENCODER_ID);
-    private final PIDController pid = new PIDController(ArmConstants.P, ArmConstants.I, ArmConstants.D);
-    private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(ArmConstants.S, ArmConstants.V);
-
-    private SingleJointedArmSim simulation;
+    /** this instance sets the REV absolute encoder value during simulations */
     private DutyCycleEncoderSim encoderSim;
+    /** REV encoder offset in radians */
+    private static final double OFFSET = 0;
+    /** REV encoder scale factor */
+    private static final double DISTANCE_PER_ROTATION = 2 * Math.PI;
 
+
+    // Motor PID control
+    private static final double TOLERANCE = Units.degreesToRadians(1.0);
+    private static final double P = 5;
+    private static final double I = 0;
+    private static final double D = 0;
+    private final PIDController pid = new PIDController(P, I, D);
+
+    // Motor feedforward control
+    public static final double S = 0;
+    public static final double V = 0;
+    // TODO: simpleMotorFeedforward does not do gravity!
+    private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(S, V);
+
+    /** arm simulator */
+    private SingleJointedArmSim simulation;
+
+    // Mechanism display
     private Mechanism2d wristDisplay = new Mechanism2d(90, 90);
     private MechanismRoot2d pivot = wristDisplay.getRoot("ArmPivot", 45, 45);
-    private MechanismLigament2d moving;
+    private MechanismLigament2d moving = pivot.append(
+        new MechanismLigament2d(
+            "Moving",
+            30,
+            Units.radiansToDegrees(ArmConstants.START_ANGLE_RADS),
+            6,
+            new Color8Bit(Color.kYellow)));
 
     public Arm() {
-        motor.setNeutralMode(ArmConstants.neutralMode);
-        motor.setInverted(ArmConstants.inverted);
-        motor.getConfigurator().apply(ArmConstants.currentConfig);
+        // set the PID tolerance
+        pid.setTolerance(TOLERANCE);
 
-        // setting the PID tolerance
-        pid.setTolerance(ArmConstants.TOLERANCE);
+        // set the PID initial position
+        // TODO: figure this out some more.
+        pid.setSetpoint(ArmConstants.START_ANGLE_RADS);
 
-        // encoder reports arm angle in radians
-        encoder.setDistancePerRotation(ArmConstants.DISTANCE_PER_ROTATION);
-        encoder.setPositionOffset(ArmConstants.OFFSET);
-        encoder.setDutyCycleRange(ArmConstants.Duty_Cycle_Min, ArmConstants.Duty_Cycle_Max);
+        // make the encoder report arm angle in radians
+        encoder.setDistancePerRotation(DISTANCE_PER_ROTATION);
+        encoder.setPositionOffset(OFFSET);
+   
+        // consider each of the motors
+        for (int i = 0; i < motors.length; i++) {
+            // create the motor
+            motors[i] = new TalonFX(ArmConstants.MOTOR_IDS[i]);
 
-        for (int i = 0; i < slaves.length; i++) {
-            slaves[i] = new TalonFX(ArmConstants.SLAVE_IDS[i]);
-            slaves[i].setControl(new Follower(motor.getDeviceID(), false));
-            slaves[i].setNeutralMode(ArmConstants.neutralMode);
-            slaves[i].setInverted(ArmConstants.inverted);
-            slaves[i].getConfigurator().apply(ArmConstants.currentConfig);
+            // common configuration for each motor
+            // TODO: should these be sent only to the master after the slaves are configured?
+            motors[i].setNeutralMode(ArmConstants.neutralMode);
+            motors[i].setInverted(ArmConstants.inverted);
+            motors[i].getConfigurator().apply(ArmConstants.currentConfig);
+
+            // i=0 is the master; the others are slaves
+            if (i > 0) {
+                // set the slave mode
+                // the master is MOTOR_IDS[0]
+                // invert master for ids 2 and 3
+                motors[i].setControl(new Follower(ArmConstants.MOTOR_IDS[0], (i >= motors.length / 2)));
+            }
         }
 
+        // possibly set up simulations
         if (RobotBase.isSimulation()) {
-            // DCMotor model is 4 Falcon 500s
-            DCMotor motorModel = DCMotor.getFalcon500(4);
-
             simulation = new SingleJointedArmSim(motorModel,
                     ArmConstants.GEARING,
                     ArmConstants.MOMENT_OF_INERTIA,
@@ -71,20 +122,16 @@ public class Arm extends SubsystemBase {
                     ArmConstants.MAX_ANGLE_RADS,
                     true,
                     ArmConstants.START_ANGLE_RADS);
-            moving = pivot.append(
-                    new MechanismLigament2d(
-                            "Moving",
-                            30,
-                            Units.radiansToDegrees(/* m_wristPhysicsSim */ simulation.getAngleRads()),
-                            6,
-                            new Color8Bit(Color.kYellow)));
+
             // encodersim allows us to set the encoder values
             encoderSim = new DutyCycleEncoderSim(encoder);
 
+            // put the display on the SmartDashboard
             SmartDashboard.putData("ArmSim", wristDisplay);
             SmartDashboard.putData(pid);
-
         }
+
+        // Add some test commands
         SmartDashboard.putData("Set Angle to 0.0", new InstantCommand(() -> setAngle(0.0)));
         SmartDashboard.putData("Set Angle to 1.0 Rad", new InstantCommand(() -> setAngle(1.0)));
     }
@@ -92,11 +139,14 @@ public class Arm extends SubsystemBase {
     @Override
     public void periodic() {
         // use the scaled distance (which is radians)
-        motor.set(
+        motors[0].set(
                 MathUtil.clamp(
                         pid.calculate(encoder.getDistance()) + feedforward.calculate(pid.getSetpoint()),
                         -1,
                         1));
+
+        // report the arm angle
+        SmartDashboard.putNumber("Arm angle", Units.radiansToDegrees(encoder.getDistance()));
     }
 
     @Override
@@ -104,30 +154,43 @@ public class Arm extends SubsystemBase {
         // Assuming the volts
         double voltsBattery = 12.8;
 
-        simulation.setInputVoltage(motor.get() * voltsBattery);
+        // set the simulator inputs
+        simulation.setInputVoltage(motors[0].get() * voltsBattery);
 
+        // run the simulator for 20 milliseconds
         simulation.update(0.02);
 
+        // set the arm angle in the display
         moving.setAngle(Units.radiansToDegrees(simulation.getAngleRads()));
+
         // update the DutyCycleEncoder
         encoderSim.setDistance(simulation.getAngleRads());
     }
 
     /**
      * Sets the angle of the wrist in radians.
+     * @param angle (in radians)
      */
     public void setAngle(double angle) {
+        // zero the integrator portion of the PID controller
         pid.reset();
+        // change the setpoint
+
         pid.setSetpoint(angle);
     }
 
     /**
      * Returns the angle of the wrist in radians.
+     * @returns arm angle in radians
      */
     public double getAngleRad() {
         return encoder.getDistance() / ArmConstants.GEARING;
     }
 
+    /**
+     * Whether the arm has reached its setpoint
+     * @return true when the setpoint is reached.
+     */
     public boolean atSetpoint() {
         return pid.atSetpoint();
     }

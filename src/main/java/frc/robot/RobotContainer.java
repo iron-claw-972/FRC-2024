@@ -1,6 +1,5 @@
 package frc.robot;
 
-import java.rmi.server.Operation;
 import java.util.function.BooleanSupplier;
 
 import com.ctre.phoenix6.SignalLogger;
@@ -85,6 +84,9 @@ public class RobotContainer {
       default:
       case SwerveCompetition:
         intake = new Intake();
+        arm = new Arm();
+        // break for testing arm
+        break;
 
       case SwerveTest:
         vision = new Vision(VisionConstants.CAMERAS);
