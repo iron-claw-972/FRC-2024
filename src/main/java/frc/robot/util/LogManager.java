@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 
 /**
  * Utilty class for logging data to the DataLogManager.
- * View logs using MechanicalAdvantage's advantage scope (https://github.com/Mechanical-Advantage/AdvantageScope)
+ * View logs using MechanicalAdvantage's advantage scope (<a href="https://github.com/Mechanical-Advantage/AdvantageScope">...</a>)
  */
 public class LogManager {
 
