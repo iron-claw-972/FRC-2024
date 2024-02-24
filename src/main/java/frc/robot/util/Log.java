@@ -42,7 +42,6 @@ public class Log<T> {
     public void update() {
         if (System.currentTimeMillis() - lastUpdate > delay.toMillis()) {
             value = supplier.get();
-            System.out.println("Updating " + name + " to " + value);
             lastUpdate = System.currentTimeMillis();
             if (isInteger()) {
                 ((IntegerLogEntry) logEntry).append((Integer) value);
