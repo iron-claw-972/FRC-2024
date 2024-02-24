@@ -85,7 +85,15 @@ public class Shoot extends Command {
                 double heading = driveYaw.getRadians() + Math.atan2(drive.getChassisSpeeds().vyMetersPerSecond, drive.getChassisSpeeds().vxMetersPerSecond);
                 v_rx = driveSpeed * Math.cos(heading);
                 v_ry = driveSpeed * Math.sin(heading);
-
+                System.err.println(displacement.getX()+" " +
+                                displacement.getY()+" " +
+                                displacement.getZ()+" " +
+                                        v_rx+" " +
+                                        v_ry+" "+
+                                        heading+" "+
+                                        drive.getChassisSpeeds().vxMetersPerSecond+" "+
+                                        drive.getChassisSpeeds().vyMetersPerSecond
+                );
                 // TODO: Figure out what v_note is empirically
                 double v_note = 10;
 
@@ -95,15 +103,18 @@ public class Shoot extends Command {
                                 + displacement.getY() * displacement.getY());
                 // height (sorry that it's called y)
                 double y = displacement.getZ();
-                System.err.println("dx " + displacement.getX()+" dy "+ displacement.getY());
                 // Basic vertical angle calculation (static robot)
                 double phi_v = Math.atan(Math.pow(v_note, 2) / 9.8 / x * (1 - Math.sqrt(1
                                 + 19.6 / Math.pow(v_note, 2) * (y - 4.9 * x * x / Math.pow(v_note, 2)))));
                 System.err.println("*pv " + phi_v);
                 // Angle to goal
                 double phi_h = Math.atan2(displacement.getY(), displacement.getX());
+                // flip angle
+                if (displacement.getX()>=0) phi_h += Math.PI;
                 System.err.println("*ph " + phi_h);
                 double theta_h = Math.atan((v_note * Math.cos(phi_v) * Math.sin(phi_h) - v_ry) / (v_note * Math.cos(phi_v) * Math.cos(phi_h) - v_rx));
+                // flip angle
+                if (displacement.getX()>=0) theta_h += Math.PI;
                 // random quirk that using -v_rx, -v_ry works instead of +v_rx, +v_ry
                 // theta_h conversion (i.e. pi-theta_h if necessary)
                 // if the mirrored angle is the same-ish direction??? logic may break at high

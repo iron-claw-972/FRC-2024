@@ -61,7 +61,7 @@ public class SWMTest {
 
 
     };
-    public final int NUM = 4; // num test cases
+    public final int NUM = 28; // num test cases
 
     @AfterEach
     public void cleanup() {
@@ -83,12 +83,15 @@ public class SWMTest {
             test_cases[idx][1],
             new Rotation2d()));
         sh.drive.driveHeading(test_cases[idx][3], test_cases[idx][4], 0, true);
+        System.err.println("vx expected " + test_cases[idx][3]);
+        System.err.println("vx actual " + sh.drive.getChassisSpeeds().vxMetersPerSecond);
 
         sh.execute();
         double vz = sh.exit_vel*Math.sin(sh.vert_angle);
-        double tx= Math.abs(sh.displacement.getX()/(sh.exit_vel*Math.cos(sh.vert_angle)*Math.sin(sh.horiz_angle)+sh.v_rx)),
-        ty = Math.abs(sh.displacement.getY()/(sh.exit_vel*Math.cos(sh.vert_angle)*Math.cos(sh.horiz_angle)+sh.v_ry)),
+        double tx= Math.abs(sh.displacement.getX()/(sh.exit_vel*Math.cos(sh.vert_angle)*Math.cos(sh.horiz_angle)+sh.v_rx)),
+        ty = Math.abs(sh.displacement.getY()/(sh.exit_vel*Math.cos(sh.vert_angle)*Math.sin(sh.horiz_angle)+sh.v_ry)),
         tz = (vz-Math.sqrt(vz*vz+19.6*sh.displacement.getZ()))/9.8;
+        if (tx-tz > .1) tz = (vz+Math.sqrt(vz*vz+19.6*sh.displacement.getZ()))/9.8;
         System.err.println(tx+", " + ty + ", " + tz+"vz"+vz);
         assertEquals(tx, ty, 0.001);
         assertEquals(tx, tz, 0.001);
