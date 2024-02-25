@@ -16,8 +16,7 @@ public class ArmConstants {
     public static final int[] MOTOR_IDS = new int[] {9, 11, 3, 58};
 
     // TODO: use real encoder id
-    //set to 5 to prevent error described by Johann
-    public static final int ENCODER_ID = 5;
+    public static final int ENCODER_ID = 3;
 
     // TODO: use the real gearing
     public static final double GEARING = 172.8;
@@ -27,12 +26,12 @@ public class ArmConstants {
     public static final double MOMENT_OF_INERTIA = 2.5;
     /** Arm length in meters */
     public static final double ARM_LENGTH = .5;
-    /** minimum arm angle in radians */
-    public static final double MIN_ANGLE_RADS = Units.degreesToRadians(-20.0);
+    /** minimum arm angle in radians -- temporarily zero */
+    public static final double MIN_ANGLE_RADS = Units.degreesToRadians(0.0);
     /** maximum arm angle in radians */
     public static final double MAX_ANGLE_RADS = Units.degreesToRadians(80.0);
     /** starting angle in radians */
-    public static final double START_ANGLE_RADS = Units.degreesToRadians(-20.0);
+    public static final double START_ANGLE_RADS = Units.degreesToRadians(0.0);
 
     public static final double intakeSetpoint = 0;
     public static final double stowedSetpoint = 0;

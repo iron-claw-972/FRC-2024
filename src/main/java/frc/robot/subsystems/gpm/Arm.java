@@ -60,15 +60,15 @@ public class Arm extends SubsystemBase {
     /** this instance sets the REV absolute encoder value during simulations */
     private DutyCycleEncoderSim encoderSim;
     /** REV encoder offset in radians. Need to find this value. */
-    private static final double OFFSET = 0;
+    private static final double OFFSET = 0.54;
     /** REV encoder scale factor. This is fixed. */
-    private static final double DISTANCE_PER_ROTATION = 2 * Math.PI;
+    private static final double DISTANCE_PER_ROTATION = -2 * Math.PI;
 
 
     // Motor PID control
     private static final double TOLERANCE = Units.degreesToRadians(1.0);
     // P = 5 worked during simulation simulation
-    private static final double P = 0.005;
+    private static final double P = 0.1;
     private static final double I = 0;
     private static final double D = 0;
     private final PIDController pid = new PIDController(P, I, D);
@@ -98,8 +98,7 @@ public class Arm extends SubsystemBase {
         pid.setTolerance(TOLERANCE);
 
         // set the PID initial position
-        // TODO: figure this out some more.
-        pid.setSetpoint(0 * ArmConstants.START_ANGLE_RADS);
+        pid.setSetpoint(ArmConstants.START_ANGLE_RADS);
 
         // make the encoder report arm angle in radians
         encoder.setDistancePerRotation(DISTANCE_PER_ROTATION);
@@ -120,7 +119,7 @@ public class Arm extends SubsystemBase {
         }
 
         // common configuration for each motor
-        // TODO: should these be sent only to the master after the slaves are configured?
+        // configure master after the slaves are configured so slaves will follow.
         // assuming following motors will also set these values
         motors[0].setNeutralMode(NeutralModeValue.Brake);
         motors[0].setInverted(false);
@@ -150,7 +149,8 @@ public class Arm extends SubsystemBase {
 
         // Add some test commands
         SmartDashboard.putData("Set Angle to 0.0", new InstantCommand(() -> setAngle(0.0)));
-        SmartDashboard.putData("Set Angle to 1.0 Rad", new InstantCommand(() -> setAngle(0.5)));
+        SmartDashboard.putData("Set Angle to 1.0 Rad", new InstantCommand(() -> setAngle(0.2)));
+        SmartDashboard.putData("arm pid", pid);
     }
 
     /**
@@ -159,10 +159,10 @@ public class Arm extends SubsystemBase {
      */
     double getRadians() {
         // absolute sensor is easy
-        // return encoder.getDistance();
+        return encoder.getDistance();
 
         // motor encoder is more difficult
-        return Units.rotationsToRadians(rotorPositionSignal.getValue() / ArmConstants.GEARING);
+        // return Units.rotationsToRadians(rotorPositionSignal.getValue() / ArmConstants.GEARING);
     }
 
     @Override
@@ -173,10 +173,10 @@ public class Arm extends SubsystemBase {
                         1);
 
         // use the scaled distance (which is radians)
-        motors[0].set(dutyCycle);
+        // motors[0].set(dutyCycle);
 
         // may want to do Phoenix 6 version:
-        // motors[0].setControl(m_request.withOutput(dutyCycle));
+        motors[0].setControl(m_request.withOutput(dutyCycle));
 
         // report the arm angle in rotations
         SmartDashboard.putNumber("Arm angle", Units.radiansToRotations(encoder.getDistance()));
@@ -185,8 +185,10 @@ public class Arm extends SubsystemBase {
         // Adding this had the desired effect in simulation.
         rotorPositionSignal.refresh();
 
+        // report dutycycle
+        SmartDashboard.putNumber("arm pow", dutyCycle);
         // report the rotor position. This should trigger an update so we get results faster than 4 times per second.)
-        SmartDashboard.putNumber("Rotor Signal", Units.radiansToDegrees(getRadians()));
+        SmartDashboard.putNumber("Rotor Signal", rotorPositionSignal.getValue());
         // check the latency
         SmartDashboard.putNumber("Rotor delay", rotorPositionSignal.getTimestamp().getLatency());
     }
@@ -226,7 +228,7 @@ public class Arm extends SubsystemBase {
      * @returns arm angle in radians
      */
     public double getAngleRad() {
-        return encoder.getDistance() / ArmConstants.GEARING;
+        return encoder.getDistance();
     }
 
     /**
