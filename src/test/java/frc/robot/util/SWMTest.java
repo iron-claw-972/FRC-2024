@@ -84,7 +84,7 @@ public class SWMTest {
             new Rotation2d()));
         sh.drive.driveHeading(test_cases[idx][3], test_cases[idx][4], 0, true);
         System.err.println("vx expected " + test_cases[idx][3]);
-        System.err.println("vx actual " + sh.drive.getChassisSpeeds().vxMetersPerSecond);
+        System.err.println("vx actual :( " + sh.drive.getChassisSpeeds().vxMetersPerSecond);
 
         sh.execute();
         double vz = sh.exit_vel*Math.sin(sh.vert_angle);
