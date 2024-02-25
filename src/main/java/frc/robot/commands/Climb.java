@@ -27,13 +27,13 @@ public class Climb extends SequentialCommandGroup {
         addCommands(
             new InstantCommand(()->getPoses(chain)),
             new ParallelCommandGroup(
-                new ArmToPos(arm, ArmConstants.climbSetpoint),
+                arm==null?new DoNothing():new ArmToPos(arm, ArmConstants.climbSetpoint),
                 new GoToPose(()->pose1, drive).until(
                     ()->drive.getPose().getTranslation().getDistance(pose1.getTranslation())<tolerance1)
             ),
             new GoToPose(()->pose2, drive).until(
                 ()->drive.getPose().getTranslation().getDistance(pose2.getTranslation())<tolerance2),
-            new ArmToPos(arm, ArmConstants.stowedSetpoint)
+            arm==null?new DoNothing():new ArmToPos(arm, ArmConstants.stowedSetpoint)
         );
     }
 
