@@ -115,7 +115,7 @@
       "name": "Note 2",
       "waypointRelativePos": 0.8,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
           "commands": [
             {
@@ -132,7 +132,7 @@
       "name": "Shoot",
       "waypointRelativePos": 1.5500000000000003,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
           "commands": [
             {
@@ -149,7 +149,7 @@
       "name": "Intake",
       "waypointRelativePos": 2.75,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
           "commands": [
             {
@@ -166,7 +166,7 @@
       "name": "Shoot",
       "waypointRelativePos": 4.0,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
           "commands": [
             {
@@ -192,7 +192,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Undeveloped",
   "previewStartingState": {
     "rotation": -56.0,
     "velocity": 0.0

@@ -30,13 +30,25 @@ public class AutoTab extends ShuffleBoardTabs {
         autoCommand.addOption("Example Path", new FollowPathCommand("Example Path",true, drive));
         autoCommand.addOption("7 Piece Auto Realistic", new FollowPathCommand("7 Piece Auto Realistic",true, drive));
         autoCommand.addOption("7 Piece Auto", new FollowPathCommand("7 Piece Auto",true, drive));       
-        autoCommand.addOption("Bottom 4 Piece 4 5 (No Shooting On The Move)", new FollowPathCommand("Bottom 4 Piece 4 5 (No Shooting On The Move)",true, drive));       
-        autoCommand.addOption("Dream Bottom 4 Piece 4 5", new FollowPathCommand("Dream Bottom 4 Piece 4 5",true, drive));
         autoCommand.addOption("Three Piece", new FollowPathCommand("Three Piece",true, drive));
         autoCommand.addOption("Test", new FollowPathCommand("Test",true, drive));
         autoCommand.addOption("Two Piece", new FollowPathCommand("Two Piece",true, drive));
         autoCommand.addOption("Sabotage Auto", new FollowPathCommand("Sabotage Auto",true, drive));
+        autoCommand.addOption("Three Piece (L)", new FollowPathCommand("Three Piece (L)",true, drive));
+        autoCommand.addOption("Two Piece (pos 2) [B]", new FollowPathCommand("Two Piece (pos 2) [B]",true, drive));
+        autoCommand.addOption("Two Piece (pos 4) [B]", new FollowPathCommand("Two Piece (pos 4) [B]",true, drive));
+        // Important Notes and To-Do's:
+        // Fix the starting angle for shooting for 2 piece pos 4, we have to do this for all of the autos, should be a quick fix
+        // Also have to add constraint zones for all autos near shooting point
+        // Check robot container.java for imporant note
 
+        //Replacement points, do not delete
+        // autoCommand.addOption("lol", new FollowPathCommand("lol",true, drive));
+        // autoCommand.addOption("lol", new FollowPathCommand("lol",true, drive));
+        // autoCommand.addOption("lol", new FollowPathCommand("lol",true, drive));
+        // autoCommand.addOption("lol", new FollowPathCommand("lol",true, drive));
+
+        
         tab.add(autoCommand);
     }
 

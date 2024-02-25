@@ -164,7 +164,9 @@ public class RobotContainer {
 
   public void registerCommands() {
     NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index, arm).withTimeout(1));
-    NamedCommands.registerCommand("Stop", new WaitCommand(2)); // to represent stopping for shooting
+    // NamedCommands.registerCommand("Stop", new WaitCommand(2)); // to represent stopping for shooting 
+    // Mehaan -- Consulted with Jerry, just going to use a constraint zone going at .1 which should be fine instead of stopping for the area in which we are supposed to shoot
+    
   }
 
   public static BooleanSupplier getAllianceColorBooleanSupplier() {
