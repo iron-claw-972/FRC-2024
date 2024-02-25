@@ -47,9 +47,9 @@ public class Arm extends SubsystemBase {
     private final DutyCycleEncoder encoder = new DutyCycleEncoder(ArmConstants.ENCODER_ID);
     /** this instance sets the REV absolute encoder value during simulations */
     private DutyCycleEncoderSim encoderSim;
-    /** REV encoder offset in radians */
+    /** REV encoder offset in radians. Need to find this value. */
     private static final double OFFSET = 0;
-    /** REV encoder scale factor */
+    /** REV encoder scale factor. This is fixed. */
     private static final double DISTANCE_PER_ROTATION = 2 * Math.PI;
 
 
@@ -145,8 +145,8 @@ public class Arm extends SubsystemBase {
                         -1,
                         1));
 
-        // report the arm angle
-        SmartDashboard.putNumber("Arm angle", Units.radiansToDegrees(encoder.getDistance()));
+        // report the arm angle in rotations
+        SmartDashboard.putNumber("Arm angle", Units.radiansToRotations(encoder.getDistance()));
     }
 
     @Override
