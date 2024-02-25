@@ -6,6 +6,7 @@ package frc.robot.constants.miscConstants;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
@@ -14,7 +15,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -97,6 +100,24 @@ public class VisionConstants {
     BLUE_PODIUM_POSE.getY(),
     new Rotation2d(Math.PI).minus(BLUE_PODIUM_POSE.getRotation())
   );
+
+  public enum CHAIN_POSES{
+    RED_LEFT(FieldConstants.APRIL_TAGS.get(10)),
+    RED_RIGHT(FieldConstants.APRIL_TAGS.get(11)),
+    RED_CENTER(FieldConstants.APRIL_TAGS.get(12)),
+    BLUE_CENTER(FieldConstants.APRIL_TAGS.get(13)),
+    BLUE_RIGHT(FieldConstants.APRIL_TAGS.get(14)),
+    BLUE_LEFT(FieldConstants.APRIL_TAGS.get(15));
+
+    private double dist1 = Units.inchesToMeters(40);
+    private double dist2 = Units.inchesToMeters(9);
+    public final Pose2d pose1;
+    public final Pose2d pose2;
+    private CHAIN_POSES(AprilTag tag){
+      pose1 = tag.pose.toPose2d().plus(new Transform2d(new Translation2d(dist1, tag.pose.toPose2d().getRotation().plus(new Rotation2d(Math.PI))), new Rotation2d()));
+      pose2 = tag.pose.toPose2d().plus(new Transform2d(new Translation2d(dist2, tag.pose.toPose2d().getRotation().plus(new Rotation2d(Math.PI))), new Rotation2d()));
+    }
+  }
 
   // The camera poses
   // TODO: Add these

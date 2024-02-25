@@ -78,19 +78,19 @@ public class RobotContainer {
       case TestBed2:
         intake = new Intake();
         index = new StorageIndex();
-        arm = new Arm();
         SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index, arm));
         break;
-
+        
       default:
       case SwerveCompetition:
+        arm = new Arm();
         intake = new Intake();
 
       case SwerveTest:
         vision = new Vision(VisionConstants.CAMERAS);
 
         drive = new Drivetrain(vision);
-        driver = new GameControllerDriverConfig(drive, vision);
+        driver = new GameControllerDriverConfig(drive, vision, arm);
         operator = new Operator(intake);
 
         // Detected objects need access to the drivetrain

@@ -2,10 +2,14 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.constants.ArmConstants;
+import frc.robot.constants.miscConstants.VisionConstants;
+import frc.robot.constants.miscConstants.VisionConstants.CHAIN_POSES;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Arm;
 
@@ -34,6 +38,23 @@ public class Climb extends SequentialCommandGroup {
     }
 
     private void getPoses(Chain chain){
-
+        boolean red = DriverStation.getAlliance().get() == Alliance.Red;
+        CHAIN_POSES poses = null;
+        switch(chain){
+            case LEFT:
+                poses = red?CHAIN_POSES.RED_LEFT:CHAIN_POSES.BLUE_LEFT;
+                break;
+            case CENTER:
+                poses = red?CHAIN_POSES.RED_CENTER:CHAIN_POSES.BLUE_CENTER;
+                break;
+            case RIGHT:
+                poses = red?CHAIN_POSES.RED_RIGHT:CHAIN_POSES.BLUE_RIGHT;
+                break;
+            default:
+                System.err.println("That chain doesn't exist");
+                return;
+        }
+        pose1 = poses.pose1;
+        pose2 = poses.pose2;
     }
 }
