@@ -70,7 +70,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Tested",
+  "folder": "Position & Angle Issues",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

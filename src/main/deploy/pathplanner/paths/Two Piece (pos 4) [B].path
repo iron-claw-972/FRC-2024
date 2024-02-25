@@ -48,22 +48,6 @@
     },
     {
       "anchor": {
-        "x": 3.531874047121017,
-        "y": 2.3106926973948965
-      },
-      "prevControl": {
-        "x": 3.1383150379917644,
-        "y": 2.4242193346437206
-      },
-      "nextControl": {
-        "x": 4.038861474397534,
-        "y": 2.164446324142055
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
         "x": 5.2380817350708355,
         "y": 1.7452067208172428
       },
@@ -112,16 +96,6 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Outtake",
-      "waypointRelativePos": 0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": []
-        }
-      }
-    },
-    {
       "name": "Intake 1",
       "waypointRelativePos": 0.8999999999999999,
       "command": {
@@ -150,7 +124,7 @@
     },
     {
       "name": "Intake 2",
-      "waypointRelativePos": 4.9,
+      "waypointRelativePos": 3.9000000000000004,
       "command": {
         "type": "parallel",
         "data": {
@@ -171,9 +145,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Autos",
+  "folder": "Dimensions wrong) Autos",
   "previewStartingState": {
-    "rotation": 34.62415507994892,
+    "rotation": -59.0,
     "velocity": 0
   },
   "useDefaultConstraints": false
