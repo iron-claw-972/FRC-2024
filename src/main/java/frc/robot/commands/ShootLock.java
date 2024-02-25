@@ -104,7 +104,7 @@ public class ShootLock extends Command {
                                 + 19.6 / Math.pow(v_note, 2) * (y - 4.9 * x * x / Math.pow(v_note, 2)))));
                 System.err.println("*pv " + phi_v);
                 // Angle to goal
-                double phi_h = Math.atan2(displacement.getY(), displacement.getX());
+                double phi_h = Math.atan(displacement.getY()/ displacement.getX());
                 // flip angle -- atan's range is (-pi/2, pi/2) so we flip it if we should be going left
                 if (displacement.getX()>=0) phi_h += Math.PI;
                 System.err.println("*ph " + phi_h);
