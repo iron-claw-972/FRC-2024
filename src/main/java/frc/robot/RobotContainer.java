@@ -83,7 +83,7 @@ public class RobotContainer {
 
       default:
       case SwerveCompetition:
-        intake = new Intake();
+        // intake = new Intake();
         arm = new Arm();
         // break for testing arm
         break;

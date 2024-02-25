@@ -4,6 +4,8 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -65,7 +67,8 @@ public class Arm extends SubsystemBase {
 
     // Motor PID control
     private static final double TOLERANCE = Units.degreesToRadians(1.0);
-    private static final double P = 5;
+    // P = 5 worked during simulation simulation
+    private static final double P = 0.005;
     private static final double I = 0;
     private static final double D = 0;
     private final PIDController pid = new PIDController(P, I, D);
@@ -96,7 +99,7 @@ public class Arm extends SubsystemBase {
 
         // set the PID initial position
         // TODO: figure this out some more.
-        pid.setSetpoint(ArmConstants.START_ANGLE_RADS);
+        pid.setSetpoint(0 * ArmConstants.START_ANGLE_RADS);
 
         // make the encoder report arm angle in radians
         encoder.setDistancePerRotation(DISTANCE_PER_ROTATION);
@@ -107,12 +110,6 @@ public class Arm extends SubsystemBase {
             // create the motor
             motors[i] = new TalonFX(ArmConstants.MOTOR_IDS[i]);
 
-            // common configuration for each motor
-            // TODO: should these be sent only to the master after the slaves are configured?
-            motors[i].setNeutralMode(ArmConstants.neutralMode);
-            motors[i].setInverted(ArmConstants.inverted);
-            motors[i].getConfigurator().apply(ArmConstants.currentConfig);
-
             // i=0 is the master; the others are slaves
             if (i > 0) {
                 // set the slave mode
@@ -121,6 +118,13 @@ public class Arm extends SubsystemBase {
                 motors[i].setControl(new Follower(ArmConstants.MOTOR_IDS[0], (i >= motors.length / 2)));
             }
         }
+
+        // common configuration for each motor
+        // TODO: should these be sent only to the master after the slaves are configured?
+        // assuming following motors will also set these values
+        motors[0].setNeutralMode(NeutralModeValue.Brake);
+        motors[0].setInverted(false);
+        motors[0].getConfigurator().apply(ArmConstants.currentConfig);
 
         // Phoenix v6 rotor position signal
         rotorPositionSignal = motors[0].getRotorPosition();
@@ -146,13 +150,25 @@ public class Arm extends SubsystemBase {
 
         // Add some test commands
         SmartDashboard.putData("Set Angle to 0.0", new InstantCommand(() -> setAngle(0.0)));
-        SmartDashboard.putData("Set Angle to 1.0 Rad", new InstantCommand(() -> setAngle(1.0)));
+        SmartDashboard.putData("Set Angle to 1.0 Rad", new InstantCommand(() -> setAngle(0.5)));
+    }
+
+    /**
+     * Get the arm angle using the absolute sensor or the motor encoder.
+     * @return
+     */
+    double getRadians() {
+        // absolute sensor is easy
+        // return encoder.getDistance();
+
+        // motor encoder is more difficult
+        return Units.rotationsToRadians(rotorPositionSignal.getValue() / ArmConstants.GEARING);
     }
 
     @Override
     public void periodic() {
         double dutyCycle = MathUtil.clamp(
-                        pid.calculate(encoder.getDistance()) + feedforward.calculate(pid.getSetpoint()),
+                        pid.calculate(getRadians()) + feedforward.calculate(pid.getSetpoint()),
                         -1,
                         1);
 
@@ -170,7 +186,7 @@ public class Arm extends SubsystemBase {
         rotorPositionSignal.refresh();
 
         // report the rotor position. This should trigger an update so we get results faster than 4 times per second.)
-        SmartDashboard.putNumber("Rotor Signal", rotorPositionSignal.getValue());
+        SmartDashboard.putNumber("Rotor Signal", Units.radiansToDegrees(getRadians()));
         // check the latency
         SmartDashboard.putNumber("Rotor delay", rotorPositionSignal.getTimestamp().getLatency());
     }

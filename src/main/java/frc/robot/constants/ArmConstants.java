@@ -41,10 +41,6 @@ public class ArmConstants {
     public static final double climbSetpoint = 0;
     public static final double ampSetpoint = 0;
 
-
-    public static final NeutralModeValue neutralMode = NeutralModeValue.Brake;
-
-    public static final boolean inverted = false;
-
-    public static CurrentLimitsConfigs currentConfig = new CurrentLimitsConfigs().withSupplyCurrentLimit(40);
+    // reduced 40 to 4 A. I snapped both chains.
+    public static CurrentLimitsConfigs currentConfig = new CurrentLimitsConfigs().withSupplyCurrentLimit(4);
 }
