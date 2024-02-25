@@ -1,5 +1,7 @@
 package frc.robot.subsystems.gpm;
 
+import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.MathUtil;
@@ -38,6 +40,14 @@ public class Arm extends SubsystemBase {
     private final TalonFX[] motors = new TalonFX[ArmConstants.MOTOR_IDS.length];
     // DCMotor model is 4 Kraken X60
     private static final DCMotor motorModel = DCMotor.getKrakenX60(ArmConstants.MOTOR_IDS.length);
+
+    // Encoder in the TalonFX....
+    //   check docs. Normal update is 4 Hz.
+    StatusSignal<Double> rotorPositionSignal;
+
+    // DutyCycle control
+    // TODO: change to voltage control
+    private final DutyCycleOut m_request = new DutyCycleOut(0);
 
     /**
      * REV absolute encoder.
@@ -112,6 +122,9 @@ public class Arm extends SubsystemBase {
             }
         }
 
+        // Phoenix v6 rotor position signal
+        rotorPositionSignal = motors[0].getRotorPosition();
+
         // possibly set up simulations
         if (RobotBase.isSimulation()) {
             simulation = new SingleJointedArmSim(motorModel,
@@ -138,15 +151,28 @@ public class Arm extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // use the scaled distance (which is radians)
-        motors[0].set(
-                MathUtil.clamp(
+        double dutyCycle = MathUtil.clamp(
                         pid.calculate(encoder.getDistance()) + feedforward.calculate(pid.getSetpoint()),
                         -1,
-                        1));
+                        1);
+
+        // use the scaled distance (which is radians)
+        motors[0].set(dutyCycle);
+
+        // may want to do Phoenix 6 version:
+        // motors[0].setControl(m_request.withOutput(dutyCycle));
 
         // report the arm angle in rotations
         SmartDashboard.putNumber("Arm angle", Units.radiansToRotations(encoder.getDistance()));
+
+        // this call should not be required, but add it anyway. Simulation is not updating.
+        // Adding this had the desired effect in simulation.
+        rotorPositionSignal.refresh();
+
+        // report the rotor position. This should trigger an update so we get results faster than 4 times per second.)
+        SmartDashboard.putNumber("Rotor Signal", rotorPositionSignal.getValue());
+        // check the latency
+        SmartDashboard.putNumber("Rotor delay", rotorPositionSignal.getTimestamp().getLatency());
     }
 
     @Override
