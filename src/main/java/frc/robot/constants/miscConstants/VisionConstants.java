@@ -34,12 +34,14 @@ public class VisionConstants {
   public static final boolean ENABLED_GO_TO_POSE = true;
 
   // If vision should use manual calculations
-  public static final boolean USE_MANUAL_CALCULATIONS = true;
+  public static final boolean USE_MANUAL_CALCULATIONS = false;
 
   // The number to multiply the distance to the April tag by
   // Only affects manual calculations
   // To find this, set it to 1 and measure the actual distance and the calculated distance
-  public static final double DISTANCE_SCALE = 1.05;
+  public static final double DISTANCE_SCALE = 1;
+  public static final double X_OFFSET_SCALE = 139.28/94.24;
+  public static final double Y_OFFSET_SCALE = 114/60.84;
 
   /*
    * The standard deviations to use for the vision
@@ -72,7 +74,7 @@ public class VisionConstants {
   public static final Pose2d BLUE_AMP_POSE = new Pose2d(
     FieldConstants.APRIL_TAGS.get(5).pose.getX(),
     FieldConstants.APRIL_TAGS.get(5).pose.getY() - DriveConstants.kRobotWidthWithBumpers/2,
-    new Rotation2d(Math.PI/2)
+    new Rotation2d(-Math.PI/2)
   );
   public static final Pose2d RED_AMP_POSE = new Pose2d(
     FieldConstants.APRIL_TAGS.get(4).pose.getX(),
@@ -88,7 +90,7 @@ public class VisionConstants {
   public static final Pose2d BLUE_PODIUM_POSE = new Pose2d(
     FieldConstants.APRIL_TAGS.get(13).pose.getX() - Units.inchesToMeters(82.75) - DriveConstants.kRobotWidthWithBumpers/2,
     FieldConstants.APRIL_TAGS.get(13).pose.getY(),
-    new Rotation2d(Math.PI)
+    new Rotation2d(0)
   );
   public static final Pose2d RED_PODIUM_POSE = new Pose2d(
     FieldConstants.APRIL_TAGS.get(12).pose.getX() + Units.inchesToMeters(82.75) + DriveConstants.kRobotWidthWithBumpers/2,
@@ -102,8 +104,8 @@ public class VisionConstants {
     new Pair<String, Transform3d>(
       "Camera1",
       new Transform3d(
-        new Translation3d(Units.inchesToMeters(-11), Units.inchesToMeters(-11), Units.inchesToMeters(8)),
-        new Rotation3d(0, Units.degreesToRadians(0), Math.PI)
+        new Translation3d(Units.inchesToMeters(-12.55), Units.inchesToMeters(-9.705), Units.inchesToMeters(9.5)),
+        new Rotation3d(0, Units.degreesToRadians(-50), Math.PI)
       )),
     new Pair<String, Transform3d>(
       "Camera2",
