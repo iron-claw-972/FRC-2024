@@ -3,7 +3,8 @@
   "robotLength": 0.911,
   "holonomicMode": true,
   "pathFolders": [
-    "Undeveloped",
+    "Autos",
+    "Tested",
     "Previous Stuff"
   ],
   "autoFolders": [],

@@ -70,7 +70,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Autos",
   "previewStartingState": {
     "rotation": -33.69006752597975,
     "velocity": 0

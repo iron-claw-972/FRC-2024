@@ -150,7 +150,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Autos",
   "previewStartingState": null,
   "useDefaultConstraints": false
 }
