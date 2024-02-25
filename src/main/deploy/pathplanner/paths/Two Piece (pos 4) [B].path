@@ -80,12 +80,12 @@
     },
     {
       "anchor": {
-        "x": 7.812017904320845,
-        "y": 0.779980657348488
+        "x": 7.831517420754557,
+        "y": 0.7507313826979205
       },
       "prevControl": {
-        "x": 7.709645443043856,
-        "y": 0.7775432177942736
+        "x": 7.729144959477568,
+        "y": 0.7482939431437061
       },
       "nextControl": null,
       "isLocked": false,
@@ -171,7 +171,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Autos",
   "previewStartingState": {
     "rotation": 34.62415507994892,
     "velocity": 0
