@@ -91,7 +91,7 @@ public class SWMTest {
         double tx= Math.abs(sh.displacement.getX()/(sh.exit_vel*Math.cos(sh.vert_angle)*Math.cos(sh.horiz_angle)+sh.v_rx)),
         ty = Math.abs(sh.displacement.getY()/(sh.exit_vel*Math.cos(sh.vert_angle)*Math.sin(sh.horiz_angle)+sh.v_ry)),
         tz = (vz-Math.sqrt(vz*vz+19.6*sh.displacement.getZ()))/9.8;
-        if (tx-tz > .1) tz = (vz+Math.sqrt(vz*vz+19.6*sh.displacement.getZ()))/9.8;
+        if (tx-tz > .01) tz = (vz+Math.sqrt(vz*vz+19.6*sh.displacement.getZ()))/9.8;
         System.err.println(tx+", " + ty + ", " + tz+"vz"+vz);
         assertEquals(tx, ty, 0.001);
         assertEquals(tx, tz, 0.001);

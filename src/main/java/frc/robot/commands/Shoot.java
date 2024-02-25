@@ -40,6 +40,8 @@ public class Shoot extends Command {
         // TODO: put in constants for other commands to use
         private final double REST_VEL = 4; // TODO: determine the fastest idle note-exit velocity that won't kill the
                                            // battery.
+        public static final double shooterHeight = ArmConstants.ARM_LENGTH*Math.sin(ArmConstants.standbySetpoint) + ArmConstants.PIVOT_HEIGHT;
+        public static final double shooterOffset = ArmConstants.PIVOT_X + ArmConstants.ARM_LENGTH * Math.cos(ArmConstants.standbySetpoint);
 
         public Shoot(Shooter shooter, Arm arm, Drivetrain drivetrain, StorageIndex index) {
                 this.shooter = shooter;
@@ -64,8 +66,6 @@ public class Shoot extends Command {
                 Pose3d speakerPose = DriverStation.getAlliance().isPresent() &&
                                 DriverStation.getAlliance().get() == Alliance.Red ?
                                 VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
-                double shooterHeight = ArmConstants.ARM_LENGTH*Math.sin(arm.getAngleRad()) + ArmConstants.PIVOT_HEIGHT;
-                double shooterOffset = ArmConstants.PIVOT_X + ArmConstants.ARM_LENGTH * Math.cos(arm.getAngleRad());
                 // shooterHeight and shooterOffset have an additional offset because the shooter is offset from the arm, right?
                 Rotation2d driveYaw = drive.getYaw();
                 // Set displacement to speaker
