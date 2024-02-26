@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.constants.ArmConstants;
-import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.miscConstants.VisionConstants.CHAIN_POSES;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Arm;
@@ -27,13 +26,13 @@ public class Climb extends SequentialCommandGroup {
         addCommands(
             new InstantCommand(()->getPoses(chain)),
             new ParallelCommandGroup(
-                arm==null?new DoNothing():new ArmToPos(arm, ArmConstants.climbSetpoint),
+                arm==null?new DoNothing():new ArmToPos(arm, ArmConstants.preClimbSetpoint),
                 new GoToPose(()->pose1, drive).until(
                     ()->drive.getPose().getTranslation().getDistance(pose1.getTranslation())<tolerance1)
             ),
             new GoToPose(()->pose2, drive).until(
                 ()->drive.getPose().getTranslation().getDistance(pose2.getTranslation())<tolerance2),
-            arm==null?new DoNothing():new ArmToPos(arm, ArmConstants.stowedSetpoint)
+            arm==null?new DoNothing():new ArmToPos(arm, ArmConstants.climbSetpoint)
         );
     }
 

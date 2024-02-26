@@ -36,7 +36,7 @@ public class ArmConstants {
     public static final double intakeSetpoint = 0;
     public static final double stowedSetpoint = 0;
     public static final double subwooferSetpoint = 0;
-    public static final double preClimbSetpoint = 0;
+    public static final double preClimbSetpoint = 2;
     public static final double climbSetpoint = 0;
     public static final double ampSetpoint = 0;
 

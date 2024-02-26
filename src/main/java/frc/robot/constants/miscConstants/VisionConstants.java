@@ -106,16 +106,16 @@ public class VisionConstants {
     RED_RIGHT(FieldConstants.APRIL_TAGS.get(11)),
     RED_CENTER(FieldConstants.APRIL_TAGS.get(12)),
     BLUE_CENTER(FieldConstants.APRIL_TAGS.get(13)),
-    BLUE_RIGHT(FieldConstants.APRIL_TAGS.get(14)),
-    BLUE_LEFT(FieldConstants.APRIL_TAGS.get(15));
+    BLUE_LEFT(FieldConstants.APRIL_TAGS.get(14)),
+    BLUE_RIGHT(FieldConstants.APRIL_TAGS.get(15));
 
-    private double dist1 = Units.inchesToMeters(40);
+    private double dist1 = Units.inchesToMeters(50);
     private double dist2 = Units.inchesToMeters(9);
     public final Pose2d pose1;
     public final Pose2d pose2;
     private CHAIN_POSES(AprilTag tag){
-      pose1 = tag.pose.toPose2d().plus(new Transform2d(new Translation2d(dist1, tag.pose.toPose2d().getRotation().plus(new Rotation2d(Math.PI))), new Rotation2d()));
-      pose2 = tag.pose.toPose2d().plus(new Transform2d(new Translation2d(dist2, tag.pose.toPose2d().getRotation().plus(new Rotation2d(Math.PI))), new Rotation2d()));
+      pose1 = tag.pose.toPose2d().plus(new Transform2d(new Translation2d(dist1, 0/*tag.pose.toPose2d().getRotation()*/), new Rotation2d(Math.PI)));
+      pose2 = tag.pose.toPose2d().plus(new Transform2d(new Translation2d(dist2, 0/*tag.pose.toPose2d().getRotation()*/), new Rotation2d(Math.PI)));
     }
   }
 
