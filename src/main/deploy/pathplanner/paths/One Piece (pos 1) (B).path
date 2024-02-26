@@ -3,29 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.9579378778710067,
-        "y": 6.980826883268969
+        "x": 0.7509152340242001,
+        "y": 6.876162812154685
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9579378778710068,
-        "y": 6.980826883268969
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 0.6339736895998008,
-        "y": 6.6
-      },
-      "prevControl": {
-        "x": -0.2489739032591165,
-        "y": 7.0694715627858855
-      },
-      "nextControl": {
-        "x": 1.36569836122482,
-        "y": 6.210935090717578
+        "x": 1.7509152340242,
+        "y": 6.876162812154685
       },
       "isLocked": false,
       "linkedName": null
@@ -55,7 +39,7 @@
   "eventMarkers": [
     {
       "name": "Outtake",
-      "waypointRelativePos": 1.0,
+      "waypointRelativePos": 0.5,
       "command": {
         "type": "sequential",
         "data": {
@@ -65,7 +49,7 @@
     },
     {
       "name": "Intake",
-      "waypointRelativePos": 1.95,
+      "waypointRelativePos": 1.0,
       "command": {
         "type": "sequential",
         "data": {
@@ -86,9 +70,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Position & Angle Issues",
+  "folder": null,
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 60.80251395393552,
     "velocity": 0
   },
   "useDefaultConstraints": true

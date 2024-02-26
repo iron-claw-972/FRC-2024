@@ -62,6 +62,9 @@
   },
   "reversed": false,
   "folder": "Autos",
-  "previewStartingState": null,
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
   "useDefaultConstraints": false
 }
