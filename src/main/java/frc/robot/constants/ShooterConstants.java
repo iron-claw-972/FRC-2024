@@ -5,8 +5,8 @@ import edu.wpi.first.math.util.Units;
 public class ShooterConstants {
 
     // motor Ids
-    public static final int RIGHT_MOTOR_ID = 1;
-    public static final int LEFT_MOTOR_ID = 2;
+    public static final int RIGHT_MOTOR_ID = 6;
+    public static final int LEFT_MOTOR_ID = 3;
 
     // RPMs
 
