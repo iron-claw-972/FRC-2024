@@ -30,11 +30,14 @@ public class ArmConstants {
     // TODO use the real moi
     // guess the MOI as radius = 0.5 meter and the mass is 10 kg
     public static final double MOMENT_OF_INERTIA = 2.5;
-    public static final double ARM_LENGTH = .5;
+    public static final double ARM_LENGTH = 0.5;
+    public static final double PIVOT_HEIGHT = Units.inchesToMeters(16.75);
+    public static final double PIVOT_X = Units.inchesToMeters(-10);
     public static final double MIN_ANGLE_RADS = Units.degreesToRadians(-20.0);
     public static final double MAX_ANGLE_RADS = Units.degreesToRadians(120.0);
     public static final double intakeSetpoint = 0;
     public static final double stowedSetpoint = 0;
+    public static final double standbySetpoint = Units.degreesToRadians(40); // TODO: tune
     public static final double subwooferSetpoint = 0;
     public static final double preClimbSetpoint = 0;
     public static final double climbSetpoint = 0;
