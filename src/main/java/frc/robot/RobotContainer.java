@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.Shoot;
 import frc.robot.constants.AutoConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
@@ -29,6 +30,9 @@ import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
 import frc.robot.commands.gpm.IntakeNote;
+import frc.robot.commands.gpm.PrepareShooter;
+import frc.robot.commands.gpm.SetShooterSpeed;
+import frc.robot.commands.gpm.ShootKnownPos;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -158,8 +162,16 @@ public class RobotContainer {
     NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index, arm).withTimeout(1));
     // NamedCommands.registerCommand("Stop", new WaitCommand(2)); // to represent stopping for shooting 
     // Mehaan -- Consulted with Jerry, just going to use a constraint zone going at .1 which should be fine instead of stopping for the area in which we are supposed to shoot
-    
+    NamedCommands.registerCommand("PrepareShooter", new PrepareShooter(shooter, 0));
+    NamedCommands.registerCommand("SetShooterSpeed", new SetShooterSpeed(shooter, 0));
+    NamedCommands.registerCommand("ShootKnownPos", new ShootKnownPos(shooter, arm, index, null));
+    NamedCommands.registerCommand("Shoot", new Shoot(shooter, arm, drive, index)); // using for now in the auto paths
+
+
+
+
   }
+
 
   public static BooleanSupplier getAllianceColorBooleanSupplier() {
     return () -> {

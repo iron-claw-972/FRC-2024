@@ -33,15 +33,15 @@
     {
       "anchor": {
         "x": 0.7336934388833163,
-        "y": 6.737082927847566
+        "y": 6.887856966597124
       },
       "prevControl": {
         "x": 1.2406808661598334,
-        "y": 6.810206114473988
+        "y": 6.960980153223546
       },
       "nextControl": {
         "x": 0.22670601160679915,
-        "y": 6.663959741221144
+        "y": 6.814733779970703
       },
       "isLocked": false,
       "linkedName": null
@@ -86,16 +86,6 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Outtake",
-      "waypointRelativePos": 0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": []
-        }
-      }
-    },
-    {
       "name": "Intake 1",
       "waypointRelativePos": 1.0,
       "command": {
@@ -114,11 +104,18 @@
     },
     {
       "name": "Outtake 2",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 2.15,
       "command": {
         "type": "parallel",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Shoot"
+              }
+            }
+          ]
         }
       }
     },
@@ -145,7 +142,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Autos",
+  "folder": null,
   "previewStartingState": {
     "rotation": 60.0,
     "velocity": 0.0
