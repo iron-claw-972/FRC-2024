@@ -89,7 +89,7 @@ public class RobotContainer {
         intake = new Intake();
 
       case SwerveTest:
-        vision = new Vision(VisionConstants.CAMERAS);
+        vision = new Vision(VisionConstants.APRIL_TAG_CAMERAS);
 
         drive = new Drivetrain(vision);
         driver = new GameControllerDriverConfig(drive, vision, arm);

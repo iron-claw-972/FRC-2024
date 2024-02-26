@@ -150,7 +150,7 @@ public class Vision {
         // distance[i],
         objectClass[i],
         // VisionConstants.CAMERAS.get((int)cameraIndex[i]).getSecond()
-        VisionConstants.CAMERAS.get(0).getSecond()
+        VisionConstants.APRIL_TAG_CAMERAS.get(0).getSecond()
       );
     }
     return objects;

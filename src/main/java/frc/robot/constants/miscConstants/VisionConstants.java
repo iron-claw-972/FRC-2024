@@ -121,7 +121,7 @@ public class VisionConstants {
 
   // The camera poses
   // TODO: Add these
-  public static final ArrayList<Pair<String, Transform3d>> CAMERAS = new ArrayList<Pair<String, Transform3d>>(List.of(
+  public static final ArrayList<Pair<String, Transform3d>> APRIL_TAG_CAMERAS = new ArrayList<Pair<String, Transform3d>>(List.of(
     new Pair<String, Transform3d>(
       "Camera1",
       new Transform3d(
