@@ -27,11 +27,11 @@ public class ArmConstants {
     /** Arm length in meters */
     public static final double ARM_LENGTH = .5;
     /** minimum arm angle in radians -- temporarily zero */
-    public static final double MIN_ANGLE_RADS = Units.degreesToRadians(0.0);
+    public static final double MIN_ANGLE_RADS = Units.degreesToRadians(-10.0);
     /** maximum arm angle in radians */
-    public static final double MAX_ANGLE_RADS = Units.degreesToRadians(80.0);
+    public static final double MAX_ANGLE_RADS = Units.degreesToRadians(70.0);
     /** starting angle in radians */
-    public static final double START_ANGLE_RADS = Units.degreesToRadians(0.0);
+    public static final double START_ANGLE_RADS = Units.degreesToRadians(-10.0);
 
     public static final double intakeSetpoint = 0;
     public static final double stowedSetpoint = 0;

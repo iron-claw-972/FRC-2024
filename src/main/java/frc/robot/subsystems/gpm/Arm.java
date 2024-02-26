@@ -7,6 +7,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -64,7 +65,7 @@ public class Arm extends SubsystemBase {
      * <p>
      * WARNING: This value will change if the belt driving the REV encoder slips!
      */
-    private static final double OFFSET = 0.54;
+    private static final double OFFSET = 0.54+Units.degreesToRotations(ArmConstants.MIN_ANGLE_RADS);
     /** REV encoder scale factor. This is fixed. */
     private static final double DISTANCE_PER_ROTATION = -2 * Math.PI;
 
@@ -78,9 +79,9 @@ public class Arm extends SubsystemBase {
 
     // Motor feedforward control
     public static final double S = 0;
+    public static final double G = 0;
     public static final double V = 0;
-    // TODO: simpleMotorFeedforward does not do gravity!
-    private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(S, V);
+    private final ArmFeedforward feedforward = new ArmFeedforward(S, G, V);
 
     /** arm simulator */
     private SingleJointedArmSim simulation;
@@ -177,7 +178,7 @@ public class Arm extends SubsystemBase {
         
         // calculate the desired duty cycle
         double dutyCycle = MathUtil.clamp(
-                        pid.calculate(getRadians()) + feedforward.calculate(pid.getSetpoint()),
+                        pid.calculate(getRadians()) + feedforward.calculate(pid.getSetpoint(), 0),
                         -1,
                         1);
 
