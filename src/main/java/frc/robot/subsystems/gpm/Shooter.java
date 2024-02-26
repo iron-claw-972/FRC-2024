@@ -1,5 +1,7 @@
 package frc.robot.subsystems.gpm;
 
+import javax.swing.plaf.basic.BasicBorders.RadioButtonBorder;
+
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
@@ -31,11 +33,19 @@ public class Shooter extends SubsystemBase {
     private static final double TOLERANCE = 200;
 
 	// 4-inch Colson wheels
-	private static final double MASS_COLSON = 0.245;
-	private static final double RADIUS_COLSON = Units.inchesToMeters(2.0);
-	private static final double MOI_COLSON = 0.5 * MASS_COLSON * RADIUS_COLSON * RADIUS_COLSON;
-	// each motor spins 4 Colson wheels
-	private static final double MOI_SHAFT = MOI_COLSON * 4;
+	// private static final double MASS_COLSON = 0.245;
+	// private static final double RADIUS_COLSON = Units.inchesToMeters(2.0);
+	// private static final double MOI_COLSON = 0.5 * MASS_COLSON * RADIUS_COLSON * RADIUS_COLSON;
+
+	// 4-inch Stealth
+	// mass is 0.097 kg. About half of that is in the rim.
+	// steel insert is 0.365 kg with radius of 3.25 inches and a 0.875 hole.
+	private static final double MASS_RIM = 0.5 * 0.097;
+	private static final double RADIUS_STEALTH = Units.inchesToMeters(2.0);
+	private static final double MOI_STEALTH = MASS_RIM * RADIUS_STEALTH * RADIUS_STEALTH;
+
+	// each motor spins 6 stealth wheels
+	private static final double MOI_SHAFT = MOI_STEALTH * 6;
 
 	// top motor
     private final CANSparkFlex topMotor = new CANSparkFlex(ShooterConstants.TOP_MOTOR_ID, MotorType.kBrushless);
@@ -118,7 +128,11 @@ public class Shooter extends SubsystemBase {
 	* @see        shooterSpeedToRPM
 	*/
 	public static double shooterRPMToSpeed(double rpm) {
+<<<<<<< HEAD
 			return (rpm / 60) * (RADIUS_COLSON * 2 * Math.PI);
+=======
+		return (rpm / 60) * (RADIUS_STEALTH * 2 * Math.PI);
+>>>>>>> main
 	}
 
 	/**
@@ -129,7 +143,11 @@ public class Shooter extends SubsystemBase {
 	* @see          shooterRPMToSpeed
 	*/
 	public static double shooterSpeedToRPM(double speed) {
+<<<<<<< HEAD
 			return (speed * 60) / (RADIUS_COLSON * 2 * Math.PI);
+=======
+		return (speed * 60) / (RADIUS_STEALTH * 2 * Math.PI);
+>>>>>>> main
 	}
 
 	/**
