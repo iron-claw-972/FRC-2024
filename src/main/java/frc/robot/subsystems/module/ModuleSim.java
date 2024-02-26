@@ -25,6 +25,7 @@ public class ModuleSim extends Module {
 
     public ModuleSim(ModuleConstants ignored) {
         super(ignored);
+        desiredState = new SwerveModuleState(0, new Rotation2d(0));
     }
 
     /**

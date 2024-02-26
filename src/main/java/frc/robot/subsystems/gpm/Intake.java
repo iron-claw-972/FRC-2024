@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.IntakeConstants;
@@ -133,7 +134,6 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         publish();
-
         // set the motor powers to be the value appropriate for this mode
         motor.set(mode.power);
         centeringMotor.set(mode.centeringPower);
@@ -141,14 +141,18 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void simulationPeriodic() {
-        flywheelSim.setInputVoltage(mode.power * Constants.ROBOT_VOLTAGE);
-        centeringFlywheelSim.setInputVoltage(mode.centeringPower * Constants.ROBOT_VOLTAGE);
+     flywheelSim.setInputVoltage(mode.power * Constants.ROBOT_VOLTAGE); 
+        
+         
+      centeringFlywheelSim.setInputVoltage(mode.centeringPower * Constants.ROBOT_VOLTAGE);
 
         flywheelSim.update(0.020);
         centeringFlywheelSim.update(0.020);
 
         motorRPMSim = flywheelSim.getAngularVelocityRPM();
+        
         centeringMotorRPMSim = centeringFlywheelSim.getAngularVelocityRPM();
+    
     }
 
     public void close() {
