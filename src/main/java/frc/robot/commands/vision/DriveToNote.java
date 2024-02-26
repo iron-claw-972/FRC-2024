@@ -3,6 +3,7 @@ package frc.robot.commands.vision;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.DetectedObject;
@@ -60,8 +61,17 @@ public class DriveToNote extends Command {
    * @return True only if the object is null
    */
   @Override
-  public boolean isFinished() { 
-    return object == null;
+  public boolean isFinished() {
+    if (object == null) {
+      return true;
+    }
+
+    double xoff = (object.pose.toPose2d().getX() - drive.getPose().getX());
+    double yoff = (object.pose.toPose2d().getY() - drive.getPose().getY());
+    if (xoff * xoff + yoff * yoff < VisionConstants.objectPositionTolerance) {
+      return true;
+    }
+    return false;
   }
 
   /**

@@ -54,6 +54,7 @@ public class DetectedObject {
         // If the drivetrain exists, rotate and translate it to get the field relative position
         if(drive != null){
             Pose2d past = drive.posFromSecondsAgo(VisionConstants.objectLatencySeconds);
+            // Pose2d past = drive.getPose();
             translation = translation.rotateBy(new Rotation3d(
                 0,
                 0,
@@ -104,6 +105,7 @@ public class DetectedObject {
         // If the drivetrain exists, rotate and translate it to be field relative
         if(drive != null){
             Pose2d past = drive.posFromSecondsAgo(VisionConstants.objectLatencySeconds);
+            // Pose2d past = drive.getPose();
             translation = translation.rotateBy(new Rotation3d(
                 0,
                 0,

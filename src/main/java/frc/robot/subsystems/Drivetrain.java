@@ -132,7 +132,6 @@ public class Drivetrain extends SubsystemBase {
     @Override
     public void periodic() {
         updateOdometry();
-        updateLatencyList();
     }
 
     // DRIVE
@@ -204,6 +203,8 @@ public class Drivetrain extends SubsystemBase {
                 vision.updateOdometry(poseEstimator);
             }
         }
+
+        updateLatencyList();
     }
 
     /**
@@ -429,12 +430,9 @@ public class Drivetrain extends SubsystemBase {
         return lowerBound;
     }
 
-    // lienar interpolates between a start and end value
-    private Double lerp(Double startValue, Double endValue, Double t) {
-        return (1 - t) * startValue + t * endValue;
-    }
-
     public Pose2d posFromSecondsAgo(double seconds) {
+        seconds = Timer.getFPGATimestamp() - seconds;
+
         // get poses that surround the input time
         double olderTime;
         Pose2d olderPos;
@@ -449,7 +447,7 @@ public class Drivetrain extends SubsystemBase {
         olderPos = pastPositions.get(lower_bound).getSecond();
 
         // newer pos will be 1 after lower bound (lower bound is length of list, use current pos and time)
-        if (lower_bound == pastPositions.size()-1) {
+        if (lower_bound >= pastPositions.size()-1) {
             // use current
             newerTime = Timer.getFPGATimestamp();
             newerPos = getPose();
@@ -460,16 +458,7 @@ public class Drivetrain extends SubsystemBase {
 
         // lerp
         double t = (seconds - olderTime) / (newerTime - olderTime);
-        
-        double newX = lerp(olderPos.getX(), newerPos.getX(), t);
-        double newY = lerp(olderPos.getY(), newerPos.getY(), t);
-        
-        Rotation2d newRot = Rotation2d.fromDegrees(
-            lerp(olderPos.getRotation().getDegrees(), newerPos.getRotation().getDegrees(), t)
-        );
 
-        return new Pose2d(
-            newX, newY, newRot
-        );
+        return olderPos.interpolate(newerPos, t);
     }
 }
