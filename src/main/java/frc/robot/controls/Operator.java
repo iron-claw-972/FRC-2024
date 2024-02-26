@@ -46,5 +46,6 @@ public class Operator{
         if(index != null && arm != null && shooter != null && drive != null){
             kDriver.get(Button.A).whileTrue(new Shoot(shooter, arm, drive, index));
         }
+
     }
 }
