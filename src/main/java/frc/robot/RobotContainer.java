@@ -83,10 +83,12 @@ public class RobotContainer {
 
       default:
       case SwerveCompetition:
-        // intake = new Intake();
+        intake = new Intake();
         arm = new Arm();
-        // break for testing arm
-        break;
+        // break for testing just the arm
+        // break;
+
+        // falls through ...
 
       case SwerveTest:
         vision = new Vision(VisionConstants.CAMERAS);

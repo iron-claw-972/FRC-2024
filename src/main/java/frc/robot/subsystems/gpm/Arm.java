@@ -59,11 +59,14 @@ public class Arm extends SubsystemBase {
     private final DutyCycleEncoder encoder = new DutyCycleEncoder(ArmConstants.ENCODER_ID);
     /** this instance sets the REV absolute encoder value during simulations */
     private DutyCycleEncoderSim encoderSim;
-    /** REV encoder offset in radians. Need to find this value. */
+    /** 
+     * REV encoder offset in radians.
+     * <p>
+     * WARNING: This value will change if the belt driving the REV encoder slips!
+     */
     private static final double OFFSET = 0.54;
     /** REV encoder scale factor. This is fixed. */
     private static final double DISTANCE_PER_ROTATION = -2 * Math.PI;
-
 
     // Motor PID control
     private static final double TOLERANCE = Units.degreesToRadians(1.0);
@@ -82,7 +85,8 @@ public class Arm extends SubsystemBase {
     /** arm simulator */
     private SingleJointedArmSim simulation;
 
-    // Mechanism display
+    // Mechanism display.
+    // The display is always built, but it only changes during simulation.
     private Mechanism2d wristDisplay = new Mechanism2d(90, 90);
     private MechanismRoot2d pivot = wristDisplay.getRoot("ArmPivot", 45, 45);
     private MechanismLigament2d moving = pivot.append(
@@ -97,7 +101,7 @@ public class Arm extends SubsystemBase {
         // set the PID tolerance
         pid.setTolerance(TOLERANCE);
 
-        // set the PID initial position
+        // set the PID the starting position
         pid.setSetpoint(ArmConstants.START_ANGLE_RADS);
 
         // make the encoder report arm angle in radians
@@ -109,9 +113,9 @@ public class Arm extends SubsystemBase {
             // create the motor
             motors[i] = new TalonFX(ArmConstants.MOTOR_IDS[i]);
 
-            // i=0 is the master; the others are slaves
+            // i==0 is the master; the others are slaves
             if (i > 0) {
-                // set the slave mode
+                // set slave mode
                 // the master is MOTOR_IDS[0]
                 // invert master for ids 2 and 3
                 motors[i].setControl(new Follower(ArmConstants.MOTOR_IDS[0], (i >= motors.length / 2)));
@@ -119,8 +123,7 @@ public class Arm extends SubsystemBase {
         }
 
         // common configuration for each motor
-        // configure master after the slaves are configured so slaves will follow.
-        // assuming following motors will also set these values
+        // configure the master after the slaves have been linked so slaves will copy the same settings.
         motors[0].setNeutralMode(NeutralModeValue.Brake);
         motors[0].setInverted(false);
         motors[0].getConfigurator().apply(ArmConstants.currentConfig);
@@ -147,9 +150,10 @@ public class Arm extends SubsystemBase {
             SmartDashboard.putData(pid);
         }
 
+        // TODO: remove when not needed.
         // Add some test commands
         SmartDashboard.putData("Set Angle to 0.0", new InstantCommand(() -> setAngle(0.0)));
-        SmartDashboard.putData("Set Angle to 1.0 Rad", new InstantCommand(() -> setAngle(0.2)));
+        SmartDashboard.putData("Set Angle to 1.0 Rad", new InstantCommand(() -> setAngle(0.6)));
         SmartDashboard.putData("arm pid", pid);
     }
 
@@ -158,39 +162,40 @@ public class Arm extends SubsystemBase {
      * @return
      */
     double getRadians() {
-        // absolute sensor is easy
+        // using the REV absolute sensor is easy
         return encoder.getDistance();
 
-        // motor encoder is more difficult
+        // using the motor encoder is more difficult
+        // refresh the position (needed because we want it more often than 4 Hz)
+        // rotorPositionSignal.refresh();
         // return Units.rotationsToRadians(rotorPositionSignal.getValue() / ArmConstants.GEARING);
     }
 
     @Override
     public void periodic() {
+        // TODO: possibly clamp the setpoint ...
+        
+        // calculate the desired duty cycle
         double dutyCycle = MathUtil.clamp(
                         pid.calculate(getRadians()) + feedforward.calculate(pid.getSetpoint()),
                         -1,
                         1);
 
-        // use the scaled distance (which is radians)
-        // motors[0].set(dutyCycle);
-
-        // may want to do Phoenix 6 version:
+        // use the Phoenix 6 version of setting the motor "power"
         motors[0].setControl(m_request.withOutput(dutyCycle));
 
         // report the arm angle in rotations
-        SmartDashboard.putNumber("Arm angle", Units.radiansToRotations(encoder.getDistance()));
+        SmartDashboard.putNumber("Arm angle", encoder.getDistance());
 
-        // this call should not be required, but add it anyway. Simulation is not updating.
-        // Adding this had the desired effect in simulation.
-        rotorPositionSignal.refresh();
-
+        // TODO: Clean these up when not needed.
         // report dutycycle
         SmartDashboard.putNumber("arm pow", dutyCycle);
         // report the rotor position. This should trigger an update so we get results faster than 4 times per second.)
-        SmartDashboard.putNumber("Rotor Signal", rotorPositionSignal.getValue());
+        SmartDashboard.putNumber("Rotor Signal", Units.rotationsToRadians(rotorPositionSignal.getValue()));
         // check the latency
         SmartDashboard.putNumber("Rotor delay", rotorPositionSignal.getTimestamp().getLatency());
+        // the absolute position is the one used to set the offset.
+        SmartDashboard.putNumber("REV ABS", encoder.getAbsolutePosition());
     }
 
     @Override
@@ -218,8 +223,11 @@ public class Arm extends SubsystemBase {
     public void setAngle(double angle) {
         // zero the integrator portion of the PID controller
         pid.reset();
-        // change the setpoint
 
+        // clamp the angle to avoid problems
+        angle = MathUtil.clamp(angle, ArmConstants.MIN_ANGLE_RADS, ArmConstants.MAX_ANGLE_RADS);
+
+        // change the setpoint
         pid.setSetpoint(angle);
     }
 
