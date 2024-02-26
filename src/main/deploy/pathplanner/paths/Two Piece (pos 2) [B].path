@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 2.4789001597005584,
-        "y": 6.961327366835257
+        "x": 2.5167325548326307,
+        "y": 6.737082927847566
       },
       "prevControl": {
-        "x": 1.4259262722800996,
-        "y": 6.805331235365559
+        "x": 1.4637586674121719,
+        "y": 6.581086796377868
       },
       "nextControl": {
-        "x": 3.5318740471210175,
-        "y": 7.117323498304955
+        "x": 3.5697064422530898,
+        "y": 6.893079059317264
       },
       "isLocked": false,
       "linkedName": null
@@ -77,11 +77,6 @@
     }
   ],
   "rotationTargets": [
-    {
-      "waypointRelativePos": 0.0,
-      "rotationDegrees": 60.0,
-      "rotateFast": true
-    },
     {
       "waypointRelativePos": 1.9,
       "rotationDegrees": 60.0,
@@ -150,7 +145,10 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Position & Angle Issues",
-  "previewStartingState": null,
+  "folder": "Autos",
+  "previewStartingState": {
+    "rotation": 60.0,
+    "velocity": 0.0
+  },
   "useDefaultConstraints": false
 }
