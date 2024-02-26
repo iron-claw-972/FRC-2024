@@ -63,15 +63,6 @@ public class RobotContainer {
       case TestBed1:
         index = new StorageIndex();
         shooter = new Shooter();
-        // add some motor rpm
-        SmartDashboard.setDefaultNumber("RPM top", 1500.0);
-        SmartDashboard.setDefaultNumber("RPM bottom", 1500.0);
-        // add shooter commands
-        SmartDashboard.putData("shoot",
-            new InstantCommand(() -> shooter.setTargetRPM(
-                SmartDashboard.getNumber("RPM top", 1500.0),
-                SmartDashboard.getNumber("RPM bottom", 1500.0))));
-        SmartDashboard.putData("shoot off", new InstantCommand(() -> shooter.setTargetRPM(0)));
         break;
 
       case TestBed2:
@@ -84,18 +75,16 @@ public class RobotContainer {
       default:
       case SwerveCompetition:
         intake = new Intake();
+        index = new StorageIndex();
         arm = new Arm();
-        // break for testing just the arm
-        // break;
-
-        // falls through ...
+        shooter = new Shooter();
 
       case SwerveTest:
         vision = new Vision(VisionConstants.CAMERAS);
 
         drive = new Drivetrain(vision);
         driver = new GameControllerDriverConfig(drive, vision);
-        operator = new Operator(intake);
+        operator = new Operator(intake, arm, index, shooter, drive);
 
         // Detected objects need access to the drivetrain
         DetectedObject.setDrive(drive);
