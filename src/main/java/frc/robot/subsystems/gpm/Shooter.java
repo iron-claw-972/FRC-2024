@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -22,9 +23,10 @@ public class Shooter extends SubsystemBase {
 			.radiansPerSecondToRotationsPerMinute(Shooter.gearbox.freeSpeedRadPerSec);
 
 	// PID constants. PID system measures RPM and outputs motor power [-1,1]
-	private static final double P = 0.00005;
-	private static final double I = 0.0;
+	private static final double P = 0.00070;
+	private static final double I = 0.00009;
 	private static final double D = 0.0;
+
 
 	// FeedForward constants
 	private static final double S = 0;
@@ -78,6 +80,7 @@ public class Shooter extends SubsystemBase {
 		rightPID.setTolerance(TOLERANCE);
 		// invert the right motor so +power sends the note out
 		rightMotor.setInverted(true);
+		leftMotor.setInverted(false);
 
 		// are we simulating?
 		if (RobotBase.isSimulation()) {
@@ -98,8 +101,8 @@ public class Shooter extends SubsystemBase {
 		rightPower = rightPID.calculate(rightSpeed) + feedforward.calculate(rightPID.getSetpoint());
 
 		// set motor powers
-		leftMotor.set(leftPower);
-		rightMotor.set(rightPower);
+		leftMotor.set(MathUtil.clamp(leftPower,-1,1));
+		rightMotor.set(MathUtil.clamp(rightPower,-1,1));
 
 		// report some values to the Dashboard
 		SmartDashboard.putNumber("left speed", /* shooterRPMToSpeed */ (leftSpeed));

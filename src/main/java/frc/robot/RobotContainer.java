@@ -10,7 +10,9 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.commands.Climb;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.Climb.Chain;
 import frc.robot.constants.AutoConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
@@ -63,36 +65,28 @@ public class RobotContainer {
       case TestBed1:
         index = new StorageIndex();
         shooter = new Shooter();
-        // add some motor rpm
-        SmartDashboard.setDefaultNumber("RPM top", 1500.0);
-        SmartDashboard.setDefaultNumber("RPM bottom", 1500.0);
-        // add shooter commands
-        SmartDashboard.putData("shoot",
-            new InstantCommand(() -> shooter.setTargetRPM(
-                SmartDashboard.getNumber("RPM top", 1500.0),
-                SmartDashboard.getNumber("RPM bottom", 1500.0))));
-        SmartDashboard.putData("shoot off", new InstantCommand(() -> shooter.setTargetRPM(0)));
         break;
 
       case TestBed2:
         intake = new Intake();
         index = new StorageIndex();
-        arm = new Arm();
         SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index, arm));
         break;
-
+        
       default:
       case SwerveCompetition:
-      intake = new Intake();
-      operator = new Operator(intake);
-      operator.configureControls();
+        arm = new Arm();
+        intake = new Intake();
+        index = new StorageIndex();
+        arm = new Arm();
+        shooter = new Shooter();
 
       case SwerveTest:
-      case Vertigo:
-        vision = new Vision(VisionConstants.CAMERAS);
-        
+        vision = new Vision(VisionConstants.APRIL_TAG_CAMERAS);
+
         drive = new Drivetrain(vision);
-        driver = new GameControllerDriverConfig(drive, vision);
+        driver = new GameControllerDriverConfig(drive, vision, arm);
+        operator = new Operator(intake, arm, index, shooter, drive);
 
         // Detected objects need access to the drivetrain
         DetectedObject.setDrive(drive);

@@ -13,7 +13,6 @@ import frc.robot.constants.StorageIndexConstants;
  */
 public class StorageIndex extends SubsystemBase {
 
-  // private final CANSparkFlex m_indexmotor;***
   private final CANSparkFlex m_indexmotor;
   DigitalInput m_indexBeamBreak;
 
