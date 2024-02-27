@@ -78,7 +78,6 @@ public class RobotContainer {
         arm = new Arm();
         intake = new Intake();
         index = new StorageIndex();
-        arm = new Arm();
         shooter = new Shooter();
 
       case SwerveTest:
