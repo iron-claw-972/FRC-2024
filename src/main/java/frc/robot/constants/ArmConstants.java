@@ -23,9 +23,9 @@ public class ArmConstants {
     public static final double ARM_LENGTH = .5;
 
     /* arm slants down at 9.2 degrees */
-    /* offset is 0.54 rotations */
+    /* offset to stow position is 0.54 rotations */
     /** minimum arm angle in radians */
-    public static final double MIN_ANGLE_RADS = Units.degreesToRadians(-10.0);
+    public static final double MIN_ANGLE_RADS = Units.degreesToRadians(-9.2);
     /** maximum arm angle in radians */
     public static final double MAX_ANGLE_RADS = Units.degreesToRadians(70.0);
     /** starting angle in radians */
@@ -36,7 +36,8 @@ public class ArmConstants {
     // TODO: tune
     public static final double standbySetpoint = Units.degreesToRadians(40);
     public static final double subwooferSetpoint = 0;
-    public static final double preClimbSetpoint = 2;
+    // 2 radians is about 120 degrees -- too much! reverted back to zero
+    public static final double preClimbSetpoint = 0;
     public static final double climbSetpoint = 0;
     public static final double ampSetpoint = 0;
 

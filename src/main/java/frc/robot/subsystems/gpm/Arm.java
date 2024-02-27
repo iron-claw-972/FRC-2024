@@ -10,7 +10,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -194,20 +193,6 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putData("arm pid", pid);
     }
 
-    /**
-     * Get the arm angle using the absolute sensor or the motor encoder.
-     * @return
-     */
-    double getRadians() {
-        // using the REV absolute sensor is easy
-        return encoder.getDistance();
-
-        // using the motor encoder is more difficult
-        // refresh the position (needed because we want it more often than 4 Hz)
-        // rotorPositionSignal.refresh();
-        // return Units.rotationsToRadians(rotorPositionSignal.getValue() / ArmConstants.GEARING);
-    }
-
     @Override
     public void periodic() {
         double setpoint = pid.getSetpoint();
@@ -226,7 +211,7 @@ public class Arm extends SubsystemBase {
 
         // calculate the desired duty cycle
         double dutyCycle = MathUtil.clamp(
-                        pid.calculate(getRadians()) + feedforward.calculate(setpoint, 0),
+                        pid.calculate(getAngleRad()) + feedforward.calculate(setpoint, 0),
                         -1,
                         1);
 
@@ -288,7 +273,13 @@ public class Arm extends SubsystemBase {
      * @returns arm angle in radians
      */
     public double getAngleRad() {
+        // using the REV encoder
         return encoder.getDistance();
+
+        // using the motor encoder is more difficult
+        // refresh the position (needed because we want it more often than 4 Hz)
+        // rotorPositionSignal.refresh();
+        // return Units.rotationsToRadians(rotorPositionSignal.getValue() / Arm.GEARING);
     }
 
     /**
