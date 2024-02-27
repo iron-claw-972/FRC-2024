@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.29917941546097,
-        "y": 2.20344535700948
+        "x": 1.1617787572237042,
+        "y": 2.974552482628502
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.8210801606788397,
-        "y": 4.326837143702777
+        "x": 0.75,
+        "y": 4.27
       },
       "prevControl": {
-        "x": 1.3378173461722132,
-        "y": 3.46885842061944
+        "x": 0.7401886415755699,
+        "y": 3.2673233962730404
       },
       "nextControl": {
-        "x": 0.2932580807330246,
-        "y": 5.203220974556206
+        "x": 0.7600103006805087,
+        "y": 5.293007605514225
       },
       "isLocked": false,
       "linkedName": null
@@ -47,14 +47,26 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 1.0,
-      "rotationDegrees": -60.0,
+      "rotationDegrees": -60.75,
       "rotateFast": true
     }
   ],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Outtake 1 ",
+      "minWaypointRelativePos": 0.9,
+      "maxWaypointRelativePos": 1.1,
+      "constraints": {
+        "maxVelocity": 0.25,
+        "maxAcceleration": 0.25,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    }
+  ],
   "eventMarkers": [
     {
-      "name": "Outtake",
+      "name": "Outtake 1",
       "waypointRelativePos": 1.05,
       "command": {
         "type": "sequential",
@@ -63,7 +75,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Shoot"
+                "name": "Outtake_Note_1.5_Sec"
               }
             }
           ]
@@ -71,7 +83,7 @@
       }
     },
     {
-      "name": "Intake",
+      "name": "Intake 1",
       "waypointRelativePos": 1.95,
       "command": {
         "type": "sequential",
@@ -93,7 +105,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Autos",
+  "folder": "Final Autos",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

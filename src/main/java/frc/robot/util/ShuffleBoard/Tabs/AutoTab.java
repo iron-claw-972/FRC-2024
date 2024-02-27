@@ -25,32 +25,34 @@ public class AutoTab extends ShuffleBoardTabs {
     
     public void createEntries(){  
         tab = Shuffleboard.getTab("Auto");
-        
-        autoCommand.setDefaultOption("Do Nothing", new PrintCommand("This will do nothing!"));
-        autoCommand.addOption("Example Path", new FollowPathCommand("Example Path",true, drive));
-        autoCommand.addOption("Two Piece (R) Close Shot", new FollowPathCommand("Two Piece (R) Close Shot",true, drive));
-        autoCommand.addOption("1 point auto (L)", new FollowPathCommand("1 point auto (L)",true, drive));
-        autoCommand.addOption("1 point auto (R)", new FollowPathCommand("1 point auto (R)",true, drive));
-        autoCommand.addOption("Two Piece (pos 2) [B]", new FollowPathCommand("Two Piece (pos 2) [B]",true, drive));
+    
+        // Final Autos
+        autoCommand.addOption("One Piece (pos 7) (B)", new FollowPathCommand("One Piece (pos 7) (B)",true, drive));
         autoCommand.addOption("Two Piece (pos 4) [B]", new FollowPathCommand("Two Piece (pos 4) [B]",true, drive));
-        autoCommand.addOption("One Piece (pos 2) [B]", new FollowPathCommand("One Piece (pos 2) [B]",true, drive));
-        autoCommand.addOption("Two Piece (R) Close Shot", new FollowPathCommand("Two Piece (R) Close Shot",true, drive));
+        autoCommand.addOption("One Piece (pos 2) (B)", new FollowPathCommand("One Piece (pos 2) (B)",true, drive));
+        autoCommand.addOption("Three Piece (pos 2) [B]", new FollowPathCommand("Three Piece (pos 2) [B]",true, drive));
+        autoCommand.addOption("Two Piece (pos 2) [B]", new FollowPathCommand("Two Piece (pos 2) [B]",true, drive));
+        autoCommand.addOption("0 Piece Auto (pos 1)", new FollowPathCommand("0 Piece Auto (pos 1)",true, drive));
+        autoCommand.addOption("0 Auto (pos 7)", new FollowPathCommand("0 Auto (pos 7)",true, drive));
+        autoCommand.addOption("[Under the stage] One Piece (pos 4) (destroy) (B2)", new FollowPathCommand("[Under the stage] One Piece (pos 4) (destroy) (B2)",true, drive));
+        autoCommand.addOption("[Under the stage] One Piece (pos 4) (destroy) (B1)", new FollowPathCommand("[Under the stage] One Piece (pos 4) (destroy) (B1)",true, drive));
+        autoCommand.addOption("[Around the stage] One Piece (pos 4) (destroy) (B)", new FollowPathCommand("[Around the stage] One Piece (pos 4) (destroy) (B)",true, drive));
         
-        // Important Notes and To-Do's:
-        // Fix the starting angle for shooting for 2 piece pos 4, we have to do this for all of the autos, should be a quick fix
-        // Also have to add constraint zones for all autos near shooting point
-        // Check robot container.java for imporant note
-
-        //Replacement points, do not delete
-        // autoCommand.addOption("lol", new FollowPathCommand("lol",true, drive));
-        // autoCommand.addOption("lol", new FollowPathCommand("lol",true, drive));
-        // autoCommand.addOption("lol", new FollowPathCommand("lol",true, drive));
-        // autoCommand.addOption("lol", new FollowPathCommand("lol",true, drive));
-
-        autoCommand.addOption("Accuracy", new FollowPathCommand("Accuracy",true, drive));
-        autoCommand.addOption("Three Piece (L)", new FollowPathCommand("Three Piece (L)",true, drive));
-
+        // Previous Autos (Some will keep and still have to fix) 
+        // autoCommand.setDefaultOption("Do Nothing", new PrintCommand("This will do nothing!"));
+        // autoCommand.addOption("Example Path", new FollowPathCommand("Example Path",true, drive));
+        // autoCommand.addOption("Two Piece (R) Close Shot", new FollowPathCommand("Two Piece (R) Close Shot",true, drive));
+        // autoCommand.addOption("1 point auto (L)", new FollowPathCommand("1 point auto (L)",true, drive));
+        // autoCommand.addOption("1 point auto (R)", new FollowPathCommand("1 point auto (R)",true, drive));
+        // autoCommand.addOption("Two Piece (R) Close Shot", new FollowPathCommand("Two Piece (R) Close Shot",true, drive));
+        // autoCommand.addOption("Accuracy", new FollowPathCommand("Accuracy",true, drive));
+        // autoCommand.addOption("Three Piece (L)", new FollowPathCommand("Three Piece (L)",true, drive));
         
+
+        // Repleacement Auto, don't delete
+        // autoCommand.addOption("lol", new FollowPathCommand("lol",true, drive));
+
+
         tab.add(autoCommand);
     }
 
