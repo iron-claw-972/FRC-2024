@@ -3,45 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7336934388833163,
-        "y": 6.737082927847566
+        "x": 0.75,
+        "y": 6.8
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8549156338217698,
-        "y": 6.893079059317264
+        "x": 1.8712221949384533,
+        "y": 6.955996131469698
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.5167325548326307,
-        "y": 6.737082927847566
+        "x": 2.2977299021645106,
+        "y": 6.8
       },
       "prevControl": {
-        "x": 1.4637586674121719,
-        "y": 6.581086796377868
+        "x": 1.2447560147440517,
+        "y": 6.644003868530302
       },
       "nextControl": {
-        "x": 3.5697064422530898,
-        "y": 6.893079059317264
+        "x": 3.3507037895849696,
+        "y": 6.955996131469698
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.7336934388833163,
-        "y": 6.887856966597124
+        "x": 0.75,
+        "y": 6.8
       },
       "prevControl": {
-        "x": 1.2406808661598334,
-        "y": 6.960980153223546
+        "x": 1.2569874272765171,
+        "y": 6.8731231866264215
       },
       "nextControl": {
-        "x": 0.22670601160679915,
-        "y": 6.814733779970703
+        "x": 0.24301257272348287,
+        "y": 6.726876813373578
       },
       "isLocked": false,
       "linkedName": null
@@ -78,15 +78,20 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.9,
-      "rotationDegrees": 60.0,
+      "waypointRelativePos": 0.95,
+      "rotationDegrees": 16.882612524522283,
       "rotateFast": true
+    },
+    {
+      "waypointRelativePos": 2.0,
+      "rotationDegrees": 60.0,
+      "rotateFast": false
     }
   ],
   "constraintZones": [
     {
-      "name": "Shoot",
-      "minWaypointRelativePos": 1.8,
+      "name": "Outtake",
+      "minWaypointRelativePos": 1.85,
       "maxWaypointRelativePos": 2.2,
       "constraints": {
         "maxVelocity": 0.25,
@@ -115,8 +120,8 @@
       }
     },
     {
-      "name": "Outtake 2",
-      "waypointRelativePos": 2.15,
+      "name": "Outtake 1",
+      "waypointRelativePos": 2.2,
       "command": {
         "type": "parallel",
         "data": {
@@ -154,9 +159,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Final Autos",
   "previewStartingState": {
-    "rotation": 60.0,
+    "rotation": 60.75476639108816,
     "velocity": 0.0
   },
   "useDefaultConstraints": false

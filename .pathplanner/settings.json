@@ -3,8 +3,8 @@
   "robotLength": 0.911,
   "holonomicMode": true,
   "pathFolders": [
-    "Autos",
-    "Position & Angle Issues",
+    "Autos yet to fix",
+    "Final Autos",
     "Previous Stuff"
   ],
   "autoFolders": [],

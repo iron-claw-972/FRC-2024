@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.72394368066646,
-        "y": 4.358141922934678
+        "x": 0.75,
+        "y": 4.27
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8546634567879394,
-        "y": 4.358141922934678
+        "x": 1.8807197761214796,
+        "y": 4.27
       },
       "isLocked": false,
       "linkedName": null
@@ -32,16 +32,16 @@
     },
     {
       "anchor": {
-        "x": 0.72394368066646,
-        "y": 4.358141922934678
+        "x": 0.75,
+        "y": 4.27
       },
       "prevControl": {
-        "x": 1.0554354600395677,
-        "y": 4.3678916811515345
+        "x": 0.9201116017553043,
+        "y": 4.591354263425829
       },
       "nextControl": {
-        "x": 0.523034145707765,
-        "y": 4.352232818965304
+        "x": 0.6230802761221356,
+        "y": 4.0302386083011
       },
       "isLocked": false,
       "linkedName": null
@@ -83,21 +83,16 @@
       "rotateFast": true
     },
     {
-      "waypointRelativePos": 1.85,
-      "rotationDegrees": -57.13706408602528,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 0,
+      "waypointRelativePos": 1.95,
+      "rotationDegrees": -60.75,
       "rotateFast": false
     }
   ],
   "constraintZones": [
     {
-      "name": "Shoot",
+      "name": "Outtake Zone",
       "minWaypointRelativePos": 1.85,
-      "maxWaypointRelativePos": 2.3,
+      "maxWaypointRelativePos": 2.15,
       "constraints": {
         "maxVelocity": 0.25,
         "maxAcceleration": 0.25,
@@ -134,7 +129,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Shoot"
+                "name": "Outtake_Note_1.5_Sec"
               }
             }
           ]
@@ -143,11 +138,18 @@
     },
     {
       "name": "Intake 2",
-      "waypointRelativePos": 3.9000000000000004,
+      "waypointRelativePos": 3.85,
       "command": {
         "type": "parallel",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake_Note_1.5_Sec"
+              }
+            }
+          ]
         }
       }
     }
@@ -160,13 +162,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 2.960936134163773,
+    "rotation": -0.17076820191035333,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Final Autos",
   "previewStartingState": {
-    "rotation": -59.0,
+    "rotation": -60.75,
     "velocity": 0
   },
   "useDefaultConstraints": false
