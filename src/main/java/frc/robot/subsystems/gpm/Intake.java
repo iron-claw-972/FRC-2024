@@ -81,6 +81,7 @@ public class Intake extends SubsystemBase {
     private Mode mode;
 
     private Timer waitTimer = new Timer();
+    private Timer point2Timer = new Timer();
 
     public Intake() {
         // set the motor parameters
@@ -104,6 +105,7 @@ public class Intake extends SubsystemBase {
         }
 
         waitTimer.start();
+        point2Timer.start();
 
         publish();
     }
@@ -220,15 +222,15 @@ public class Intake extends SubsystemBase {
         motorRPMSim = flywheelSim.getAngularVelocityRPM();
         centeringMotorRPMSim = centeringFlywheelSim.getAngularVelocityRPM();
 
-        // change values every 1/2 second
-        if (countSim++ > 25) {
-            countSim = 0;
-
-            IntakeSensorDioSim.setValue(simDIOValue);
-
-            simDIOValue = !simDIOValue;
+        if (mode == Mode.INTAKE) {
+            if (point2Timer.advanceIfElapsed(.2)) {
+                IntakeSensorDioSim.setValue(false);
+                point2Timer.reset();
+            }
         }
-
+        else if (mode==Mode.DISABLED) {
+            IntakeSensorDioSim.setValue(true);
+        }
     }
 
     public void close() {
