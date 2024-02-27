@@ -41,6 +41,9 @@ public class ArmConstants {
     public static final double climbSetpoint = 0;
     public static final double ampSetpoint = 0;
 
+    public static final double PIVOT_HEIGHT = Units.inchesToMeters(16.75);
+    public static final double PIVOT_X = Units.inchesToMeters(-10);
+
     // TODO: temporary reduction from 40 A to 4 A. I snapped both chains.
     public static CurrentLimitsConfigs currentConfig = new CurrentLimitsConfigs().withSupplyCurrentLimit(4);
 }
