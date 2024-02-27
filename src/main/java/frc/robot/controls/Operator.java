@@ -52,10 +52,18 @@ public class Operator {
             kDriver.get(Button.B).onFalse(new InstantCommand(() -> intake.setMode(Mode.DISABLED), intake));
         }
         kDriver.get(Button.BACK).onTrue(new InstantCommand(()->{
-            shooter.setTargetRPM(0);
-            intake.setMode(Mode.DISABLED);
-            arm.setAngle(ArmConstants.stowedSetpoint);
-            index.stopIndex();
+            if(shooter != null){
+                shooter.setTargetRPM(0);
+            }
+            if(intake != null){
+                intake.setMode(Mode.DISABLED);
+            }
+            if(arm != null){
+                arm.setAngle(ArmConstants.stowedSetpoint);
+            }
+            if(index != null){
+                index.stopIndex();
+            }
             CommandScheduler.getInstance().cancelAll();
         }));
         if (index != null && arm != null && shooter != null && drive != null) {

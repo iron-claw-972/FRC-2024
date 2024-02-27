@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.commands.ChainAlign;
 import frc.robot.commands.Climb;
 import frc.robot.commands.GoToPose;
 import frc.robot.commands.OuttakeAmp;
@@ -67,6 +68,10 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
       kDriver.get(DPad.LEFT).toggleOnTrue(new Climb(Chain.LEFT, getDrivetrain(), arm));
       kDriver.get(DPad.UP).toggleOnTrue(new Climb(Chain.CENTER, getDrivetrain(), arm));
       kDriver.get(DPad.RIGHT).toggleOnTrue(new Climb(Chain.RIGHT, getDrivetrain(), arm));
+    }else{
+      kDriver.get(DPad.LEFT).whileTrue(new ChainAlign(Chain.LEFT, getDrivetrain()));
+      kDriver.get(DPad.UP).whileTrue(new ChainAlign(Chain.CENTER, getDrivetrain()));
+      kDriver.get(DPad.RIGHT).whileTrue(new ChainAlign(Chain.RIGHT, getDrivetrain()));
     }
 
     // Amp alignment
