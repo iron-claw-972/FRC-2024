@@ -11,8 +11,12 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.OuttakeAmp;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.gpm.IntakeNote;
+import frc.robot.commands.gpm.ShootKnownPos;
+import frc.robot.commands.gpm.ShootKnownPos.ShotPosition;
+import frc.robot.constants.ArmConstants;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Arm;
@@ -48,18 +52,31 @@ public class Operator {
             Command intakeNote = new IntakeNote(intake, index, arm);
             kDriver.get(Button.X).onTrue(intakeNote);
             kDriver.get(Button.X).onFalse(new InstantCommand(()->intakeNote.cancel()));
-            kDriver.get(Button.B).onTrue(new InstantCommand(() -> intake.setMode(Mode.ReverseMotors)));
-            kDriver.get(Button.B).onFalse(new InstantCommand(() -> intake.setMode(Mode.DISABLED)));
+            kDriver.get(Button.B).onTrue(new InstantCommand(() -> intake.setMode(Mode.ReverseMotors), intake));
+            kDriver.get(Button.B).onFalse(new InstantCommand(() -> intake.setMode(Mode.DISABLED), intake));
         }
-        kDriver.get(Button.BACK).onTrue(new InstantCommand(()->CommandScheduler.getInstance().cancelAll()));
+        kDriver.get(Button.BACK).onTrue(new InstantCommand(()->{
+            shooter.setTargetRPM(0);
+            intake.setMode(Mode.DISABLED);
+            arm.setAngle(ArmConstants.stowedSetpoint);
+            index.stopIndex();
+            CommandScheduler.getInstance().cancelAll();
+        }));
         if (index != null && arm != null && shooter != null && drive != null) {
-            getRightTrigger().whileTrue(new Shoot(shooter, arm, drive, index));
+            getRightTrigger().onTrue(new Shoot(shooter, arm, drive, index));
+        }
+        if(shooter != null){
+            getLeftTrigger().onTrue(new InstantCommand(()->shooter.setTargetRPM(1000), shooter));
+        }
+        if(arm != null && shooter != null && index != null){
+            kDriver.get(Button.Y).onTrue(new ShootKnownPos(shooter, arm, index, ShotPosition.SUBWOOFER_MIDDLE));
+            kDriver.get(Button.A).onTrue(new OuttakeAmp(arm, index, shooter));
         }
     }
     public Trigger getRightTrigger(){
         return new Trigger(kDriver.RIGHT_TRIGGER_BUTTON);
     }
-        public Trigger getLeftTrigger(){
+    public Trigger getLeftTrigger(){
         return new Trigger(kDriver.LEFT_TRIGGER_BUTTON);
     }
 }
