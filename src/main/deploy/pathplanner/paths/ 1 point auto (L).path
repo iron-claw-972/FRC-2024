@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Autos yet to fix",
+  "folder": null,
   "previewStartingState": {
     "rotation": -56.0,
     "velocity": 0

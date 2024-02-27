@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7044441642327478,
-        "y": 4.260644340766117
+        "x": 0.75,
+        "y": 4.27
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.704444164232748,
-        "y": 4.260644340766117
+        "x": 1.75,
+        "y": 4.27
       },
       "isLocked": false,
       "linkedName": null
@@ -96,11 +96,11 @@
     },
     {
       "anchor": {
-        "x": 0.7044441642327478,
+        "x": 0.75,
         "y": 4.260644340766117
       },
       "prevControl": {
-        "x": 0.8564681719844666,
+        "x": 0.9020240077517183,
         "y": 3.8747372441655994
       },
       "nextControl": null,
@@ -108,7 +108,13 @@
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 2.8,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [
     {
       "name": "Intake to Straight Outtake",
@@ -131,6 +137,17 @@
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
       }
+    },
+    {
+      "name": "Outtake",
+      "minWaypointRelativePos": 5.8999999999999995,
+      "maxWaypointRelativePos": 6.0,
+      "constraints": {
+        "maxVelocity": 0.25,
+        "maxAcceleration": 0.25,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
     }
   ],
   "eventMarkers": [
@@ -150,7 +167,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Outtake"
+                "name": "Outtake_Note_1.5_Sec"
               }
             }
           ]
@@ -173,7 +190,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Outtake"
+                "name": "Outtake_Note_1.5_Sec"
               }
             }
           ]
@@ -199,7 +216,7 @@
     },
     {
       "name": "Outtake",
-      "waypointRelativePos": 5.85,
+      "waypointRelativePos": 6.0,
       "command": {
         "type": "parallel",
         "data": {
@@ -207,7 +224,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Outtake"
+                "name": "Outtake_Note_1.5_Sec"
               }
             }
           ]
@@ -223,13 +240,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -58.13402230639629,
+    "rotation": -59.92788540186203,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Autos yet to fix",
+  "folder": "Final Autos",
   "previewStartingState": {
-    "rotation": -57.82614121299425,
+    "rotation": -60.75,
     "velocity": 0
   },
   "useDefaultConstraints": true
