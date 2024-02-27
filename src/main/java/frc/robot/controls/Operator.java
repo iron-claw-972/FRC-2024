@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.OuttakeAmp;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.gpm.IntakeNote;
+import frc.robot.commands.gpm.PrepareShooter;
 import frc.robot.commands.gpm.ShootKnownPos;
 import frc.robot.commands.gpm.ShootKnownPos.ShotPosition;
 import frc.robot.constants.ArmConstants;
@@ -70,10 +71,10 @@ public class Operator {
             getRightTrigger().onTrue(new Shoot(shooter, arm, drive, index));
         }
         if(shooter != null){
-            getLeftTrigger().onTrue(new InstantCommand(()->shooter.setTargetRPM(1000), shooter));
+            getLeftTrigger().onTrue(new PrepareShooter(shooter, 1500));
         }
         if(arm != null && shooter != null && index != null){
-            kDriver.get(Button.Y).onTrue(new ShootKnownPos(shooter, arm, index, ShotPosition.SUBWOOFER_MIDDLE));
+            kDriver.get(Button.Y).onTrue(new ShootKnownPos(shooter, arm, index, ShotPosition.SUBWOOFER));
             kDriver.get(Button.A).onTrue(new OuttakeAmp(arm, index, shooter));
         }
     }

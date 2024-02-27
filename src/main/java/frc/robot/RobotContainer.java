@@ -85,7 +85,7 @@ public class RobotContainer {
         vision = new Vision(VisionConstants.APRIL_TAG_CAMERAS);
 
         drive = new Drivetrain(vision);
-        driver = new GameControllerDriverConfig(drive, vision, arm);
+        driver = new GameControllerDriverConfig(drive, vision, arm, intake, index, shooter);
         operator = new Operator(intake, arm, index, shooter, drive);
         SmartDashboard.putData(new Climb(Chain.LEFT, drive, arm));
 
