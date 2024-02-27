@@ -24,6 +24,7 @@ import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
 import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.subsystems.gpm.StorageIndex;
+import frc.robot.subsystems.gpm.Intake.Mode;
 import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
@@ -70,7 +71,8 @@ public class RobotContainer {
       case TestBed2:
         intake = new Intake();
         index = new StorageIndex();
-        SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index, arm));
+        // SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index, arm));
+        SmartDashboard.putData("Intake", new InstantCommand(() -> intake.setMode(Mode.INTAKE)));
         break;
         
       default:
@@ -78,7 +80,6 @@ public class RobotContainer {
         arm = new Arm();
         intake = new Intake();
         index = new StorageIndex();
-        arm = new Arm();
         shooter = new Shooter();
 
       case SwerveTest:

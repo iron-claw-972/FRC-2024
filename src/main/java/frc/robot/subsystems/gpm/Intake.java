@@ -72,9 +72,7 @@ public class Intake extends SubsystemBase {
     private double motorRPMSim;
     private double centeringMotorRPMSim;
 
-    private int countSim = 0;
-    private DIOSim IntakeSensorDioSim;
-    private boolean simDIOValue = true;
+    private DIOSim intakeSensorDioSim;
     private FlywheelSim flywheelSim;
     private FlywheelSim centeringFlywheelSim;
 
@@ -98,7 +96,9 @@ public class Intake extends SubsystemBase {
 
         // Simulation objects
         if (RobotBase.isSimulation()) {
-            IntakeSensorDioSim = new DIOSim(sensor);
+            intakeSensorDioSim = new DIOSim(sensor);
+            intakeSensorDioSim.setValue(true);
+
             // assuming gearing is 1:1 for both
             flywheelSim = new FlywheelSim(dcMotor, 1.0, MOI_TOTAL);
             centeringFlywheelSim = new FlywheelSim(dcMotorCentering ,  1.0, MOI_CENTERING_TOTAL);
@@ -211,6 +211,10 @@ public class Intake extends SubsystemBase {
         }
     }
 
+    public boolean intakeInactive() {
+        return mode == Mode.DISABLED;
+    }
+
     @Override
     public void simulationPeriodic() {
         flywheelSim.setInputVoltage(mode.power * motorVoltage);
@@ -223,13 +227,13 @@ public class Intake extends SubsystemBase {
         centeringMotorRPMSim = centeringFlywheelSim.getAngularVelocityRPM();
 
         if (mode == Mode.INTAKE) {
-            if (point2Timer.advanceIfElapsed(.2)) {
-                IntakeSensorDioSim.setValue(false);
+            if (point2Timer.hasElapsed(.2)) {
+                intakeSensorDioSim.setValue(false);
                 point2Timer.reset();
             }
         }
         else if (mode==Mode.DISABLED) {
-            IntakeSensorDioSim.setValue(true);
+            intakeSensorDioSim.setValue(true);
         }
     }
 
