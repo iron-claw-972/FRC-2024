@@ -357,6 +357,14 @@ public class Drivetrain extends SubsystemBase {
         alignAngle = newAngle;
     }
 
+    public boolean atAlignAngle(){
+        if(alignAngle == null){
+            return false;
+        }
+        double diff = Math.abs(alignAngle - getYaw().getRadians());
+        return diff < DriveConstants.HEADING_TOLERANCE || diff > 2*Math.PI - DriveConstants.HEADING_TOLERANCE;
+    }
+
     /**
      * Gets the angle to align to for the speaker
      * @return The angle in radians

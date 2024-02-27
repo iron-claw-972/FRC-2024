@@ -24,17 +24,22 @@ public class ArmConstants {
 
     /* arm slants down at 9.2 degrees */
     /* offset is 0.54 rotations */
-    /** minimum arm angle in radians -- temporarily zero */
-    public static final double MIN_ANGLE_RADS = Units.degreesToRadians(0.0);
+    /** minimum arm angle in radians */
+    public static final double MIN_ANGLE_RADS = Units.degreesToRadians(-10.0);
     /** maximum arm angle in radians */
-    public static final double MAX_ANGLE_RADS = Units.degreesToRadians(80.0);
+    public static final double MAX_ANGLE_RADS = Units.degreesToRadians(70.0);
     /** starting angle in radians */
-    public static final double START_ANGLE_RADS = Units.degreesToRadians(0.0);
+    public static final double START_ANGLE_RADS = MIN_ANGLE_RADS;
 
     public static final double intakeSetpoint = 0;
     public static final double stowedSetpoint = 0;
+    // TODO: tune
+    public static final double standbySetpoint = Units.degreesToRadians(40);
     public static final double subwooferSetpoint = 0;
     public static final double preClimbSetpoint = 0;
     public static final double climbSetpoint = 0;
     public static final double ampSetpoint = 0;
+
+    public static final double PIVOT_HEIGHT = Units.inchesToMeters(16.75);
+    public static final double PIVOT_X = Units.inchesToMeters(-10);
 }
