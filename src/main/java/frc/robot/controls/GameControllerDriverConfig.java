@@ -57,7 +57,7 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     // Enable state deadband after setting formation to X
     kDriver.get(Button.X).onFalse(new InstantCommand(()->getDrivetrain().setStateDeadband(true)));
 
-    kDriver.get(Button.RB).whileTrue(new AcquireGamePiece(()->vision.getBestGamePiece(Math.PI/2), getDrivetrain(), intake, index, arm));
+    kDriver.get(Button.Y).whileTrue(new AcquireGamePiece(()->vision.getBestGamePiece(Math.PI/2), getDrivetrain(), intake, index, arm));
 
     // Resets the modules to absolute if they are having the unresolved zeroing
     // error
@@ -92,8 +92,8 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
             getDrivetrain()));
     
     if(arm != null){
-      kDriver.get(Button.Y).onTrue(new InstantCommand(()->arm.setAngle(ArmConstants.preClimbSetpoint), arm));
-      kDriver.get(Button.Y).onFalse(new InstantCommand(()->arm.setAngle(ArmConstants.climbSetpoint), arm));
+      kDriver.get(Button.RB).onTrue(new InstantCommand(()->arm.setAngle(ArmConstants.preClimbSetpoint), arm));
+      kDriver.get(Button.RB).onFalse(new InstantCommand(()->arm.setAngle(ArmConstants.climbSetpoint), arm));
     }
   }
 
