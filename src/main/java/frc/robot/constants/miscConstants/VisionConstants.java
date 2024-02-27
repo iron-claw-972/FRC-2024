@@ -30,6 +30,8 @@ public class VisionConstants {
    */
   public static final boolean ENABLED = false;
 
+  public static final boolean OBJECT_DETECTION_ENABLED = false;
+
   // If odometry should be updated using vision during auto
   public static final boolean ENABLED_AUTO = true;
 

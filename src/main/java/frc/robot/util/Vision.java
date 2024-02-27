@@ -137,11 +137,14 @@ public class Vision {
    * @return The array of DetectedObjects
    */
   public DetectedObject[] getDetectedObjects(){
+    if(!VisionConstants.OBJECT_DETECTION_ENABLED){
+      return new DetectedObject[0];
+    }
     double[] xOffset = getHorizontalOffset();
     double[] yOffset = getVerticalOffset();
-    double[] distance = getDistance();
+    // double[] distance = getDistance();
     long[] objectClass = getDetectedObjectClass();
-    long[] cameraIndex = getCameraIndex();
+    // long[] cameraIndex = getCameraIndex();
     DetectedObject[] objects = new DetectedObject[xOffset.length];
     for(int i = 0; i < objects.length; i++){
       objects[i] = new DetectedObject(
