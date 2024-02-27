@@ -165,7 +165,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("PrepareShooter", new PrepareShooter(shooter, 0));
     NamedCommands.registerCommand("SetShooterSpeed", new SetShooterSpeed(shooter, 0));
     NamedCommands.registerCommand("ShootKnownPos", new ShootKnownPos(shooter, arm, index, null));
-    NamedCommands.registerCommand("Shoot", new Shoot(shooter, arm, drive, index).withTimeout(2)); // using for now in the auto paths
+    NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new Shoot(shooter, arm, drive, index).withTimeout(1.5)); // using for now in the auto paths
 
 
 
