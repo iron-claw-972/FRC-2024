@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7859976973515199,
-        "y": 4.198201444835939
+        "x": 0.75,
+        "y": 4.27
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.78599769735152,
-        "y": 4.198201444835939
+        "x": 1.75,
+        "y": 4.27
       },
       "isLocked": false,
       "linkedName": null
@@ -32,16 +32,16 @@
     },
     {
       "anchor": {
-        "x": 7.849266980585242,
-        "y": 2.408995815142628
+        "x": 7.744019590603283,
+        "y": 2.41243232843099
       },
       "prevControl": {
-        "x": 7.859238955513593,
-        "y": 1.807538508391674
+        "x": 7.753991565531634,
+        "y": 1.8109750216800358
       },
       "nextControl": {
-        "x": 7.843446209446888,
-        "y": 2.7600742481754663
+        "x": 7.738198819464929,
+        "y": 2.763510761463828
       },
       "isLocked": false,
       "linkedName": null
@@ -96,12 +96,12 @@
     },
     {
       "anchor": {
-        "x": 0.7859976973515199,
-        "y": 4.198201444835939
+        "x": 0.75,
+        "y": 4.27
       },
       "prevControl": {
-        "x": 0.627624888709658,
-        "y": 3.2930398640571408
+        "x": 0.5916271913581381,
+        "y": 3.3648384192212015
       },
       "nextControl": null,
       "isLocked": false,
@@ -144,6 +144,17 @@
       "constraints": {
         "maxVelocity": 2.0,
         "maxAcceleration": 2.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    },
+    {
+      "name": "Outtake",
+      "minWaypointRelativePos": 5.8999999999999995,
+      "maxWaypointRelativePos": 6.0,
+      "constraints": {
+        "maxVelocity": 0.25,
+        "maxAcceleration": 0.25,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
       }
@@ -243,9 +254,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Autos yet to fix",
+  "folder": "Final Autos",
   "previewStartingState": {
-    "rotation": -57.82614121299425,
+    "rotation": -60.75,
     "velocity": 0
   },
   "useDefaultConstraints": true

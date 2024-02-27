@@ -36,7 +36,7 @@ public class AutoTab extends ShuffleBoardTabs {
         autoCommand.addOption("0 Auto (pos 7)", new FollowPathCommand("0 Auto (pos 7)",true, drive));
         autoCommand.addOption("[Under the stage] One Piece (pos 4) (destroy) (B2)", new FollowPathCommand("[Under the stage] One Piece (pos 4) (destroy) (B2)",true, drive));
         autoCommand.addOption("[Under the stage] One Piece (pos 4) (destroy) (B1)", new FollowPathCommand("[Under the stage] One Piece (pos 4) (destroy) (B1)",true, drive));
-        
+        autoCommand.addOption("[Around the stage] One Piece (pos 4) (destroy) (B)", new FollowPathCommand("[Around the stage] One Piece (pos 4) (destroy) (B)",true, drive));
         
         // Previous Autos (Some will keep and still have to fix) 
         // autoCommand.setDefaultOption("Do Nothing", new PrintCommand("This will do nothing!"));
