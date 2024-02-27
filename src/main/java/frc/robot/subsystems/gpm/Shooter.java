@@ -174,10 +174,10 @@ public class Shooter extends SubsystemBase {
 	 */
 	public void setTargetRPM(double speedLeft, double speedRight) {
 		leftPID.reset();
-		leftPID.setSetpoint(speedLeft);
+		leftPID.setSetpoint(speedLeft + ShooterConstants.SPIN);
 
 		rightPID.reset();
-		rightPID.setSetpoint(speedRight);
+		rightPID.setSetpoint(speedRight - ShooterConstants.SPIN);
 	}
 
 	/**
