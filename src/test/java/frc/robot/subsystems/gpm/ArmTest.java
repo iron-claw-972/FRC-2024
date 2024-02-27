@@ -29,11 +29,11 @@ public class ArmTest {
         assertTrue(ArmConstants.MIN_ANGLE_RADS <= ArmConstants.START_ANGLE_RADS);
         assertTrue(ArmConstants.START_ANGLE_RADS <= ArmConstants.MAX_ANGLE_RADS);
 
-        // the offset should be in the range 0 to 1
+        // the offset should be in the range 0 to 1 (less the range of movement)
         assertTrue(0.0 <= Arm.OFFSET);
-        assertTrue(Arm.OFFSET <= 1.0);
-        // should test that OFFSET does not cause a wrap around
+        assertTrue(Arm.OFFSET <= 1.0 - (ArmConstants.MAX_ANGLE_RADS - ArmConstants.MIN_ANGLE_RADS)/(2.0 * Math.PI));
 
+        // the tests below actually caught a bad value...
         assertTrue(rangeCheck(ArmConstants.intakeSetpoint));
         assertTrue(rangeCheck(ArmConstants.stowedSetpoint));
         assertTrue(rangeCheck(ArmConstants.subwooferSetpoint));
@@ -43,7 +43,7 @@ public class ArmTest {
     }
 
     /**
-     * Check that an angle is within the legal range.
+     * Check that an angle is within the min-max range.
      * @param setpoint arm setpoint in radians
      * @return true if the value is acceptable.
      */
