@@ -33,13 +33,13 @@ public class ArmConstants {
     /** starting angle in radians */
     public static final double START_ANGLE_RADS = Units.degreesToRadians(-10.0);
 
-    public static final double intakeSetpoint = 0;
-    public static final double stowedSetpoint = 0;
-    public static final double standbySetpoint = Units.degreesToRadians(40); // TODO: tune
-    public static final double subwooferSetpoint = 0;
-    public static final double preClimbSetpoint = 2;
-    public static final double climbSetpoint = 0;
-    public static final double ampSetpoint = 0;
+    public static final double intakeSetpoint = MIN_ANGLE_RADS;
+    public static final double stowedSetpoint = MIN_ANGLE_RADS;
+    public static final double standbySetpoint = MIN_ANGLE_RADS;
+    public static final double subwooferSetpoint = MIN_ANGLE_RADS;
+    public static final double preClimbSetpoint = MAX_ANGLE_RADS;
+    public static final double climbSetpoint = MIN_ANGLE_RADS;
+    public static final double ampSetpoint = MAX_ANGLE_RADS;
 
     public static final double PIVOT_HEIGHT = Units.inchesToMeters(16.75);
     public static final double PIVOT_X = Units.inchesToMeters(-10);
