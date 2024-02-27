@@ -42,7 +42,7 @@ public class AutoTab extends ShuffleBoardTabs {
         // autoCommand.setDefaultOption("Do Nothing", new PrintCommand("This will do nothing!"));
         // autoCommand.addOption("Example Path", new FollowPathCommand("Example Path",true, drive));
         // autoCommand.addOption("Two Piece (R) Close Shot", new FollowPathCommand("Two Piece (R) Close Shot",true, drive));
-        // autoCommand.addOption("1 point auto (L)", new FollowPathCommand("1 point auto (L)",true, drive));
+        autoCommand.addOption("1 point auto (L)", new FollowPathCommand("1 point auto (L)",true, drive));
         // autoCommand.addOption("1 point auto (R)", new FollowPathCommand("1 point auto (R)",true, drive));
         // autoCommand.addOption("Two Piece (R) Close Shot", new FollowPathCommand("Two Piece (R) Close Shot",true, drive));
         // autoCommand.addOption("Accuracy", new FollowPathCommand("Accuracy",true, drive));
