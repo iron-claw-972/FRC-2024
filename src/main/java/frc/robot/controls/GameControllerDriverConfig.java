@@ -56,28 +56,40 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     // Enable state deadband after setting formation to X
     kDriver.get(Button.X).onFalse(new InstantCommand(()->getDrivetrain().setStateDeadband(true)));
 
-    kDriver.get(Button.B).whileTrue(new AcquireGamePiece(()->vision.getBestGamePiece(Math.PI/2), getDrivetrain(), intake, index, arm));
+    kDriver.get(Button.RB).whileTrue(new AcquireGamePiece(()->vision.getBestGamePiece(Math.PI/2), getDrivetrain(), intake, index, arm));
 
     // Resets the modules to absolute if they are having the unresolved zeroing
     // error
     kDriver.get(Button.A).onTrue(new InstantCommand(() -> getDrivetrain().resetModulesToAbsolute()));
 
     // Align to stage and climb
-    kDriver.get(DPad.LEFT).toggleOnTrue(new Climb(Chain.LEFT, getDrivetrain(), arm));
-    kDriver.get(DPad.UP).toggleOnTrue(new Climb(Chain.CENTER, getDrivetrain(), arm));
-    kDriver.get(DPad.RIGHT).toggleOnTrue(new Climb(Chain.RIGHT, getDrivetrain(), arm));
+    if(arm != null){
+      kDriver.get(DPad.LEFT).toggleOnTrue(new Climb(Chain.LEFT, getDrivetrain(), arm));
+      kDriver.get(DPad.UP).toggleOnTrue(new Climb(Chain.CENTER, getDrivetrain(), arm));
+      kDriver.get(DPad.RIGHT).toggleOnTrue(new Climb(Chain.RIGHT, getDrivetrain(), arm));
+    }
 
     // Amp alignment
-    kDriver.get(Button.LB).whileTrue(new OuttakeAmp(arm, index, shooter, getDrivetrain()));
+    if(arm != null && index != null && shooter != null){
+      kDriver.get(Button.B).whileTrue(new OuttakeAmp(arm, index, shooter, getDrivetrain()));
+    }else{
+      kDriver.get(Button.B).whileTrue(new GoToPose(()->
+        DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_AMP_POSE
+        : VisionConstants.BLUE_AMP_POSE,
+        getDrivetrain()
+      ));
+    }
     // Podium alignment
-    kDriver.get(Button.RB)
+    kDriver.get(Button.LB)
         .whileTrue(new GoToPose(
             () -> DriverStation.getAlliance().get() == Alliance.Blue ? VisionConstants.BLUE_PODIUM_POSE
                 : VisionConstants.RED_PODIUM_POSE,
             getDrivetrain()));
     
-    kDriver.get(Button.Y).onTrue(new InstantCommand(()->arm.setAngle(ArmConstants.preClimbSetpoint)));
-    kDriver.get(Button.Y).onFalse(new InstantCommand(()->arm.setAngle(ArmConstants.climbSetpoint)));
+    if(arm != null){
+      kDriver.get(Button.Y).onTrue(new InstantCommand(()->arm.setAngle(ArmConstants.preClimbSetpoint), arm));
+      kDriver.get(Button.Y).onFalse(new InstantCommand(()->arm.setAngle(ArmConstants.climbSetpoint), arm));
+    }
   }
 
   @Override
