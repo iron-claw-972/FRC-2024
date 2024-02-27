@@ -83,7 +83,19 @@
       "rotateFast": true
     }
   ],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Shoot",
+      "minWaypointRelativePos": 1.8,
+      "maxWaypointRelativePos": 2.2,
+      "constraints": {
+        "maxVelocity": 0.25,
+        "maxAcceleration": 0.25,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    }
+  ],
   "eventMarkers": [
     {
       "name": "Intake 1",

@@ -93,7 +93,19 @@
       "rotateFast": false
     }
   ],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Shoot",
+      "minWaypointRelativePos": 1.85,
+      "maxWaypointRelativePos": 2.3,
+      "constraints": {
+        "maxVelocity": 0.25,
+        "maxAcceleration": 0.25,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    }
+  ],
   "eventMarkers": [
     {
       "name": "Intake 1",
@@ -114,11 +126,18 @@
     },
     {
       "name": "Outtake 2",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 2.0,
       "command": {
         "type": "parallel",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Shoot"
+              }
+            }
+          ]
         }
       }
     },
@@ -145,7 +164,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Autos",
+  "folder": null,
   "previewStartingState": {
     "rotation": -59.0,
     "velocity": 0

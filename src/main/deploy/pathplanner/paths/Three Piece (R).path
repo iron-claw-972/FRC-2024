@@ -138,7 +138,7 @@
             {
               "type": "named",
               "data": {
-                "name": "WaitCommand"
+                "name": "Shoot"
               }
             }
           ]
@@ -165,7 +165,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Stop"
+                "name": "Shoot"
               }
             }
           ]
