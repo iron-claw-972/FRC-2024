@@ -309,8 +309,8 @@ public class Shooter extends SubsystemBase {
 		LogManager.add("Shooter/LeftSpeedError", () -> speedLeft - getLeftMotorSpeed(), Duration.ofSeconds(1));
 		LogManager.add("Shooter/RightSpeedError", () -> speedRight - getRightMotorSpeed(), Duration.ofSeconds(1));
 
-		LogManager.add("Shooter/Volts/Left", () -> leftMotor.get() * voltage);	
-		LogManager.add("Shooter/Volts/Right", () -> rightMotor.get() * voltage);
+		LogManager.add("Shooter/VoltsLeft", () -> leftMotor.get() * voltage);	
+		LogManager.add("Shooter/VoltsRight", () -> rightMotor.get() * voltage);
 	}
 }
  

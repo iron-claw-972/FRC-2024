@@ -1,6 +1,7 @@
 package frc.robot.subsystems.gpm;
 
 import java.time.Duration;
+import java.util.ArrayList;
 
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -128,6 +129,7 @@ public class Arm extends SubsystemBase {
     public void setAngle(double angle) {
         pid.reset();
         pid.setSetpoint(angle);
+        this.angle = angle;
     }
 
     /**
@@ -142,7 +144,14 @@ public class Arm extends SubsystemBase {
     }
 
     private void setupLogs() {
-        LogManager.add("Arm/PositionError", () -> angle - getAngleRad(), Duration.ofSeconds(1));
+        LogManager.add("Arm/PositionError", () -> angle - simulation.getAngleRads(), Duration.ofSeconds(1));
         LogManager.add("Arm/Volts", () -> motor.get() * voltsBattery);
+
+        ArrayList<Double> slave_errors = new ArrayList();
+        for (TalonFX each_talon: slaves) {
+            slave_errors.add(each_talon.getPosition().getValue()-motor.getPosition().getValue());
+        }
+
+        LogManager.add("Arm/SlaveErrors(ticks)", () -> slave_errors);
     }
 }
