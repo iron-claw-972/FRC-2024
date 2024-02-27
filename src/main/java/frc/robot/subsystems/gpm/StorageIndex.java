@@ -1,5 +1,6 @@
 package frc.robot.subsystems.gpm;
 
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -13,6 +14,7 @@ import frc.robot.constants.StorageIndexConstants;
  */
 public class StorageIndex extends SubsystemBase {
 
+  // private final CANSparkFlex m_indexmotor;***
   private final CANSparkFlex m_indexmotor;
   DigitalInput m_indexBeamBreak;
 

@@ -4,7 +4,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 public class StorageIndexConstants {
-    public static final int indexMotorID = 7;
+    public static final int indexMotorID = 0;
     public static final int indexBeamBreak = 0; // no clue what we're using, but this is what windup's doing
     public static final NeutralModeValue indexNeutralMode = NeutralModeValue.Brake;
 
