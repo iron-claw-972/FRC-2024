@@ -4,12 +4,9 @@
 
 package frc.robot.controls;
 
-import java.util.function.Supplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.OuttakeAmp;
 import frc.robot.commands.Shoot;
@@ -25,7 +22,6 @@ import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.subsystems.gpm.Intake.Mode;
 import frc.robot.subsystems.gpm.StorageIndex;
 import lib.controllers.GameController;
-import lib.controllers.GameController.Axis;
 import lib.controllers.GameController.Button;
 
 /** Add your docs here. */

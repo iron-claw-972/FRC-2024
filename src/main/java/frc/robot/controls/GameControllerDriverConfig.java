@@ -6,13 +6,18 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.Climb;
 import frc.robot.commands.GoToPose;
+import frc.robot.commands.OuttakeAmp;
 import frc.robot.commands.Climb.Chain;
 import frc.robot.commands.drive_comm.SetFormationX;
-import frc.robot.commands.vision.DriveToNote;
+import frc.robot.commands.vision.AcquireGamePiece;
+import frc.robot.constants.ArmConstants;
 import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Arm;
+import frc.robot.subsystems.gpm.Intake;
+import frc.robot.subsystems.gpm.Shooter;
+import frc.robot.subsystems.gpm.StorageIndex;
 import frc.robot.util.MathUtils;
 import frc.robot.util.Vision;
 import lib.controllers.GameController;
@@ -27,11 +32,17 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
   private final GameController kDriver = new GameController(Constants.DRIVER_JOY);
   private Vision vision;
   private Arm arm;
+  private Intake intake;
+  private StorageIndex index;
+  private Shooter shooter;
 
-  public GameControllerDriverConfig(Drivetrain drive, Vision vision, Arm arm) {
+  public GameControllerDriverConfig(Drivetrain drive, Vision vision, Arm arm, Intake intake, StorageIndex index, Shooter shooter) {
     super(drive);
     this.vision = vision;
     this.arm = arm;
+    this.index = index;
+    this.intake = intake;
+    this.shooter = shooter;
   }
 
   @Override
@@ -45,7 +56,7 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     // Enable state deadband after setting formation to X
     kDriver.get(Button.X).onFalse(new InstantCommand(()->getDrivetrain().setStateDeadband(true)));
 
-    kDriver.get(Button.B).whileTrue(new DriveToNote(()->vision.getBestGamePiece(Math.PI/2), getDrivetrain()));
+    kDriver.get(Button.B).whileTrue(new AcquireGamePiece(()->vision.getBestGamePiece(Math.PI/2), getDrivetrain(), intake, index, arm));
 
     // Resets the modules to absolute if they are having the unresolved zeroing
     // error
@@ -57,17 +68,16 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     kDriver.get(DPad.RIGHT).toggleOnTrue(new Climb(Chain.RIGHT, getDrivetrain(), arm));
 
     // Amp alignment
-    kDriver.get(Button.LB)
-        .whileTrue(new GoToPose(
-            () -> DriverStation.getAlliance().get() == Alliance.Blue ? VisionConstants.BLUE_AMP_POSE
-                : VisionConstants.RED_AMP_POSE,
-            getDrivetrain()));
+    kDriver.get(Button.LB).whileTrue(new OuttakeAmp(arm, index, shooter, getDrivetrain()));
     // Podium alignment
     kDriver.get(Button.RB)
         .whileTrue(new GoToPose(
             () -> DriverStation.getAlliance().get() == Alliance.Blue ? VisionConstants.BLUE_PODIUM_POSE
                 : VisionConstants.RED_PODIUM_POSE,
             getDrivetrain()));
+    
+    kDriver.get(Button.Y).onTrue(new InstantCommand(()->arm.setAngle(ArmConstants.preClimbSetpoint)));
+    kDriver.get(Button.Y).onFalse(new InstantCommand(()->arm.setAngle(ArmConstants.climbSetpoint)));
   }
 
   @Override
