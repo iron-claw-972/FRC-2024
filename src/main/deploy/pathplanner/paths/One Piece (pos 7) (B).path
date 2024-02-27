@@ -59,7 +59,14 @@
       "command": {
         "type": "sequential",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Shoot"
+              }
+            }
+          ]
         }
       }
     },
@@ -86,7 +93,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Autos",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

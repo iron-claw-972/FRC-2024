@@ -28,15 +28,14 @@ public class AutoTab extends ShuffleBoardTabs {
         
         autoCommand.setDefaultOption("Do Nothing", new PrintCommand("This will do nothing!"));
         autoCommand.addOption("Example Path", new FollowPathCommand("Example Path",true, drive));
-        autoCommand.addOption("7 Piece Auto Realistic", new FollowPathCommand("7 Piece Auto Realistic",true, drive));
-        autoCommand.addOption("7 Piece Auto", new FollowPathCommand("7 Piece Auto",true, drive));       
-        autoCommand.addOption("Three Piece", new FollowPathCommand("Three Piece",true, drive));
-        autoCommand.addOption("Test", new FollowPathCommand("Test",true, drive));
-        autoCommand.addOption("Two Piece", new FollowPathCommand("Two Piece",true, drive));
-        autoCommand.addOption("Sabotage Auto", new FollowPathCommand("Sabotage Auto",true, drive));
-        autoCommand.addOption("Three Piece (L)", new FollowPathCommand("Three Piece (L)",true, drive));
+        autoCommand.addOption("Two Piece (R) Close Shot", new FollowPathCommand("Two Piece (R) Close Shot",true, drive));
+        autoCommand.addOption("1 point auto (L)", new FollowPathCommand("1 point auto (L)",true, drive));
+        autoCommand.addOption("1 point auto (R)", new FollowPathCommand("1 point auto (R)",true, drive));
         autoCommand.addOption("Two Piece (pos 2) [B]", new FollowPathCommand("Two Piece (pos 2) [B]",true, drive));
         autoCommand.addOption("Two Piece (pos 4) [B]", new FollowPathCommand("Two Piece (pos 4) [B]",true, drive));
+        autoCommand.addOption("One Piece (pos 2) [B]", new FollowPathCommand("One Piece (pos 2) [B]",true, drive));
+        autoCommand.addOption("Two Piece (R) Close Shot", new FollowPathCommand("Two Piece (R) Close Shot",true, drive));
+        
         // Important Notes and To-Do's:
         // Fix the starting angle for shooting for 2 piece pos 4, we have to do this for all of the autos, should be a quick fix
         // Also have to add constraint zones for all autos near shooting point
