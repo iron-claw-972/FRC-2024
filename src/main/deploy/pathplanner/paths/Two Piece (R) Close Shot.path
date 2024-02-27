@@ -3,57 +3,57 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.9086365238257539,
-        "y": 4.081259900411539
+        "x": 0.7682751977525814,
+        "y": 6.8670494718038615
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6981417438618356,
-        "y": 3.438081406077343
+        "x": 1.411759240065084,
+        "y": 6.936658856679763
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.961110423645348,
-        "y": 5.168816263558454
+        "x": 2.8441688792209487,
+        "y": 6.630585568863446
       },
       "prevControl": {
-        "x": 2.1902744180851785,
-        "y": 5.123472969113746
+        "x": 2.040022154497349,
+        "y": 6.875690601642758
       },
       "nextControl": {
-        "x": 3.1599110491668267,
-        "y": 5.180510418000892
+        "x": 3.0564097853939693,
+        "y": 6.565894247410225
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.9086365238257539,
-        "y": 6.0692661556263285
+        "x": 0.89943932856987,
+        "y": 7.010076157919538
       },
       "prevControl": {
-        "x": 2.045738384478432,
-        "y": 5.9138840468866265
+        "x": 1.323541687042007,
+        "y": 7.191905739855137
       },
       "nextControl": {
-        "x": 0.85616262400616,
-        "y": 7.262069908755204
+        "x": -0.006676372783946588,
+        "y": 6.621588247227403
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.106837968661694,
-        "y": 6.0692661556263285
+        "x": 4.036972632349823,
+        "y": 7.180210827658122
       },
       "prevControl": {
-        "x": 6.130226277546573,
-        "y": 6.630585568863443
+        "x": 2.8324747247785087,
+        "y": 7.343928989852282
       },
       "nextControl": null,
       "isLocked": false,
@@ -62,35 +62,19 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 2.85,
-      "rotationDegrees": 92.0,
-      "rotateFast": true
-    },
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 0,
+      "waypointRelativePos": 2,
+      "rotationDegrees": 56.0,
       "rotateFast": false
     }
   ],
   "constraintZones": [
     {
       "name": "Shoot",
-      "minWaypointRelativePos": 0,
-      "maxWaypointRelativePos": 0.55,
+      "minWaypointRelativePos": 1.9,
+      "maxWaypointRelativePos": 2.5,
       "constraints": {
-        "maxVelocity": 0.5,
-        "maxAcceleration": 0.5,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0
-      }
-    },
-    {
-      "name": "Shoot2",
-      "minWaypointRelativePos": 1.0,
-      "maxWaypointRelativePos": 1.9,
-      "constraints": {
-        "maxVelocity": 0.5,
-        "maxAcceleration": 0.5,
+        "maxVelocity": 0.25,
+        "maxAcceleration": 0.25,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
       }
@@ -99,7 +83,7 @@
   "eventMarkers": [
     {
       "name": "Intake 1",
-      "waypointRelativePos": 2.3,
+      "waypointRelativePos": 0.65,
       "command": {
         "type": "parallel",
         "data": {
@@ -108,6 +92,23 @@
               "type": "named",
               "data": {
                 "name": "Intake_Note_1.5_Sec"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Shoot",
+      "waypointRelativePos": 2.1999999999999997,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Shoot"
               }
             }
           ]
@@ -123,13 +124,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": -0.707319368544236,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": " Fix or no need",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 56.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

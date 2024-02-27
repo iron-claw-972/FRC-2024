@@ -25,17 +25,33 @@ public class AutoTab extends ShuffleBoardTabs {
     
     public void createEntries(){  
         tab = Shuffleboard.getTab("Auto");
+    
+        // Final Autos
+        autoCommand.addOption("One Piece (pos 7) (B)", new FollowPathCommand("One Piece (pos 7) (B)",true, drive));
+        autoCommand.addOption("Two Piece (pos 4) [B]", new FollowPathCommand("Two Piece (pos 4) [B]",true, drive));
+        autoCommand.addOption("One Piece (pos 2) (B)", new FollowPathCommand("One Piece (pos 2) (B)",true, drive));
+        autoCommand.addOption("Three Piece (pos 2) [B]", new FollowPathCommand("Three Piece (pos 2) [B]",true, drive));
+        autoCommand.addOption("Two Piece (pos 2) [B]", new FollowPathCommand("Two Piece (pos 2) [B]",true, drive));
+        autoCommand.addOption("0 Piece Auto (pos 1)", new FollowPathCommand("0 Piece Auto (pos 1)",true, drive));
+        autoCommand.addOption("0 Auto (pos 7)", new FollowPathCommand("0 Auto (pos 7)",true, drive));
+        autoCommand.addOption("[Under the stage] One Piece (pos 4) (destroy) (B2)", new FollowPathCommand("[Under the stage] One Piece (pos 4) (destroy) (B2)",true, drive));
+        autoCommand.addOption("[Under the stage] One Piece (pos 4) (destroy) (B1)", new FollowPathCommand("[Under the stage] One Piece (pos 4) (destroy) (B1)",true, drive));
+        autoCommand.addOption("[Around the stage] One Piece (pos 4) (destroy) (B)", new FollowPathCommand("[Around the stage] One Piece (pos 4) (destroy) (B)",true, drive));
         
-        autoCommand.setDefaultOption("Do Nothing", new PrintCommand("This will do nothing!"));
-        autoCommand.addOption("Example Path", new FollowPathCommand("Example Path",true, drive));
-        autoCommand.addOption("7 Piece Auto Realistic", new FollowPathCommand("7 Piece Auto Realistic",true, drive));
-        autoCommand.addOption("7 Piece Auto", new FollowPathCommand("7 Piece Auto",true, drive));       
-        autoCommand.addOption("Bottom 4 Piece 4 5 (No Shooting On The Move)", new FollowPathCommand("Bottom 4 Piece 4 5 (No Shooting On The Move)",true, drive));       
-        autoCommand.addOption("Dream Bottom 4 Piece 4 5", new FollowPathCommand("Dream Bottom 4 Piece 4 5",true, drive));
-        autoCommand.addOption("Three Piece", new FollowPathCommand("Three Piece",true, drive));
-        autoCommand.addOption("Test", new FollowPathCommand("Test",true, drive));
-        autoCommand.addOption("Two Piece", new FollowPathCommand("Two Piece",true, drive));
-        autoCommand.addOption("Sabotage Auto", new FollowPathCommand("Sabotage Auto",true, drive));
+        // Previous Autos (Some will keep and still have to fix) 
+        // autoCommand.setDefaultOption("Do Nothing", new PrintCommand("This will do nothing!"));
+        // autoCommand.addOption("Example Path", new FollowPathCommand("Example Path",true, drive));
+        // autoCommand.addOption("Two Piece (R) Close Shot", new FollowPathCommand("Two Piece (R) Close Shot",true, drive));
+        // autoCommand.addOption("1 point auto (L)", new FollowPathCommand("1 point auto (L)",true, drive));
+        // autoCommand.addOption("1 point auto (R)", new FollowPathCommand("1 point auto (R)",true, drive));
+        // autoCommand.addOption("Two Piece (R) Close Shot", new FollowPathCommand("Two Piece (R) Close Shot",true, drive));
+        // autoCommand.addOption("Accuracy", new FollowPathCommand("Accuracy",true, drive));
+        // autoCommand.addOption("Three Piece (L)", new FollowPathCommand("Three Piece (L)",true, drive));
+        
+
+        // Repleacement Auto, don't delete
+        // autoCommand.addOption("lol", new FollowPathCommand("lol",true, drive));
+
 
         tab.add(autoCommand);
     }

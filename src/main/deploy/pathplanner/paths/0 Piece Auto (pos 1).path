@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.9377476678450625,
-        "y": 7.160801753297496
+        "x": 0.9978270455827631,
+        "y": 7.237296985292972
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.8812568444809021,
-        "y": 7.08171460058767
+        "x": 2.0049589885199732,
+        "y": 7.196683851830634
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.581518201287769,
-        "y": 7.160801753297496
+        "x": 3.820138653116107,
+        "y": 7.237296985292972
       },
       "prevControl": {
-        "x": 3.4967819662415285,
-        "y": 7.104310929933336
+        "x": 2.9813621427325456,
+        "y": 7.243527198013759
       },
       "nextControl": null,
       "isLocked": false,
@@ -61,7 +61,10 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
-  "previewStartingState": null,
+  "folder": "Final Autos",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
   "useDefaultConstraints": false
 }

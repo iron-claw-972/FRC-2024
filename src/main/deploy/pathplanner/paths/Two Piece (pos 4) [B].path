@@ -3,89 +3,73 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.1298164672832078,
-        "y": 5.49997154639118
+        "x": 0.75,
+        "y": 4.27
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.1072201379375437,
-        "y": 5.488673381718348
+        "x": 1.8807197761214796,
+        "y": 4.27
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.332958578485463,
-        "y": 5.49997154639118
+        "x": 2.391152335748853,
+        "y": 4.114397967513275
       },
       "prevControl": {
-        "x": 3.7340434243710012,
-        "y": 5.4717261347091
+        "x": 1.8549156338217678,
+        "y": 4.231395066115549
       },
       "nextControl": {
-        "x": 2.931873732599925,
-        "y": 5.528216958073259
+        "x": 2.886853279467213,
+        "y": 4.00624503433836
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.2144402758750874,
-        "y": 6.595893519655892
+        "x": 0.75,
+        "y": 4.27
       },
       "prevControl": {
-        "x": 1.4590520472024555,
-        "y": 6.11519191959149
+        "x": 0.9201116017553043,
+        "y": 4.591354263425829
       },
       "nextControl": {
-        "x": 2.9698285045477197,
-        "y": 7.076595119720293
+        "x": 0.6230802761221356,
+        "y": 4.0302386083011
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.852674153435739,
-        "y": 7.4771503641367945
+        "x": 5.2380817350708355,
+        "y": 1.7452067208172428
       },
       "prevControl": {
-        "x": 3.2496677141151418,
-        "y": 7.2790683813522685
+        "x": 4.795761099132753,
+        "y": 1.9008380556843465
       },
       "nextControl": {
-        "x": 4.4556805927563365,
-        "y": 7.67523234692132
+        "x": 5.764568678781067,
+        "y": 1.559961314696976
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.3331834313941853,
-        "y": 7.002627447877846
+        "x": 7.831517420754557,
+        "y": 0.7507313826979205
       },
       "prevControl": {
-        "x": 1.1382900907878328,
-        "y": 7.067591894746632
-      },
-      "nextControl": {
-        "x": 1.5280767720005377,
-        "y": 6.937663001009061
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.734155850825363,
-        "y": 7.002627447877846
-      },
-      "prevControl": {
-        "x": 2.8485497681377874,
-        "y": 6.936250730424957
+        "x": 7.729144959477568,
+        "y": 0.7482939431437061
       },
       "nextControl": null,
       "isLocked": false,
@@ -94,21 +78,33 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 3.5,
-      "rotationDegrees": 0,
-      "rotateFast": false
+      "waypointRelativePos": 0.8500000000000001,
+      "rotationDegrees": -1.1361084359015519,
+      "rotateFast": true
     },
     {
-      "waypointRelativePos": 4.0,
-      "rotationDegrees": 50.0,
+      "waypointRelativePos": 1.95,
+      "rotationDegrees": -60.75,
       "rotateFast": false
     }
   ],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Outtake Zone",
+      "minWaypointRelativePos": 1.85,
+      "maxWaypointRelativePos": 2.15,
+      "constraints": {
+        "maxVelocity": 0.25,
+        "maxAcceleration": 0.25,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    }
+  ],
   "eventMarkers": [
     {
-      "name": "Note 2",
-      "waypointRelativePos": 0.65,
+      "name": "Intake 1",
+      "waypointRelativePos": 0.8999999999999999,
       "command": {
         "type": "parallel",
         "data": {
@@ -118,19 +114,13 @@
               "data": {
                 "name": "Intake_Note_1.5_Sec"
               }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "Stop"
-              }
             }
           ]
         }
       }
     },
     {
-      "name": "Intake 2",
+      "name": "Outtake 2",
       "waypointRelativePos": 2.0,
       "command": {
         "type": "parallel",
@@ -139,7 +129,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Intake_Note_1.5_Sec"
+                "name": "Outtake_Note_1.5_Sec"
               }
             }
           ]
@@ -147,8 +137,8 @@
       }
     },
     {
-      "name": "Shoot",
-      "waypointRelativePos": 3.95,
+      "name": "Intake 2",
+      "waypointRelativePos": 3.85,
       "command": {
         "type": "parallel",
         "data": {
@@ -156,7 +146,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Stop"
+                "name": "Intake_Note_1.5_Sec"
               }
             }
           ]
@@ -172,14 +162,14 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -0.707319368544236,
+    "rotation": -0.17076820191035333,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": " Fix or no need",
+  "folder": "Final Autos",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -60.75,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
