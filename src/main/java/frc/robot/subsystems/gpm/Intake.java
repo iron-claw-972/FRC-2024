@@ -72,15 +72,14 @@ public class Intake extends SubsystemBase {
     private double motorRPMSim;
     private double centeringMotorRPMSim;
 
-    private int countSim = 0;
-    private DIOSim IntakeSensorDioSim;
-    private boolean simDIOValue = true;
+    private DIOSim intakeSensorDioSim;
     private FlywheelSim flywheelSim;
     private FlywheelSim centeringFlywheelSim;
 
     private Mode mode;
 
     private Timer waitTimer = new Timer();
+    private Timer point2Timer = new Timer();
 
     public Intake() {
         // set the motor parameters
@@ -100,13 +99,16 @@ public class Intake extends SubsystemBase {
 
         // Simulation objects
         if (RobotBase.isSimulation()) {
-            IntakeSensorDioSim = new DIOSim(sensor);
+            intakeSensorDioSim = new DIOSim(sensor);
+            intakeSensorDioSim.setValue(true);
+
             // assuming gearing is 1:1 for both
             flywheelSim = new FlywheelSim(dcMotor, 1.0, MOI_TOTAL);
             centeringFlywheelSim = new FlywheelSim(dcMotorCentering ,  1.0, MOI_CENTERING_TOTAL);
         }
 
         waitTimer.start();
+        point2Timer.start();
 
         publish();
     }
@@ -212,6 +214,10 @@ public class Intake extends SubsystemBase {
         }
     }
 
+    public boolean intakeInactive() {
+        return mode == Mode.DISABLED;
+    }
+
     @Override
     public void simulationPeriodic() {
         flywheelSim.setInputVoltage(mode.power * motorVoltage);
@@ -223,15 +229,15 @@ public class Intake extends SubsystemBase {
         motorRPMSim = flywheelSim.getAngularVelocityRPM();
         centeringMotorRPMSim = centeringFlywheelSim.getAngularVelocityRPM();
 
-        // change values every 1/2 second
-        if (countSim++ > 25) {
-            countSim = 0;
-
-            IntakeSensorDioSim.setValue(simDIOValue);
-
-            simDIOValue = !simDIOValue;
+        if (mode == Mode.INTAKE) {
+            if (point2Timer.hasElapsed(.2)) {
+                intakeSensorDioSim.setValue(false);
+                point2Timer.reset();
+            }
         }
-
+        else if (mode==Mode.DISABLED) {
+            intakeSensorDioSim.setValue(true);
+        }
     }
 
     public void close() {

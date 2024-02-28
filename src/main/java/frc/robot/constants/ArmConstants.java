@@ -1,57 +1,47 @@
 package frc.robot.constants;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.util.Units;
 
 public class ArmConstants {
 
-    public static final int MOTOR_ID = 0;
-    public static final int[] SLAVE_IDS = new int[] {
-            0, 0, 0
-    };
-    // TODO use real encoder id
-    //set to 5 to prevent error described by Johann
-    public static final int ENCODER_ID = 5;
+    /** 
+     * Arm motor ids.
+     * <p>
+     * left side motors: KR69(9), KR71(11);
+     * <p>
+     * right side motors: KR63(3), KR58(58)
+     */
+    public static final int[] MOTOR_IDS = new int[] {9, 11, 3, 58};
 
-    public static final double S = 0;
-    public static final double V = 0;
-    public static final double P = 3400;
-    public static final double I = 0;
-    public static final double D = 500;
+    /** The REV Duty Cycle encoder DIO channel */
+    public static final int ENCODER_ID = 3;
 
-    // All angle measurements in radians
-    public static final double OFFSET = 0;
-    public static final double TOLERANCE = Units.degreesToRadians(1.0);
-    public static final double DISTANCE_PER_ROTATION = 2 * Math.PI;
-
-    // TODO use the real gearing
-    public static final double GEARING = 172.8;
-    // TODO use the real moi
+    // TODO: use the real moment of inertia
     // guess the MOI as radius = 0.5 meter and the mass is 10 kg
     public static final double MOMENT_OF_INERTIA = 2.5;
-    public static final double ARM_LENGTH = 0.5;
-    public static final double PIVOT_HEIGHT = Units.inchesToMeters(16.75);
-    public static final double PIVOT_X = Units.inchesToMeters(-10);
-    public static final double MIN_ANGLE_RADS = Units.degreesToRadians(-20.0);
-    public static final double MAX_ANGLE_RADS = Units.degreesToRadians(120.0);
+    /** Arm length in meters */
+    public static final double ARM_LENGTH = .5;
+    /** minimum arm angle in radians -- temporarily zero */
+    public static final double MIN_ANGLE_RADS = Units.degreesToRadians(-10.0);
+    /** maximum arm angle in radians */
+    public static final double MAX_ANGLE_RADS = Units.degreesToRadians(70.0);
+    /** starting angle in radians */
+    public static final double START_ANGLE_RADS = Units.degreesToRadians(-10.0);
+
+    // If you add another setpoint field, check its validity in test/java/frc/robot/subsystems/gpm/ArmTest.java
+    // TODO: update these values; e.g., stowedSetpoint should probably be MIN_ANGLE_RADS
     public static final double intakeSetpoint = 0;
     public static final double stowedSetpoint = 0;
     public static final double standbySetpoint = Units.degreesToRadians(40); // TODO: tune
     public static final double subwooferSetpoint = 0;
     public static final double preClimbSetpoint = 0;
     public static final double climbSetpoint = 0;
-    public static final double ampSetpoint = 0;
+    public static final double ampSetpoint = 1.14;
 
-    public static final double START_ANGLE_RADS = 0.0;
+    public static final double PIVOT_HEIGHT = Units.inchesToMeters(16.75);
+    public static final double PIVOT_X = Units.inchesToMeters(-10);
 
-    public static final NeutralModeValue neutralMode = NeutralModeValue.Brake;
-
-    // these might be useless because MIN_ANGLE_RADS etc.
-    public static final double Duty_Cycle_Max = 0;
-    public static final double Duty_Cycle_Min = 0;
-
-    public static final boolean inverted = false;
-
-    public static CurrentLimitsConfigs currentConfig = new CurrentLimitsConfigs().withSupplyCurrentLimit(40);
+    // TODO: temporary reduction from 40 A to 4 A. I snapped both chains.
+    public static CurrentLimitsConfigs currentConfig = new CurrentLimitsConfigs().withSupplyCurrentLimit(4);
 }
