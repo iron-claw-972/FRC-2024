@@ -199,7 +199,7 @@ public class Shooter extends SubsystemBase {
 	 */
 	public void setTargetVelocity(double speed) {
 		// convert speed to RPM
-		setTargetRPM(shooterSpeedToRPM(speed));
+		setTargetRPM(shooterSpeedToRPM(speed) / 0.64);
 	}
 
 	/**
