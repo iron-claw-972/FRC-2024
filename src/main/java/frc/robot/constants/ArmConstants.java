@@ -29,10 +29,10 @@ public class ArmConstants {
     /** maximum arm angle in radians */
     public static final double MAX_ANGLE_RADS = Units.degreesToRadians(70.0);
     /** starting angle in radians */
-    public static final double START_ANGLE_RADS = MIN_ANGLE_RADS;
+    public static final double START_ANGLE_RADS = 0.0;
 
     public static final double intakeSetpoint = 0;
-    public static final double stowedSetpoint = 0;
+    public static final double stowedSetpoint = MIN_ANGLE_RADS;
     // TODO: tune
     public static final double standbySetpoint = Units.degreesToRadians(40);
     public static final double subwooferSetpoint = 0;

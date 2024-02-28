@@ -99,7 +99,7 @@ public class Arm extends SubsystemBase {
      * <p>
      * WARNING: This value will change if the belt driving the REV encoder slips!
      */
-    protected static final double OFFSET = 0.54 + Units.degreesToRotations(ArmConstants.MIN_ANGLE_RADS);
+    protected static final double OFFSET = 0.54 + Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
     /** REV encoder scale factor. This is fixed. */
     private static final double DISTANCE_PER_ROTATION = -2 * Math.PI;
 

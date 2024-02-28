@@ -83,7 +83,7 @@ public class Shooter extends SubsystemBase {
 		// invert the right motor so +power sends the note out
 		rightMotor.setInverted(true);
 		leftMotor.setInverted(false);
-
+		
 		// are we simulating?
 		if (RobotBase.isSimulation()) {
 			leftFlywheelSim = new FlywheelSim(gearbox, 1.0, MOI_SHAFT);

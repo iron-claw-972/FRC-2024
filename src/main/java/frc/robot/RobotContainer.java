@@ -28,6 +28,7 @@ import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
 import frc.robot.commands.gpm.IntakeNote;
+import frc.robot.commands.gpm.PrepareShooter;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -79,6 +80,10 @@ public class RobotContainer {
         intake = new Intake();
         index = new StorageIndex();
         shooter = new Shooter();
+        SmartDashboard.putData("Blast", new IntakeNote(intake, index, arm));
+        SmartDashboard.putData("Prepare Shooter", new PrepareShooter(shooter, 1000));
+        SmartDashboard.putData("Stop Shooter", new InstantCommand(() -> shooter.setTargetRPM(0,0)));
+        break;
 
       case SwerveTest:
         vision = new Vision(VisionConstants.APRIL_TAG_CAMERAS);
