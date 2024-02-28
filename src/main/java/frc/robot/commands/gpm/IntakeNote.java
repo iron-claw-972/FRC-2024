@@ -40,7 +40,7 @@ public class IntakeNote extends Command{
         if (intake.hasNote()){
             detectedNote = true;
         }
-        if(!intake.hasNote()&& detectedNote){
+        if(!intake.hasNote() && detectedNote){
             timer.start();
         }
     }
