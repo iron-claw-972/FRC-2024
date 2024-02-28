@@ -308,12 +308,36 @@ public class Vision {
       );
     }
   }
+
+  /**
+   * Enable or disable a single camera
+   * @param index The camera index
+   * @param enabled If it should be enabled or disabled
+   */
+  public void enableCamera(int index, boolean enabled){
+    try{
+      m_cameras.get(index).enable(enabled);
+    }catch(IndexOutOfBoundsException e){
+      DriverStation.reportWarning("Camera index "+index+" is out of bounds", false);
+    }
+  }
+  /**
+   * Sets the cameras to only use one April tag
+   * @param id The id of the tag to use
+   */
+  public void onlyUse(int id){
+    for(VisionCamera c : m_cameras){
+      c.setOnlyUse(id);
+    }
+  }
   
   private class VisionCamera {
     PhotonCamera camera;
     PhotonPoseEstimator photonPoseEstimator;
     Pose2d lastPose;
     double lastTimestamp = 0;
+    boolean enabled = true;
+    int onlyUse = 0;
   
     /**
      * Stores information about a camera
@@ -341,6 +365,10 @@ public class Vision {
     public Optional<EstimatedRobotPose> getEstimatedPose(Pose2d referencePose) {
       photonPoseEstimator.setReferencePose(referencePose);
 
+      if(!enabled){
+        return Optional.empty();
+      }
+
       PhotonPipelineResult cameraResult = camera.getLatestResult();
       
       // if there is a target detected and the timestamp exists, 
@@ -349,7 +377,11 @@ public class Vision {
       if (cameraResult.hasTargets() && cameraResult.getTimestampSeconds() > 0) {
         // go through all the targets
         List<PhotonTrackedTarget> targetsUsed = cameraResult.targets;
-        for (int i = 0; i < targetsUsed.size(); i++) {
+        for (int i = targetsUsed.size()-1; i >= 0; i--) {
+          if(onlyUse > 0 && targetsUsed.get(i).getFiducialId() != onlyUse){
+            targetsUsed.remove(i);
+            continue;
+          }
           // check their ambiguity, if it is below the highest wanted amount, use this camera's result
           if (targetsUsed.get(i).getPoseAmbiguity() <= VisionConstants.HIGHEST_AMBIGUITY) {
             foundGoodTarget = true;
@@ -384,8 +416,8 @@ public class Vision {
     public Pose2d getEstimatedPose(double yaw){
       // Gets the best target to use for the calculations
       PhotonTrackedTarget target = camera.getLatestResult().getBestTarget();
-      // Return null if the target doesn't exist
-      if(target==null){
+      // Return null if the target doesn't exist or it should be ignored
+      if(target==null || onlyUse>0 && target.getFiducialId()!=onlyUse){
         return null;
       }
       // Return null if the id is too high or too low
@@ -431,6 +463,21 @@ public class Vision {
      */
     public PhotonTrackedTarget getBestTarget(){
       return camera.getLatestResult().getBestTarget();
+    }
+
+    /**
+     * Enables or disables this camera
+     * @param enable If it should be enabled or disabled
+     */
+    public void enable(boolean enable){
+      enabled = enable;
+    }
+    /**
+     * Sets the camera to only use 1 April tag
+     * @param id The id of the tag to use, or 0 to use all
+     */
+    public void setOnlyUse(int id){
+      onlyUse = id;
     }
   }
 }
