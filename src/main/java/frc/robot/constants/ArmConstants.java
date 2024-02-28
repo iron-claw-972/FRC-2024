@@ -36,7 +36,7 @@ public class ArmConstants {
     public static final double subwooferSetpoint = 0;
     public static final double preClimbSetpoint = 0;
     public static final double climbSetpoint = 0;
-    public static final double ampSetpoint = 0;
+    public static final double ampSetpoint = 1.14;
 
     public static final double START_ANGLE_RADS = 0.0;
 
