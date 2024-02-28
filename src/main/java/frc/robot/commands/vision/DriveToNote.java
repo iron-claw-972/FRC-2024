@@ -66,9 +66,9 @@ public class DriveToNote extends Command {
       return true;
     }
 
-    double xoff = (object.pose.toPose2d().getX() - drive.getPose().getX());
-    double yoff = (object.pose.toPose2d().getY() - drive.getPose().getY());
-    if (xoff * xoff + yoff * yoff < VisionConstants.objectPositionTolerance) {
+    double xOffset = (object.pose.toPose2d().getX() - drive.getPose().getX());
+    double yOffset = (object.pose.toPose2d().getY() - drive.getPose().getY());
+    if (xOffset * xOffset + yOffset * yOffset < VisionConstants.objectPositionTolerance) {
       return true;
     }
     return false;
