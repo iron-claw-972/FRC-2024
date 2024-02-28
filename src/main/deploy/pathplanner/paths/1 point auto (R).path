@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.8586605151352379,
-        "y": 6.7427696604027085
+        "x": 0.77,
+        "y": 6.75
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.8586605151352379,
-        "y": 6.674980672365716
+        "x": 0.77,
+        "y": 6.682211011963007
       },
       "isLocked": false,
       "linkedName": null
@@ -61,7 +61,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": " Fix or no need",
+  "folder": "Final Autos",
   "previewStartingState": {
     "rotation": 56.0,
     "velocity": 0
