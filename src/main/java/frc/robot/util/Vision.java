@@ -150,7 +150,7 @@ public class Vision {
         // distance[i],
         objectClass[i],
         // VisionConstants.CAMERAS.get((int)cameraIndex[i]).getSecond()
-        VisionConstants.CAMERAS.get(0).getSecond()
+        VisionConstants.APRIL_TAG_CAMERAS.get(0).getSecond()
       );
     }
     return objects;
@@ -395,7 +395,11 @@ public class Vision {
       Transform3d robotToCamera = photonPoseEstimator.getRobotToCameraTransform();
 
       // Get the tag position relative to the robot, assuming the robot is on the ground
-      Translation3d translation = new Translation3d(1, new Rotation3d(0, -Units.degreesToRadians(target.getPitch()), -Units.degreesToRadians(target.getYaw())));
+      System.out.printf("x: %.2f, y: %.2f\n", VisionConstants.X_OFFSET_SCALE*target.getYaw(), VisionConstants.Y_OFFSET_SCALE*target.getPitch());
+      Translation3d translation = new Translation3d(1, new Rotation3d(
+        0,
+        -VisionConstants.Y_OFFSET_SCALE*Units.degreesToRadians(target.getPitch()),
+        -VisionConstants.X_OFFSET_SCALE*Units.degreesToRadians(target.getYaw())));
       translation = translation.rotateBy(robotToCamera.getRotation());
       translation = translation.times((targetPose.getZ()-robotToCamera.getZ())/translation.getZ());
       translation = translation.plus(robotToCamera.getTranslation());

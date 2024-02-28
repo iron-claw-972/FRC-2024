@@ -171,6 +171,9 @@ networktables.json.bck
 # Don't commit ctre_sim directory
 ctre_sim/*
 
+# Don't commit logs/ directory
+logs/*
+
 # File that has git and version data
 src/main/java/frc/robot/util/BuildData.java
 
