@@ -144,6 +144,7 @@ public class RobotContainer {
   }
 
   public void initializeAutoBuilder() {
+    //shooter.setTargetRPM(1500);
     AutoBuilder.configureHolonomic(
         () -> drive.getPose(),
         (pose) -> {
@@ -162,10 +163,10 @@ public class RobotContainer {
     NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index, arm).withTimeout(1));
     // NamedCommands.registerCommand("Stop", new WaitCommand(2)); // to represent stopping for shooting 
     // Mehaan -- Consulted with Jerry, just going to use a constraint zone going at .1 which should be fine instead of stopping for the area in which we are supposed to shoot
-    NamedCommands.registerCommand("PrepareShooter", new PrepareShooter(shooter, 0));
-    NamedCommands.registerCommand("SetShooterSpeed", new SetShooterSpeed(shooter, 0));
-    NamedCommands.registerCommand("ShootKnownPos", new ShootKnownPos(shooter, arm, index, null));
-    NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new Shoot(shooter, arm, drive, index).withTimeout(1.5)); // using for now in the auto paths
+    // NamedCommands.registerCommand("PrepareShooter", new PrepareShooter(shooter, 0));
+    // NamedCommands.registerCommand("SetShooterSpeed", new SetShooterSpeed(shooter, 0));
+    // NamedCommands.registerCommand("ShootKnownPos", new ShootKnownPos(shooter, arm, index, null));
+    // NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new Shoot(shooter, arm, drive, index).withTimeout(1.5)); // using for now in the auto paths
 
 
 
