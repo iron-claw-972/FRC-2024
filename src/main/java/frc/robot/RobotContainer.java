@@ -87,6 +87,7 @@ public class RobotContainer {
         drive = new Drivetrain(vision);
         driver = new GameControllerDriverConfig(drive, vision, arm);
         operator = new Operator(intake, arm, index, shooter, drive);
+        SmartDashboard.putData(new Climb(Chain.LEFT, drive, arm));
 
         // Detected objects need access to the drivetrain
         DetectedObject.setDrive(drive);
