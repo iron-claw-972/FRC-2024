@@ -78,13 +78,13 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.8500000000000001,
-      "rotationDegrees": -1.1361084359015519,
-      "rotateFast": true
+      "waypointRelativePos": 0.95,
+      "rotationDegrees": 0,
+      "rotateFast": false
     },
     {
       "waypointRelativePos": 1.95,
-      "rotationDegrees": -60.75,
+      "rotationDegrees": -60.0,
       "rotateFast": false
     }
   ],
@@ -168,7 +168,7 @@
   "reversed": false,
   "folder": "Final Autos",
   "previewStartingState": {
-    "rotation": -60.75,
+    "rotation": -60.0,
     "velocity": 0
   },
   "useDefaultConstraints": false
