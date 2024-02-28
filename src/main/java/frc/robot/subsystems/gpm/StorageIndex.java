@@ -14,7 +14,7 @@ import frc.robot.constants.StorageIndexConstants;
 public class StorageIndex extends SubsystemBase {
 
   private final CANSparkFlex m_indexmotor;
-  private final DigitalInput m_indexBeamBreak;
+  DigitalInput m_indexBeamBreak;
 
   /**
    * Indicates whether the indexer is in the process of running the motors to take

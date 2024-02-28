@@ -1,10 +1,10 @@
 package frc.robot;
 
+import java.rmi.server.Operation;
 import java.util.function.BooleanSupplier;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -13,10 +13,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.Climb;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.Shoot;
-import frc.robot.commands.Climb.Chain;
 import frc.robot.constants.AutoConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
@@ -28,13 +26,13 @@ import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
 import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.subsystems.gpm.StorageIndex;
-import frc.robot.subsystems.gpm.Intake.Mode;
 import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
 import frc.robot.commands.gpm.IntakeNote;
+import frc.robot.commands.gpm.PrepareShooter;
+import frc.robot.commands.gpm.SetShooterSpeed;
 import frc.robot.commands.gpm.ShootKnownPos;
-import frc.robot.commands.gpm.ShootKnownPos.ShotPosition;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -77,24 +75,24 @@ public class RobotContainer {
       case TestBed2:
         intake = new Intake();
         index = new StorageIndex();
-        // SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index, arm));
-        SmartDashboard.putData("Intake", new InstantCommand(() -> intake.setMode(Mode.INTAKE)));
+        arm = new Arm();
+        SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index, arm));
         break;
-        
+
       default:
       case SwerveCompetition:
-        arm = new Arm();
         intake = new Intake();
         index = new StorageIndex();
+        arm = new Arm();
         shooter = new Shooter();
 
       case SwerveTest:
-        vision = new Vision(VisionConstants.APRIL_TAG_CAMERAS);
+        System.out.println("INFO: SwerveTest");
+        vision = new Vision(VisionConstants.CAMERAS);
 
         drive = new Drivetrain(vision);
-        driver = new GameControllerDriverConfig(drive, vision, arm);
+        driver = new GameControllerDriverConfig(drive, vision);
         operator = new Operator(intake, arm, index, shooter, drive);
-        SmartDashboard.putData(new Climb(Chain.LEFT, drive, arm));
 
         registerCommands();
 
