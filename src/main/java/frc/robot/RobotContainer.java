@@ -95,6 +95,7 @@ public class RobotContainer {
         SignalLogger.start();
 
         driver.configureControls();
+        operator.configureControls();
         initializeAutoBuilder();
         drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
 
