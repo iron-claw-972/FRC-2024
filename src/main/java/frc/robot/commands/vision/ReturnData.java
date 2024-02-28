@@ -42,7 +42,7 @@ public class ReturnData extends Command{
     }
     for(int i = 0; i < xOffset.length; i++){
       System.out.printf("\nx: %.2f, y: %.2f, type: %s\n", xOffset[i], yOffset[i], DetectedObject.getType(objectClass[i]));
-      DetectedObject object = new DetectedObject(Units.degreesToRadians(xOffset[i]), Units.degreesToRadians(yOffset[i]), objectClass[i], VisionConstants.CAMERAS.get(0).getSecond());
+      DetectedObject object = new DetectedObject(Units.degreesToRadians(xOffset[i]), Units.degreesToRadians(yOffset[i]), objectClass[i], VisionConstants.APRIL_TAG_CAMERAS.get(0).getSecond());
       System.out.printf("Object: %s\nDistance: %.2f, Angle: %.2f\n", object, object.getDistance(), Units.radiansToDegrees(object.getAngle()));
     }
   }

@@ -18,7 +18,7 @@ public class ShootKnownPos extends SequentialCommandGroup {
 		// TODO: add actual values
 		SUBWOOFER_TOP(0.0, 0.0),
 		SUBWOOFER_MIDDLE(0.0, 0.0),
-		SUBWOOFER_BOTTOM(0.0, 0.0);
+		SUBWOOFER_BOTTOM(0.15, 1500);
 		
 		private double armAngle;
 		private double shooterSpeed;

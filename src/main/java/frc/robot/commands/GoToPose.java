@@ -77,7 +77,7 @@ public class GoToPose extends SequentialCommandGroup {
     if (dist > 6) {
       command = new DoNothing();
       DriverStation.reportWarning("Alignment Path too long, doing nothing, GoToPose.java", false);
-    } else if (dist < 0.1) {
+    } else if (dist < 0.02) {
       command = new DoNothing();
       DriverStation.reportWarning("Alignment Path too short, doing nothing, GoToPose.java", false);
     }
