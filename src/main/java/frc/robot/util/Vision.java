@@ -145,10 +145,6 @@ public class Vision {
     long[] cameraIndex = getCameraIndex();
     DetectedObject[] objects = new DetectedObject[xOffset.length];
     for(int i = 0; i < objects.length; i++){
-      // System.out.println(xOffset.length);
-      // System.out.println(yOffset.length);
-      // System.out.println(objectClass.length);
-      // System.out.println(VisionConstants.CAMERAS.get(0).getSecond());
       objects[i] = new DetectedObject(
         Units.degreesToRadians(xOffset[i]),
         Units.degreesToRadians(yOffset[i]),
