@@ -59,7 +59,7 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
 
     if(VisionConstants.OBJECT_DETECTION_ENABLED){
       if(intake != null && index != null && arm != null){
-        kDriver.get(Button.Y).whileTrue(new AcquireGamePiece(()->vision.getBestGamePiece(Math.PI/2), getDrivetrain(), intake, index, arm));
+        kDriver.get(Button.RIGHT_JOY).whileTrue(new AcquireGamePiece(()->vision.getBestGamePiece(Math.PI/2), getDrivetrain(), intake, index, arm));
       }
     }
 
