@@ -425,7 +425,6 @@ public class Drivetrain extends SubsystemBase {
     }
 
     // util for latency calculation
-    // taken from https://www.geeksforgeeks.org/java-equivalent-of-cpp-lower_bound-method/ (slightly modified)
     private int lowerBoundOfPastPos(double seconds) {
         int lowerBound = 0;
         while (lowerBound < pastPositions.size()) {
