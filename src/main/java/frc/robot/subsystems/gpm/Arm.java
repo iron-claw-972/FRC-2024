@@ -42,7 +42,20 @@ public class Arm extends SubsystemBase {
      */
     private final TalonFX[] motors = new TalonFX[ArmConstants.MOTOR_IDS.length];
     // DCMotor model is 4 Kraken X60
-    private static final DCMotor motorModel = DCMotor.getKrakenX60(ArmConstants.MOTOR_IDS.length);
+    protected static final DCMotor motorModel = DCMotor.getKrakenX60(ArmConstants.MOTOR_IDS.length);
+
+    /**
+     * Gearbox ratio
+     * <p>
+     * The gearing starting from the motor is:
+     * <p>
+     * 8T : 72T
+     * <p>
+     * 18T : 84T
+     * <p>
+     * 16T : 64T
+     */
+    protected static final double GEARING = (72.0 / 8.0) * (84.0 / 18.0) * (64.0 / 16.0);
 
     // Encoder in the TalonFX....
     //   check docs. Normal update is 4 Hz.
@@ -135,7 +148,7 @@ public class Arm extends SubsystemBase {
         // possibly set up simulations
         if (RobotBase.isSimulation()) {
             simulation = new SingleJointedArmSim(motorModel,
-                    ArmConstants.GEARING,
+                    Arm.GEARING,
                     ArmConstants.MOMENT_OF_INERTIA,
                     ArmConstants.ARM_LENGTH,
                     ArmConstants.MIN_ANGLE_RADS,

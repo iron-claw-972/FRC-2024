@@ -17,10 +17,6 @@ public class ArmConstants {
     /** The REV Duty Cycle encoder DIO channel */
     public static final int ENCODER_ID = 3;
 
-    // TODO: use the real gearing
-    // 1728 = 4 * 4 * 4 * 27
-    public static final double GEARING = 172.8;
-
     // TODO: use the real moment of inertia
     // guess the MOI as radius = 0.5 meter and the mass is 10 kg
     public static final double MOMENT_OF_INERTIA = 2.5;
