@@ -9,7 +9,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -42,7 +41,20 @@ public class Arm extends SubsystemBase {
      */
     private final TalonFX[] motors = new TalonFX[ArmConstants.MOTOR_IDS.length];
     // DCMotor model is 4 Kraken X60
-    private static final DCMotor motorModel = DCMotor.getKrakenX60(ArmConstants.MOTOR_IDS.length);
+    protected static final DCMotor motorModel = DCMotor.getKrakenX60(ArmConstants.MOTOR_IDS.length);
+
+    /**
+     * Gearbox ratio
+     * <p>
+     * The gearing starting from the motor is:
+     * <p>
+     * 8T : 72T
+     * <p>
+     * 18T : 84T
+     * <p>
+     * 16T : 64T
+     */
+    protected static final double GEARING = (72.0 / 8.0) * (84.0 / 18.0) * (64.0 / 16.0);
 
     // Encoder in the TalonFX....
     //   check docs. Normal update is 4 Hz.
@@ -65,14 +77,14 @@ public class Arm extends SubsystemBase {
      * <p>
      * WARNING: This value will change if the belt driving the REV encoder slips!
      */
-    private static final double OFFSET = 0.54+Units.degreesToRotations(ArmConstants.MIN_ANGLE_RADS);
+    protected static final double OFFSET = 0.54+Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
     /** REV encoder scale factor. This is fixed. */
     private static final double DISTANCE_PER_ROTATION = -2 * Math.PI;
 
     // Motor PID control
     private static final double TOLERANCE = Units.degreesToRadians(1.0);
     // P = 5 worked during simulation simulation
-    private static final double P = 0.1;
+    private static final double P = 0.4;
     private static final double I = 0;
     private static final double D = 0;
     private final PIDController pid = new PIDController(P, I, D);
@@ -135,7 +147,7 @@ public class Arm extends SubsystemBase {
         // possibly set up simulations
         if (RobotBase.isSimulation()) {
             simulation = new SingleJointedArmSim(motorModel,
-                    ArmConstants.GEARING,
+                    Arm.GEARING,
                     ArmConstants.MOMENT_OF_INERTIA,
                     ArmConstants.ARM_LENGTH,
                     ArmConstants.MIN_ANGLE_RADS,

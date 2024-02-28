@@ -17,10 +17,6 @@ public class ArmConstants {
     /** The REV Duty Cycle encoder DIO channel */
     public static final int ENCODER_ID = 3;
 
-    // TODO: use the real gearing
-    // 1728 = 4 * 4 * 4 * 27
-    public static final double GEARING = 172.8;
-
     // TODO: use the real moment of inertia
     // guess the MOI as radius = 0.5 meter and the mass is 10 kg
     public static final double MOMENT_OF_INERTIA = 2.5;
@@ -33,13 +29,15 @@ public class ArmConstants {
     /** starting angle in radians */
     public static final double START_ANGLE_RADS = Units.degreesToRadians(-10.0);
 
+    // If you add another setpoint field, check its validity in test/java/frc/robot/subsystems/gpm/ArmTest.java
+    // TODO: update these values; e.g., stowedSetpoint should probably be MIN_ANGLE_RADS
     public static final double intakeSetpoint = 0;
     public static final double stowedSetpoint = 0;
     public static final double standbySetpoint = Units.degreesToRadians(40); // TODO: tune
     public static final double subwooferSetpoint = 0;
-    public static final double preClimbSetpoint = 2;
+    public static final double preClimbSetpoint = 0;
     public static final double climbSetpoint = 0;
-    public static final double ampSetpoint = 0;
+    public static final double ampSetpoint = 1.14;
 
     public static final double PIVOT_HEIGHT = Units.inchesToMeters(16.75);
     public static final double PIVOT_X = Units.inchesToMeters(-10);
