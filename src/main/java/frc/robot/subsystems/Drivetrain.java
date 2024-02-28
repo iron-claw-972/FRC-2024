@@ -69,7 +69,7 @@ public class Drivetrain extends SubsystemBase {
     private Double alignAngle = null;
 
     // Latency calculation
-    private int maxSecondsStored = 1; //max number of past frames to store
+    private int maxSecondsStored = 1; //max number of past seconds to store
     private ArrayList<Pair<Double, Pose2d>> pastPositions; //list of past positions
 
     /**
