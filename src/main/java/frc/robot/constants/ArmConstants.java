@@ -29,6 +29,8 @@ public class ArmConstants {
     /** starting angle in radians */
     public static final double START_ANGLE_RADS = Units.degreesToRadians(-10.0);
 
+    // If you add another setpoint field, check its validity in test/java/frc/robot/subsystems/gpm/ArmTest.java
+    // TODO: update these values; e.g., stowedSetpoint should probably be MIN_ANGLE_RADS
     public static final double intakeSetpoint = 0;
     public static final double stowedSetpoint = 0;
     public static final double standbySetpoint = Units.degreesToRadians(40); // TODO: tune
