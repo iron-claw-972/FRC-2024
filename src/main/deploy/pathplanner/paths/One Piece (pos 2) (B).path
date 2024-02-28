@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.77,
-        "y": 6.65
+        "x": 0.75,
+        "y": 6.8
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7548077530122088,
-        "y": 6.82364817766693
+        "x": 1.7348077530122088,
+        "y": 6.97364817766693
       },
       "isLocked": false,
       "linkedName": null
@@ -32,16 +32,16 @@
     },
     {
       "anchor": {
-        "x": 0.8,
-        "y": 6.75
+        "x": 0.75,
+        "y": 6.8
       },
       "prevControl": {
-        "x": 0.5845789354207465,
-        "y": 6.702513444316017
+        "x": 0.5345789354207464,
+        "y": 6.752513444316016
       },
       "nextControl": {
-        "x": 1.0154210645792536,
-        "y": 6.797486555683983
+        "x": 0.9654210645792536,
+        "y": 6.847486555683983
       },
       "isLocked": false,
       "linkedName": null
@@ -62,13 +62,13 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.95,
+      "waypointRelativePos": 0.5,
       "rotationDegrees": 0,
-      "rotateFast": false
+      "rotateFast": true
     },
     {
-      "waypointRelativePos": 2,
-      "rotationDegrees": 60.0,
+      "waypointRelativePos": 1.85,
+      "rotationDegrees": 60.75,
       "rotateFast": false
     },
     {
@@ -150,7 +150,7 @@
   "reversed": false,
   "folder": "Final Autos",
   "previewStartingState": {
-    "rotation": 60.0,
+    "rotation": 60.75,
     "velocity": 0.0
   },
   "useDefaultConstraints": true
