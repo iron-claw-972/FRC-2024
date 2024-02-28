@@ -9,7 +9,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -78,14 +77,14 @@ public class Arm extends SubsystemBase {
      * <p>
      * WARNING: This value will change if the belt driving the REV encoder slips!
      */
-    private static final double OFFSET = 0.54+Units.degreesToRotations(ArmConstants.MIN_ANGLE_RADS);
+    protected static final double OFFSET = 0.54+Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
     /** REV encoder scale factor. This is fixed. */
     private static final double DISTANCE_PER_ROTATION = -2 * Math.PI;
 
     // Motor PID control
     private static final double TOLERANCE = Units.degreesToRadians(1.0);
     // P = 5 worked during simulation simulation
-    private static final double P = 0.1;
+    private static final double P = 0.4;
     private static final double I = 0;
     private static final double D = 0;
     private final PIDController pid = new PIDController(P, I, D);
