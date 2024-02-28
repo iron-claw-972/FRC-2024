@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.6045885083223155,
+        "x": 1.6,
         "y": 5.49997154639118
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5819921789766513,
+        "x": 1.577403670654336,
         "y": 5.488673381718348
       },
       "isLocked": false,
@@ -111,7 +111,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Outtake_Note_1.5_Sec"
+                "name": "Stop"
               }
             }
           ]
