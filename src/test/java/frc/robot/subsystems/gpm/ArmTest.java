@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import edu.wpi.first.math.util.Units;
 import frc.robot.constants.ArmConstants;
 import frc.robot.constants.Constants;
 
@@ -31,7 +32,7 @@ public class ArmTest {
 
         // the offset should be in the range 0 to 1 (less the range of movement)
         assertTrue(0.0 <= Arm.OFFSET);
-        assertTrue(Arm.OFFSET <= 1.0 - (ArmConstants.MAX_ANGLE_RADS - ArmConstants.MIN_ANGLE_RADS)/(2.0 * Math.PI));
+        assertTrue(Arm.OFFSET <= 1.0 - Units.radiansToRotations(ArmConstants.MAX_ANGLE_RADS - ArmConstants.MIN_ANGLE_RADS));
 
         // the tests below actually caught a bad value...
         assertTrue(rangeCheck(ArmConstants.intakeSetpoint));
