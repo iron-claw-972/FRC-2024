@@ -27,6 +27,9 @@ public class IntakeNote extends Command{
 
     @Override
     public void initialize() {
+        detectedNote = false;
+        timer.reset();
+        timer.stop();
         intake.setMode(Mode.INTAKE);
         storageIndex.runIndex();
         arm.setAngle(ArmConstants.intakeSetpoint);
