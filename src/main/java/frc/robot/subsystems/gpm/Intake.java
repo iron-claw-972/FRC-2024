@@ -87,6 +87,7 @@ public class Intake extends SubsystemBase {
         // motor.setIdleMode(IntakeConstants.idleMode);***
         centeringMotor.setIdleMode(IntakeConstants.idleMode);
         centeringMotor.setInverted(true);
+        motor.setInverted(true);
         // set the mode to Idle; this will turn off the motors
         setMode(Mode.DISABLED);
 
