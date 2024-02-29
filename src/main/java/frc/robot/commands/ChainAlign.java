@@ -4,7 +4,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.commands.Climb.Chain;
-import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.miscConstants.VisionConstants.CHAIN_POSES;
 import frc.robot.subsystems.Drivetrain;
 

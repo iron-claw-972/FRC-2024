@@ -1,6 +1,5 @@
 package frc.robot.subsystems.gpm;
 
-import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -16,13 +15,6 @@ public class StorageIndex extends SubsystemBase {
 
   private final CANSparkMax m_indexmotor;
   DigitalInput m_indexBeamBreak;
-
-  /**
-   * Indicates whether the indexer is in the process of running the motors to take
-   * in a note. Once the
-   * beambreak sensor detects a note inside, this boolean becomes false.
-   */
-  private boolean isIndexing = false;
 
   /**
    * Constructs the StorageIndex subsystem, initializing the motor and beam break
@@ -48,7 +40,6 @@ public class StorageIndex extends SubsystemBase {
    */
   public void storeNote() {
     if (!hasNote()) {
-      isIndexing = true;
       runIndex();
     }
   }
@@ -77,7 +68,6 @@ public class StorageIndex extends SubsystemBase {
    * Stops the storage index mechanism.
    */
   public void stopIndex() {
-    isIndexing = false;
     m_indexmotor.set(0);
   }
 

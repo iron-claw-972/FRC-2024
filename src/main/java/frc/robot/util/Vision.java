@@ -152,8 +152,8 @@ public class Vision {
         Units.degreesToRadians(yOffset[i]),
         // distance[i],
         objectClass[i],
-        // VisionConstants.CAMERAS.get((int)cameraIndex[i]).getSecond()
-        VisionConstants.APRIL_TAG_CAMERAS.get(0).getSecond()
+        // VisionConstants.OBJECT_DETECTION_CAMERAS.get((int)cameraIndex[i]).getSecond()
+        VisionConstants.OBJECT_DETECTION_CAMERAS.get(0)
       );
     }
     return objects;
