@@ -112,7 +112,7 @@ public class Arm extends SubsystemBase {
         for (int i = 0; i < motors.length; i++) {
             // create the motor
             motors[i] = new TalonFX(ArmConstants.MOTOR_IDS[i]);
-            motors[i].setNeutralMode(NeutralModeValue.Coast);
+            motors[i].setNeutralMode(NeutralModeValue.Brake);
 
             // i==0 is the master; the others are slaves
             if (i > 0) {
@@ -125,7 +125,7 @@ public class Arm extends SubsystemBase {
 
         // common configuration for each motor
         // configure the master after the slaves have been linked so slaves will copy the same settings.
-        motors[0].setNeutralMode(NeutralModeValue.Coast);
+        motors[0].setNeutralMode(NeutralModeValue.Brake);
         motors[0].setInverted(false);
         motors[0].getConfigurator().apply(ArmConstants.currentConfig);
 
