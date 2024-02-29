@@ -144,7 +144,10 @@ public class RobotContainer {
   }
 
   public void initializeAutoBuilder() {
-    //shooter.setTargetRPM(1500);
+    shooter.setTargetRPM(1500); //prepare shooter
+    new WaitCommand(0.5); //wait until shooter is ready
+    index.runIndex(); //put note into shooter
+    new WaitCommand(1); //wait until note is shot
     AutoBuilder.configureHolonomic(
         () -> drive.getPose(),
         (pose) -> {
@@ -167,12 +170,11 @@ public class RobotContainer {
     // NamedCommands.registerCommand("SetShooterSpeed", new SetShooterSpeed(shooter, 0));
     // NamedCommands.registerCommand("ShootKnownPos", new ShootKnownPos(shooter, arm, index, null));
     // NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new Shoot(shooter, arm, drive, index).withTimeout(1.5)); // using for now in the auto paths
-
-
-
-
+    NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new SequentialCommandGroup(
+      new InstantCommand(()-> index.runIndex()),
+      new WaitCommand(.5),
+      new PrepareShooter(shooter, 1500).withTimeout(1.5))); // using for now in the auto paths
   }
-
 
   public static BooleanSupplier getAllianceColorBooleanSupplier() {
     return () -> {
