@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -31,7 +32,7 @@ public class OuttakeAmp extends SequentialCommandGroup {
   public OuttakeAmp(Arm arm, StorageIndex index, Shooter shooter) {
     addCommands(
         // Get the shooter to the right speed while moving arm
-        new InstantCommand(() -> shooter.setTargetRPM(ShooterConstants.AMP_OUTTAKE_RPM), shooter),
+        new ParallelCommandGroup (new InstantCommand(() -> index.runIndex()),  new InstantCommand(() -> shooter.setTargetRPM(ShooterConstants.AMP_OUTTAKE_RPM), shooter)),
         // Move arm
         new ArmToPos(arm, ArmConstants.ampSetpoint),
         // Score in amp

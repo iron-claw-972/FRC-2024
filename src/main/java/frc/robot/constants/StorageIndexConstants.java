@@ -10,7 +10,7 @@ public class StorageIndexConstants {
 
     public static final int stallLimit = 25;
 
-    public static final double intakeSpeed = 0.5;
+    public static final double intakeSpeed = 0.2;
     public static final double ejectShootSpeed = 1;
     public static final double ejectAmpFrontSpeed = 1;
     public static final double ejectAmpBackSpeed = 1;

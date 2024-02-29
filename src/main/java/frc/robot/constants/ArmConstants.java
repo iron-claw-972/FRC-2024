@@ -45,5 +45,5 @@ public class ArmConstants {
     public static final double PIVOT_X = Units.inchesToMeters(-10);
 
     // TODO: temporary reduction from 40 A to 4 A. I snapped both chains.
-    public static CurrentLimitsConfigs currentConfig = new CurrentLimitsConfigs().withSupplyCurrentLimit(4);
+    public static CurrentLimitsConfigs currentConfig = new CurrentLimitsConfigs().withSupplyCurrentLimit(30);
 }
