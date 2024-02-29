@@ -31,11 +31,11 @@ public class OuttakeAmp extends SequentialCommandGroup {
   public OuttakeAmp(Arm arm, StorageIndex index, Shooter shooter) {
     addCommands(
         // Get the shooter to the right speed while moving arm
-        new InstantCommand(() -> shooter.setTargetRPM(ShooterConstants.AMP_OUTTAKE_RPM)),
+        new InstantCommand(() -> shooter.setTargetRPM(ShooterConstants.AMP_OUTTAKE_RPM), shooter),
         // Move arm
         new ArmToPos(arm, ArmConstants.ampSetpoint),
         // Score in amp
-        new InstantCommand(() -> index.ejectAmpFront()),
+        new InstantCommand(() -> index.ejectAmpFront(), index),
         // Wait until note is scored
         new WaitCommand(StorageIndexConstants.ejectAmpFrontTimeout),
         // Set everything back to default state
