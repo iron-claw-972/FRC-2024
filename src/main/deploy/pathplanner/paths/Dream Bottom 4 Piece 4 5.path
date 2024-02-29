@@ -148,25 +148,7 @@
       }
     }
   ],
-  "eventMarkers": [
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.95,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "IntakeNote"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 2.5,
     "maxAcceleration": 2.5,
@@ -179,7 +161,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Previous Stuff",
+  "folder": null,
   "previewStartingState": null,
   "useDefaultConstraints": false
 }

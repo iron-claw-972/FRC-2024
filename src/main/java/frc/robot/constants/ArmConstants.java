@@ -1,7 +1,6 @@
 package frc.robot.constants;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.util.Units;
 
 public class ArmConstants {
@@ -15,20 +14,14 @@ public class ArmConstants {
      */
     public static final int[] MOTOR_IDS = new int[] {9, 11, 8, 58};
 
-    public static final double S = 0;
-    public static final double V = 0;
-    public static final double P = 3400;
-    public static final double I = 0;
-    public static final double D = 500;
+    /** The REV Duty Cycle encoder DIO channel */
+    public static final int ENCODER_ID = 3;
 
-    // All angle measurements in radians
-    public static final double OFFSET = 0;
-    public static final double TOLERANCE = Units.degreesToRadians(1.0);
-    public static final double DISTANCE_PER_ROTATION = 2 * Math.PI;
-
-    // TODO use the real gearing
+    // TODO: use the real gearing
+    // 1728 = 4 * 4 * 4 * 27
     public static final double GEARING = 172.8;
-    // TODO use the real moi
+
+    // TODO: use the real moment of inertia
     // guess the MOI as radius = 0.5 meter and the mass is 10 kg
     public static final double MOMENT_OF_INERTIA = 2.5;
     /** Arm length in meters */
@@ -48,7 +41,8 @@ public class ArmConstants {
     public static final double climbSetpoint = MIN_ANGLE_RADS;
     public static final double ampSetpoint = MAX_ANGLE_RADS;
 
-    public static final double START_ANGLE_RADS = 0.0;
+    public static final double PIVOT_HEIGHT = Units.inchesToMeters(16.75);
+    public static final double PIVOT_X = Units.inchesToMeters(-10);
 
     // TODO: temporary reduction from 40 A to 4 A. I snapped both chains.
     public static CurrentLimitsConfigs currentConfig = new CurrentLimitsConfigs().withSupplyCurrentLimit(30);

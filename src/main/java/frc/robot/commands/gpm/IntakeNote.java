@@ -17,13 +17,11 @@ public class IntakeNote extends Command{
     Boolean detectedNote = false;
 
     public IntakeNote(Intake intake, StorageIndex storageIndex, Arm arm) {
+        this.intake = intake;
+        this.storageIndex = storageIndex;
+        this.arm = arm;
+        addRequirements(intake, storageIndex, arm);
 
-        if (IS_COMP_BOT) {
-            this.intake = intake;
-            this.storageIndex = storageIndex;
-            this.arm = arm;
-            addRequirements(intake, storageIndex, arm);
-        }
        
     }
 
