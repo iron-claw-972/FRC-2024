@@ -1,6 +1,7 @@
 package frc.robot.subsystems.gpm;
 
 import com.revrobotics.CANSparkFlex;
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -13,7 +14,7 @@ import frc.robot.constants.StorageIndexConstants;
  */
 public class StorageIndex extends SubsystemBase {
 
-  private final CANSparkFlex m_indexmotor;
+  private final CANSparkMax m_indexmotor;
   private final DigitalInput m_indexBeamBreak;
 
   /**
@@ -28,7 +29,7 @@ public class StorageIndex extends SubsystemBase {
    * sensor.
    */
   public StorageIndex() {
-    m_indexmotor = new CANSparkFlex(StorageIndexConstants.indexMotorID, MotorType.kBrushless);
+    m_indexmotor = new CANSparkMax(StorageIndexConstants.indexMotorID, MotorType.kBrushless);
     m_indexBeamBreak = new DigitalInput(StorageIndexConstants.indexBeamBreak);
     m_indexmotor.setInverted(false);
 
@@ -40,10 +41,6 @@ public class StorageIndex extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (isIndexing && hasNote()) {
-      isIndexing = false;
-      stopIndex();
-    }
   }
 
   /**

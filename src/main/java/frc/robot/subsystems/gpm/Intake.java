@@ -133,12 +133,11 @@ public class Intake extends SubsystemBase {
     public boolean hasNote() {
         return !sensor.get();
     }
-
     @Override
     public void periodic() {
         publish();
 
-        /* */
+        /* 
         switch (mode) {
             case DISABLED:
                 // don't have to do anything
@@ -181,7 +180,7 @@ public class Intake extends SubsystemBase {
 
             default:
                 break;
-        }
+        }*/
     }
 
     /**

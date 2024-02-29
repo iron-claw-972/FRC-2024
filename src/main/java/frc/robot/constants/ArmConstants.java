@@ -12,7 +12,7 @@ public class ArmConstants {
      * <p>
      * right side motors: KR63(3), KR58(58)
      */
-    public static final int[] MOTOR_IDS = new int[] {9, 11, 3, 58};
+    public static final int[] MOTOR_IDS = new int[] {9, 11, 8, 58};
 
     /** The REV Duty Cycle encoder DIO channel */
     public static final int ENCODER_ID = 3;
@@ -23,21 +23,21 @@ public class ArmConstants {
     /** Arm length in meters */
     public static final double ARM_LENGTH = .5;
     /** minimum arm angle in radians -- temporarily zero */
-    public static final double MIN_ANGLE_RADS = Units.degreesToRadians(-10.0);
+    public static final double MIN_ANGLE_RADS = Units.degreesToRadians(-9.20);
     /** maximum arm angle in radians */
-    public static final double MAX_ANGLE_RADS = Units.degreesToRadians(70.0);
+    public static final double MAX_ANGLE_RADS = Units.degreesToRadians(78.0);
     /** starting angle in radians */
-    public static final double START_ANGLE_RADS = Units.degreesToRadians(-10.0);
+    public static final double START_ANGLE_RADS = Units.degreesToRadians(-9.20);
 
     // If you add another setpoint field, check its validity in test/java/frc/robot/subsystems/gpm/ArmTest.java
     // TODO: update these values; e.g., stowedSetpoint should probably be MIN_ANGLE_RADS
-    public static final double intakeSetpoint = 0;
-    public static final double stowedSetpoint = 0;
+    public static final double intakeSetpoint = MIN_ANGLE_RADS;
+    public static final double stowedSetpoint = MIN_ANGLE_RADS;
     public static final double standbySetpoint = Units.degreesToRadians(40); // TODO: tune
-    public static final double subwooferSetpoint = 0;
-    public static final double preClimbSetpoint = 0;
-    public static final double climbSetpoint = 0;
-    public static final double ampSetpoint = 1.14;
+    public static final double subwooferSetpoint = MIN_ANGLE_RADS;
+    public static final double preClimbSetpoint = MAX_ANGLE_RADS;
+    public static final double climbSetpoint = MIN_ANGLE_RADS;
+    public static final double ampSetpoint = MAX_ANGLE_RADS;
 
     public static final double PIVOT_HEIGHT = Units.inchesToMeters(16.75);
     public static final double PIVOT_X = Units.inchesToMeters(-10);
