@@ -4,11 +4,11 @@
     {
       "anchor": {
         "x": 0.8,
-        "y": 4.45
+        "y": 4.42
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8,
+        "x": 1.8000000000000005,
         "y": 4.42
       },
       "isLocked": false,
@@ -112,12 +112,12 @@
     },
     {
       "anchor": {
-        "x": 0.8,
-        "y": 4.45
+        "x": 2.4114851648506717,
+        "y": 2.7949029117431463
       },
       "prevControl": {
-        "x": 0.6416271913581382,
-        "y": 3.544838419221202
+        "x": 2.25311235620881,
+        "y": 1.8897413309643483
       },
       "nextControl": null,
       "isLocked": false,
@@ -272,7 +272,7 @@
   "reversed": false,
   "folder": "Final Autos",
   "previewStartingState": {
-    "rotation": -60.75,
+    "rotation": -60.0,
     "velocity": 0
   },
   "useDefaultConstraints": true
