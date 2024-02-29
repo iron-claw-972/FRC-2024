@@ -37,6 +37,7 @@ public class IntakeNote extends Command{
 
     @Override
     public void execute(){
+        storageIndex.runIndex();
         if (intake.hasNote()){
             detectedNote = true;
         }
