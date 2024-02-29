@@ -144,7 +144,10 @@ public class RobotContainer {
   }
 
   public void initializeAutoBuilder() {
-    //shooter.setTargetRPM(1500);
+    shooter.setTargetRPM(1500); //prepare shooter
+    new WaitCommand(0.5); //wait until shooter is ready
+    index.runIndex(); //put note into shooter
+    new WaitCommand(1); //wait until note is shot
     AutoBuilder.configureHolonomic(
         () -> drive.getPose(),
         (pose) -> {
