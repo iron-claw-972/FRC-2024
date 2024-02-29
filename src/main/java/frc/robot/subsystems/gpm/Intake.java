@@ -241,6 +241,10 @@ public class Intake extends SubsystemBase {
         return mode == Mode.Wait;
     }
 
+    public boolean isJammed() {
+        return mode == Mode.Pause;
+    }
+
     public void close() {
         sensor.close();
     }
