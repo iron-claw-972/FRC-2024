@@ -366,6 +366,7 @@ public class Vision {
       photonPoseEstimator.setReferencePose(referencePose);
 
       if(!enabled){
+        System.out.println("VISION.JAVA LINE 369");
         return Optional.empty();
       }
 
@@ -379,6 +380,7 @@ public class Vision {
         List<PhotonTrackedTarget> targetsUsed = cameraResult.targets;
         for (int i = targetsUsed.size()-1; i >= 0; i--) {
           if(onlyUse > 0 && targetsUsed.get(i).getFiducialId() != onlyUse){
+            System.out.println("VISION.JAVA LINE 383");
             targetsUsed.remove(i);
             continue;
           }
