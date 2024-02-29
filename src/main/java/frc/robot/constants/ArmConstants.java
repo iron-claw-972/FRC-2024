@@ -10,9 +10,9 @@ public class ArmConstants {
      * <p>
      * left side motors: KR69(9), KR71(11);
      * <p>
-     * right side motors: KR63(3), KR58(58)
+     * right side motors: KR63(8), KR58(58)
      */
-    public static final int[] MOTOR_IDS = new int[] {9, 11, 3, 58};
+    public static final int[] MOTOR_IDS = new int[] {9, 11, 8, 58};
 
     /** The REV Duty Cycle encoder DIO channel */
     public static final int ENCODER_ID = 3;
