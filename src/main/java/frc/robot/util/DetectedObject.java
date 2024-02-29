@@ -1,5 +1,7 @@
 package frc.robot.util;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -7,6 +9,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
 
 /**
@@ -50,12 +53,14 @@ public class DetectedObject {
         translation = translation.plus(robotToCamera.getTranslation());
         // If the drivetrain exists, rotate and translate it to get the field relative position
         if(drive != null){
+            Pose2d past = drive.posFromSecondsAgo(VisionConstants.objectLatencySeconds);
+            //Pose2d past = drive.getPose();
             translation = translation.rotateBy(new Rotation3d(
                 0,
                 0,
-                drive.getYaw().getRadians()
+                past.getRotation().getRadians()
             ));
-            Translation2d drivePose = drive.getPose().getTranslation();
+            Translation2d drivePose = past.getTranslation();
             translation = translation.plus(new Translation3d(
                 drivePose.getX(),
                 drivePose.getY(),
@@ -99,12 +104,14 @@ public class DetectedObject {
         translation = translation.plus(robotToCamera.getTranslation());
         // If the drivetrain exists, rotate and translate it to be field relative
         if(drive != null){
+            Pose2d past = drive.posFromSecondsAgo(VisionConstants.objectLatencySeconds);
+            //Pose2d past = drive.getPose();
             translation = translation.rotateBy(new Rotation3d(
                 0,
                 0,
-                drive.getYaw().getRadians()
+                past.getRotation().getRadians()
             ));
-            Translation2d drivePose = drive.getPose().getTranslation();
+            Translation2d drivePose = past.getTranslation();
             translation = translation.plus(new Translation3d(
                 drivePose.getX(),
                 drivePose.getY(),
@@ -125,8 +132,8 @@ public class DetectedObject {
     }
 
     /**
-     * Converts a String to an ObjectType
-     * @param type The type as a String
+     * Converts a long to an ObjectType
+     * @param type The type as a long
      * @return The type as an ObjectType
      */
     public static ObjectType getType(long type){
@@ -171,6 +178,9 @@ public class DetectedObject {
      * @return The distance in meters
      */
     public double getDistance(){
+        if(drive == null){
+            return pose.getTranslation().toTranslation2d().getNorm();
+        }
         return drive.getPose().getTranslation().getDistance(pose.getTranslation().toTranslation2d());
     }
     /**
@@ -178,6 +188,9 @@ public class DetectedObject {
      * @return The angle in radians
      */
     public double getAngle(){
+        if(drive == null){
+            return pose.getTranslation().toTranslation2d().getAngle().getRadians();
+        }
         return Math.atan2(pose.getY()-drive.getPose().getY(), pose.getX()-drive.getPose().getX());
     }
 
@@ -186,16 +199,15 @@ public class DetectedObject {
      * @return The relative angle in radians
      */
     public double getRelativeAngle(){
-        double angle = getAngle()-drive.getYaw().getRadians();
-        if(angle > Math.PI){
-            angle -= Math.PI*2;
-        }else if(angle < -Math.PI){
-            angle += Math.PI*2;
+        if(drive == null){
+            return getAngle();
         }
+        double angle = getAngle()-drive.getYaw().getRadians();
+        angle = MathUtil.angleModulus(angle);
         return angle;
     }
 
     public String toString(){
-        return type+" at ("+pose.getX()+", "+pose.getY()+", "+pose.getZ()+")";
+        return String.format("%s at (%.2f, %.2f, %.2f)", type.name(), pose.getX(), pose.getY(), pose.getZ());
     }
 }

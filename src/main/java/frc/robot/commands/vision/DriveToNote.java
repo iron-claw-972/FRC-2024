@@ -3,6 +3,7 @@ package frc.robot.commands.vision;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.DetectedObject;
@@ -13,9 +14,11 @@ import frc.robot.util.DetectedObject;
  */
 public class DriveToNote extends Command {
 
+  private double speed = DriveConstants.kMaxSpeed/2;
   private Drivetrain drive; 
   private Supplier<DetectedObject> objectSupplier;
   private DetectedObject object;
+  private double angle;
 
   /**
    * Moves toward the detected object
@@ -31,7 +34,7 @@ public class DriveToNote extends Command {
   }
 
   /**
-   * Does nothing
+   * Gets the object and finds the angle to it
    */
   @Override
   public void initialize(){
@@ -39,27 +42,35 @@ public class DriveToNote extends Command {
   }
 
   /**
-   * Gets the x offset and distance and drives toward the object
+   * Drives toward the note
    */
   @Override
   public void execute() {
-    // DetectedObject object = objectSupplier.get();
     if(object == null){
       drive.stop();
       return;
     }
-    double angle = object.getAngle();
-    double speed = DriveConstants.kMaxSpeed/2;
+
+    angle = object.getAngle();
 
     drive.driveHeading(speed*Math.cos(angle), speed*Math.sin(angle), angle, true);
   }
 
   /**
    * If the command is finished
-   * @return Always false
+   * @return True only if the object is null
    */
   @Override
-  public boolean isFinished() { 
+  public boolean isFinished() {
+    if (object == null) {
+      return true;
+    }
+
+    double xOffset = (object.pose.toPose2d().getX() - drive.getPose().getX());
+    double yOffset = (object.pose.toPose2d().getY() - drive.getPose().getY());
+    if (xOffset * xOffset + yOffset * yOffset < VisionConstants.objectPositionTolerance) {
+      return true;
+    }
     return false;
   }
 

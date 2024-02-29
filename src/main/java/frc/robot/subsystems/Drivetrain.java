@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
+
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -28,6 +30,7 @@ import frc.robot.subsystems.module.Module;
 import frc.robot.subsystems.module.ModuleSim;
 import frc.robot.util.Vision;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -64,6 +67,10 @@ public class Drivetrain extends SubsystemBase {
     private boolean isAlign = false;
     // Angle to align to, null for directly toward speaker
     private Double alignAngle = null;
+
+    // Latency calculation
+    private int maxSecondsStored = 1; //max number of past seconds to store
+    private ArrayList<Pair<Double, Pose2d>> pastPositions; //list of past positions
 
     /**
      * Creates a new Swerve Style Drivetrain.
@@ -118,6 +125,8 @@ public class Drivetrain extends SubsystemBase {
         rotationController.enableContinuousInput(-Math.PI, Math.PI);
         rotationController.setTolerance(Units.degreesToRadians(0.25), Units.degreesToRadians(0.25));
 
+        // setup latency list
+        pastPositions = new ArrayList<Pair<Double, Pose2d>>();
     }
 
     @Override
@@ -186,10 +195,16 @@ public class Drivetrain extends SubsystemBase {
     public void updateOdometry() {
         // Updates pose based on encoders and gyro. NOTE: must use yaw directly from gyro!
         poseEstimator.update(Rotation2d.fromDegrees(pigeon.getYaw().getValue()), getModulePositions());
-
-        if(RobotBase.isReal() && VisionConstants.ENABLED && visionEnabled){
-            vision.updateOdometry(poseEstimator);
+        
+        // Updates the pose using vision
+        // 2 if statements to avoid warning when vision is disabled
+        if(VisionConstants.ENABLED){
+            if(RobotBase.isReal() && visionEnabled){
+                vision.updateOdometry(poseEstimator);
+            }
         }
+
+        updateLatencyList();
     }
 
     /**
@@ -395,5 +410,62 @@ public class Drivetrain extends SubsystemBase {
     }
     public PIDController getRotationController() {
         return rotationController;
+    }
+
+    // Adds the current pos to the latency list
+    public void updateLatencyList() {
+        // add timestamp pair
+        double currentTime = Timer.getFPGATimestamp();
+        pastPositions.add(new Pair<>(currentTime, getPose()));
+
+        // remove first until maxSecondsStored is met
+        while (pastPositions.size() > 0 && currentTime - pastPositions.get(0).getFirst() > maxSecondsStored) {
+            pastPositions.remove(0);
+        }
+    }
+
+    // util for latency calculation
+    private int lowerBoundOfPastPos(double seconds) {
+        int lowerBound = 0;
+        while (lowerBound < pastPositions.size()) {
+            if (seconds > pastPositions.get(lowerBound).getFirst()) {
+                lowerBound++;
+            } else {
+                return lowerBound;
+            }
+        }
+        return lowerBound;
+    }
+
+    public Pose2d posFromSecondsAgo(double seconds) {
+        seconds = Timer.getFPGATimestamp() - seconds;
+
+        // get poses that surround the input time
+        double olderTime;
+        Pose2d olderPos;
+
+        double newerTime;
+        Pose2d newerPos;
+        
+        int lower_bound = lowerBoundOfPastPos(seconds);
+
+        // older pos will be lower bound
+        olderTime = pastPositions.get(lower_bound).getFirst();
+        olderPos = pastPositions.get(lower_bound).getSecond();
+
+        // newer pos will be 1 after lower bound (lower bound is length of list, use current pos and time)
+        if (lower_bound >= pastPositions.size()-1) {
+            // use current
+            newerTime = Timer.getFPGATimestamp();
+            newerPos = getPose();
+        } else {
+            newerTime = pastPositions.get(lower_bound+1).getFirst();
+            newerPos = pastPositions.get(lower_bound+1).getSecond();
+        }
+
+        // lerp
+        double t = (seconds - olderTime) / (newerTime - olderTime);
+
+        return olderPos.interpolate(newerPos, t);
     }
 }
