@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.Climb;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.Climb.Chain;
@@ -28,7 +27,6 @@ import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
 import frc.robot.commands.gpm.IntakeNote;
-import frc.robot.commands.gpm.PrepareShooter;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -80,18 +78,16 @@ public class RobotContainer {
         intake = new Intake();
         index = new StorageIndex();
         shooter = new Shooter();
-        SmartDashboard.putData("Blast", new IntakeNote(intake, index, arm));
-        SmartDashboard.putData("Prepare Shooter", new PrepareShooter(shooter, 1000));
-        SmartDashboard.putData("Stop Shooter", new InstantCommand(() -> shooter.setTargetRPM(0,0)));
-        break;
 
       case SwerveTest:
         vision = new Vision(VisionConstants.APRIL_TAG_CAMERAS);
+
 
         drive = new Drivetrain(vision);
         driver = new GameControllerDriverConfig(drive, vision, arm, intake, index, shooter);
         operator = new Operator(intake, arm, index, shooter, drive);
         SmartDashboard.putData(new Climb(Chain.LEFT, drive, arm));
+        SmartDashboard.putBoolean("Index beam", index.hasNote());
 
         // Detected objects need access to the drivetrain
         DetectedObject.setDrive(drive);

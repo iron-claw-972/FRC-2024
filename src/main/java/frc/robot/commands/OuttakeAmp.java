@@ -31,11 +31,11 @@ public class OuttakeAmp extends SequentialCommandGroup {
   public OuttakeAmp(Arm arm, StorageIndex index, Shooter shooter) {
     addCommands(
         // Get the shooter to the right speed while moving arm
-        new InstantCommand(() -> shooter.setTargetRPM(ShooterConstants.AMP_OUTTAKE_RPM)),
+        new InstantCommand(() -> shooter.setTargetRPM(ShooterConstants.AMP_OUTTAKE_RPM), shooter),
         // Move arm
         new ArmToPos(arm, ArmConstants.ampSetpoint),
         // Score in amp
-        new InstantCommand(() -> index.ejectAmpFront()),
+        new InstantCommand(() -> index.ejectAmpFront(), index),
         // Wait until note is scored
         new WaitCommand(StorageIndexConstants.ejectAmpFrontTimeout),
         // Set everything back to default state
@@ -55,6 +55,8 @@ public class OuttakeAmp extends SequentialCommandGroup {
   public OuttakeAmp(Arm arm, StorageIndex index, Shooter shooter, Drivetrain drive) {
     Pose2d ampPose = DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_AMP_POSE
         : VisionConstants.BLUE_AMP_POSE;
+    Pose2d ampPose2 = DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_AMP_POSE_2
+        : VisionConstants.BLUE_AMP_POSE_2;
     addCommands(
         new SequentialCommandGroup(
             // Wait until the robot is close enough to the amp to start scoring
@@ -66,6 +68,11 @@ public class OuttakeAmp extends SequentialCommandGroup {
             // Run the other version of this command to score in the amp
             new OuttakeAmp(arm, index, shooter)).deadlineWith(
                 // Go to the pose and stay at it until the command finishes
-                new GoToPose(ampPose, drive)));
+                new SequentialCommandGroup(
+                  new GoToPose(ampPose2, drive).until(()->{
+                    return drive.getPose().getTranslation().getDistance(ampPose2.getTranslation()) < VisionConstants.AMP_TOLERANCE_DISTANCE;
+                  }),
+                  new GoToPose(ampPose, drive))
+                ));
   }
 }

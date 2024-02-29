@@ -5,13 +5,12 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 public class StorageIndexConstants {
     public static final int indexMotorID = 7;
-    // TODO: get the correct DIO channel
-    public static final int indexBeamBreak = 2;
+    public static final int indexBeamBreak = 2; 
     public static final NeutralModeValue indexNeutralMode = NeutralModeValue.Brake;
 
     public static final int stallLimit = 25;
 
-    public static final double intakeSpeed = 1;
+    public static final double intakeSpeed = 0.5;
     public static final double ejectShootSpeed = 1;
     public static final double ejectAmpFrontSpeed = 1;
     public static final double ejectAmpBackSpeed = 1;

@@ -52,6 +52,10 @@ public class Operator {
             kDriver.get(Button.B).onTrue(new InstantCommand(() -> intake.setMode(Mode.ReverseMotors), intake));
             kDriver.get(Button.B).onFalse(new InstantCommand(() -> intake.setMode(Mode.DISABLED), intake));
         }
+        if(index != null){
+            kDriver.get(Button.B).onTrue(new InstantCommand(() -> index.ejectBack(), index));
+            kDriver.get(Button.B).onFalse(new InstantCommand(() -> index.stopIndex(), index));
+        }
         kDriver.get(Button.BACK).onTrue(new InstantCommand(()->{
             if(shooter != null){
                 shooter.setTargetRPM(0);

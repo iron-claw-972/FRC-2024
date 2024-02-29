@@ -1,10 +1,9 @@
 package frc.robot.subsystems.gpm;
 
-import com.revrobotics.CANSparkFlex;
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.StorageIndexConstants;
 
@@ -14,22 +13,15 @@ import frc.robot.constants.StorageIndexConstants;
  */
 public class StorageIndex extends SubsystemBase {
 
-  private final CANSparkFlex m_indexmotor;
+  private final CANSparkMax m_indexmotor;
   DigitalInput m_indexBeamBreak;
-
-  /**
-   * Indicates whether the indexer is in the process of running the motors to take
-   * in a note. Once the
-   * beambreak sensor detects a note inside, this boolean becomes false.
-   */
-  private boolean isIndexing = false;
 
   /**
    * Constructs the StorageIndex subsystem, initializing the motor and beam break
    * sensor.
    */
   public StorageIndex() {
-    m_indexmotor = new CANSparkFlex(StorageIndexConstants.indexMotorID, MotorType.kBrushless);
+    m_indexmotor = new CANSparkMax(StorageIndexConstants.indexMotorID, MotorType.kBrushless);
     m_indexBeamBreak = new DigitalInput(StorageIndexConstants.indexBeamBreak);
     m_indexmotor.setInverted(false);
 
@@ -41,11 +33,6 @@ public class StorageIndex extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("Index BM", m_indexBeamBreak.get());
-    if (isIndexing && hasNote()) {
-      isIndexing = false;
-      stopIndex();
-    }
   }
 
   /**
@@ -53,7 +40,6 @@ public class StorageIndex extends SubsystemBase {
    */
   public void storeNote() {
     if (!hasNote()) {
-      isIndexing = true;
       runIndex();
     }
   }
@@ -82,7 +68,6 @@ public class StorageIndex extends SubsystemBase {
    * Stops the storage index mechanism.
    */
   public void stopIndex() {
-    isIndexing = false;
     m_indexmotor.set(0);
   }
 

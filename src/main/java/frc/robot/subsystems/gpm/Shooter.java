@@ -1,7 +1,5 @@
 package frc.robot.subsystems.gpm;
 
-import javax.swing.plaf.basic.BasicBorders.RadioButtonBorder;
-
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
@@ -83,7 +81,7 @@ public class Shooter extends SubsystemBase {
 		// invert the right motor so +power sends the note out
 		rightMotor.setInverted(true);
 		leftMotor.setInverted(false);
-		
+
 		// are we simulating?
 		if (RobotBase.isSimulation()) {
 			leftFlywheelSim = new FlywheelSim(gearbox, 1.0, MOI_SHAFT);
@@ -199,7 +197,7 @@ public class Shooter extends SubsystemBase {
 	 */
 	public void setTargetVelocity(double speed) {
 		// convert speed to RPM
-		setTargetRPM(shooterSpeedToRPM(speed));
+		setTargetRPM(shooterSpeedToRPM(speed) / 0.64);
 	}
 
 	/**
