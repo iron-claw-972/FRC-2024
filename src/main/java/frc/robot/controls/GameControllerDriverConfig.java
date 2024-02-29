@@ -82,6 +82,7 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     if(arm != null && index != null && shooter != null){
       kDriver.get(Button.B).whileTrue(new OuttakeAmp(arm, index, shooter, getDrivetrain()));
     }else{
+      System.out.println("The arm is null, the index is null, the shooter is null");
       kDriver.get(Button.B).whileTrue(new GoToPose(()->
         DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_AMP_POSE
         : VisionConstants.BLUE_AMP_POSE,
