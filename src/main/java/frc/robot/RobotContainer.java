@@ -1,17 +1,21 @@
 package frc.robot;
 
+import java.rmi.server.Operation;
 import java.util.function.BooleanSupplier;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.Climb;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.commands.Climb.Chain;
+import frc.robot.commands.Shoot;
 import frc.robot.constants.AutoConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
@@ -27,6 +31,9 @@ import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
 import frc.robot.commands.gpm.IntakeNote;
+import frc.robot.commands.gpm.PrepareShooter;
+import frc.robot.commands.gpm.SetShooterSpeed;
+import frc.robot.commands.gpm.ShootKnownPos;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -69,25 +76,29 @@ public class RobotContainer {
       case TestBed2:
         intake = new Intake();
         index = new StorageIndex();
+        arm = new Arm();
         SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index, arm));
         break;
-        
+
       default:
       case SwerveCompetition:
-        arm = new Arm();
         intake = new Intake();
         index = new StorageIndex();
+        arm = new Arm();
         shooter = new Shooter();
         SmartDashboard.putData(new Climb(Chain.LEFT, drive, arm));
         SmartDashboard.putBoolean("Index beam", index.hasNote());
 
       case SwerveTest:
-        vision = new Vision(VisionConstants.APRIL_TAG_CAMERAS);
+        System.out.println("INFO: SwerveTest");
+        vision = new Vision(VisionConstants.CAMERAS);
 
 
         drive = new Drivetrain(vision);
-        driver = new GameControllerDriverConfig(drive, vision, arm, intake, index, shooter);
+        driver = new GameControllerDriverConfig(drive, vision);
         operator = new Operator(intake, arm, index, shooter, drive);
+
+        registerCommands();
 
         // Detected objects need access to the drivetrain
         DetectedObject.setDrive(drive);
@@ -137,6 +148,10 @@ public class RobotContainer {
   }
 
   public void initializeAutoBuilder() {
+    shooter.setTargetRPM(1500); //prepare shooter
+    new WaitCommand(0.5); //wait until shooter is ready
+    index.runIndex(); //put note into shooter
+    new WaitCommand(1); //wait until note is shot
     AutoBuilder.configureHolonomic(
         () -> drive.getPose(),
         (pose) -> {
@@ -149,6 +164,20 @@ public class RobotContainer {
         AutoConstants.config,
         getAllianceColorBooleanSupplier(),
         drive);
+  }
+
+  public void registerCommands() {
+    NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index, arm).withTimeout(1));
+    // NamedCommands.registerCommand("Stop", new WaitCommand(2)); // to represent stopping for shooting 
+    // Mehaan -- Consulted with Jerry, just going to use a constraint zone going at .1 which should be fine instead of stopping for the area in which we are supposed to shoot
+    // NamedCommands.registerCommand("PrepareShooter", new PrepareShooter(shooter, 0));
+    // NamedCommands.registerCommand("SetShooterSpeed", new SetShooterSpeed(shooter, 0));
+    // NamedCommands.registerCommand("ShootKnownPos", new ShootKnownPos(shooter, arm, index, null));
+    // NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new Shoot(shooter, arm, drive, index).withTimeout(1.5)); // using for now in the auto paths
+    NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new SequentialCommandGroup(
+      new InstantCommand(()-> index.runIndex()),
+      new WaitCommand(.5),
+      new PrepareShooter(shooter, 1500).withTimeout(1.5))); // using for now in the auto paths
   }
 
   public static BooleanSupplier getAllianceColorBooleanSupplier() {
