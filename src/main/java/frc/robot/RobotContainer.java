@@ -49,6 +49,7 @@ public class RobotContainer {
   private Shooter shooter = null;
   private Intake intake = null;
   private StorageIndex index = null;
+  @SuppressWarnings("unused")
   private DIOCheck dioCheck;
 
   // Controllers are defined here
