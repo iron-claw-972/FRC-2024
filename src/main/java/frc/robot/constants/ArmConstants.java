@@ -37,7 +37,7 @@ public class ArmConstants {
     public static final double subwooferSetpoint = MIN_ANGLE_RADS;
     public static final double preClimbSetpoint = MAX_ANGLE_RADS;
     public static final double climbSetpoint = MIN_ANGLE_RADS;
-    public static final double ampSetpoint = MAX_ANGLE_RADS;
+    public static final double ampSetpoint = Units.degreesToRadians(73.0);
 
     public static final double PIVOT_HEIGHT = Units.inchesToMeters(16.75);
     public static final double PIVOT_X = Units.inchesToMeters(-10);
