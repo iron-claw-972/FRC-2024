@@ -10,9 +10,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * Open some DIO inputs and display them on the SmartDashboard.
  */
 public class DIOCheck extends SubsystemBase {
-    DigitalInput[] adio = new DigitalInput[12];
-    DIOSim[] adioSim = new DIOSim[12];
-    String[] label = new String[12];
+    DigitalInput[] adio = new DigitalInput[10];
+    DIOSim[] adioSim = new DIOSim[10];
+    String[] label = new String[10];
     int counterSim = 0;
 
     public DIOCheck() {
