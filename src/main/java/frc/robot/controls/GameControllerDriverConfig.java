@@ -82,11 +82,7 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     if(arm != null && index != null && shooter != null){
       kDriver.get(Button.B).whileTrue(new OuttakeAmp(arm, index, shooter, getDrivetrain()));
     }else{
-      kDriver.get(Button.B).whileTrue(new GoToPose(()->
-        DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_AMP_POSE
-        : VisionConstants.BLUE_AMP_POSE,
-        getDrivetrain()
-      ));
+      kDriver.get(Button.B).whileTrue(new OuttakeAmp(getDrivetrain()));
     }
     // Podium alignment
     kDriver.get(Button.LB)

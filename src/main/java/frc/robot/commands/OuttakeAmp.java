@@ -76,4 +76,17 @@ public class OuttakeAmp extends SequentialCommandGroup {
                   new GoToPose(ampPose, drive))
                 ));
   }
+
+  public OuttakeAmp(Drivetrain drive){
+    Pose2d ampPose = DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_AMP_POSE
+        : VisionConstants.BLUE_AMP_POSE;
+    Pose2d ampPose2 = DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_AMP_POSE_2
+        : VisionConstants.BLUE_AMP_POSE_2;
+    addCommands(
+      new GoToPose(ampPose2, drive).until(()->{
+        return drive.getPose().getTranslation().getDistance(ampPose2.getTranslation()) < VisionConstants.AMP_TOLERANCE_DISTANCE;
+      }),
+      new GoToPose(ampPose, drive)
+    );
+  }
 }
