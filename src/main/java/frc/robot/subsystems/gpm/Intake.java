@@ -20,7 +20,7 @@ public class Intake extends SubsystemBase {
 
     public enum Mode {
         DISABLED(0,0),
-        INTAKE(.8,.3),
+        INTAKE(.6,.5),
         PickedUpNote(.8,.3),
         Wait(.8,.3),
         Pause (0,0),
@@ -86,7 +86,7 @@ public class Intake extends SubsystemBase {
         // set the motor parameters
         // motor.setIdleMode(IntakeConstants.idleMode);***
         centeringMotor.setIdleMode(IntakeConstants.idleMode);
-
+        centeringMotor.setInverted(true);
         // set the mode to Idle; this will turn off the motors
         setMode(Mode.DISABLED);
 
@@ -136,7 +136,7 @@ public class Intake extends SubsystemBase {
     public void periodic() {
         publish();
 
-        /* */
+        /* 
         switch (mode) {
             case DISABLED:
                 // don't have to do anything
@@ -179,7 +179,7 @@ public class Intake extends SubsystemBase {
 
             default:
                 break;
-        }
+        }*/
     }
 
     /**

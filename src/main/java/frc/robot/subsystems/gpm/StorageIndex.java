@@ -40,10 +40,9 @@ public class StorageIndex extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (isIndexing && hasNote()) {
       isIndexing = false;
       stopIndex();
-    }
+    
   }
 
   /**

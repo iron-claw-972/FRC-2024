@@ -78,16 +78,17 @@ public class RobotContainer {
         arm = new Arm();
         intake = new Intake();
         index = new StorageIndex();
-        arm = new Arm();
         shooter = new Shooter();
 
       case SwerveTest:
         vision = new Vision(VisionConstants.APRIL_TAG_CAMERAS);
 
+
         drive = new Drivetrain(vision);
         driver = new GameControllerDriverConfig(drive, vision, arm, intake, index, shooter);
         operator = new Operator(intake, arm, index, shooter, drive);
         SmartDashboard.putData(new Climb(Chain.LEFT, drive, arm));
+        SmartDashboard.putBoolean("Index beam", index.hasNote());
 
         // Detected objects need access to the drivetrain
         DetectedObject.setDrive(drive);

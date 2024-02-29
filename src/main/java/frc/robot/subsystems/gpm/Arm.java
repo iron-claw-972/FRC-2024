@@ -65,7 +65,7 @@ public class Arm extends SubsystemBase {
      * <p>
      * WARNING: This value will change if the belt driving the REV encoder slips!
      */
-    private static final double OFFSET = 0.54+Units.degreesToRotations(ArmConstants.MIN_ANGLE_RADS);
+    private static final double OFFSET = 0.54+Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
     /** REV encoder scale factor. This is fixed. */
     private static final double DISTANCE_PER_ROTATION = -2 * Math.PI;
 
@@ -113,6 +113,7 @@ public class Arm extends SubsystemBase {
         for (int i = 0; i < motors.length; i++) {
             // create the motor
             motors[i] = new TalonFX(ArmConstants.MOTOR_IDS[i]);
+            motors[i].setNeutralMode(NeutralModeValue.Coast);
 
             // i==0 is the master; the others are slaves
             if (i > 0) {
@@ -125,7 +126,7 @@ public class Arm extends SubsystemBase {
 
         // common configuration for each motor
         // configure the master after the slaves have been linked so slaves will copy the same settings.
-        motors[0].setNeutralMode(NeutralModeValue.Brake);
+        motors[0].setNeutralMode(NeutralModeValue.Coast);
         motors[0].setInverted(false);
         motors[0].getConfigurator().apply(ArmConstants.currentConfig);
 
