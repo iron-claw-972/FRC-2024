@@ -114,6 +114,10 @@ public class Arm extends SubsystemBase {
             Units.radiansToDegrees(ArmConstants.START_ANGLE_RADS),
             6,
             new Color8Bit(Color.kYellow)));
+    // Angle for logging
+    private double angle;
+    //Assumed Voltage
+    double voltsBattery = 12.8;
 
     public Arm() {
         // set the PID tolerance
@@ -222,9 +226,6 @@ public class Arm extends SubsystemBase {
 
     @Override
     public void simulationPeriodic() {
-        // Assuming the volts
-        double voltsBattery = 12.8;
-
         // set the simulator inputs
         simulation.setInputVoltage(motors[0].get() * voltsBattery);
 
@@ -272,11 +273,11 @@ public class Arm extends SubsystemBase {
 
     private void setupLogs() {
         LogManager.add("Arm/PositionError", () -> angle - simulation.getAngleRads(), Duration.ofSeconds(1));
-        LogManager.add("Arm/Volts", () -> motor.get() * voltsBattery);
+        LogManager.add("Arm/Volts", () -> motors[0].get() * voltsBattery);
 
         ArrayList<Double> slave_errors = new ArrayList();
-        for (TalonFX each_talon: slaves) {
-            slave_errors.add(each_talon.getPosition().getValue()-motor.getPosition().getValue());
+        for (TalonFX each_talon: motors) {
+            slave_errors.add(each_talon.getPosition().getValue()-motors[0].getPosition().getValue());
         }
 
         LogManager.add("Arm/SlaveErrors(ticks)", () -> slave_errors);
