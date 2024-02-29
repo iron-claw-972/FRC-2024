@@ -4,15 +4,21 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+//import frc.robot.commands.ChainAlign;
 import frc.robot.commands.Climb;
 import frc.robot.commands.GoToPose;
+import frc.robot.commands.OuttakeAmp;
 import frc.robot.commands.Climb.Chain;
 import frc.robot.commands.drive_comm.SetFormationX;
-import frc.robot.commands.vision.DriveToNote;
+import frc.robot.commands.vision.AcquireGamePiece;
+import frc.robot.constants.ArmConstants;
 import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Arm;
+import frc.robot.subsystems.gpm.Intake;
+import frc.robot.subsystems.gpm.Shooter;
+import frc.robot.subsystems.gpm.StorageIndex;
 import frc.robot.util.MathUtils;
 import frc.robot.util.Vision;
 import lib.controllers.GameController;
@@ -27,11 +33,17 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
   private final GameController kDriver = new GameController(Constants.DRIVER_JOY);
   private Vision vision;
   private Arm arm;
+  private Intake intake;
+  private StorageIndex index;
+  private Shooter shooter;
 
-  public GameControllerDriverConfig(Drivetrain drive, Vision vision, Arm arm) {
+  public GameControllerDriverConfig(Drivetrain drive, Vision vision, Arm arm, Intake intake, StorageIndex index, Shooter shooter) {
     super(drive);
     this.vision = vision;
     this.arm = arm;
+    this.index = index;
+    this.intake = intake;
+    this.shooter = shooter;
   }
 
   @Override
@@ -45,29 +57,42 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     // Enable state deadband after setting formation to X
     kDriver.get(Button.X).onFalse(new InstantCommand(()->getDrivetrain().setStateDeadband(true)));
 
-    kDriver.get(Button.B).whileTrue(new DriveToNote(()->vision.getBestGamePiece(Math.PI/2), getDrivetrain()));
+    if(VisionConstants.OBJECT_DETECTION_ENABLED){
+      if(intake != null && index != null && arm != null){
+        kDriver.get(Button.RIGHT_JOY).whileTrue(new AcquireGamePiece(()->vision.getBestGamePiece(Math.PI/2), getDrivetrain(), intake, index, arm));
+      }
+    }
 
     // Resets the modules to absolute if they are having the unresolved zeroing
     // error
     kDriver.get(Button.A).onTrue(new InstantCommand(() -> getDrivetrain().resetModulesToAbsolute()));
 
     // Align to stage and climb
-    kDriver.get(DPad.LEFT).toggleOnTrue(new Climb(Chain.LEFT, getDrivetrain(), arm));
-    kDriver.get(DPad.UP).toggleOnTrue(new Climb(Chain.CENTER, getDrivetrain(), arm));
-    kDriver.get(DPad.RIGHT).toggleOnTrue(new Climb(Chain.RIGHT, getDrivetrain(), arm));
+    if(arm != null){
+      kDriver.get(DPad.LEFT).toggleOnTrue(new Climb(Chain.LEFT, getDrivetrain(), arm));
+      kDriver.get(DPad.UP).toggleOnTrue(new Climb(Chain.CENTER, getDrivetrain(), arm));
+      kDriver.get(DPad.RIGHT).toggleOnTrue(new Climb(Chain.RIGHT, getDrivetrain(), arm));
+    }else{
+
+    }
 
     // Amp alignment
-    kDriver.get(Button.LB)
-        .whileTrue(new GoToPose(
-            () -> DriverStation.getAlliance().get() == Alliance.Blue ? VisionConstants.BLUE_AMP_POSE
-                : VisionConstants.RED_AMP_POSE,
-            getDrivetrain()));
+    if(arm != null && index != null && shooter != null){
+      kDriver.get(Button.B).whileTrue(new OuttakeAmp(arm, index, shooter, getDrivetrain()));
+    }else{
+      //kDriver.get(Button.B).whileTrue(new OuttakeAmp(getDrivetrain()));
+    }
     // Podium alignment
-    kDriver.get(Button.RB)
+    kDriver.get(Button.LB)
         .whileTrue(new GoToPose(
             () -> DriverStation.getAlliance().get() == Alliance.Blue ? VisionConstants.BLUE_PODIUM_POSE
                 : VisionConstants.RED_PODIUM_POSE,
             getDrivetrain()));
+    
+    if(arm != null){
+      kDriver.get(Button.RB).onTrue(new InstantCommand(()->arm.setAngle(ArmConstants.preClimbSetpoint), arm));
+      kDriver.get(Button.RB).onFalse(new InstantCommand(()->arm.setAngle(ArmConstants.climbSetpoint), arm));
+    }
   }
 
   @Override

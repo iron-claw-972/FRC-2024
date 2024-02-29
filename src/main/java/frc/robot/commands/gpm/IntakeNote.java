@@ -21,8 +21,6 @@ public class IntakeNote extends Command{
         this.storageIndex = storageIndex;
         this.arm = arm;
         addRequirements(intake, storageIndex, arm);
-
-       
     }
 
     @Override
