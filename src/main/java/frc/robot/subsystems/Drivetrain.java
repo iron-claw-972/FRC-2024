@@ -402,36 +402,15 @@ public class Drivetrain extends SubsystemBase {
     }
 
     private void setupLogs() {
-        LogManager.add("Drivetrain/Speed/X", () -> getChassisSpeeds().vxMetersPerSecond);
-        LogManager.add("Drdrivetrain/Speed/Y", () -> getChassisSpeeds().vyMetersPerSecond);
-        LogManager.add("Drivetrain/Speed/Rot", () -> getChassisSpeeds().omegaRadiansPerSecond);
+        LogManager.add("Drivetrain/SpeedX", () -> getChassisSpeeds().vxMetersPerSecond);
+        LogManager.add("Drivetrain/SpeedY", () -> getChassisSpeeds().vyMetersPerSecond);
+        LogManager.add("Drivetrain/Speed", () -> Math.hypot(getChassisSpeeds().vxMetersPerSecond, getChassisSpeeds().vyMetersPerSecond));
+        LogManager.add("Drivetrain/SpeedRot", () -> getChassisSpeeds().omegaRadiansPerSecond);
 
         LogManager.add("Drivetrain/Pose2d", () -> new Double[]{
                 getPose().getX(),
                 getPose().getY(),
                 getPose().getRotation().getRadians()
-        });
-
-        LogManager.add("Drivetrain/States/Actual", () -> new Double[]{
-                modules[0].getAngle().getRadians(),
-                modules[0].getState().speedMetersPerSecond,
-                modules[1].getAngle().getRadians(),
-                modules[1].getState().speedMetersPerSecond,
-                modules[2].getAngle().getRadians(),
-                modules[2].getState().speedMetersPerSecond,
-                modules[3].getAngle().getRadians(),
-                modules[3].getState().speedMetersPerSecond
-        });
-
-        LogManager.add("Drivetrain/States/Desired", () -> new Double[]{
-                modules[0].getDesiredAngle().getRadians(),
-                modules[0].getDesiredVelocity(),
-                modules[1].getDesiredAngle().getRadians(),
-                modules[1].getDesiredVelocity(),
-                modules[2].getDesiredAngle().getRadians(),
-                modules[2].getDesiredVelocity(),
-                modules[3].getDesiredAngle().getRadians(),
-                modules[3].getDesiredVelocity()
         });
     }
 }

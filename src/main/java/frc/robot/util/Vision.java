@@ -1,5 +1,6 @@
 package frc.robot.util;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -258,7 +259,7 @@ public class Vision {
                 pose.getX(),
                 pose.getY(),
                 pose.getRotation().getRadians()
-              });
+              }, Duration.ofSeconds(1));
             }
           }catch(Exception e){
             System.out.println(e.getStackTrace());
@@ -276,7 +277,7 @@ public class Vision {
               estimatedPose.get().estimatedPose.getX(),
               estimatedPose.get().estimatedPose.getY(),
               estimatedPose.get().estimatedPose.getRotation().getZ()
-            });
+            }, Duration.ofSeconds(1));
           }
         }
       }
