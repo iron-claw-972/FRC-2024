@@ -18,6 +18,7 @@ import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
 import frc.robot.controls.Operator;
+import frc.robot.subsystems.DIOCheck;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.DetectedObject;
 import frc.robot.subsystems.gpm.Arm;
@@ -48,6 +49,7 @@ public class RobotContainer {
   private Shooter shooter = null;
   private Intake intake = null;
   private StorageIndex index = null;
+  private DIOCheck dioCheck;
 
   // Controllers are defined here
   private BaseDriverConfig driver = null;
@@ -64,8 +66,6 @@ public class RobotContainer {
     switch (robotId) {
 
       case TestBed1:
-        index = new StorageIndex();
-        shooter = new Shooter();
         break;
 
       case TestBed2:
@@ -75,8 +75,10 @@ public class RobotContainer {
         SmartDashboard.putData("Intake", new InstantCommand(() -> intake.setMode(Mode.INTAKE)));
         break;
         
-      default:
       case SwerveCompetition:
+        dioCheck = new DIOCheck();
+        break;
+      default:
         arm = new Arm();
         intake = new Intake();
         index = new StorageIndex();
