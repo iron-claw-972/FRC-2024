@@ -3,45 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.77,
-        "y": 6.65
+        "x": 0.8,
+        "y": 6.67
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.109130478830757,
-        "y": 6.264092903399482
+        "x": 1.335622956146197,
+        "y": 6.560420642208806
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.6453682536994707,
-        "y": 5.788606449007769
+        "x": 2.5868974814872705,
+        "y": 5.81199475789265
       },
       "prevControl": {
-        "x": 2.271155311541392,
-        "y": 6.221290163378048
+        "x": 2.212684539329192,
+        "y": 6.244678472262929
       },
       "nextControl": {
-        "x": 2.803296936578966,
-        "y": 5.6060014094283535
+        "x": 2.7448261643667657,
+        "y": 5.629389718313234
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.75,
-        "y": 6.8
+        "x": 0.81,
+        "y": 6.7
       },
       "prevControl": {
-        "x": 0.6593703030710909,
-        "y": 6.9110944672031795
+        "x": 0.719370303071091,
+        "y": 6.81109446720318
       },
       "nextControl": {
-        "x": 0.840629696928909,
-        "y": 6.68890553279682
+        "x": 0.900629696928909,
+        "y": 6.5889055327968205
       },
       "isLocked": false,
       "linkedName": null
@@ -64,16 +64,16 @@
     },
     {
       "anchor": {
-        "x": 0.75,
-        "y": 6.8
+        "x": 0.81,
+        "y": 6.7
       },
       "prevControl": {
-        "x": 0.7390367302102128,
-        "y": 6.810232385137136
+        "x": 0.7990367302102128,
+        "y": 6.710232385137136
       },
       "nextControl": {
-        "x": 0.7609632697897872,
-        "y": 6.789767614862864
+        "x": 0.8209632697897873,
+        "y": 6.689767614862864
       },
       "isLocked": false,
       "linkedName": null
@@ -100,7 +100,7 @@
     },
     {
       "waypointRelativePos": 2.0,
-      "rotationDegrees": 60.75,
+      "rotationDegrees": 60.0,
       "rotateFast": false
     },
     {
@@ -110,7 +110,7 @@
     },
     {
       "waypointRelativePos": 3.95,
-      "rotationDegrees": 60.75,
+      "rotationDegrees": 60.0,
       "rotateFast": false
     }
   ],
@@ -239,7 +239,7 @@
   "reversed": false,
   "folder": "Final Autos",
   "previewStartingState": {
-    "rotation": 60.75,
+    "rotation": 60.0,
     "velocity": 0.0
   },
   "useDefaultConstraints": false

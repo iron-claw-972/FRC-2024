@@ -3,23 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-<<<<<<< Updated upstream
-        "x": 0.77,
-        "y": 6.8
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 1.8912221949384533,
-        "y": 6.955996131469698
-=======
         "x": 0.8,
         "y": 6.67
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9212221949384536,
+        "x": 1.9212221949384534,
         "y": 6.825996131469698
->>>>>>> Stashed changes
       },
       "isLocked": false,
       "linkedName": null
@@ -42,57 +32,44 @@
     },
     {
       "anchor": {
-<<<<<<< Updated upstream
-        "x": 0.75,
-        "y": 6.8
-      },
-      "prevControl": {
-        "x": 1.2569874272765171,
-        "y": 6.8731231866264215
-      },
-      "nextControl": {
-        "x": 0.24301257272348287,
-        "y": 6.726876813373578
-=======
         "x": 0.81,
         "y": 6.7
       },
       "prevControl": {
-        "x": 1.3169874272765174,
+        "x": 1.3169874272765172,
         "y": 6.773123186626422
       },
       "nextControl": {
         "x": 0.3030125727234829,
         "y": 6.6268768133735785
->>>>>>> Stashed changes
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.6861479990766246,
-        "y": 7.063269283233724
+        "x": 3.7073696950244264,
+        "y": 6.737082927847566
       },
       "prevControl": {
-        "x": 2.5875205896433946,
-        "y": 6.8974631163242135
+        "x": 2.600692138125101,
+        "y": 6.835767550755786
       },
       "nextControl": {
-        "x": 5.150083917318695,
-        "y": 7.284208248637921
+        "x": 5.2380817350708355,
+        "y": 6.600586312811581
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.779102053930604,
-        "y": 7.390705607622041
+        "x": 7.792518387887133,
+        "y": 7.400066486593781
       },
       "prevControl": {
-        "x": 7.51037955128268,
-        "y": 7.354558934574826
+        "x": 8.34337972713951,
+        "y": 7.481720711659951
       },
       "nextControl": null,
       "isLocked": false,
@@ -103,15 +80,10 @@
     {
       "waypointRelativePos": 0.95,
       "rotationDegrees": 16.882612524522283,
-      "rotateFast": true
-    },
-    {
-      "waypointRelativePos": 2.0,
-      "rotationDegrees": 60.0,
       "rotateFast": false
     },
     {
-      "waypointRelativePos": 2,
+      "waypointRelativePos": 2.0,
       "rotationDegrees": 60.0,
       "rotateFast": false
     }
@@ -166,7 +138,7 @@
     },
     {
       "name": "Intake 2",
-      "waypointRelativePos": 3.4,
+      "waypointRelativePos": 3.8,
       "command": {
         "type": "parallel",
         "data": {
@@ -189,7 +161,7 @@
   "reversed": false,
   "folder": "Final Autos",
   "previewStartingState": {
-    "rotation": 60.75476639108816,
+    "rotation": 60.0,
     "velocity": 0.0
   },
   "useDefaultConstraints": false

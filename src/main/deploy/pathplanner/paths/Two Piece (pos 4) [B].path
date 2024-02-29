@@ -3,55 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-<<<<<<< Updated upstream
-        "x": 0.77,
-        "y": 4.27
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 1.9007197761214796,
-        "y": 4.27
-=======
         "x": 0.8,
-        "y": 4.42
+        "y": 4.43
       },
       "prevControl": null,
       "nextControl": {
         "x": 1.9307197761214796,
+        "y": 4.43
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.391152335748853,
+        "y": 4.114397967513275
+      },
+      "prevControl": {
+        "x": 1.8434093977633172,
+        "y": 4.0795297088535465
+      },
+      "nextControl": {
+        "x": 2.972804578087788,
+        "y": 4.151424827066179
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.82,
         "y": 4.42
->>>>>>> Stashed changes
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.4805422242423427,
-        "y": 4.147855032552171
       },
       "prevControl": {
-        "x": 1.9620603451733223,
-        "y": 4.2095790657746734
+        "x": 0.9901116017553042,
+        "y": 4.741354263425829
       },
       "nextControl": {
-        "x": 3.059285163056142,
-        "y": 4.078957063645765
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 0.75,
-        "y": 4.27
-      },
-      "prevControl": {
-        "x": 0.9201116017553043,
-        "y": 4.591354263425829
-      },
-      "nextControl": {
-        "x": 0.6230802761221356,
-        "y": 4.0302386083011
+        "x": 0.6930802761221355,
+        "y": 4.1802386083011
       },
       "isLocked": false,
       "linkedName": null
@@ -90,11 +80,11 @@
     {
       "waypointRelativePos": 0.8500000000000001,
       "rotationDegrees": -1.1361084359015519,
-      "rotateFast": true
+      "rotateFast": false
     },
     {
       "waypointRelativePos": 1.95,
-      "rotationDegrees": -60.75,
+      "rotationDegrees": -60.0,
       "rotateFast": false
     }
   ],
@@ -178,7 +168,7 @@
   "reversed": false,
   "folder": "Final Autos",
   "previewStartingState": {
-    "rotation": -60.75,
+    "rotation": -60.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

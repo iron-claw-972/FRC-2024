@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 0.8,
-        "y": 4.425
+        "y": 4.43
       },
       "prevControl": null,
       "nextControl": {
         "x": 0.8,
-        "y": 4.357211011963007
+        "y": 4.362211011963007
       },
       "isLocked": false,
       "linkedName": null
@@ -36,31 +36,23 @@
         "y": 0.7718141932010376
       },
       "prevControl": {
-        "x": 5.65169551629559,
-        "y": 0.8244760729700349
+        "x": 5.65096929649833,
+        "y": 0.814510016963094
       },
       "nextControl": {
-        "x": 6.998741456129529,
-        "y": 0.7159987853810289
+        "x": 6.843569698535406,
+        "y": 0.7367317298737166
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-<<<<<<< Updated upstream
         "x": 7.627078046178885,
         "y": 0.7718141932010376
       },
       "prevControl": {
         "x": 7.954514370567201,
-=======
-        "x": 7.949291567756068,
-        "y": 0.7718141932010376
-      },
-      "prevControl": {
-        "x": 8.276727892144386,
->>>>>>> Stashed changes
         "y": 0.7718141932010376
       },
       "nextControl": null,
@@ -103,7 +95,7 @@
   "reversed": false,
   "folder": "Final Autos",
   "previewStartingState": {
-    "rotation": -60.75,
+    "rotation": -60.0,
     "velocity": 0
   },
   "useDefaultConstraints": false
