@@ -50,6 +50,7 @@ public class ArmConstants {
 
     public static final double START_ANGLE_RADS = 0.0;
 
-    // TODO: temporary reduction from 40 A to 4 A. I snapped both chains.
-    public static CurrentLimitsConfigs currentConfig = new CurrentLimitsConfigs().withSupplyCurrentLimit(30);
+    public static CurrentLimitsConfigs currentConfig = new CurrentLimitsConfigs()
+        .withSupplyCurrentLimit(30)
+        .withSupplyCurrentLimitEnable(true);
 }
