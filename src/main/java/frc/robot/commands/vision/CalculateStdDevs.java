@@ -105,16 +105,20 @@ public class CalculateStdDevs extends Command {
     double distance = 0;
     try{
       distance = m_vision.getTagPose(m_vision.getEstimatedPoses(m_drive.getPose()).get(0).targetsUsed.get(0).getFiducialId()).toPose2d().getTranslation().getDistance(m_drive.getPose().getTranslation());
-    }catch(Exception e){}
+    }catch(Exception e){
+      distance = 0;
+    }
     
     // Print and log values
     System.out.printf("Standard deviation values:\nX: %.5f\nY: %.5f\nRotation: %.5f\nDistance: %.5f\n",
       stdDevX, stdDevY, stdDevRot, distance);
     if (Constants.DO_LOGGING) {
-      LogManager.addDouble("Vision/StdDevTest/StdDevX", stdDevX);
-      LogManager.addDouble("Vision/StdDevTest/StdDevY", stdDevY);
-      LogManager.addDouble("Vision/StdDevTest/StdDevRotation", stdDevRot);
-      LogManager.addDouble("Vision/StdDevTest/TargetDistance", distance);
+      LogManager.add("Vision/StdDevTest/StdDevX", () -> stdDevX);
+      LogManager.add("Vision/StdDevTest/StdDevY", () -> stdDevY);
+      LogManager.add("Vision/StdDevTest/StdDevRotation", () -> stdDevRot);
+      try{ 
+      LogManager.add("Vision/StdDevTest/TargetDistance", () -> m_vision.getTagPose(m_vision.getEstimatedPoses(m_drive.getPose()).get(0).targetsUsed.get(0).getFiducialId()).toPose2d().getTranslation().getDistance(m_drive.getPose().getTranslation()));
+      }catch(Exception e) {LogManager.add("Vision/StdDevTest/TargetDistance", () -> 0);}
     }    
   }
 

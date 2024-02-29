@@ -1,5 +1,7 @@
 package frc.robot.subsystems.gpm;
 
+import java.time.Duration;
+
 import javax.swing.plaf.basic.BasicBorders.RadioButtonBorder;
 
 import com.revrobotics.CANSparkFlex;
@@ -15,7 +17,9 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.Constants;
 import frc.robot.constants.ShooterConstants;
+import frc.robot.util.LogManager;
 
 public class Shooter extends SubsystemBase {
 	// each of the shooter shafts is driven by one Neo Vortex motor
@@ -39,6 +43,9 @@ public class Shooter extends SubsystemBase {
 	 * At 1500 rpm, the simulator gives 1519 rpm.
 	 */
 	private static final double TOLERANCE = 40;
+	
+	private double speedLeft;
+	private double speedRight;
 
 	// 4-inch Colson wheels
 	// private static final double MASS_COLSON = 0.245;
@@ -73,6 +80,8 @@ public class Shooter extends SubsystemBase {
 	private double rightMotorSpeedSim;
 	private double rightPower = 0.0;
 
+	double voltage = 12.0;
+
 	// TODO: TUNE THIS
 	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(S, V);
 
@@ -88,6 +97,9 @@ public class Shooter extends SubsystemBase {
 		if (RobotBase.isSimulation()) {
 			leftFlywheelSim = new FlywheelSim(gearbox, 1.0, MOI_SHAFT);
 			rightFlywheelSim = new FlywheelSim(gearbox, 1.0, MOI_SHAFT);
+		}
+		if (Constants.DO_LOGGING) {
+			setupLogs();
 		}
 	}
 
@@ -115,7 +127,6 @@ public class Shooter extends SubsystemBase {
 	@Override
 	public void simulationPeriodic() {
 		// assume the battery voltage is 12 volts
-		double voltage = 12.0;
 
 		// leftPower and rightPower are now member variables; cannot read them from
 		// simulated encoder
@@ -296,4 +307,13 @@ public class Shooter extends SubsystemBase {
 	public double getMotorSpeedDifference() {
 		return getLeftMotorSpeed() - getRightMotorSpeed();
 	}
+	private void setupLogs() {
+		LogManager.add("Shooter/MotorSpeedDifference", () -> getMotorSpeedDifference(), Duration.ofSeconds(1));
+		LogManager.add("Shooter/LeftSpeedError", () -> speedLeft - getLeftMotorSpeed(), Duration.ofSeconds(1));
+		LogManager.add("Shooter/RightSpeedError", () -> speedRight - getRightMotorSpeed(), Duration.ofSeconds(1));
+
+		LogManager.add("Shooter/VoltsLeft", () -> leftMotor.get() * voltage, Duration.ofSeconds(1));	
+		LogManager.add("Shooter/VoltsRight", () -> rightMotor.get() * voltage, Duration.ofSeconds(1));
+	}
 }
+ 

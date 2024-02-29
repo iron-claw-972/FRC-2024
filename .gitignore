@@ -179,3 +179,4 @@ src/main/java/frc/robot/util/BuildData.java
 
 # IntelliJ IDEA files
 .idea/
+*.hoot

@@ -1,5 +1,8 @@
 package frc.robot.subsystems.gpm;
 
+import java.time.Duration;
+import java.util.ArrayList;
+
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
@@ -24,6 +27,8 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ArmConstants;
+import frc.robot.constants.Constants;
+import frc.robot.util.LogManager;
 
 /**
  * Subsystem that controls the arm.
@@ -109,6 +114,10 @@ public class Arm extends SubsystemBase {
             Units.radiansToDegrees(ArmConstants.START_ANGLE_RADS),
             6,
             new Color8Bit(Color.kYellow)));
+    // Angle for logging
+    private double angle;
+    //Assumed Voltage
+    double voltsBattery = 12.8;
 
     public Arm() {
         // set the PID tolerance
@@ -167,7 +176,11 @@ public class Arm extends SubsystemBase {
         // Add some test commands
         SmartDashboard.putData("Set Angle to 0.0", new InstantCommand(() -> setAngle(0.0)));
         SmartDashboard.putData("Set Angle to 1.0 Rad", new InstantCommand(() -> setAngle(0.6)));
+
         SmartDashboard.putData("arm pid", pid);
+        if (Constants.DO_LOGGING) {
+            setupLogs();
+        }
     }
 
     /**
@@ -213,9 +226,6 @@ public class Arm extends SubsystemBase {
 
     @Override
     public void simulationPeriodic() {
-        // Assuming the volts
-        double voltsBattery = 12.8;
-
         // set the simulator inputs
         simulation.setInputVoltage(motors[0].get() * voltsBattery);
 
@@ -242,6 +252,7 @@ public class Arm extends SubsystemBase {
 
         // change the setpoint
         pid.setSetpoint(angle);
+        this.angle = angle;
     }
 
     /**
@@ -258,5 +269,17 @@ public class Arm extends SubsystemBase {
      */
     public boolean atSetpoint() {
         return pid.atSetpoint();
+    }
+
+    private void setupLogs() {
+        LogManager.add("Arm/PositionError", () -> angle - simulation.getAngleRads(), Duration.ofSeconds(1));
+        LogManager.add("Arm/Volts", () -> motors[0].get() * voltsBattery);
+
+        ArrayList<Double> slave_errors = new ArrayList();
+        for (TalonFX each_talon: motors) {
+            slave_errors.add(each_talon.getPosition().getValue()-motors[0].getPosition().getValue());
+        }
+
+        LogManager.add("Arm/SlaveErrors(ticks)", () -> slave_errors);
     }
 }

@@ -61,6 +61,8 @@ public class RobotContainer {
    */
   public RobotContainer(RobotId robotId) {
     // dispatch on the robot
+
+    SmartDashboard.putData("go",new InstantCommand(() -> intake.setMode(Intake.Mode.INTAKE)));
     switch (robotId) {
 
       case TestBed1:

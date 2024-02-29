@@ -26,6 +26,7 @@ import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
 import frc.robot.subsystems.module.Module;
 import frc.robot.subsystems.module.ModuleSim;
+import frc.robot.util.LogManager;
 import frc.robot.util.Vision;
 
 import java.util.Arrays;
@@ -118,6 +119,9 @@ public class Drivetrain extends SubsystemBase {
         rotationController.enableContinuousInput(-Math.PI, Math.PI);
         rotationController.setTolerance(Units.degreesToRadians(0.25), Units.degreesToRadians(0.25));
 
+        if (Constants.DO_LOGGING) {
+            setupLogs();
+        }   
     }
 
     @Override
@@ -395,5 +399,18 @@ public class Drivetrain extends SubsystemBase {
     }
     public PIDController getRotationController() {
         return rotationController;
+    }
+
+    private void setupLogs() {
+        LogManager.add("Drivetrain/SpeedX", () -> getChassisSpeeds().vxMetersPerSecond);
+        LogManager.add("Drivetrain/SpeedY", () -> getChassisSpeeds().vyMetersPerSecond);
+        LogManager.add("Drivetrain/Speed", () -> Math.hypot(getChassisSpeeds().vxMetersPerSecond, getChassisSpeeds().vyMetersPerSecond));
+        LogManager.add("Drivetrain/SpeedRot", () -> getChassisSpeeds().omegaRadiansPerSecond);
+
+        LogManager.add("Drivetrain/Pose2d", () -> new Double[]{
+                getPose().getX(),
+                getPose().getY(),
+                getPose().getRotation().getRadians()
+        });
     }
 }

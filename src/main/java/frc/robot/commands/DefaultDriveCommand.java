@@ -3,9 +3,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.Constants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.util.LogManager;
 
 /**
  * Default drive command. Drives robot using driver controls.
@@ -33,6 +35,12 @@ public class DefaultDriveCommand extends Command {
         double forwardTranslation = driver.getForwardTranslation();
         double sideTranslation = driver.getSideTranslation();
         double rotation = -driver.getRotation();
+
+        if (Constants.DO_LOGGING) {
+            LogManager.add("DriveControls/ForwardTranslation", () -> driver.getForwardTranslation());
+            LogManager.add("DriveControls/SideTranslation", () -> driver.getSideTranslation());
+            LogManager.add("DriveControls/Rotation", () -> driver.getRotation());
+        }
 
         double slowFactor = driver.getIsSlowMode() ? DriveConstants.kSlowDriveFactor : 1;
 
