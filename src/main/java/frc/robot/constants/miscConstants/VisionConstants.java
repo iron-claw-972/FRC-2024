@@ -83,6 +83,19 @@ public class VisionConstants {
     FieldConstants.APRIL_TAGS.get(5).pose.getY() - DriveConstants.kRobotWidthWithBumpers/2,
     new Rotation2d(-Math.PI/2)
   );
+
+  public static final Pose2d BLUE_AMP_POSE_2 = new Pose2d(
+    BLUE_AMP_POSE.getX(),
+    BLUE_AMP_POSE.getY() - AMP_DISTANCE,
+    BLUE_AMP_POSE.getRotation()
+  );
+
+  public static final Pose2d BLUE_AMP_POSE_3 = new Pose2d(
+    BLUE_AMP_POSE.getX(),
+    BLUE_AMP_POSE.getY() - 2*AMP_DISTANCE,
+    BLUE_AMP_POSE.getRotation()
+  );
+
   public static final Pose2d RED_AMP_POSE = new Pose2d(
     FieldConstants.APRIL_TAGS.get(4).pose.getX(),
     BLUE_AMP_POSE.getY(),
@@ -93,10 +106,11 @@ public class VisionConstants {
     RED_AMP_POSE.getY() - AMP_DISTANCE,
     RED_AMP_POSE.getRotation()
   );
-  public static final Pose2d BLUE_AMP_POSE_2 = new Pose2d(
-    BLUE_AMP_POSE.getX(),
-    BLUE_AMP_POSE.getY() - AMP_DISTANCE,
-    BLUE_AMP_POSE.getRotation()
+
+  public static final Pose2d RED_AMP_POSE_3 = new Pose2d(
+    RED_AMP_POSE.getX(),
+    RED_AMP_POSE.getY() - 2*AMP_DISTANCE,
+    RED_AMP_POSE.getRotation()
   );
 
   // How close we have to get to the amp before scoring in it (meters and radians)
