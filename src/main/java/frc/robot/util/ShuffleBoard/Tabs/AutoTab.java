@@ -25,7 +25,7 @@ public class AutoTab extends ShuffleBoardTabs {
     
     public void createEntries(){  
         tab = Shuffleboard.getTab("Auto");
-        
+    
         // Final Autos
         autoCommand.addOption("One Piece (pos 7) (B)", new FollowPathCommand("One Piece (pos 7) (B)",true, drive));
         autoCommand.addOption("Two Piece (pos 4) [B]", new FollowPathCommand("Two Piece (pos 4) [B]",true, drive));
@@ -39,6 +39,13 @@ public class AutoTab extends ShuffleBoardTabs {
         autoCommand.addOption("[Around the stage] One Piece (pos 4) (destroy) (B)", new FollowPathCommand("[Around the stage] One Piece (pos 4) (destroy) (B)",true, drive));
         autoCommand.addOption("Four Piece (M)", new FollowPathCommand("Four Piece (M)",true, drive));
         autoCommand.addOption("One Piece (pos 4) (B)", new FollowPathCommand("One Piece (pos 4) (B)",true, drive));
+        autoCommand.addOption("Pos 1 Path", new FollowPathCommand("Pos 1 Path",true, drive));
+        
+        
+
+        // Repleacement Auto, don't delete
+        // autoCommand.addOption("lol", new FollowPathCommand("lol",true, drive));
+
 
         tab.add(autoCommand);
     }
