@@ -125,6 +125,7 @@ public class Arm extends SubsystemBase {
         for (int i = 0; i < motors.length; i++) {
             // create the motor
             motors[i] = new TalonFX(ArmConstants.MOTOR_IDS[i]);
+            motors[i].setNeutralMode(NeutralModeValue.Brake);
 
             // i==0 is the master; the others are slaves
             if (i > 0) {
