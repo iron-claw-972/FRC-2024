@@ -348,7 +348,7 @@ public class Vision {
       camera = new PhotonCamera(cameraName);
       photonPoseEstimator = new PhotonPoseEstimator(
         m_aprilTagFieldLayout, 
-        PoseStrategy.AVERAGE_BEST_TARGETS, 
+        PoseStrategy.LOWEST_AMBIGUITY, 
         camera, 
         robotToCam
       );
@@ -396,7 +396,7 @@ public class Vision {
 
       Optional<EstimatedRobotPose> pose = photonPoseEstimator.update(cameraResult);
       
-      if(pose.isPresent() && pose.get()!=null && pose.get().estimatedPose!=null && Double.isFinite(pose.get().estimatedPose.getX())){
+      if(pose.isPresent() && pose.get()!=null && pose.get().estimatedPose!=null && Math.abs(pose.get().estimatedPose.getX()) < 20){
         double timestamp = getTimeStamp();
         if(lastPose==null || lastPose.getTranslation().getDistance(pose.get().estimatedPose.toPose2d().getTranslation()) > DriveConstants.kMaxSpeed*(timestamp-lastTimestamp)){
           lastPose = pose.get().estimatedPose.toPose2d();
