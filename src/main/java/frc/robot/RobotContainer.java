@@ -85,8 +85,6 @@ public class RobotContainer {
         intake = new Intake();
         index = new StorageIndex();
         shooter = new Shooter();
-        SmartDashboard.putData(new Climb(Chain.LEFT, drive, arm));
-        SmartDashboard.putBoolean("Index beam", index.hasNote());
 
       case SwerveTest:
         vision = new Vision(VisionConstants.APRIL_TAG_CAMERAS);
@@ -109,6 +107,7 @@ public class RobotContainer {
         PathGroupLoader.loadPathGroups();
 
         shuffleboardManager = new ShuffleBoardManager(drive, vision);
+        SmartDashboard.putBoolean("Index beam", index.hasNote());
         break;
       }
 

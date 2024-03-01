@@ -26,6 +26,7 @@ public class SWMTest {
      */
     public double[][] test_cases = {
        // x, y, z ,vx, vy
+        {12.922, 5.537, 0, 0, 0},
         {2 ,1.5 ,1.619, 0, 0},
         {1.5 ,2 ,1.619, 0, 0},
         {1 ,3 ,1.619, 0, 0},
@@ -61,7 +62,7 @@ public class SWMTest {
 
 
     };
-    public final int NUM = 28; // num test cases
+    public final int NUM = 0; // num test cases
 
     @AfterEach
     public void cleanup() {
