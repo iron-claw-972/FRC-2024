@@ -107,7 +107,6 @@ public class Shooter extends SubsystemBase {
 		// report some values to the Dashboard
 		SmartDashboard.putNumber("left speed", /* shooterRPMToSpeed */ (leftSpeed));
 		SmartDashboard.putNumber("right speed", /* shooterRPMToSpeed */ (rightSpeed));
-		SmartDashboard.putBoolean("at setpoint?", atSetpoint());
 	}
 
 	@Override

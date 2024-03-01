@@ -4,6 +4,7 @@ import java.rmi.server.Operation;
 import java.util.function.BooleanSupplier;
 
 import com.ctre.phoenix6.SignalLogger;
+import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -106,8 +107,8 @@ public class RobotContainer {
         operator.configureControls();
         initializeAutoBuilder();
         drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
-
-        PathGroupLoader.loadPathGroups();
+        //registerCommands();
+        //PathGroupLoader.loadPathGroups();
 
         shuffleboardManager = new ShuffleBoardManager(drive, vision);
         SmartDashboard.putBoolean("Index beam", index.hasNote());
@@ -166,12 +167,6 @@ public class RobotContainer {
 
   public void registerCommands() {
     NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index, arm).withTimeout(1));
-    // NamedCommands.registerCommand("Stop", new WaitCommand(2)); // to represent stopping for shooting 
-    // Mehaan -- Consulted with Jerry, just going to use a constraint zone going at .1 which should be fine instead of stopping for the area in which we are supposed to shoot
-    // NamedCommands.registerCommand("PrepareShooter", new PrepareShooter(shooter, 0));
-    // NamedCommands.registerCommand("SetShooterSpeed", new SetShooterSpeed(shooter, 0));
-    // NamedCommands.registerCommand("ShootKnownPos", new ShootKnownPos(shooter, arm, index, null));
-    // NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new Shoot(shooter, arm, drive, index).withTimeout(1.5)); // using for now in the auto paths
     NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new SequentialCommandGroup(
       new InstantCommand(()-> index.runIndex()),
       new WaitCommand(.5),

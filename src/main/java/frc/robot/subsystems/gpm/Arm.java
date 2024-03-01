@@ -70,9 +70,9 @@ public class Arm extends SubsystemBase {
     private static final double DISTANCE_PER_ROTATION = -2 * Math.PI;
 
     // Motor PID control
-    private static final double TOLERANCE = Units.degreesToRadians(1.0);
+    private static final double TOLERANCE = Units.degreesToRadians(3.0);
     // P = 5 worked during simulation simulation
-    private static final double P = 0.25;
+    private static final double P = 0.35;
     private static final double I = 0;
     private static final double D = 0;
     private final PIDController pid = new PIDController(P, I, D);
@@ -198,6 +198,8 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putNumber("Rotor delay", rotorPositionSignal.getTimestamp().getLatency());
         // the absolute position is the one used to set the offset.
         SmartDashboard.putNumber("REV ABS", encoder.getAbsolutePosition());
+        SmartDashboard.putBoolean("at setpoint?", atSetpoint());
+
     }
 
     @Override
