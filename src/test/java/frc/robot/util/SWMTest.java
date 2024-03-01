@@ -62,7 +62,7 @@ public class SWMTest {
 
 
     };
-    public final int NUM = 0; // num test cases
+    public final int NUM = 1; // num test cases
 
     @AfterEach
     public void cleanup() {
