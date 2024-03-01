@@ -7,6 +7,7 @@ package frc.robot.util.ShuffleBoard.Tabs;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.DoNothing;
 import frc.robot.commands.auto_comm.FollowPathCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.ShuffleBoard.ShuffleBoardTabs;
@@ -26,6 +27,7 @@ public class AutoTab extends ShuffleBoardTabs {
         tab = Shuffleboard.getTab("Auto");
     
         // Final Autos
+        autoCommand.setDefaultOption("Do nothing", new DoNothing());
         // autoCommand.addOption("One Piece (pos 7) (B)", new FollowPathCommand("One Piece (pos 7) (B)",true, drive));
         // autoCommand.addOption("Two Piece (pos 4) [B]", new FollowPathCommand("Two Piece (pos 4) [B]",true, drive));
         // autoCommand.addOption("One Piece (pos 2) (B)", new FollowPathCommand("One Piece (pos 2) (B)",true, drive));
