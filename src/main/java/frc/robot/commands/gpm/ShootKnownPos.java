@@ -16,10 +16,10 @@ public class ShootKnownPos extends SequentialCommandGroup {
 	*/
 	public enum ShotPosition {
 		// TODO: add actual values
-		SUBWOOFER_TOP(ArmConstants.stowedSetpoint, 0.0),
-		SUBWOOFER_MIDDLE(ArmConstants.stowedSetpoint, 0.0),
-		SUBWOOFER_BOTTOM(ArmConstants.stowedSetpoint, 0.0);
-		
+		SUBWOOFER_TOP(ArmConstants.stowedSetpoint, 10.0),
+		SUBWOOFER_MIDDLE(ArmConstants.stowedSetpoint, 10.0),
+		SUBWOOFER_BOTTOM(ArmConstants.stowedSetpoint, 10.0);
+
 		
 		private double armAngle;
 		private double shooterSpeed;
