@@ -36,6 +36,8 @@ import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
 import frc.robot.commands.gpm.IntakeNote;
 import frc.robot.commands.gpm.PrepareShooter;
+import frc.robot.commands.gpm.ShootKnownPos;
+import frc.robot.commands.gpm.ShootKnownPos.ShotPosition;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -128,7 +130,11 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return shuffleboardManager.getSelectedCommand();
+    Command pathCommand = shuffleboardManager.getSelectedCommand();
+    Command shootCommand = arm!=null&&shooter!=null&&index!=null
+      ? new ShootKnownPos(shooter, arm, index, ShotPosition.SUBWOOFER)
+      : new DoNothing();
+    return shootCommand.andThen(pathCommand);
   }
 
   public void updateShuffleBoard() {
