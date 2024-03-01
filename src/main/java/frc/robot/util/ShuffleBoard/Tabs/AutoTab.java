@@ -26,12 +26,12 @@ public class AutoTab extends ShuffleBoardTabs {
     public void createEntries(){  
         tab = Shuffleboard.getTab("Auto");
         
-        autoCommand.setDefaultOption("Do Nothing", new PrintCommand("This will do nothing!"));
-        autoCommand.addOption("Example Path", new FollowPathCommand("Example Path",true, drive));
-        autoCommand.addOption("7 Piece Auto Realistic", new FollowPathCommand("7 Piece Auto Realistic",true, drive));
-        autoCommand.addOption("7 Piece Auto", new FollowPathCommand("7 Piece Auto",true, drive));       
-        autoCommand.addOption("Bottom 4 Piece 4 5 (No Shooting On The Move)", new FollowPathCommand("Bottom 4 Piece 4 5 (No Shooting On The Move)",true, drive));       
-        autoCommand.addOption("Dream Bottom 4 Piece 4 5", new FollowPathCommand("Dream Bottom 4 Piece 4 5",true, drive));
+        // autoCommand.setDefaultOption("Do Nothing", new PrintCommand("This will do nothing!"));
+        // autoCommand.addOption("Example Path", new FollowPathCommand("Example Path",true, drive));
+        // autoCommand.addOption("7 Piece Auto Realistic", new FollowPathCommand("7 Piece Auto Realistic",true, drive));
+        // autoCommand.addOption("7 Piece Auto", new FollowPathCommand("7 Piece Auto",true, drive));       
+        // autoCommand.addOption("Bottom 4 Piece 4 5 (No Shooting On The Move)", new FollowPathCommand("Bottom 4 Piece 4 5 (No Shooting On The Move)",true, drive));       
+        // autoCommand.addOption("Dream Bottom 4 Piece 4 5", new FollowPathCommand("Dream Bottom 4 Piece 4 5",true, drive));
 
         tab.add(autoCommand);
     }
