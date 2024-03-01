@@ -7,7 +7,6 @@ package frc.robot.util.ShuffleBoard.Tabs;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.commands.auto_comm.FollowPathCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.ShuffleBoard.ShuffleBoardTabs;

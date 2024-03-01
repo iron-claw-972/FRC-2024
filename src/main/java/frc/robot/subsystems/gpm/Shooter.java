@@ -1,7 +1,5 @@
 package frc.robot.subsystems.gpm;
 
-import javax.swing.plaf.basic.BasicBorders.RadioButtonBorder;
-
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
@@ -188,7 +186,8 @@ public class Shooter extends SubsystemBase {
 	 * @see setTargetVelocity
 	 */
 	public void setTargetRPM(double speed) {
-		setTargetRPM(speed, speed);
+		double spin = speed < 300 ? 0 : ShooterConstants.SPIN;
+		setTargetRPM(speed+spin, speed-spin);
 	}
 
 	/**
@@ -199,7 +198,7 @@ public class Shooter extends SubsystemBase {
 	 */
 	public void setTargetVelocity(double speed) {
 		// convert speed to RPM
-		setTargetRPM(shooterSpeedToRPM(speed));
+		setTargetRPM(shooterSpeedToRPM(speed) / 0.64);
 	}
 
 	/**

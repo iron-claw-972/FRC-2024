@@ -27,6 +27,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.FieldConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
@@ -137,11 +138,14 @@ public class Vision {
    * @return The array of DetectedObjects
    */
   public DetectedObject[] getDetectedObjects(){
+    if(!VisionConstants.OBJECT_DETECTION_ENABLED){
+      return new DetectedObject[0];
+    }
     double[] xOffset = getHorizontalOffset();
     double[] yOffset = getVerticalOffset();
-    double[] distance = getDistance();
+    // double[] distance = getDistance();
     long[] objectClass = getDetectedObjectClass();
-    long[] cameraIndex = getCameraIndex();
+    // long[] cameraIndex = getCameraIndex();
     DetectedObject[] objects = new DetectedObject[xOffset.length];
     for(int i = 0; i < objects.length; i++){
       objects[i] = new DetectedObject(
@@ -149,8 +153,8 @@ public class Vision {
         Units.degreesToRadians(yOffset[i]),
         // distance[i],
         objectClass[i],
-        // VisionConstants.CAMERAS.get((int)cameraIndex[i]).getSecond()
-        VisionConstants.APRIL_TAG_CAMERAS.get(0).getSecond()
+        // VisionConstants.OBJECT_DETECTION_CAMERAS.get((int)cameraIndex[i]).getSecond()
+        VisionConstants.OBJECT_DETECTION_CAMERAS.get(0)
       );
     }
     return objects;
@@ -294,7 +298,8 @@ public class Vision {
     for (int i = 0; i < estimatedPoses.size(); i++) {
       EstimatedRobotPose estimatedPose = estimatedPoses.get(i);
       // Continue if this pose doesn't exist
-      if(estimatedPose==null || estimatedPose.estimatedPose==null || estimatedPose.timestampSeconds < 0){
+      // System.out.println(Timer.getFPGATimestamp()-estimatedPose.timestampSeconds);
+      if(estimatedPose==null || estimatedPose.estimatedPose==null || estimatedPose.timestampSeconds < 0 || Math.abs(estimatedPose.estimatedPose.getX()) > 20 || Math.abs(estimatedPose.estimatedPose.getY()) > 10 || Timer.getFPGATimestamp() < estimatedPose.timestampSeconds || Timer.getFPGATimestamp() > estimatedPose.timestampSeconds + 5){
         continue;
       }
       // Adds the vision measurement for this camera
@@ -305,12 +310,36 @@ public class Vision {
       );
     }
   }
+
+  /**
+   * Enable or disable a single camera
+   * @param index The camera index
+   * @param enabled If it should be enabled or disabled
+   */
+  public void enableCamera(int index, boolean enabled){
+    try{
+      m_cameras.get(index).enable(enabled);
+    }catch(IndexOutOfBoundsException e){
+      DriverStation.reportWarning("Camera index "+index+" is out of bounds", false);
+    }
+  }
+  /**
+   * Sets the cameras to only use one April tag
+   * @param id The id of the tag to use
+   */
+  public void onlyUse(int id){
+    for(VisionCamera c : m_cameras){
+      c.setOnlyUse(id);
+    }
+  }
   
   private class VisionCamera {
     PhotonCamera camera;
     PhotonPoseEstimator photonPoseEstimator;
     Pose2d lastPose;
     double lastTimestamp = 0;
+    boolean enabled = true;
+    int onlyUse = 0;
   
     /**
      * Stores information about a camera
@@ -321,7 +350,7 @@ public class Vision {
       camera = new PhotonCamera(cameraName);
       photonPoseEstimator = new PhotonPoseEstimator(
         m_aprilTagFieldLayout, 
-        PoseStrategy.AVERAGE_BEST_TARGETS, 
+        PoseStrategy.LOWEST_AMBIGUITY, 
         camera, 
         robotToCam
       );
@@ -338,6 +367,10 @@ public class Vision {
     public Optional<EstimatedRobotPose> getEstimatedPose(Pose2d referencePose) {
       photonPoseEstimator.setReferencePose(referencePose);
 
+      if(!enabled){
+        return Optional.empty();
+      }
+
       PhotonPipelineResult cameraResult = camera.getLatestResult();
       
       // if there is a target detected and the timestamp exists, 
@@ -346,7 +379,11 @@ public class Vision {
       if (cameraResult.hasTargets() && cameraResult.getTimestampSeconds() > 0) {
         // go through all the targets
         List<PhotonTrackedTarget> targetsUsed = cameraResult.targets;
-        for (int i = 0; i < targetsUsed.size(); i++) {
+        for (int i = targetsUsed.size()-1; i >= 0; i--) {
+          if(onlyUse > 0 && targetsUsed.get(i).getFiducialId() != onlyUse){
+            targetsUsed.remove(i);
+            continue;
+          }
           // check their ambiguity, if it is below the highest wanted amount, use this camera's result
           if (targetsUsed.get(i).getPoseAmbiguity() <= VisionConstants.HIGHEST_AMBIGUITY) {
             foundGoodTarget = true;
@@ -359,7 +396,7 @@ public class Vision {
 
       Optional<EstimatedRobotPose> pose = photonPoseEstimator.update(cameraResult);
       
-      if(pose.isPresent() && pose.get()!=null && pose.get().estimatedPose!=null && Double.isFinite(pose.get().estimatedPose.getX())){
+      if(pose.isPresent() && pose.get()!=null && pose.get().estimatedPose!=null && Math.abs(pose.get().estimatedPose.getX()) < 20){
         double timestamp = getTimeStamp();
         if(lastPose==null || lastPose.getTranslation().getDistance(pose.get().estimatedPose.toPose2d().getTranslation()) > DriveConstants.kMaxSpeed*(timestamp-lastTimestamp)){
           lastPose = pose.get().estimatedPose.toPose2d();
@@ -368,9 +405,10 @@ public class Vision {
         }
         lastPose = pose.get().estimatedPose.toPose2d();
         lastTimestamp = timestamp;
+        return pose;
       }
 
-      return pose;
+      return Optional.empty();
     }
     
     /**
@@ -381,8 +419,8 @@ public class Vision {
     public Pose2d getEstimatedPose(double yaw){
       // Gets the best target to use for the calculations
       PhotonTrackedTarget target = camera.getLatestResult().getBestTarget();
-      // Return null if the target doesn't exist
-      if(target==null){
+      // Return null if the target doesn't exist or it should be ignored
+      if(target==null || onlyUse>0 && target.getFiducialId()!=onlyUse){
         return null;
       }
       // Return null if the id is too high or too low
@@ -395,7 +433,6 @@ public class Vision {
       Transform3d robotToCamera = photonPoseEstimator.getRobotToCameraTransform();
 
       // Get the tag position relative to the robot, assuming the robot is on the ground
-      System.out.printf("x: %.2f, y: %.2f\n", VisionConstants.X_OFFSET_SCALE*target.getYaw(), VisionConstants.Y_OFFSET_SCALE*target.getPitch());
       Translation3d translation = new Translation3d(1, new Rotation3d(
         0,
         -VisionConstants.Y_OFFSET_SCALE*Units.degreesToRadians(target.getPitch()),
@@ -428,6 +465,21 @@ public class Vision {
      */
     public PhotonTrackedTarget getBestTarget(){
       return camera.getLatestResult().getBestTarget();
+    }
+
+    /**
+     * Enables or disables this camera
+     * @param enable If it should be enabled or disabled
+     */
+    public void enable(boolean enable){
+      enabled = enable;
+    }
+    /**
+     * Sets the camera to only use 1 April tag
+     * @param id The id of the tag to use, or 0 to use all
+     */
+    public void setOnlyUse(int id){
+      onlyUse = id;
     }
   }
 }
