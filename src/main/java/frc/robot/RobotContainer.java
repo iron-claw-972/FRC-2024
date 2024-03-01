@@ -1,5 +1,6 @@
 package frc.robot;
 
+import java.rmi.server.Operation;
 import java.util.function.BooleanSupplier;
 
 import com.ctre.phoenix6.SignalLogger;
@@ -15,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.Climb;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.Shoot;
 import frc.robot.commands.Climb.Chain;
 import frc.robot.constants.AutoConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
@@ -189,3 +191,5 @@ public class RobotContainer {
     };
   }
 }
+
+
