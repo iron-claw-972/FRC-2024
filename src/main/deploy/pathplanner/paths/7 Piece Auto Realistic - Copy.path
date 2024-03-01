@@ -230,7 +230,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Previous Stuff",
+  "folder": null,
   "previewStartingState": null,
   "useDefaultConstraints": false
 }
