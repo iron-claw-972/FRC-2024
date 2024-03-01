@@ -30,9 +30,11 @@ public class VisionConstants {
    */
   public static final boolean ENABLED = true;
 
+  public static final boolean OBJECT_DETECTION_ENABLED = false;
+
   // If odometry should be updated using vision during auto
   public static final boolean ENABLED_AUTO = true;
- public static final boolean OBJECT_DETECTION_ENABLED = false;
+
   // If odometry should be updated using vision while running the GoToPose and GoToPosePID commands in teleop
   public static final boolean ENABLED_GO_TO_POSE = true;
 
@@ -151,15 +153,21 @@ public class VisionConstants {
     new Pair<String, Transform3d>(
       "Camera1",
       new Transform3d(
-        new Translation3d(Units.inchesToMeters(-12.55), Units.inchesToMeters(-9.705), Units.inchesToMeters(9.5)),
-        new Rotation3d(0, Units.degreesToRadians(-50), Math.PI)
+        new Translation3d(Units.inchesToMeters(16.627), Units.inchesToMeters(11.924), Units.inchesToMeters(12.7)),
+        new Rotation3d(0, Units.degreesToRadians(-50), 0)
       )),
     new Pair<String, Transform3d>(
       "Camera2",
       new Transform3d(
-        new Translation3d(Units.inchesToMeters(-0.75), Units.inchesToMeters(-7.125), Units.inchesToMeters(21)),
-        new Rotation3d(0, 0, Math.PI)
+        new Translation3d(Units.inchesToMeters(-10.429), Units.inchesToMeters(-10.275), Units.inchesToMeters(8.874)),
+        new Rotation3d(0, Units.degreesToRadians(-50), Math.PI)
       )
     )
+  ));
+
+  public static final ArrayList<Transform3d> OBJECT_DETECTION_CAMERAS = new ArrayList<>(List.of(
+    new Transform3d(
+      new Translation3d(Units.inchesToMeters(10), 0, Units.inchesToMeters(24)),
+      new Rotation3d(0, Units.degreesToRadians(20), 0))
   ));
 }

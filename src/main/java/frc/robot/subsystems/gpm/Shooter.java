@@ -1,7 +1,5 @@
 package frc.robot.subsystems.gpm;
 
-import javax.swing.plaf.basic.BasicBorders.RadioButtonBorder;
-
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
@@ -152,7 +150,8 @@ public class Shooter extends SubsystemBase {
 	 * @see shooterSpeedToRPM
 	 */
 	public static double shooterRPMToSpeed(double rpm) {
-		return (rpm / 60) * (RADIUS_STEALTH * 2 * Math.PI);
+		// factor in Gear Ratio
+		return 2 * (rpm / 60) * (RADIUS_STEALTH * 2 * Math.PI);
 	}
 
 	/**
@@ -163,7 +162,7 @@ public class Shooter extends SubsystemBase {
 	 * @see shooterRPMToSpeed
 	 */
 	public static double shooterSpeedToRPM(double speed) {
-		return (speed * 60) / (RADIUS_STEALTH * 2 * Math.PI);
+		return .5 * (speed * 60) / (RADIUS_STEALTH * 2 * Math.PI);
 	}
 
 	/**
@@ -187,7 +186,8 @@ public class Shooter extends SubsystemBase {
 	 * @see setTargetVelocity
 	 */
 	public void setTargetRPM(double speed) {
-		setTargetRPM(speed, speed);
+		double spin = speed < 300 ? 0 : ShooterConstants.SPIN;
+		setTargetRPM(speed+spin, speed-spin);
 	}
 
 	/**
@@ -198,7 +198,7 @@ public class Shooter extends SubsystemBase {
 	 */
 	public void setTargetVelocity(double speed) {
 		// convert speed to RPM
-		setTargetRPM(shooterSpeedToRPM(speed));
+		setTargetRPM(shooterSpeedToRPM(speed) / 0.64);
 	}
 
 	/**

@@ -29,7 +29,6 @@ import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
 import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.subsystems.gpm.StorageIndex;
-import frc.robot.subsystems.gpm.Intake.Mode;
 import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
@@ -77,8 +76,7 @@ public class RobotContainer {
       case TestBed2:
         intake = new Intake();
         index = new StorageIndex();
-        // SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index, arm));
-        SmartDashboard.putData("Intake", new InstantCommand(() -> intake.setMode(Mode.INTAKE)));
+        SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index, arm));
         break;
         
       default:
@@ -91,10 +89,10 @@ public class RobotContainer {
       case SwerveTest:
         vision = new Vision(VisionConstants.APRIL_TAG_CAMERAS);
 
+
         drive = new Drivetrain(vision);
         driver = new GameControllerDriverConfig(drive, vision, arm, intake, index, shooter);
         operator = new Operator(intake, arm, index, shooter, drive);
-        SmartDashboard.putData(new Climb(Chain.LEFT, drive, arm));
 
         // Detected objects need access to the drivetrain
         DetectedObject.setDrive(drive);
@@ -109,6 +107,7 @@ public class RobotContainer {
         PathGroupLoader.loadPathGroups();
 
         shuffleboardManager = new ShuffleBoardManager(drive, vision);
+        SmartDashboard.putBoolean("Index beam", index.hasNote());
         break;
       }
 
@@ -144,10 +143,6 @@ public class RobotContainer {
   }
 
   public void initializeAutoBuilder() {
-    shooter.setTargetRPM(1500); //prepare shooter
-    new WaitCommand(0.5); //wait until shooter is ready
-    index.runIndex(); //put note into shooter
-    new WaitCommand(1); //wait until note is shot
     AutoBuilder.configureHolonomic(
         () -> drive.getPose(),
         (pose) -> {

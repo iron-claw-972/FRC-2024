@@ -22,6 +22,9 @@ import frc.robot.subsystems.gpm.StorageIndex;
  * Scores in the amp
  */
 public class OuttakeAmp extends SequentialCommandGroup {
+  private Pose2d ampPose;
+  private Pose2d ampPose2;
+
   /**
    * Scores in the amp
    * 
@@ -33,8 +36,10 @@ public class OuttakeAmp extends SequentialCommandGroup {
     addCommands(
         // Get the shooter to the right speed while moving arm
         new ParallelCommandGroup (
-          new InstantCommand(() -> index.runIndex()),  
-          new InstantCommand(() -> shooter.setTargetRPM(ShooterConstants.AMP_OUTTAKE_RPM), shooter)),
+          new InstantCommand(() -> shooter.setTargetRPM(ShooterConstants.AMP_OUTTAKE_RPM), shooter),
+          new WaitCommand(0.5),
+          new InstantCommand(() -> index.runIndex())
+        ),
         // Move arm
         new ArmToPos(arm, ArmConstants.ampSetpoint),
         // Score in amp
@@ -60,47 +65,40 @@ public class OuttakeAmp extends SequentialCommandGroup {
         : VisionConstants.BLUE_AMP_POSE;
     Pose2d ampPose2 = DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_AMP_POSE //TODO
         : VisionConstants.BLUE_AMP_POSE; //TODO FIX this
-    Pose2d ampPose3 = DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_AMP_POSE_3 //TODO
-        : VisionConstants.BLUE_AMP_POSE_3;
-
     addCommands(
-        new SequentialCommandGroup(
-            // Wait until the robot is close enough to the amp to start scoring
-            new WaitUntilCommand((() -> {
-              Transform2d dist = drive.getPose().minus(ampPose);
-              return dist.getTranslation().getNorm() < VisionConstants.AMP_TOLERANCE_DISTANCE
-                  && Math.abs(dist.getRotation().getRadians()) < VisionConstants.AMP_TOLERANCE_ANGLE;
-            })),
-            // Run the other version of this command to score in the amp
-            new OuttakeAmp(arm, index, shooter)).deadlineWith(
-                // Go to the pose and stay at it until the command finishes
-                new SequentialCommandGroup(
-                  new GoToPose(ampPose3, drive).until(()->{
-                    return drive.getPose().getTranslation().getDistance(ampPose3.getTranslation()) < VisionConstants.AMP_TOLERANCE_DISTANCE;
-                  }),
-                  new GoToPose(ampPose2, drive).until(()->{
-                    return drive.getPose().getTranslation().getDistance(ampPose2.getTranslation()) < VisionConstants.AMP_TOLERANCE_DISTANCE;
-                  }),
-                  new GoToPose(ampPose, drive))
-                ));
+      new InstantCommand(()->getPoses()),
+      new SequentialCommandGroup(
+          // Wait until the robot is close enough to the amp to start scoring
+          new WaitUntilCommand((() -> {
+            Transform2d dist = drive.getPose().minus(ampPose);
+            return dist.getTranslation().getNorm() < VisionConstants.AMP_TOLERANCE_DISTANCE
+                && Math.abs(dist.getRotation().getRadians()) < VisionConstants.AMP_TOLERANCE_ANGLE;
+          })),
+          // Run the other version of this command to score in the amp
+          new OuttakeAmp(arm, index, shooter)).deadlineWith(
+              // Go to the pose and stay at it until the command finishes
+              new SequentialCommandGroup(
+                // new GoToPose(ampPose2, drive).until(()->{
+                //   return drive.getPose().getTranslation().getDistance(ampPose2.getTranslation()) < VisionConstants.AMP_TOLERANCE_DISTANCE;
+                // }),
+                new GoToPose(ampPose, drive))
+              ));
   }
 
   public OuttakeAmp(Drivetrain drive){
-    Pose2d ampPose = DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_AMP_POSE
-        : VisionConstants.BLUE_AMP_POSE;
-    Pose2d ampPose2 = DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_AMP_POSE_2 //TODO
-        : VisionConstants.BLUE_AMP_POSE_2;
-    Pose2d ampPose3 = DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_AMP_POSE_3 //TODO
-        : VisionConstants.BLUE_AMP_POSE_3;
-        
     addCommands(
-      new GoToPose(ampPose3, drive).until(()->{
-        return drive.getPose().getTranslation().getDistance(ampPose3.getTranslation()) < VisionConstants.AMP_TOLERANCE_DISTANCE;
-      }),
-      new GoToPose(ampPose2, drive).until(()->{
-        return drive.getPose().getTranslation().getDistance(ampPose2.getTranslation()) < VisionConstants.AMP_TOLERANCE_DISTANCE;
-      }),
+      new InstantCommand(()->getPoses()),
+      // new GoToPose(ampPose2, drive).until(()->{
+      //   return drive.getPose().getTranslation().getDistance(ampPose2.getTranslation()) < VisionConstants.AMP_TOLERANCE_DISTANCE;
+      // }),
       new GoToPose(ampPose, drive)
     );
+  }
+
+  public void getPoses(){
+    ampPose = DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_AMP_POSE
+        : VisionConstants.BLUE_AMP_POSE;
+    ampPose2 = DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_AMP_POSE_2
+        : VisionConstants.BLUE_AMP_POSE_2;
   }
 }

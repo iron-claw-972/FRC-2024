@@ -5,8 +5,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 public class StorageIndexConstants {
     public static final int indexMotorID = 7;
-    /** Indexer beam breaker DIO channel */
-    public static final int indexBeamBreak = 2;
+    public static final int indexBeamBreak = 2; 
     public static final NeutralModeValue indexNeutralMode = NeutralModeValue.Brake;
 
     public static final int stallLimit = 25;
