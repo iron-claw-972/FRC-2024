@@ -79,7 +79,6 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        // TODO: why is this here? A robot may not have vision. The container may not have the method.
         // Disable vision if the constant is false.
         robotContainer.setVisionEnabled(VisionConstants.ENABLED_AUTO);
 
