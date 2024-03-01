@@ -33,8 +33,10 @@ public class OuttakeAmp extends SequentialCommandGroup {
     addCommands(
         // Get the shooter to the right speed while moving arm
         new ParallelCommandGroup (
-          new InstantCommand(() -> index.runIndex()),  
-          new InstantCommand(() -> shooter.setTargetRPM(ShooterConstants.AMP_OUTTAKE_RPM), shooter)),
+          new InstantCommand(() -> shooter.setTargetRPM(ShooterConstants.AMP_OUTTAKE_RPM), shooter),
+          new WaitCommand(0.5),
+          new InstantCommand(() -> index.runIndex())
+          ),
         // Move arm
         new ArmToPos(arm, ArmConstants.ampSetpoint),
         // Score in amp
