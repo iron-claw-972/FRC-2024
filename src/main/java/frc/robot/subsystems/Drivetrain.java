@@ -184,13 +184,24 @@ public class Drivetrain extends SubsystemBase {
      * Updates the field relative position of the robot.
      */
     public void updateOdometry() {
+        Pose2d pose1 = getPose();
+
         // Updates pose based on encoders and gyro. NOTE: must use yaw directly from gyro!
         poseEstimator.update(Rotation2d.fromDegrees(pigeon.getYaw().getValue()), getModulePositions());
+
+        Pose2d pose2 = getPose();
 
         if(VisionConstants.ENABLED){
             if(RobotBase.isReal() && visionEnabled){
                 vision.updateOdometry(poseEstimator);
             }
+        }
+
+        Pose2d pose3 = getPose();
+        if(Math.abs(pose2.getX())>30){
+            resetOdometry(pose1);
+        }else if(Math.abs(pose3.getX()>30)){
+            resetOdometry(pose2);
         }
     }
 
