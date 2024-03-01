@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.Shoot;
@@ -169,11 +170,10 @@ public class RobotContainer {
     // NamedCommands.registerCommand("PrepareShooter", new PrepareShooter(shooter, 0));
     // NamedCommands.registerCommand("SetShooterSpeed", new SetShooterSpeed(shooter, 0));
     // NamedCommands.registerCommand("ShootKnownPos", new ShootKnownPos(shooter, arm, index, null));
-    // NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new Shoot(shooter, arm, drive, index).withTimeout(1.5)); // using for now in the auto paths
-    // NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new SequentialCommandGroup(
-    //   new InstantCommand(()-> index.runIndex()),
-    //   new WaitCommand(.5),
-    //   new PrepareShooter(shooter, 1500).withTimeout(1.5))); // using for now in the auto paths
+    NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new SequentialCommandGroup(
+      new PrepareShooter(shooter, 1500).withTimeout(1.5),
+      new WaitCommand(.5),
+      new InstantCommand(()-> index.runIndex())));
   }
 
   public static BooleanSupplier getAllianceColorBooleanSupplier() {
