@@ -93,6 +93,13 @@ public class VisionConstants {
     RED_AMP_POSE.getY() - AMP_DISTANCE,
     RED_AMP_POSE.getRotation()
   );
+
+  public static final Pose2d RED_AMP_POSE_3 = new Pose2d(
+    RED_AMP_POSE.getX(),
+    RED_AMP_POSE.getY() - 2*AMP_DISTANCE,
+    RED_AMP_POSE.getRotation()
+  );
+
   public static final Pose2d BLUE_AMP_POSE_2 = new Pose2d(
     BLUE_AMP_POSE.getX(),
     BLUE_AMP_POSE.getY() - AMP_DISTANCE,

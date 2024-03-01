@@ -84,8 +84,11 @@ public class OuttakeAmp extends SequentialCommandGroup {
       new InstantCommand(()->printcall()),
       new InstantCommand(()->getPoses()),
       new InstantCommand(()->printAmpPose()),
+      new GoToPose(VisionConstants.RED_AMP_POSE_3, drive).until(()->{
+        return drive.getPose().getTranslation().getDistance(VisionConstants.RED_AMP_POSE_3.getTranslation()) < VisionConstants.AMP_TOLERANCE_DISTANCE;
+      }),
       new GoToPose(VisionConstants.RED_AMP_POSE_2, drive).until(()->{
-        return drive.getPose().getTranslation().getDistance(ampPose2.getTranslation()) < VisionConstants.AMP_TOLERANCE_DISTANCE;
+        return drive.getPose().getTranslation().getDistance(VisionConstants.RED_AMP_POSE_2.getTranslation()) < VisionConstants.AMP_TOLERANCE_DISTANCE;
       }),
       new GoToPose(VisionConstants.RED_AMP_POSE, drive)
     );
