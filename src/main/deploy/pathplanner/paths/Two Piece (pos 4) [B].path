@@ -152,6 +152,23 @@
           ]
         }
       }
+    },
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Outtake_Note_1.5_Sec"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "globalConstraints": {
@@ -166,7 +183,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Final Autos",
+  "folder": null,
   "previewStartingState": {
     "rotation": -60.0,
     "velocity": 0
