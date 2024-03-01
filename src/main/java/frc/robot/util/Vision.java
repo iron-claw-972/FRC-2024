@@ -405,9 +405,10 @@ public class Vision {
         }
         lastPose = pose.get().estimatedPose.toPose2d();
         lastTimestamp = timestamp;
+        return pose;
       }
 
-      return pose;
+      return Optional.empty();
     }
     
     /**
