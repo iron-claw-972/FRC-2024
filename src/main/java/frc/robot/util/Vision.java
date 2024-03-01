@@ -298,7 +298,7 @@ public class Vision {
     for (int i = 0; i < estimatedPoses.size(); i++) {
       EstimatedRobotPose estimatedPose = estimatedPoses.get(i);
       // Continue if this pose doesn't exist
-      System.out.println(Timer.getFPGATimestamp()-estimatedPose.timestampSeconds);
+      // System.out.println(Timer.getFPGATimestamp()-estimatedPose.timestampSeconds);
       if(estimatedPose==null || estimatedPose.estimatedPose==null || estimatedPose.timestampSeconds < 0 || Math.abs(estimatedPose.estimatedPose.getX()) > 20 || Math.abs(estimatedPose.estimatedPose.getY()) > 10 || Timer.getFPGATimestamp() < estimatedPose.timestampSeconds || Timer.getFPGATimestamp() > estimatedPose.timestampSeconds + 5){
         continue;
       }
@@ -368,7 +368,6 @@ public class Vision {
       photonPoseEstimator.setReferencePose(referencePose);
 
       if(!enabled){
-        System.out.println("VISION.JAVA LINE 369");
         return Optional.empty();
       }
 
@@ -382,7 +381,6 @@ public class Vision {
         List<PhotonTrackedTarget> targetsUsed = cameraResult.targets;
         for (int i = targetsUsed.size()-1; i >= 0; i--) {
           if(onlyUse > 0 && targetsUsed.get(i).getFiducialId() != onlyUse){
-            System.out.println("VISION.JAVA LINE 383");
             targetsUsed.remove(i);
             continue;
           }
@@ -435,7 +433,6 @@ public class Vision {
       Transform3d robotToCamera = photonPoseEstimator.getRobotToCameraTransform();
 
       // Get the tag position relative to the robot, assuming the robot is on the ground
-      System.out.printf("x: %.2f, y: %.2f\n", VisionConstants.X_OFFSET_SCALE*target.getYaw(), VisionConstants.Y_OFFSET_SCALE*target.getPitch());
       Translation3d translation = new Translation3d(1, new Rotation3d(
         0,
         -VisionConstants.Y_OFFSET_SCALE*Units.degreesToRadians(target.getPitch()),
