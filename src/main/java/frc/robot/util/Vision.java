@@ -27,6 +27,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.FieldConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
@@ -297,7 +298,8 @@ public class Vision {
     for (int i = 0; i < estimatedPoses.size(); i++) {
       EstimatedRobotPose estimatedPose = estimatedPoses.get(i);
       // Continue if this pose doesn't exist
-      if(estimatedPose==null || estimatedPose.estimatedPose==null || estimatedPose.timestampSeconds < 0){
+      System.out.println(Timer.getFPGATimestamp()-estimatedPose.timestampSeconds);
+      if(estimatedPose==null || estimatedPose.estimatedPose==null || estimatedPose.timestampSeconds < 0 || Math.abs(estimatedPose.estimatedPose.getX()) > 20 || Math.abs(estimatedPose.estimatedPose.getY()) > 10 || Timer.getFPGATimestamp() < estimatedPose.timestampSeconds || Timer.getFPGATimestamp() > estimatedPose.timestampSeconds + 5){
         continue;
       }
       // Adds the vision measurement for this camera
