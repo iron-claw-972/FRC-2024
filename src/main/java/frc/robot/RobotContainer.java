@@ -101,16 +101,16 @@ public class RobotContainer {
         // Detected objects need access to the drivetrain
         DetectedObject.setDrive(drive);
         
-        SignalLogger.start();
+        //SignalLogger.start();
 
         driver.configureControls();
         operator.configureControls();
         initializeAutoBuilder();
         drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
-        //registerCommands();
-        //PathGroupLoader.loadPathGroups();
-
-        shuffleboardManager = new ShuffleBoardManager(drive, vision);
+        registerCommands();
+        PathGroupLoader.loadPathGroups();
+ 
+        //shuffleboardManager = new ShuffleBoardManager(drive, vision);
         SmartDashboard.putBoolean("Index beam", index.hasNote());
         break;
       }
