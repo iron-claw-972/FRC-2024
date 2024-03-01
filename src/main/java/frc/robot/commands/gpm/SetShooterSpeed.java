@@ -24,7 +24,7 @@ public class SetShooterSpeed extends Command{
 
     @Override
     public void initialize(){
-        m_shooter.setTargetVelocity(targetSpeed);
+        m_shooter.setTargetRPM(targetSpeed);
 
     }
 
@@ -41,7 +41,7 @@ public class SetShooterSpeed extends Command{
     @Override
     public void end(boolean interupted){
         if (interupted){
-            m_shooter.setTargetVelocity(0);
+            m_shooter.setTargetRPM(0);
         }
     }
 }

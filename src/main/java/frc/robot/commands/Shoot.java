@@ -38,7 +38,7 @@ public class Shoot extends Command {
         public double v_rx;
         public double v_ry;
         // TODO: put in constants for other commands to use
-        private final double REST_VEL = 4; // TODO: determine the fastest idle note-exit velocity that won't kill the
+        private final double REST_VEL = 0; // TODO: determine the fastest idle note-exit velocity that won't kill the
                                            // battery.
         public static final double shooterHeight = ArmConstants.ARM_LENGTH*Math.sin(ArmConstants.standbySetpoint) + ArmConstants.PIVOT_HEIGHT;
         public static final double shooterOffset = ArmConstants.PIVOT_X + ArmConstants.ARM_LENGTH * Math.cos(ArmConstants.standbySetpoint);
