@@ -52,9 +52,9 @@ public class PoseTransform extends Command {
     @Override
     public void end(boolean interrupted) {
         drive.stop();
-        System.out.println(Timer.getFPGATimestamp() - startTime);
-        System.out.println(error.getX());
-        System.out.println(error.getY());
-        System.out.println(error.getRotation().getRadians());
+        //System.out.println(Timer.getFPGATimestamp() - startTime);
+        // System.out.println(error.getX());
+        // System.out.println(error.getY());
+        // System.out.println(error.getRotation().getRadians());
     }
 }

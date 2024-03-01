@@ -298,7 +298,7 @@ public class Vision {
     for (int i = 0; i < estimatedPoses.size(); i++) {
       EstimatedRobotPose estimatedPose = estimatedPoses.get(i);
       // Continue if this pose doesn't exist
-      System.out.println(Timer.getFPGATimestamp()-estimatedPose.timestampSeconds);
+      //System.out.println(Timer.getFPGATimestamp()-estimatedPose.timestampSeconds);
       if(estimatedPose==null || estimatedPose.estimatedPose==null || estimatedPose.timestampSeconds < 0 || Math.abs(estimatedPose.estimatedPose.getX()) > 20 || Math.abs(estimatedPose.estimatedPose.getY()) > 10 || Timer.getFPGATimestamp() < estimatedPose.timestampSeconds || Timer.getFPGATimestamp() > estimatedPose.timestampSeconds + 5){
         continue;
       }

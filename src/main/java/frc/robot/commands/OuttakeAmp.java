@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -17,6 +18,7 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.subsystems.gpm.StorageIndex;
+import frc.robot.util.Vision;
 
 /**
  * Scores in the amp
@@ -79,11 +81,13 @@ public class OuttakeAmp extends SequentialCommandGroup {
 
   public OuttakeAmp(Drivetrain drive){
     addCommands(
+      new InstantCommand(()->printcall()),
       new InstantCommand(()->getPoses()),
-      new GoToPose(ampPose2, drive).until(()->{
+      new InstantCommand(()->printAmpPose()),
+      new GoToPose(VisionConstants.RED_AMP_POSE_2, drive).until(()->{
         return drive.getPose().getTranslation().getDistance(ampPose2.getTranslation()) < VisionConstants.AMP_TOLERANCE_DISTANCE;
       }),
-      new GoToPose(ampPose, drive)
+      new GoToPose(VisionConstants.RED_AMP_POSE, drive)
     );
   }
 
@@ -92,5 +96,36 @@ public class OuttakeAmp extends SequentialCommandGroup {
         : VisionConstants.BLUE_AMP_POSE;
     ampPose2 = DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_AMP_POSE_2
         : VisionConstants.BLUE_AMP_POSE_2;
+  }
+
+  public void printAmpPose(){
+    System.out.println("ampPose: "+ampPose); 
+    System.out.println("ampPose2: "+ampPose2); 
+ 
+  }
+  public void printcall(){
+    System.out.println("HELLOOOOOOOOOOOOOOOOOOOOOO!!!");
+    System.out.println("HELLOOOOOOOOOOOOOOOOOOOOOO!!!");
+    System.out.println("HELLOOOOOOOOOOOOOOOOOOOOOO!!!");
+    System.out.println("HELLOOOOOOOOOOOOOOOOOOOOOO!!!");
+    System.out.println("HELLOOOOOOOOOOOOOOOOOOOOOO!!!");
+    System.out.println("HELLOOOOOOOOOOOOOOOOOOOOOO!!!");
+    System.out.println("HELLOOOOOOOOOOOOOOOOOOOOOO!!!");
+    System.out.println("HELLOOOOOOOOOOOOOOOOOOOOOO!!!");
+    System.out.println("HELLOOOOOOOOOOOOOOOOOOOOOO!!!");
+    System.out.println("HELLOOOOOOOOOOOOOOOOOOOOOO!!!");
+    System.out.println("HELLOOOOOOOOOOOOOOOOOOOOOO!!!");
+    System.out.println("HELLOOOOOOOOOOOOOOOOOOOOOO!!!");
+    System.out.println("HELLOOOOOOOOOOOOOOOOOOOOOO!!!");
+    System.out.println("HELLOOOOOOOOOOOOOOOOOOOOOO!!!");
+    System.out.println("HELLOOOOOOOOOOOOOOOOOOOOOO!!!");
+    System.out.println("HELLOOOOOOOOOOOOOOOOOOOOOO!!!");
+    System.out.println("HELLOOOOOOOOOOOOOOOOOOOOOO!!!");
+    System.out.println("HELLOOOOOOOOOOOOOOOOOOOOOO!!!");
+    System.out.println("HELLOOOOOOOOOOOOOOOOOOOOOO!!!");
+    System.out.println("HELLOOOOOOOOOOOOOOOOOOOOOO!!!");
+    System.out.println("HELLOOOOOOOOOOOOOOOOOOOOOO!!!");
+    System.out.println("HELLOOOOOOOOOOOOOOOOOOOOOO!!!");
+
   }
 }
