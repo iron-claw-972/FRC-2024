@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.vision.AimAtTag;
 import frc.robot.commands.vision.AlignToTag;
 import frc.robot.commands.vision.CalculateStdDevs;
-import frc.robot.commands.vision.ReturnData;
+// import frc.robot.commands.vision.ReturnData;
 import frc.robot.commands.vision.TestVisionDistance;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.Vision;
@@ -48,8 +48,8 @@ public class VisionTab extends ShuffleBoardTabs {
         tab.add("Distance test (backward)", new TestVisionDistance(-0.2, drive, vision));
         SmartDashboard.putData("Vision align to tag", new AlignToTag(drive));
         tab.add("Align to tag", new AlignToTag(drive));
-        SmartDashboard.putData("Return visin data", new ReturnData(vision));
-        tab.add("Return data", new ReturnData(vision));
+        // SmartDashboard.putData("Return visin data", new ReturnData(vision));
+        // tab.add("Return data", new ReturnData(vision));
     }
 
 }
