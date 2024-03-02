@@ -29,7 +29,7 @@ public class AutoTab extends ShuffleBoardTabs {
         // Final Autos
         autoCommand.setDefaultOption("Do nothing", new DoNothing());
         // autoCommand.addOption("One Piece (pos 7) (B)", new FollowPathCommand("One Piece (pos 7) (B)",true, drive));
-        // autoCommand.addOption("Two Piece (pos 4) [B]", new FollowPathCommand("Two Piece (pos 4) [B]",true, drive));
+        autoCommand.addOption("Two Piece (pos 4) center line", new FollowPathCommand("Two Piece (pos 4) center line",true, drive));
         // autoCommand.addOption("One Piece (pos 2) (B)", new FollowPathCommand("One Piece (pos 2) (B)",true, drive));
         // autoCommand.addOption("Three Piece (pos 2) [B]", new FollowPathCommand("Three Piece (pos 2) [B]",true, drive));
         // autoCommand.addOption("Two Piece (pos 2) [B]", new FollowPathCommand("Two Piece (pos 2) [B]",true, drive));
@@ -41,7 +41,8 @@ public class AutoTab extends ShuffleBoardTabs {
         // autoCommand.addOption("Four Piece (M)", new FollowPathCommand("Four Piece (M)",true, drive));
         autoCommand.addOption("One Piece (pos 4) (B)", new FollowPathCommand("One Piece (pos 4) (B)",true, drive));
         // autoCommand.addOption("Pos 1 Path", new FollowPathCommand("Pos 1 Path",true, drive));
-        
+        //autoCommand.addOption("Pos 1 Path", new FollowPathCommand("Pos 1 Path",true, drive));
+
         
 
         // Repleacement Auto, don't delete
