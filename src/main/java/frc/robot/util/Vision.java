@@ -394,7 +394,6 @@ public class Vision {
           return Optional.empty();
         }
       }
-
       Optional<EstimatedRobotPose> pose = photonPoseEstimator.update(cameraResult);
       
       if(pose.isPresent() && pose.get()!=null && pose.get().estimatedPose!=null && Math.abs(pose.get().estimatedPose.getX()) < 20){
