@@ -50,9 +50,9 @@ public class Operator {
     public void configureControls() {
         if (intake != null) {
             Command intakeNote = new IntakeNote(intake, index, arm);
-            //kDriver.get(Button.X).onTrue(intakeNote);
-            kDriver.get(Button.X).toggleOnTrue(intakeNote);
-            //kDriver.get(Button.X).onFalse(new InstantCommand(()->intakeNote.cancel()));
+            kDriver.get(Button.X).onTrue(intakeNote);
+            //kDriver.get(Button.X).toggleOnTrue(intakeNote);
+            kDriver.get(Button.X).onFalse(new InstantCommand(()->intakeNote.cancel()));
             kDriver.get(Button.B).onTrue(new InstantCommand(() -> intake.setMode(Mode.ReverseMotors),intake));
             kDriver.get(Button.B).onFalse(new InstantCommand(() -> intake.setMode(Mode.DISABLED), intake));
         }
@@ -82,24 +82,24 @@ public class Operator {
             getLeftTrigger().onTrue(new PrepareShooter(shooter, 1750));
         }
         if(arm != null && shooter != null && index != null){
-            //kDriver.get(Button.Y).onTrue(new ShootKnownPos(shooter, arm, index, ShotPosition.SUBWOOFER));
-            kDriver.get(Button.Y).onTrue(new IndexerFeed(index));
-            kDriver.get(Button.Y).whileTrue(new Rumbler(shooter,(x)->{
-                if (x){
-                    kDriver.setRumble(RumbleStatus.RUMBLE_ON);
-                }
-                else{
-                    kDriver.setRumble(RumbleStatus.RUMBLE_OFF);
-                }
-            }));
-            kDriver.get(Button.Y).whileFalse(new Rumbler(shooter,(x)->{
-                if (x){
-                    kDriver.setRumble(RumbleStatus.RUMBLE_ON);
-                }
-                else{
-                    kDriver.setRumble(RumbleStatus.RUMBLE_OFF);
-                }
-            }));
+            kDriver.get(Button.Y).onTrue(new ShootKnownPos(shooter, arm, index, ShotPosition.SUBWOOFER));
+            //kDriver.get(Button.Y).onTrue(new IndexerFeed(index));
+            // kDriver.get(Button.Y).whileTrue(new Rumbler(shooter,(x)->{
+            //     if (x){
+            //         kDriver.setRumble(RumbleStatus.RUMBLE_ON);
+            //     }
+            //     else{
+            //         kDriver.setRumble(RumbleStatus.RUMBLE_OFF);
+            //     }
+            // }));
+            // kDriver.get(Button.Y).whileFalse(new Rumbler(shooter,(x)->{
+            //     if (x){
+            //         kDriver.setRumble(RumbleStatus.RUMBLE_ON);
+            //     }
+            //     else{
+            //         kDriver.setRumble(RumbleStatus.RUMBLE_OFF);
+            //     }
+            // }));
             kDriver.get(Button.A).onTrue(new OuttakeAmp(arm, index, shooter));
         }
     }
