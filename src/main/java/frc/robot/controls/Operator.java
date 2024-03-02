@@ -47,7 +47,7 @@ public class Operator {
     public void configureControls() {
         if (intake != null) {
             Command intakeNote = new IntakeNote(intake, index, arm);
-            kDriver.get(Button.X).onTrue(intakeNote);
+            kDriver.get(Button.X).toggleOnTrue(intakeNote);
             kDriver.get(Button.X).onFalse(new InstantCommand(()->intakeNote.cancel()));
             kDriver.get(Button.B).onTrue(new InstantCommand(() -> intake.setMode(Mode.ReverseMotors), intake));
             kDriver.get(Button.B).onFalse(new InstantCommand(() -> intake.setMode(Mode.DISABLED), intake));
