@@ -18,7 +18,7 @@ public class ShootKnownPos extends SequentialCommandGroup {
 	public enum ShotPosition {
 		STAGE_ISH(ShooterConstants.ANGLE_OFFSET - .6, Shooter.shooterSpeedToRPM(10)/0.64),
 		// TODO: add actual values
-		SUBWOOFER(ArmConstants.subwooferSetpoint, 1500);
+		SUBWOOFER(ArmConstants.subwooferSetpoint, 1750);
 		
 		private double armAngle;
 		private double shooterSpeed;

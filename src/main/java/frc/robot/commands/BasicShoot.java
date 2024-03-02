@@ -16,7 +16,7 @@ import frc.robot.subsystems.gpm.StorageIndex;
 public class BasicShoot extends ParallelRaceGroup{
     public BasicShoot(Shooter shooter, Intake intake, StorageIndex index, Arm arm, double target){   
     super(
-        new PrepareShooter(shooter, 1500),
+        new PrepareShooter(shooter, 1750),
         new IntakeNote(intake, index, arm)
     );
 }

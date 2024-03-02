@@ -25,6 +25,7 @@ public class PathGroupLoader {
     public static void loadPathGroups() {
         double totalTime = 0;
         File[] directoryListing = Filesystem.getDeployDirectory().toPath().resolve(AutoConstants.TRAJECTORY_DIRECTORY).toFile().listFiles();
+        
         if (directoryListing != null) {
             for (File file : directoryListing) {
                 if (file.isFile() && file.getName().contains(".")) {

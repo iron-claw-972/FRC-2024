@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ShooterConstants;
+import frc.robot.util.LogManager;
 
 public class Shooter extends SubsystemBase {
 	// each of the shooter shafts is driven by one Neo Vortex motor

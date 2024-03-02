@@ -75,7 +75,7 @@ public class Operator {
             getRightTrigger().onTrue(new Shoot(shooter, arm, drive, index));
         }
         if(shooter != null){
-            getLeftTrigger().onTrue(new PrepareShooter(shooter, 1500));
+            getLeftTrigger().onTrue(new PrepareShooter(shooter, 1750));
         }
         if(arm != null && shooter != null && index != null){
             kDriver.get(Button.Y).onTrue(new ShootKnownPos(shooter, arm, index, ShotPosition.SUBWOOFER));

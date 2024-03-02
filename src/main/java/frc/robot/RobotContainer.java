@@ -101,14 +101,14 @@ public class RobotContainer {
         // Detected objects need access to the drivetrain
         DetectedObject.setDrive(drive);
         
-        //SignalLogger.start();
+        SignalLogger.start();
 
         driver.configureControls();
         operator.configureControls();
         initializeAutoBuilder();
         drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
-        // registerCommands();
-        //PathGroupLoader.loadPathGroups();
+        registerCommands();
+        PathGroupLoader.loadPathGroups();
  
         shuffleboardManager = new ShuffleBoardManager(drive, vision);
         SmartDashboard.putBoolean("Index beam", index.hasNote());
@@ -162,13 +162,15 @@ public class RobotContainer {
         drive);
   }
 
-  // public void registerCommands() {
-  //   NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index, arm).withTimeout(1));
-  //   NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new SequentialCommandGroup(
-  //     new InstantCommand(()-> index.runIndex()),
-  //     new WaitCommand(.5),
-  //     new PrepareShooter(shooter, 1500).withTimeout(1.5))); // using for now in the auto paths
-  // }
+  public void registerCommands() {
+    NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index, arm).withTimeout(1));
+    NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new SequentialCommandGroup(
+      new PrepareShooter(shooter, 1750),
+      new WaitCommand(1.5),
+      new InstantCommand(()-> index.runIndex()),
+      new WaitCommand(1.5),
+      new PrepareShooter(shooter, 0))); // using for now in the auto paths
+  }
 
   public static BooleanSupplier getAllianceColorBooleanSupplier() {
     return () -> {

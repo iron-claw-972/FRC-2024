@@ -1,10 +1,10 @@
 {
-    "version": 1.0,  
-    waypoints": [
+  "version": 1.0,
+  "waypoints": [
     {
-            "anchor": {
-                      "x": 0.8,
-                              "y": 4.43
+      "anchor": {
+        "x": 0.8,
+        "y": 4.43
       },
       "prevControl": null,
       "nextControl": {
@@ -48,11 +48,11 @@
     },
     {
       "anchor": {
-        "x": 7.627078046178885,
+        "x": 8.118232532761363,
         "y": 0.7718141932010376
       },
       "prevControl": {
-        "x": 7.954514370567201,
+        "x": 8.445668857149679,
         "y": 0.7718141932010376
       },
       "nextControl": null,
@@ -65,10 +65,10 @@
     {
       "name": "New Constraints Zone",
       "minWaypointRelativePos": 0,
-      "maxWaypointRelativePos": 0.15000000000000002,
+      "maxWaypointRelativePos": 0.25,
       "constraints": {
-        "maxVelocity": 0.1,
-        "maxAcceleration": 3.0,
+        "maxVelocity": 0.25,
+        "maxAcceleration": 0.25,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
       }
@@ -94,34 +94,15 @@
     },
     {
       "name": "Outtake",
-      "waypointRelativePos": 0.0,
+      "waypointRelativePos": 0,
       "command": {
-        "type": "sequential",
+        "type": "parallel",
         "data": {
           "commands": [
             {
-              "type": "wait",
+              "type": "named",
               "data": {
-                "waitTime": 0.5
-              }
-            },
-            {
-              "type": "parallel",
-              "data": {
-                "commands": [
-                  {
-                    "type": "named",
-                    "data": {
-                      "name": "Outtake_Note_1.5_Sec"
-                    }
-                  },
-                  {
-                    "type": "wait",
-                    "data": {
-                      "waitTime": 1.5
-                    }
-                  }
-                ]
+                "name": "Outtake_Note_1.5_Sec"
               }
             }
           ]
@@ -130,7 +111,7 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.3,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
