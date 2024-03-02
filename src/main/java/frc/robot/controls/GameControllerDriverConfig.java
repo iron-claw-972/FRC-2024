@@ -4,11 +4,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.commands.ChainAlign;
-import frc.robot.commands.Climb;
 import frc.robot.commands.GoToPose;
 import frc.robot.commands.OuttakeAmp;
-import frc.robot.commands.Climb.Chain;
 import frc.robot.commands.drive_comm.SetFormationX;
 import frc.robot.commands.vision.AcquireGamePiece;
 import frc.robot.constants.ArmConstants;
@@ -67,16 +64,19 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     // error
     kDriver.get(Button.A).onTrue(new InstantCommand(() -> getDrivetrain().resetModulesToAbsolute()));
 
-    // Align to stage and climb
-    if(arm != null){
-      kDriver.get(DPad.LEFT).toggleOnTrue(new Climb(Chain.LEFT, getDrivetrain(), arm));
-      kDriver.get(DPad.UP).toggleOnTrue(new Climb(Chain.CENTER, getDrivetrain(), arm));
-      kDriver.get(DPad.RIGHT).toggleOnTrue(new Climb(Chain.RIGHT, getDrivetrain(), arm));
-    }else{
-      kDriver.get(DPad.LEFT).whileTrue(new ChainAlign(Chain.LEFT, getDrivetrain()));
-      kDriver.get(DPad.UP).whileTrue(new ChainAlign(Chain.CENTER, getDrivetrain()));
-      kDriver.get(DPad.RIGHT).whileTrue(new ChainAlign(Chain.RIGHT, getDrivetrain()));
-    }
+    // Align to subwoofer
+    kDriver.get(DPad.LEFT).whileTrue(new GoToPose(()->
+      DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_SUBWOOFER_LEFT
+      : VisionConstants.BLUE_SUBWOOFER_LEFT,
+      getDrivetrain()));
+    kDriver.get(DPad.UP).whileTrue(new GoToPose(()->
+      DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_SUBWOOFER_CENTER
+      : VisionConstants.BLUE_SUBWOOFER_CENTER,
+      getDrivetrain()));
+    kDriver.get(DPad.RIGHT).whileTrue(new GoToPose(()->
+      DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_SUBWOOFER_RIGHT
+      : VisionConstants.BLUE_SUBWOOFER_RIGHT,
+      getDrivetrain()));
 
     // Amp alignment
     if(arm != null && index != null && shooter != null){
