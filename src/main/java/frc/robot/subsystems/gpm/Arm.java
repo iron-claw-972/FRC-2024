@@ -30,7 +30,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ArmConstants;
 import frc.robot.constants.Constants;
 import frc.robot.util.LogManager;
-import lib.drivers.LazyTalonFX;
+
 
 /**
  * Subsystem that controls the arm.
@@ -46,11 +46,11 @@ public class Arm extends SubsystemBase {
      * <p>
      * The first set of entries are the left side motors, and the second set are the right side.
      */
-    private final LazyTalonFX[] motors = new LazyTalonFX[ArmConstants.MOTOR_IDS.length];
+    private final TalonFX[] motors = new TalonFX[ArmConstants.MOTOR_IDS.length];
     // DCMotor model is 4 Kraken X60
     private static final DCMotor motorModel = DCMotor.getKrakenX60(ArmConstants.MOTOR_IDS.length);
 
-    // Encoder in the LazyTalonFX....
+    // Encoder in the TalonFX....
     //   check docs. Normal update is 4 Hz.
     StatusSignal<Double> rotorPositionSignal;
 
@@ -71,14 +71,14 @@ public class Arm extends SubsystemBase {
      * <p>
      * WARNING: This value will change if the belt driving the REV encoder slips!
      */
-    protected static final double OFFSET = 0.775+Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
+    protected static final double OFFSET = 0.77+Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
     /** REV encoder scale factor. This is fixed. */
     private static final double DISTANCE_PER_ROTATION = -2 * Math.PI;
 
     // Motor PID control
     private static final double TOLERANCE = Units.degreesToRadians(3.0);
     // P = 5 worked during simulation simulation
-    private static final double P = 0.5;
+    private static final double P = 0.01;
     private static final double I = 0;
     private static final double D = 0;
     private final PIDController pid = new PIDController(P, I, D);
@@ -118,8 +118,8 @@ public class Arm extends SubsystemBase {
         // consider each of the motors
         for (int i = 0; i < motors.length; i++) {
             // create the motor
-            motors[i] = new LazyTalonFX(ArmConstants.MOTOR_IDS[i]);
-            motors[i].setNeutralMode(NeutralModeValue.Brake);
+            motors[i] = new TalonFX(ArmConstants.MOTOR_IDS[i]);
+            motors[i].setNeutralMode(NeutralModeValue.Coast);
 
             // i==0 is the master; the others are slaves
             if (i > 0) {
@@ -132,7 +132,7 @@ public class Arm extends SubsystemBase {
 
         // common configuration for each motor
         // configure the master after the slaves have been linked so slaves will copy the same settings.
-        motors[0].setNeutralMode(NeutralModeValue.Brake);
+        motors[0].setNeutralMode(NeutralModeValue.Coast);
         motors[0].setInverted(false);
         motors[0].getConfigurator().apply(ArmConstants.currentConfig);
 
@@ -168,7 +168,7 @@ public class Arm extends SubsystemBase {
             // pid setpoint and get radians
 
             ArrayList<Double> slave_errors = new ArrayList<Double>();
-            for (LazyTalonFX each_talon: motors) { // could use TalonFX as it originally was. tomato tomahto
+            for (TalonFX each_talon: motors) { // could use TalonFX as it originally was. tomato tomahto
                 slave_errors.add(each_talon.getPosition().getValue()-motors[0].getPosition().getValue());
             }
 

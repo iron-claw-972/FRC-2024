@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.util.LogManager;
-import lib.drivers.LazySparkFlex;
+
 
 public class Shooter extends SubsystemBase {
 	// each of the shooter shafts is driven by one Neo Vortex motor
@@ -59,7 +59,7 @@ public class Shooter extends SubsystemBase {
 	private static final double MOI_SHAFT = MOI_STEALTH * 6;
 
 	// left motor
-	private final LazySparkFlex leftMotor = new LazySparkFlex(ShooterConstants.LEFT_MOTOR_ID, MotorType.kBrushless);
+	private final CANSparkFlex leftMotor = new CANSparkFlex(ShooterConstants.LEFT_MOTOR_ID, MotorType.kBrushless);
 	private final RelativeEncoder leftMotorEncoder = leftMotor.getEncoder();
 	/** PID controller uses RPM as input and outputs motor power */
 	private final PIDController leftPID = new PIDController(P, I, D);
@@ -68,7 +68,7 @@ public class Shooter extends SubsystemBase {
 	private double leftPower = 0.0;
 
 	// right motor
-	private final LazySparkFlex rightMotor = new LazySparkFlex(ShooterConstants.RIGHT_MOTOR_ID, MotorType.kBrushless);
+	private final CANSparkFlex rightMotor = new CANSparkFlex(ShooterConstants.RIGHT_MOTOR_ID, MotorType.kBrushless);
 	private final RelativeEncoder rightMotorEncoder = rightMotor.getEncoder();
 	/** PID controller uses RPM as input and outputs motor power */
 	private final PIDController rightPID = new PIDController(P, I, D);

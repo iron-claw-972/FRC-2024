@@ -59,7 +59,7 @@ public class Drivetrain extends SubsystemBase {
 
     // If vision is enabled for drivetrain odometry updating
     // DO NOT CHANGE THIS HERE TO DISABLE VISION, change VisionConstants.ENABLED instead
-    private boolean visionEnabled = true;
+    private boolean visionEnabled = false;
 
     // If the robot should aim at the speaker
     private boolean isAlign = false;

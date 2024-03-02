@@ -33,10 +33,10 @@ public class VisionConstants {
   public static final boolean OBJECT_DETECTION_ENABLED = false;
 
   // If odometry should be updated using vision during auto
-  public static final boolean ENABLED_AUTO = true;
+  public static final boolean ENABLED_AUTO = false;
 
   // If odometry should be updated using vision while running the GoToPose and GoToPosePID commands in teleop
-  public static final boolean ENABLED_GO_TO_POSE = true;
+  public static final boolean ENABLED_GO_TO_POSE = false;
 
   // If vision should use manual calculations
   public static final boolean USE_MANUAL_CALCULATIONS = false;
