@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.IntakeConstants;
 import edu.wpi.first.wpilibj.Timer;
+import lib.drivers.LazySparkFlex;
 
 
 public class Intake extends SubsystemBase {
@@ -44,7 +45,7 @@ public class Intake extends SubsystemBase {
     }
 
     /** Intake motor is a Vortex*/
-    private final CANSparkFlex motor = new CANSparkFlex(IntakeConstants.MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
+    private final LazySparkFlex motor = new LazySparkFlex(IntakeConstants.MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
 
     // change the motor from neo550 to whatever it actually is
     private static final DCMotor dcMotor = DCMotor.getNeoVortex(1);

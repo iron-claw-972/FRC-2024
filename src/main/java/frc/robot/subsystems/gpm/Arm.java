@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // import frc.robot.commands.test_comm.PoseTransform;
 import frc.robot.constants.ArmConstants;
+import lib.drivers.LazyTalonFX;
 
 /**
  * Subsystem that controls the arm.
@@ -40,11 +41,11 @@ public class Arm extends SubsystemBase {
      * <p>
      * The first set of entries are the left side motors, and the second set are the right side.
      */
-    private final TalonFX[] motors = new TalonFX[ArmConstants.MOTOR_IDS.length];
+    private final LazyTalonFX[] motors = new LazyTalonFX[ArmConstants.MOTOR_IDS.length];
     // DCMotor model is 4 Kraken X60
     private static final DCMotor motorModel = DCMotor.getKrakenX60(ArmConstants.MOTOR_IDS.length);
 
-    // Encoder in the TalonFX....
+    // Encoder in the LazyTalonFX....
     //   check docs. Normal update is 4 Hz.
     StatusSignal<Double> rotorPositionSignal;
 
@@ -112,7 +113,7 @@ public class Arm extends SubsystemBase {
         // consider each of the motors
         for (int i = 0; i < motors.length; i++) {
             // create the motor
-            motors[i] = new TalonFX(ArmConstants.MOTOR_IDS[i]);
+            motors[i] = new LazyTalonFX(ArmConstants.MOTOR_IDS[i]);
             motors[i].setNeutralMode(NeutralModeValue.Brake);
 
             // i==0 is the master; the others are slaves

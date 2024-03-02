@@ -8,6 +8,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.constants.Constants;
 import frc.robot.constants.swerve.ModuleConstants;
 import lib.CTREModuleState;
+import lib.drivers.LazyTalonFX;
 
 /**
  * Swerve module for drivetrain to be used inside of simulation.
@@ -104,7 +105,7 @@ public class ModuleSim extends Module {
         stateDeadband = enabled;
     }
 
-    public TalonFX getDriveMotor(){
+    public LazyTalonFX getDriveMotor(){
         return null;
     }
 

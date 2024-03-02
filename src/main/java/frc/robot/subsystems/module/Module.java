@@ -29,6 +29,7 @@ import frc.robot.constants.swerve.ModuleType;
 import frc.robot.util.ConversionUtils;
 import frc.robot.util.LogManager;
 import lib.CTREModuleState;
+import lib.drivers.LazyTalonFX;
 
 public class Module extends SubsystemBase {
     private final ModuleType type;
@@ -36,8 +37,8 @@ public class Module extends SubsystemBase {
     // Motor ticks
     private final double angleOffset;
 
-    private final TalonFX angleMotor;
-    private final TalonFX driveMotor;
+    private final LazyTalonFX angleMotor;
+    private final LazyTalonFX driveMotor;
     private final CANcoder CANcoder;
     private SwerveModuleState desiredState;
 
@@ -65,11 +66,11 @@ public class Module extends SubsystemBase {
         configCANcoder();
 
         /* Angle Motor Config */
-        angleMotor = new TalonFX(moduleConstants.getSteerPort(), DriveConstants.kSteerEncoderCAN);
+        angleMotor = new LazyTalonFX(moduleConstants.getSteerPort(), DriveConstants.kSteerEncoderCAN);
         configAngleMotor();
 
         /* Drive Motor Config */
-        driveMotor = new TalonFX(moduleConstants.getDrivePort(), DriveConstants.kDriveMotorCAN);
+        driveMotor = new LazyTalonFX(moduleConstants.getDrivePort(), DriveConstants.kDriveMotorCAN);
         configDriveMotor();
 
         setDesiredState(new SwerveModuleState(0, getAngle()), false);
@@ -253,11 +254,11 @@ public class Module extends SubsystemBase {
         angleMotor.set(0);
     }
 
-    public TalonFX getDriveMotor(){
+    public LazyTalonFX getDriveMotor(){
         return driveMotor;
     }
 
-    public TalonFX getAngleMotor(){
+    public LazyTalonFX getAngleMotor(){
         return angleMotor;
     }
 
