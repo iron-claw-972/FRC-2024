@@ -120,7 +120,7 @@
       }
     },
     {
-      "name": "Outtake 1",
+      "name": "Outtake 2",
       "waypointRelativePos": 2.2,
       "command": {
         "type": "parallel",
@@ -129,7 +129,13 @@
             {
               "type": "named",
               "data": {
-                "name": "Shoot"
+                "name": "Outtake_Note_1.5_Sec"
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 0.5
               }
             }
           ]
@@ -143,6 +149,29 @@
         "type": "parallel",
         "data": {
           "commands": []
+        }
+      }
+    },
+    {
+      "name": "Outtake 1",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Outtake_Note_1.5_Sec"
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 0.5
+              }
+            }
+          ]
         }
       }
     }
@@ -159,7 +188,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Final Autos",
+  "folder": null,
   "previewStartingState": {
     "rotation": 60.0,
     "velocity": 0.0
