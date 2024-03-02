@@ -97,12 +97,12 @@ public class DriveConstants {
     /* Swerve Current Limiting */
     public static final int kAngleContinuousCurrentLimit = 15;
     public static final int kAnglePeakCurrentLimit = 15;
-    public static final double kAnglePeakCurrentDuration = 0.1;
+    public static final double kAnglePeakCurrentDuration = 0.05;
     public static final boolean kAngleEnableCurrentLimit = true;
 
     public static final int kDriveContinuousCurrentLimit = 20;
     public static final int kDrivePeakCurrentLimit = 20;
-    public static final double kDrivePeakCurrentDuration = 0.1;
+    public static final double kDrivePeakCurrentDuration = 0.05;
     public static final boolean kDriveEnableCurrentLimit = true;
 
     /* Motor inversions */

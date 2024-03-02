@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 9.123929814811195,
-        "y": 0.7718141932010376
+        "x": 8.960211652617037,
+        "y": 0.6431784943341966
       },
       "prevControl": {
-        "x": 8.628442670522288,
-        "y": 0.4341623393181897
+        "x": 8.46472450832813,
+        "y": 0.3055266404513487
       },
       "nextControl": {
-        "x": 9.709599030333546,
-        "y": 1.1709210089127535
+        "x": 9.545880868139388,
+        "y": 1.0422853100459126
       },
       "isLocked": false,
       "linkedName": null
@@ -48,16 +48,16 @@
     },
     {
       "anchor": {
-        "x": 0.6777587794889373,
-        "y": 4.435076061565361
+        "x": 0.8795509328910394,
+        "y": 4.537331923666697
       },
       "prevControl": {
-        "x": 0.9431363524611258,
-        "y": 4.35244622938003
+        "x": 1.144928505863228,
+        "y": 4.454702091481366
       },
       "nextControl": {
-        "x": 0.3324868721993183,
-        "y": 4.5425823569848305
+        "x": 0.5342790256014204,
+        "y": 4.644838219086166
       },
       "isLocked": false,
       "linkedName": null
@@ -153,7 +153,7 @@
     },
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 2.9,
+      "waypointRelativePos": 3.0,
       "command": {
         "type": "parallel",
         "data": {
@@ -161,7 +161,7 @@
             {
               "type": "wait",
               "data": {
-                "waitTime": 0.5
+                "waitTime": 0.75
               }
             },
             {
@@ -193,8 +193,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 4.8,
+    "maxAcceleration": 2.2,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -209,5 +209,5 @@
     "rotation": -56.0,
     "velocity": 0.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
