@@ -84,6 +84,7 @@ public class Vision {
     }
   }
 
+
   /**
    * Get the horizontal offsets from the crosshair to the targets
    * @return An array of offsets in degrees
@@ -184,31 +185,31 @@ public class Vision {
    * @param referencePoses The reference poses in order of preference, null poses will be skipped
    * @return The pose of the robot, or null if it can't see april tags
    */
-  public Pose2d getPose2d(Pose2d... referencePoses){
-    Pose2d referencePose = new Pose2d();
-    for (Pose2d checkReferencePose:referencePoses){
-      if (checkReferencePose != null) {
-        referencePose = checkReferencePose;
-        break;
-      }
-    }
-    ArrayList<EstimatedRobotPose> estimatedPoses = getEstimatedPoses(referencePose);
+  // public Pose2d getPose2d(Pose2d... referencePoses){
+  //   Pose2d referencePose = new Pose2d();
+  //   for (Pose2d checkReferencePose:referencePoses){
+  //     if (checkReferencePose != null) {
+  //       referencePose = checkReferencePose;
+  //       break;
+  //     }
+  //   }
+  //   ArrayList<EstimatedRobotPose> estimatedPoses = getEstimatedPoses(referencePose);
     
-    if (estimatedPoses.size() == 1) return estimatedPoses.get(0).estimatedPose.toPose2d();
+  //   if (estimatedPoses.size() == 1) return estimatedPoses.get(0).estimatedPose.toPose2d();
     
-    if (estimatedPoses.size() == 2) {
-      return new Pose2d(
-        estimatedPoses.get(0).estimatedPose.toPose2d().getTranslation()
-          .plus(estimatedPoses.get(1).estimatedPose.toPose2d().getTranslation())
-          .div(2),
+  //   if (estimatedPoses.size() == 2) {
+  //     return new Pose2d(
+  //       estimatedPoses.get(0).estimatedPose.toPose2d().getTranslation()
+  //         .plus(estimatedPoses.get(1).estimatedPose.toPose2d().getTranslation())
+  //         .div(2),
         
-        new Rotation2d(MathUtils.modulusMidpoint(
-          estimatedPoses.get(0).estimatedPose.toPose2d().getRotation().getRadians(),
-          estimatedPoses.get(1).estimatedPose.toPose2d().getRotation().getRadians(),
-          -Math.PI, Math.PI)
-        )
-      );
-    }
+  //       new Rotation2d(MathUtils.modulusMidpoint(
+  //         estimatedPoses.get(0).estimatedPose.toPose2d().getRotation().getRadians(),
+  //         estimatedPoses.get(1).estimatedPose.toPose2d().getRotation().getRadians(),
+  //         -Math.PI, Math.PI)
+  //       )
+  //     );
+  //   }
           
     //TODO: VERY LOW PRIORITY FOR FUTURE ROBOTS, make the rotation average work with more than 2 cameras
     // for(int i = 0; i < estimatedPoses.size(); i ++){
@@ -218,8 +219,8 @@ public class Vision {
     // if(posesUsed>0){
     //   return new Pose2d(translation.div(estimatedPoses.size()), new Rotation2d());
     // }
-    return null;
-  }
+    // return null;
+   // }
 
   public AprilTagFieldLayout getAprilTagFieldLayout(){
     return m_aprilTagFieldLayout;
