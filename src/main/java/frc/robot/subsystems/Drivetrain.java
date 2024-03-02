@@ -200,7 +200,7 @@ public class Drivetrain extends SubsystemBase {
         Pose2d pose3 = getPose();
         if(Math.abs(pose2.getX())>30){
             resetOdometry(pose1);
-        }else if(Math.abs(pose3.getX()>30)){
+        }else if(Math.abs(pose3.getX())>30){
             resetOdometry(pose2);
         }
     }

@@ -7,6 +7,7 @@ package frc.robot.util.ShuffleBoard.Tabs;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.DoNothing;
 import frc.robot.commands.auto_comm.FollowPathCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.ShuffleBoard.ShuffleBoardTabs;
@@ -26,6 +27,7 @@ public class AutoTab extends ShuffleBoardTabs {
         tab = Shuffleboard.getTab("Auto");
     
         // Final Autos
+        autoCommand.setDefaultOption("Do nothing", new DoNothing());
         // autoCommand.addOption("One Piece (pos 7) (B)", new FollowPathCommand("One Piece (pos 7) (B)",true, drive));
         // autoCommand.addOption("Two Piece (pos 4) [B]", new FollowPathCommand("Two Piece (pos 4) [B]",true, drive));
         // autoCommand.addOption("One Piece (pos 2) (B)", new FollowPathCommand("One Piece (pos 2) (B)",true, drive));
@@ -37,7 +39,7 @@ public class AutoTab extends ShuffleBoardTabs {
         // autoCommand.addOption("[Under the stage] One Piece (pos 4) (destroy) (B1)", new FollowPathCommand("[Under the stage] One Piece (pos 4) (destroy) (B1)",true, drive));
         // autoCommand.addOption("[Around the stage] One Piece (pos 4) (destroy) (B)", new FollowPathCommand("[Around the stage] One Piece (pos 4) (destroy) (B)",true, drive));
         // autoCommand.addOption("Four Piece (M)", new FollowPathCommand("Four Piece (M)",true, drive));
-        // autoCommand.addOption("One Piece (pos 4) (B)", new FollowPathCommand("One Piece (pos 4) (B)",true, drive));
+        autoCommand.addOption("One Piece (pos 4) (B)", new FollowPathCommand("One Piece (pos 4) (B)",true, drive));
         // autoCommand.addOption("Pos 1 Path", new FollowPathCommand("Pos 1 Path",true, drive));
         
         

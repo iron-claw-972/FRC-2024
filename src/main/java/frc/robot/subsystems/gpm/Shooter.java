@@ -36,7 +36,7 @@ public class Shooter extends SubsystemBase {
 	 * Tolerance in RPM.
 	 * At 1500 rpm, the simulator gives 1519 rpm.
 	 */
-	private static final double TOLERANCE = 40;
+	private static final double TOLERANCE = 80;
 
 	// 4-inch Colson wheels
 	// private static final double MASS_COLSON = 0.245;
