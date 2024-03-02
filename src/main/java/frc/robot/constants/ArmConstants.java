@@ -29,7 +29,7 @@ public class ArmConstants {
     /** minimum arm angle in radians -- temporarily zero */
     public static final double MIN_ANGLE_RADS = Units.degreesToRadians(-9.20);
     /** maximum arm angle in radians */
-    public static final double MAX_ANGLE_RADS = Units.degreesToRadians(78);
+    public static final double MAX_ANGLE_RADS = Units.degreesToRadians(70.5);
     /** starting angle in radians */
     public static final double START_ANGLE_RADS = Units.degreesToRadians(-9.20);
 
@@ -47,6 +47,6 @@ public class ArmConstants {
     public static final double PIVOT_X = Units.inchesToMeters(-10);
 
     public static CurrentLimitsConfigs currentConfig = new CurrentLimitsConfigs()
-        .withSupplyCurrentLimit(40)
+        .withSupplyCurrentLimit(15)
         .withSupplyCurrentLimitEnable(true);
 }

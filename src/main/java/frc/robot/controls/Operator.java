@@ -111,6 +111,10 @@ public class Operator {
             // }));
             kDriver.get(Button.A).onTrue(new OuttakeAmp(arm, index, shooter));
         }
+        if(arm != null){
+            kDriver.get(Button.RB).onTrue(new InstantCommand(()->arm.setAngle(ArmConstants.preClimbSetpoint), arm));
+            kDriver.get(Button.LB).onTrue(new InstantCommand(()->arm.setAngle(ArmConstants.climbSetpoint), arm));
+          }
     }
     public Trigger getRightTrigger(){
         return new Trigger(kDriver.RIGHT_TRIGGER_BUTTON);
