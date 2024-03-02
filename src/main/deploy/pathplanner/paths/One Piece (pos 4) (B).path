@@ -104,6 +104,12 @@
               "data": {
                 "name": "Outtake_Note_1.5_Sec"
               }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 0.5
+              }
             }
           ]
         }
