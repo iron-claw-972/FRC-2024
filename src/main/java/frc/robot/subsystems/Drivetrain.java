@@ -123,6 +123,8 @@ public class Drivetrain extends SubsystemBase {
     @Override
     public void periodic() {
         updateOdometry();
+        System.out.println("x: "+ getPose().getX()); 
+        System.out.println("y: "+ getPose().getY()); 
     }
 
     // DRIVE
@@ -198,9 +200,13 @@ public class Drivetrain extends SubsystemBase {
         }
 
         Pose2d pose3 = getPose();
+        
+        //if the drivetrain pose is over 30: 
         if(Math.abs(pose2.getX())>30){
+            //reset our odometry to the pose before(this is the right pose)
             resetOdometry(pose1);
         }else if(Math.abs(pose3.getX())>30){
+            //if our vision+drivetrain odometry is more than 30, reset our odometry to the pose before(this is the right pose)
             resetOdometry(pose2);
         }
     }

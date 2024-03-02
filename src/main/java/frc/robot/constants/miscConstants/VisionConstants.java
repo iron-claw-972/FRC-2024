@@ -190,7 +190,7 @@ public class VisionConstants {
       "Camera2",
       new Transform3d(
         new Translation3d(Units.inchesToMeters(-10.429), Units.inchesToMeters(-10.275), Units.inchesToMeters(8.874)),
-        new Rotation3d(0, Units.degreesToRadians(-50), Math.PI)
+        new Rotation3d(0, Units.degreesToRadians(-50), Math.PI-Units.degreesToRadians(20))
       )
     )
   ));
