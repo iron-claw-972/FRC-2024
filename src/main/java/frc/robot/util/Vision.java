@@ -247,46 +247,45 @@ public class Vision {
   public ArrayList<EstimatedRobotPose> getEstimatedPoses(Pose2d referencePose) {
     ArrayList<EstimatedRobotPose> estimatedPoses = new ArrayList<>();
     for (int i = 0; i < m_cameras.size(); i++) {
-      if(VisionConstants.USE_MANUAL_CALCULATIONS){
-        Pose2d pose = m_cameras.get(i).getEstimatedPose(referencePose.getRotation().getRadians());
-        if(pose != null){
-          try{
-            EstimatedRobotPose estimatedPose = new EstimatedRobotPose(
-              new Pose3d(pose.getX(), pose.getY(), 0, new Rotation3d(0, 0, pose.getRotation().getRadians())), 
-              m_cameras.get(i).getTimeStamp(), 
-              List.of(m_cameras.get(i).getBestTarget()),
-              PoseStrategy.LOWEST_AMBIGUITY
-            );
-            estimatedPoses.add(estimatedPose);
-            if(Constants.DO_LOGGING){
-              LogManager.addDoubleArray("Vision/camera " + i + "/estimated pose2d", new double[] {
-                pose.getX(),
-                pose.getY(),
-                pose.getRotation().getRadians()
-              });
-            }
-          }catch(Exception e){
-            System.out.println(e.getStackTrace());
-            DriverStation.reportWarning("EXCEPTION THROWN:", true);
-          }
-        }
-      }else{
-        Optional<EstimatedRobotPose> estimatedPose = m_cameras.get(i).getEstimatedPose(referencePose);
-        // If the camera can see an april tag that exists, add it to the array list
-        // April tags that don't exist might return a result that is present but doesn't have a pose
-        if (estimatedPose.isPresent() && estimatedPose.get().estimatedPose != null) {
-          estimatedPoses.add(estimatedPose.get());
-          if(Constants.DO_LOGGING){
-            LogManager.addDoubleArray("Vision/camera " + i + "/estimated pose2d", new double[] {
-              estimatedPose.get().estimatedPose.getX(),
-              estimatedPose.get().estimatedPose.getY(),
-              estimatedPose.get().estimatedPose.getRotation().getZ()
-            });
-          }
+      // if(VisionConstants.USE_MANUAL_CALCULATIONS){
+      //   Pose2d pose = m_cameras.get(i).getEstimatedPose(referencePose.getRotation().getRadians());
+      //   if(pose != null){
+      //     try{
+      //       EstimatedRobotPose estimatedPose = new EstimatedRobotPose(
+      //         new Pose3d(pose.getX(), pose.getY(), 0, new Rotation3d(0, 0, pose.getRotation().getRadians())), 
+      //         m_cameras.get(i).getTimeStamp(), 
+      //         List.of(m_cameras.get(i).getBestTarget()),
+      //         PoseStrategy.LOWEST_AMBIGUITY
+      //       );
+      //       estimatedPoses.add(estimatedPose);
+      //       if(Constants.DO_LOGGING){
+      //         LogManager.addDoubleArray("Vision/camera " + i + "/estimated pose2d", new double[] {
+      //           pose.getX(),
+      //           pose.getY(),
+      //           pose.getRotation().getRadians()
+      //         });
+      //       }
+      //     }catch(Exception e){
+      //       System.out.println(e.getStackTrace());
+      //       DriverStation.reportWarning("EXCEPTION THROWN:", true);
+      //     }
+      //   }
+      // }else{
+      Optional<EstimatedRobotPose> estimatedPose = m_cameras.get(i).getEstimatedPose(referencePose);
+      // If the camera can see an april tag that exists, add it to the array list
+      // April tags that don't exist might return a result that is present but doesn't have a pose
+      if (estimatedPose.isPresent() && estimatedPose.get().estimatedPose != null) {
+        estimatedPoses.add(estimatedPose.get());
+        if(Constants.DO_LOGGING){
+          LogManager.addDoubleArray("Vision/camera " + i + "/estimated pose2d", new double[] {
+            estimatedPose.get().estimatedPose.getX(),
+            estimatedPose.get().estimatedPose.getY(),
+            estimatedPose.get().estimatedPose.getRotation().getZ()
+          });
         }
       }
     }
-    return estimatedPoses;
+    return estimatedPoses; 
   }
 
   /**
@@ -412,45 +411,52 @@ public class Vision {
       return Optional.empty();
     }
     
-    /**
-     * Gets the pose using manual calculations
-     * @param yaw The yaw of the robot to use in the calculation
-     * @return estimated pose as a Pose2d
-     */
-    public Pose2d getEstimatedPose(double yaw){
-      // Gets the best target to use for the calculations
-      PhotonTrackedTarget target = camera.getLatestResult().getBestTarget();
-      // Return null if the target doesn't exist or it should be ignored
-      if(target==null || onlyUse>0 && target.getFiducialId()!=onlyUse){
-        return null;
-      }
-      // Return null if the id is too high or too low
-      int id = target.getFiducialId();
-      if(id <= 0 || id > FieldConstants.APRIL_TAGS.size()){
-        return null;
-      }
-      // Stores target pose and robot to camera transformation for easy access later
-      Pose3d targetPose = FieldConstants.APRIL_TAGS.get(id-1).pose;
-      Transform3d robotToCamera = photonPoseEstimator.getRobotToCameraTransform();
+    // /**
+    //  * Gets the pose using manual calculations
+    //  * @param yaw The yaw of the robot to use in the calculation
+    //  * @return estimated pose as a Pose2d
+    //  */
+    // public Pose2d getEstimatedPose(double yaw){
+    //   // Gets the best target to use for the calculations
+    //   PhotonTrackedTarget target = camera.getLatestResult().getBestTarget();
+    //   // Return null if the target doesn't exist or it should be ignored
+    //   if(target==null || onlyUse>0 && target.getFiducialId()!=onlyUse){
+    //     return null;
+    //   }
+    //   // Return null if the id is too high or too low
+    //   int id = target.getFiducialId();
+    //   if(id <= 0 || id > FieldConstants.APRIL_TAGS.size()){
+    //     return null;
+    //   }
+    //   // Stores target pose and robot to camera transformation for easy access later
+    //   Pose3d targetPose = FieldConstants.APRIL_TAGS.get(id-1).pose;
+    //   Transform3d robotToCamera = photonPoseEstimator.getRobotToCameraTransform();
 
-      // Get the tag position relative to the robot, assuming the robot is on the ground
-      Translation3d translation = new Translation3d(1, new Rotation3d(
-        0,
-        -VisionConstants.Y_OFFSET_SCALE*Units.degreesToRadians(target.getPitch()),
-        -VisionConstants.X_OFFSET_SCALE*Units.degreesToRadians(target.getYaw())));
-      translation = translation.rotateBy(robotToCamera.getRotation());
-      translation = translation.times((targetPose.getZ()-robotToCamera.getZ())/translation.getZ());
-      translation = translation.plus(robotToCamera.getTranslation());
-      translation = translation.rotateBy(new Rotation3d(0, 0, yaw));
-      // Invert it to get the robot position relative to the April tag
-      translation = translation.times(-1);
-      // Multiply by a constant. I don't know why this works, but it was consistently 10% off in 2023 Fall Semester
-      translation = translation.times(VisionConstants.DISTANCE_SCALE);
-      // Get the field relative robot pose
-      translation = translation.plus(targetPose.getTranslation());
-      // Return as a Pose2d
-      return new Pose2d(translation.toTranslation2d(), new Rotation2d(yaw));
-    }
+    //   // Get the tag position relative to the robot, assuming the robot is on the ground
+    //   Translation3d translation = new Translation3d(1, new Rotation3d(
+    //     0,
+    //     -VisionConstants.Y_OFFSET_SCALE*Units.degreesToRadians(target.getPitch()),
+    //     -VisionConstants.X_OFFSET_SCALE*Units.degreesToRadians(target.getYaw())));
+    //   translation = translation.rotateBy(robotToCamera.getRotation());
+    //   translation = translation.times((targetPose.getZ()-robotToCamera.getZ())/translation.getZ());
+    //   translation = translation.plus(robotToCamera.getTranslation());
+    //   translation = translation.rotateBy(new Rotation3d(0, 0, yaw));
+
+    //   System.out.println("id: "+ id);
+    //   System.out.println("id x: "+ translation.getX());
+    //   System.out.println("id y: "+ translation.getY());
+    //   System.out.println("id z: "+ translation.getZ());
+
+
+    //   // Invert it to get the robot position relative to the April tag
+    //   translation = translation.times(-1);
+    //   // Multiply by a constant. I don't know why this works, but it was consistently 10% off in 2023 Fall Semester
+    //   translation = translation.times(VisionConstants.DISTANCE_SCALE);
+    //   // Get the field relative robot pose
+    //   translation = translation.plus(targetPose.getTranslation());
+    //   // Return as a Pose2d
+    //   return new Pose2d(translation.toTranslation2d(), new Rotation2d(yaw));
+    // }
 
     /**
      * Gets the last timestamp in seconds
