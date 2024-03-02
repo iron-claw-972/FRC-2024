@@ -47,6 +47,6 @@ public class ArmConstants {
     public static final double PIVOT_X = Units.inchesToMeters(-10);
 
     public static CurrentLimitsConfigs currentConfig = new CurrentLimitsConfigs()
-        .withSupplyCurrentLimit(40)
+        .withSupplyCurrentLimit(15)
         .withSupplyCurrentLimitEnable(true);
 }

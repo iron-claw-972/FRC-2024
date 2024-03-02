@@ -1,5 +1,7 @@
 package frc.robot.subsystems.gpm;
 
+import java.time.Duration;
+
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
@@ -12,8 +14,11 @@ import edu.wpi.first.wpilibj.simulation.DIOSim;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.Constants;
 import frc.robot.constants.IntakeConstants;
+import frc.robot.util.LogManager;
 import edu.wpi.first.wpilibj.Timer;
+
 
 
 public class Intake extends SubsystemBase {
@@ -107,6 +112,13 @@ public class Intake extends SubsystemBase {
         waitTimer.start();
 
         publish();
+        if (Constants.DO_LOGGING) {
+            LogManager.add("Intake/motorVolts", () -> motor.get() * Constants.ROBOT_VOLTAGE);
+            LogManager.add("Intake/centeringMotorVolts", () -> centeringMotor.get() * Constants.ROBOT_VOLTAGE);
+            
+            LogManager.add("Intake/motorRPM", () -> motor.getAbsoluteEncoder().getVelocity(), Duration.ofSeconds(1));
+            LogManager.add("Intake/centeringMotorRPM", () -> centeringMotor.getAbsoluteEncoder().getVelocity(), Duration.ofSeconds(1));            
+        }
     }
 
     // publish sensor to Smart Dashboard

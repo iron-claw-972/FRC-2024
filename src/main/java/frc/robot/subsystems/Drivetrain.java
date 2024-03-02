@@ -26,6 +26,7 @@ import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
 import frc.robot.subsystems.module.Module;
 import frc.robot.subsystems.module.ModuleSim;
+import frc.robot.util.LogManager;
 import frc.robot.util.Vision;
 
 import java.util.Arrays;
@@ -58,7 +59,7 @@ public class Drivetrain extends SubsystemBase {
 
     // If vision is enabled for drivetrain odometry updating
     // DO NOT CHANGE THIS HERE TO DISABLE VISION, change VisionConstants.ENABLED instead
-    private boolean visionEnabled = true;
+    private boolean visionEnabled = false;
 
     // If the robot should aim at the speaker
     private boolean isAlign = false;
@@ -117,7 +118,18 @@ public class Drivetrain extends SubsystemBase {
         rotationController = new PIDController(DriveConstants.kHeadingP, 0, DriveConstants.kHeadingD);
         rotationController.enableContinuousInput(-Math.PI, Math.PI);
         rotationController.setTolerance(Units.degreesToRadians(0.25), Units.degreesToRadians(0.25));
+        if (Constants.DO_LOGGING) {
+            LogManager.add("Drivetrain/SpeedX", () -> getChassisSpeeds().vxMetersPerSecond);
+            LogManager.add("Drivetrain/SpeedY", () -> getChassisSpeeds().vyMetersPerSecond);
+            LogManager.add("Drivetrain/Speed", () -> Math.hypot(getChassisSpeeds().vxMetersPerSecond, getChassisSpeeds().vyMetersPerSecond));
+            LogManager.add("Drivetrain/SpeedRot", () -> getChassisSpeeds().omegaRadiansPerSecond);
 
+            LogManager.add("Drivetrain/Pose2d", () -> new Double[]{
+                getPose().getX(),
+                getPose().getY(),
+                getPose().getRotation().getRadians()
+                });
+        }
     }
 
     @Override
