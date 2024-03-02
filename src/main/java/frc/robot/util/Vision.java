@@ -1,5 +1,6 @@
 package frc.robot.util;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -259,11 +260,11 @@ public class Vision {
       //       );
       //       estimatedPoses.add(estimatedPose);
       //       if(Constants.DO_LOGGING){
-      //         LogManager.addDoubleArray("Vision/camera " + i + "/estimated pose2d", new double[] {
+      //         LogManager.add("Vision/camera " + i + "/estimated pose2d", () -> new Double[] {
       //           pose.getX(),
       //           pose.getY(),
       //           pose.getRotation().getRadians()
-      //         });
+      //         }, Duration.ofSeconds(1));
       //       }
       //     }catch(Exception e){
       //       System.out.println(e.getStackTrace());
@@ -277,12 +278,12 @@ public class Vision {
       if (estimatedPose.isPresent() && estimatedPose.get().estimatedPose != null) {
         estimatedPoses.add(estimatedPose.get());
         if(Constants.DO_LOGGING){
-          LogManager.addDoubleArray("Vision/camera " + i + "/estimated pose2d", new double[] {
-            estimatedPose.get().estimatedPose.getX(),
-            estimatedPose.get().estimatedPose.getY(),
-            estimatedPose.get().estimatedPose.getRotation().getZ()
-          });
-        }
+            LogManager.add("Vision/camera " + i + "/estimated pose2d", () -> new Double[] {
+              estimatedPose.get().estimatedPose.getX(),
+              estimatedPose.get().estimatedPose.getY(),
+              estimatedPose.get().estimatedPose.getRotation().getZ()
+            }, Duration.ofSeconds(1));
+          }
       }
     }
     return estimatedPoses; 

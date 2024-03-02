@@ -1,5 +1,8 @@
 package frc.robot.subsystems.gpm;
 
+import java.time.Duration;
+import java.util.ArrayList;
+
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
@@ -25,6 +28,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // import frc.robot.commands.test_comm.PoseTransform;
 import frc.robot.constants.ArmConstants;
+import frc.robot.constants.Constants;
+import frc.robot.util.LogManager;
 import lib.drivers.LazyTalonFX;
 
 /**
@@ -158,6 +163,17 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putData("Set Angle to 0.0", new InstantCommand(() -> setAngle(0.0)));
         SmartDashboard.putData("Set Angle to 1.0 Rad", new InstantCommand(() -> setAngle(0.6)));
         SmartDashboard.putData("arm pid", pid);
+        if (Constants.DO_LOGGING) {
+            LogManager.add("Arm/PositionError", () -> getAngleRad() - pid.getSetpoint(), Duration.ofSeconds(1));
+            // pid setpoint and get radians
+
+            ArrayList<Double> slave_errors = new ArrayList<Double>();
+            for (LazyTalonFX each_talon: motors) { // could use TalonFX as it originally was. tomato tomahto
+                slave_errors.add(each_talon.getPosition().getValue()-motors[0].getPosition().getValue());
+            }
+
+            LogManager.add("Arm/SlaveErrors(ticks)", () -> slave_errors);
+        }
     }
 
     /**

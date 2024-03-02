@@ -1,5 +1,7 @@
 package frc.robot.subsystems.gpm;
 
+import java.time.Duration;
+
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
@@ -13,6 +15,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.Constants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.util.LogManager;
 import lib.drivers.LazySparkFlex;
@@ -88,6 +91,15 @@ public class Shooter extends SubsystemBase {
 		if (RobotBase.isSimulation()) {
 			leftFlywheelSim = new FlywheelSim(gearbox, 1.0, MOI_SHAFT);
 			rightFlywheelSim = new FlywheelSim(gearbox, 1.0, MOI_SHAFT);
+		}
+		if (Constants.DO_LOGGING) {
+			LogManager.add("Shooter/MotorSpeedDifference", () -> getMotorSpeedDifference(), Duration.ofSeconds(1));
+			LogManager.add("Shooter/LeftSpeedError", () -> leftPID.getSetpoint() - getLeftMotorSpeed(), Duration.ofSeconds(1));
+			LogManager.add("Shooter/RightSpeedError", () -> rightPID.getSetpoint() - getRightMotorSpeed(), Duration.ofSeconds(1));
+
+			LogManager.add("Shooter/VoltsLeft", () -> leftMotor.get() * Constants.ROBOT_VOLTAGE, Duration.ofSeconds(1));	
+			
+			LogManager.add("Shooter/VoltsRight", () -> rightMotor.get() * Constants.ROBOT_VOLTAGE, Duration.ofSeconds(1));
 		}
 	}
 
