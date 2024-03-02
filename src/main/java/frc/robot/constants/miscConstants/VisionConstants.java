@@ -147,8 +147,38 @@ public class VisionConstants {
     }
   }
 
+  public static final Pose2d BLUE_SUBWOOFER_CENTER = new Pose2d(
+    FieldConstants.APRIL_TAGS.get(6).pose.getX()+Units.inchesToMeters(53.904),
+    FieldConstants.APRIL_TAGS.get(6).pose.getY(),
+    new Rotation2d()
+  );
+  public static final Pose2d BLUE_SUBWOOFER_LEFT = new Pose2d(
+    FieldConstants.APRIL_TAGS.get(6).pose.getX()+Units.inchesToMeters(27.562),
+    FieldConstants.APRIL_TAGS.get(6).pose.getY()+Units.inchesToMeters(45.292),
+    Rotation2d.fromDegrees(60)
+    );
+  public static final Pose2d BLUE_SUBWOOFER_RIGHT = new Pose2d(
+    FieldConstants.APRIL_TAGS.get(6).pose.getX()+Units.inchesToMeters(27.562),
+    FieldConstants.APRIL_TAGS.get(6).pose.getY()-Units.inchesToMeters(45.292),
+    Rotation2d.fromDegrees(-60)
+  );
+  public static final Pose2d RED_SUBWOOFER_CENTER = new Pose2d(
+    FieldConstants.APRIL_TAGS.get(3).pose.getX()-Units.inchesToMeters(53.904),
+    BLUE_SUBWOOFER_CENTER.getY(),
+    new Rotation2d(Math.PI-BLUE_SUBWOOFER_CENTER.getRotation().getRadians())
+  );
+  public static final Pose2d RED_SUBWOOFER_LEFT = new Pose2d(
+    FieldConstants.APRIL_TAGS.get(3).pose.getX()-Units.inchesToMeters(27.562),
+    BLUE_SUBWOOFER_LEFT.getY(),
+    new Rotation2d(Math.PI-BLUE_SUBWOOFER_LEFT.getRotation().getRadians())
+  );
+  public static final Pose2d RED_SUBWOOFER_RIGHT = new Pose2d(
+    FieldConstants.APRIL_TAGS.get(3).pose.getX()-Units.inchesToMeters(27.562),
+    BLUE_SUBWOOFER_RIGHT.getY(),
+    new Rotation2d(Math.PI-BLUE_SUBWOOFER_RIGHT.getRotation().getRadians())
+  );
+
   // The camera poses
-  // TODO: Add these
   public static final ArrayList<Pair<String, Transform3d>> APRIL_TAG_CAMERAS = new ArrayList<Pair<String, Transform3d>>(List.of(
     new Pair<String, Transform3d>(
       "Camera1",
