@@ -26,7 +26,7 @@ import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
 import frc.robot.controls.Operator;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.util.DetectedObject;
+// import frc.robot.util.DetectedObject;
 import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
 import frc.robot.subsystems.gpm.Shooter;
@@ -99,7 +99,7 @@ public class RobotContainer {
         operator = new Operator(intake, arm, index, shooter, drive);
 
         // Detected objects need access to the drivetrain
-        DetectedObject.setDrive(drive);
+        //DetectedObject.setDrive(drive);
         
         SignalLogger.start();
 
