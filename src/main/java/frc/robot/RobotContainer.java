@@ -166,9 +166,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index, arm).withTimeout(1));
     NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new SequentialCommandGroup(
       new PrepareShooter(shooter, 1750),
-      new WaitCommand(1.5),
+      new WaitCommand(.5),
       new InstantCommand(()-> index.runIndex()),
-      new WaitCommand(1.5),
+      new WaitCommand(.5),
       new PrepareShooter(shooter, 0))); // using for now in the auto paths
   }
 
