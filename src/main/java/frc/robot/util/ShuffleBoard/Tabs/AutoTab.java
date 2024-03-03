@@ -30,6 +30,8 @@ public class AutoTab extends ShuffleBoardTabs {
         autoCommand.setDefaultOption("Do nothing", new DoNothing());
         // autoCommand.addOption("One Piece (pos 7) (B)", new FollowPathCommand("One Piece (pos 7) (B)",true, drive));
         autoCommand.addOption("Two Piece (pos 4) center line", new FollowPathCommand("Two Piece (pos 4) center line",true, drive));
+        autoCommand.addOption("(II) Two Piece (pos 4) center line", new FollowPathCommand("(II) Two Piece (pos 4) center line",true, drive));
+        
         // autoCommand.addOption("One Piece (pos 2) (B)", new FollowPathCommand("One Piece (pos 2) (B)",true, drive));
         // autoCommand.addOption("Three Piece (pos 2) [B]", new FollowPathCommand("Three Piece (pos 2) [B]",true, drive));
         // autoCommand.addOption("Two Piece (pos 2) [B]", new FollowPathCommand("Two Piece (pos 2) [B]",true, drive));
