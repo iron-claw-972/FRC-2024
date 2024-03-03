@@ -51,7 +51,7 @@ public class Operator {
     public void configureControls() {
         if (intake != null) {
            // Command intakeNote = new IntakeNote(intake, index, arm);
-           kDriver.setRumble(RumbleStatus.RUMBLE_ON);
+          // kDriver.setRumble(RumbleStatus.RUMBLE_ON);
             Command inakeWithRumble =  new IntakeWithRumble(intake, index, arm, (x)->{
                 if (x){
                     kDriver.setRumble(RumbleStatus.RUMBLE_ON);

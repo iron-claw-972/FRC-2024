@@ -47,7 +47,7 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
   @Override
   public void configureControls() {
     // Reset yaw to be away from driver
-    kDriver.setRumble(RumbleStatus.RUMBLE_ON);
+    //kDriver.setRumble(RumbleStatus.RUMBLE_ON);
     kDriver.get(Button.START).onTrue(new InstantCommand(() -> super.getDrivetrain().setYaw(
         new Rotation2d(DriverStation.getAlliance().get() == Alliance.Blue ? 0 : Math.PI))));
 

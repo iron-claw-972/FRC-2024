@@ -209,7 +209,7 @@
   "eventMarkers": [
     {
       "name": "Intake 1",
-      "waypointRelativePos": 2.55,
+      "waypointRelativePos": 2.4499999999999997,
       "command": {
         "type": "parallel",
         "data": {
@@ -232,12 +232,6 @@
         "data": {
           "commands": [
             {
-              "type": "wait",
-              "data": {
-                "waitTime": 0.75
-              }
-            },
-            {
               "type": "named",
               "data": {
                 "name": "Outtake_Note_1.5_Sec"
@@ -249,7 +243,7 @@
     },
     {
       "name": "Intake 2",
-      "waypointRelativePos": 10.8,
+      "waypointRelativePos": 10.6,
       "command": {
         "type": "parallel",
         "data": {
@@ -271,12 +265,6 @@
         "type": "parallel",
         "data": {
           "commands": [
-            {
-              "type": "wait",
-              "data": {
-                "waitTime": 0.75
-              }
-            },
             {
               "type": "named",
               "data": {

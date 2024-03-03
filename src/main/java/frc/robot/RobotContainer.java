@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.Climb;
@@ -163,10 +164,11 @@ public class RobotContainer {
   }
 
   public void registerCommands() {
-    NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index, arm).withTimeout(1));
+    NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index, arm).withTimeout(3));
     NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new SequentialCommandGroup(
-      new PrepareShooter(shooter, 1750),
-      new WaitCommand(.5),
+      new Deadline(new PrepareShooter(shooter, 1750),
+      new WaitCommand(.5)),
+      new WaitCommand(0.5),
       new InstantCommand(()-> index.runIndex()),
       new WaitCommand(.5),
       new PrepareShooter(shooter, 0))); // using for now in the auto paths
