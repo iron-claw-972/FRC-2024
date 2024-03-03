@@ -22,6 +22,7 @@ import lib.controllers.GameController;
 import lib.controllers.GameController.Axis;
 import lib.controllers.GameController.Button;
 import lib.controllers.GameController.DPad;
+import lib.controllers.GameController.RumbleStatus;
 
 /**
  * Driver controls for the generic game controller.
@@ -46,6 +47,7 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
   @Override
   public void configureControls() {
     // Reset yaw to be away from driver
+    kDriver.setRumble(RumbleStatus.RUMBLE_ON);
     kDriver.get(Button.START).onTrue(new InstantCommand(() -> super.getDrivetrain().setYaw(
         new Rotation2d(DriverStation.getAlliance().get() == Alliance.Blue ? 0 : Math.PI))));
 

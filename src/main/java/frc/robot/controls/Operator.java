@@ -50,7 +50,8 @@ public class Operator {
 
     public void configureControls() {
         if (intake != null) {
-            Command intakeNote = new IntakeNote(intake, index, arm);
+           // Command intakeNote = new IntakeNote(intake, index, arm);
+           kDriver.setRumble(RumbleStatus.RUMBLE_ON);
             Command inakeWithRumble =  new IntakeWithRumble(intake, index, arm, (x)->{
                 if (x){
                     kDriver.setRumble(RumbleStatus.RUMBLE_ON);
@@ -93,14 +94,14 @@ public class Operator {
         if(arm != null && shooter != null && index != null){
             kDriver.get(Button.Y).onTrue(new ShootKnownPos(shooter, arm, index, ShotPosition.SUBWOOFER));
             //kDriver.get(Button.Y).onTrue(new IndexerFeed(index));
-            kDriver.get(Button.Y).whileTrue(new Rumbler(shooter,(x)->{
-                if (x){
-                    kDriver.setRumble(RumbleStatus.RUMBLE_ON);
-                }
-                else{
-                    kDriver.setRumble(RumbleStatus.RUMBLE_OFF);
-                }
-            }));
+            // kDriver.get(Button.Y).whileTrue(new Rumbler(shooter,(x)->{
+            //     if (x){
+            //         kDriver.setRumble(RumbleStatus.RUMBLE_ON);
+            //     }
+            //     else{
+            //         kDriver.setRumble(RumbleStatus.RUMBLE_OFF);
+            //     }
+            // }));
             // kDriver.get(Button.Y).whileFalse(new Rumbler(shooter,(x)->{
             //     if (x){
             //         kDriver.setRumble(RumbleStatus.RUMBLE_ON);

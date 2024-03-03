@@ -48,5 +48,6 @@ public class ArmConstants {
 
     public static CurrentLimitsConfigs currentConfig = new CurrentLimitsConfigs()
         .withSupplyCurrentLimit(15)
-        .withSupplyCurrentLimitEnable(true);
+        .withSupplyCurrentLimitEnable(true)
+        .withSupplyCurrentThreshold(40);
 }
