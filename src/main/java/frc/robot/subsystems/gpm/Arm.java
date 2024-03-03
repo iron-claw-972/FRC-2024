@@ -3,6 +3,7 @@ package frc.robot.subsystems.gpm;
 import java.time.Duration;
 import java.util.ArrayList;
 
+// import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
@@ -57,6 +58,7 @@ public class Arm extends SubsystemBase {
     // DutyCycle control
     // TODO: change to voltage control
     private final DutyCycleOut m_request = new DutyCycleOut(0);
+    public double dutyCycle = 0;
 
     /**
      * REV absolute encoder.
@@ -193,18 +195,27 @@ public class Arm extends SubsystemBase {
     @Override
     public void periodic() {
         // TODO: possibly clamp the setpoint ...
-        
         // calculate the desired duty cycle
-        double dutyCycle = MathUtil.clamp(
-                        pid.calculate(getRadians()) + feedforward.calculate(pid.getSetpoint(), 0),
+       // if(encoder.getDistance() < ArmConstants.MAX_ANGLE_RADS + .2 && encoder.getDistance() > ArmConstants.MIN_ANGLE_RADS - .2)  {
+        dutyCycle = MathUtil.clamp(
+                        pid.calculate(getPosition()) + feedforward.calculate(pid.getSetpoint(), 0),
                         -1,
                         1);
+        // }
+        // else 
+        // {
+        //     for(int i=0;i<motors.length;i++) {
+        //         motors[i].setNeutralMode(NeutralModeValue.Coast);
+        //     }
+            
+        // }
 
         // use the Phoenix 6 version of setting the motor "power"
         motors[0].setControl(m_request.withOutput(dutyCycle));
 
         // report the arm angle in rotations
         SmartDashboard.putNumber("Arm angle", encoder.getDistance());
+        SmartDashboard.putNumber("Get Position", getPosition());
 
         // TODO: Clean these up when not needed.
         // report dutycycle
@@ -259,6 +270,12 @@ public class Arm extends SubsystemBase {
     public double getAngleRad() {
         return encoder.getDistance();
     }
+
+    public double getPosition()  {
+        return -Units.rotationsToRadians(encoder.getAbsolutePosition() - encoder.getPositionOffset());
+    }
+
+
 
     /**
      * Whether the arm has reached its setpoint

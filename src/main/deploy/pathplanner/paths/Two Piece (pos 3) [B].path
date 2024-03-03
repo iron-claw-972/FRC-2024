@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.801941746401309,
-        "y": 6.5518375217273
+        "x": 1.2699301408104018,
+        "y": 5.586611458258547
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9231639413397619,
-        "y": 6.707833653196999
+        "x": 1.6209214366172213,
+        "y": 5.781606622595669
       },
       "isLocked": false,
       "linkedName": null
@@ -32,16 +32,16 @@
     },
     {
       "anchor": {
-        "x": 0.801941746401309,
-        "y": 6.5518375217273
+        "x": 1.2699301408104018,
+        "y": 5.586611458258547
       },
       "prevControl": {
-        "x": 1.3089291736778264,
-        "y": 6.624960708353722
+        "x": 0.7829343809783231,
+        "y": 5.427808493095912
       },
       "nextControl": {
-        "x": 0.29495431912479186,
-        "y": 6.478714335100879
+        "x": 1.7184190187857824,
+        "y": 5.732857831511389
       },
       "isLocked": false,
       "linkedName": null
@@ -84,7 +84,7 @@
     },
     {
       "waypointRelativePos": 2.0,
-      "rotationDegrees": 60.0,
+      "rotationDegrees": 1.3322198538695922,
       "rotateFast": false
     }
   ],
@@ -92,7 +92,7 @@
     {
       "name": "Outtake",
       "minWaypointRelativePos": 1.85,
-      "maxWaypointRelativePos": 2.2,
+      "maxWaypointRelativePos": 1.95,
       "constraints": {
         "maxVelocity": 0.25,
         "maxAcceleration": 0.25,
@@ -218,7 +218,7 @@
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 60.0,
+    "rotation": 0.0,
     "velocity": 0.0
   },
   "useDefaultConstraints": false

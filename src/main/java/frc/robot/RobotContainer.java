@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -38,6 +39,7 @@ import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
 import frc.robot.commands.gpm.IntakeNote;
 import frc.robot.commands.gpm.PrepareShooter;
+import frc.robot.commands.gpm.SetShooterSpeed;
 import frc.robot.commands.gpm.ShootKnownPos;
 import frc.robot.commands.gpm.ShootKnownPos.ShotPosition;
 
@@ -167,12 +169,12 @@ public class RobotContainer {
   public void registerCommands() {
     NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index, arm).withTimeout(3));
     NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new SequentialCommandGroup(
-      new ParallelDeadlineGroup(new PrepareShooter(shooter, 1750),
-      new WaitCommand(.5)),
-      new WaitCommand(0.5),
+      new ParallelDeadlineGroup(
+      new InstantCommand(() -> drive.setChassisSpeeds(new ChassisSpeeds(), true)),
+      new WaitCommand(.75)),
       new InstantCommand(()-> index.runIndex()),
-      new WaitCommand(.5),
-      new PrepareShooter(shooter, 0))); // using for now in the auto paths
+      new WaitCommand(.5)));
+    NamedCommands.registerCommand("Prepare Shooter", new SequentialCommandGroup(new PrepareShooter(shooter, 1750), new WaitCommand(1)));
   }
 
   public static BooleanSupplier getAllianceColorBooleanSupplier() {
