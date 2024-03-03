@@ -76,9 +76,9 @@ public class Arm extends SubsystemBase {
     private static final double DISTANCE_PER_ROTATION = -2 * Math.PI;
 
     // Motor PID control
-    private static final double TOLERANCE = Units.degreesToRadians(3.0);
+    private static final double TOLERANCE = Units.degreesToRadians(6.0);
     // P = 5 worked during simulation simulation
-    private static final double P = 0.4;
+    private static final double P = 0.6;
     private static final double I = 0;
     private static final double D = 0;
     private final PIDController pid = new PIDController(P, I, D);

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.IntakeWithRumble;
 import frc.robot.commands.OuttakeAmp;
 import frc.robot.commands.Rumbler;
 import frc.robot.commands.Shoot;
@@ -49,10 +50,19 @@ public class Operator {
 
     public void configureControls() {
         if (intake != null) {
-            Command intakeNote = new IntakeNote(intake, index, arm);
-            kDriver.get(Button.X).onTrue(intakeNote);
+           // Command intakeNote = new IntakeNote(intake, index, arm);
+           kDriver.setRumble(RumbleStatus.RUMBLE_ON);
+            Command inakeWithRumble =  new IntakeWithRumble(intake, index, arm, (x)->{
+                if (x){
+                    kDriver.setRumble(RumbleStatus.RUMBLE_ON);
+                }
+                else{
+                    kDriver.setRumble(RumbleStatus.RUMBLE_OFF);
+                }
+            });
+            kDriver.get(Button.X).onTrue(inakeWithRumble);
             //kDriver.get(Button.X).toggleOnTrue(intakeNote);
-            kDriver.get(Button.X).onFalse(new InstantCommand(()->intakeNote.cancel()));
+            kDriver.get(Button.X).onFalse(new InstantCommand(()->inakeWithRumble.cancel()));
             kDriver.get(Button.B).onTrue(new InstantCommand(() -> intake.setMode(Mode.ReverseMotors),intake));
             kDriver.get(Button.B).onFalse(new InstantCommand(() -> intake.setMode(Mode.DISABLED), intake));
         }
