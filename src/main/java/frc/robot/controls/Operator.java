@@ -10,10 +10,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.IntakeWithRumble;
 import frc.robot.commands.OuttakeAmp;
-import frc.robot.commands.Rumbler;
 import frc.robot.commands.Shoot;
-import frc.robot.commands.gpm.IndexerFeed;
-import frc.robot.commands.gpm.IntakeNote;
 import frc.robot.commands.gpm.PrepareShooter;
 import frc.robot.commands.gpm.ShootKnownPos;
 import frc.robot.commands.gpm.ShootKnownPos.ShotPosition;
@@ -93,7 +90,6 @@ public class Operator {
         }
         if(arm != null && shooter != null && index != null){
             kDriver.get(Button.Y).onTrue(new ShootKnownPos(shooter, arm, index, ShotPosition.SUBWOOFER));
-            //kDriver.get(Button.Y).onTrue(new IndexerFeed(index));
             // kDriver.get(Button.Y).whileTrue(new Rumbler(shooter,(x)->{
             //     if (x){
             //         kDriver.setRumble(RumbleStatus.RUMBLE_ON);
