@@ -556,11 +556,11 @@
   "constraintZones": [
     {
       "name": "Outtake Pre-Loaded",
-      "minWaypointRelativePos": 0,
+      "minWaypointRelativePos": 0.0,
       "maxWaypointRelativePos": 0.1,
       "constraints": {
-        "maxVelocity": 0.1,
-        "maxAcceleration": 0.1,
+        "maxVelocity": 0.15,
+        "maxAcceleration": 0.15,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
       }
@@ -570,19 +570,19 @@
       "minWaypointRelativePos": 1.8,
       "maxWaypointRelativePos": 2.0,
       "constraints": {
-        "maxVelocity": 0.1,
-        "maxAcceleration": 0.1,
+        "maxVelocity": 0.15,
+        "maxAcceleration": 0.15,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
       }
     },
     {
       "name": "Outtake 2",
-      "minWaypointRelativePos": 3.8000000000000003,
+      "minWaypointRelativePos": 3.7500000000000004,
       "maxWaypointRelativePos": 4.3,
       "constraints": {
-        "maxVelocity": 0.1,
-        "maxAcceleration": 0.1,
+        "maxVelocity": 0.15,
+        "maxAcceleration": 0.15,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
       }
@@ -592,19 +592,19 @@
       "minWaypointRelativePos": 5.75,
       "maxWaypointRelativePos": 6.05,
       "constraints": {
-        "maxVelocity": 0.1,
-        "maxAcceleration": 0.1,
+        "maxVelocity": 0.15,
+        "maxAcceleration": 0.15,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
       }
     },
     {
       "name": "Outtake 4",
-      "minWaypointRelativePos": 9.200000000000001,
+      "minWaypointRelativePos": 8.9,
       "maxWaypointRelativePos": 9.35,
       "constraints": {
-        "maxVelocity": 0.1,
-        "maxAcceleration": 0.1,
+        "maxVelocity": 0.15,
+        "maxAcceleration": 0.15,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
       }
