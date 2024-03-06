@@ -28,6 +28,9 @@ import frc.robot.subsystems.module.Module;
 import frc.robot.subsystems.module.ModuleSim;
 import frc.robot.util.LogManager;
 import frc.robot.util.Vision;
+import frc.robot.util.SwerveStuff.ModuleLimits;
+import frc.robot.util.SwerveStuff.SwerveSetpoint;
+import frc.robot.util.SwerveStuff.SwerveSetpointGenerator;
 
 import java.util.Arrays;
 
@@ -44,6 +47,15 @@ public class Drivetrain extends SubsystemBase {
 
     protected final Module[] modules;
 
+    private SwerveSetpoint currentSetpoint =
+    new SwerveSetpoint(
+        new ChassisSpeeds(),
+        new SwerveModuleState[] {
+          new SwerveModuleState(),
+          new SwerveModuleState(),
+          new SwerveModuleState(),
+          new SwerveModuleState()
+        });
     // Odometry
     private final SwerveDrivePoseEstimator poseEstimator;
 
@@ -65,6 +77,8 @@ public class Drivetrain extends SubsystemBase {
     private boolean isAlign = false;
     // Angle to align to, null for directly toward speaker
     private Double alignAngle = null;
+
+    SwerveSetpointGenerator setpointGenerator = new SwerveSetpointGenerator();
 
     /**
      * Creates a new Swerve Style Drivetrain.
@@ -258,7 +272,12 @@ public class Drivetrain extends SubsystemBase {
             pigeon.getSimState().addYaw(
                     +Units.radiansToDegrees(chassisSpeeds.omegaRadiansPerSecond * Constants.LOOP_TIME));
         }
-        SwerveModuleState[] swerveModuleStates = DriveConstants.KINEMATICS.toSwerveModuleStates(chassisSpeeds);
+        currentSetpoint = setpointGenerator.generateSetpoint(
+            new ModuleLimits(DriveConstants.kMaxSpeed, Double.MAX_VALUE, Double.MAX_VALUE),
+            currentSetpoint,chassisSpeeds,
+            Constants.LOOP_TIME);
+            
+        SwerveModuleState[] swerveModuleStates = currentSetpoint.moduleStates();
         setModuleStates(swerveModuleStates, isOpenLoop);
     }
 
