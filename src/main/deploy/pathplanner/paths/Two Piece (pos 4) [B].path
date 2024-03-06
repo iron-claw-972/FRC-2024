@@ -3,12 +3,20 @@
   "waypoints": [
     {
       "anchor": {
+<<<<<<< Updated upstream
         "x": 0.8,
+=======
+        "x": 0.785,
+>>>>>>> Stashed changes
         "y": 4.43
       },
       "prevControl": null,
       "nextControl": {
+<<<<<<< Updated upstream
         "x": 1.9307197761214796,
+=======
+        "x": 1.9157197761214873,
+>>>>>>> Stashed changes
         "y": 4.43
       },
       "isLocked": false,
@@ -20,18 +28,19 @@
         "y": 4.114397967513275
       },
       "prevControl": {
-        "x": 1.8434093977633172,
-        "y": 4.0795297088535465
+        "x": 1.852718113424813,
+        "y": 4.19247948338978
       },
       "nextControl": {
-        "x": 2.972804578087788,
-        "y": 4.151424827066179
+        "x": 2.967948571309033,
+        "y": 4.030753350293353
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
+<<<<<<< Updated upstream
         "x": 0.82,
         "y": 4.42
       },
@@ -42,6 +51,18 @@
       "nextControl": {
         "x": 0.6930802761221355,
         "y": 4.1802386083011
+=======
+        "x": 0.785,
+        "y": 4.35
+      },
+      "prevControl": {
+        "x": 0.9551116017553043,
+        "y": 4.671354263425829
+      },
+      "nextControl": {
+        "x": 0.6580802761221356,
+        "y": 4.1102386083011
+>>>>>>> Stashed changes
       },
       "isLocked": false,
       "linkedName": null
@@ -166,7 +187,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Final Autos",
+  "folder": null,
   "previewStartingState": {
     "rotation": -60.0,
     "velocity": 0
