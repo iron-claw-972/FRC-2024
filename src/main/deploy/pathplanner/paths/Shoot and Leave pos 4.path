@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.77,
-        "y": 6.75
+        "x": 0.6807503073695607,
+        "y": 4.420390379242297
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.77,
-        "y": 6.682211011963007
+        "x": 1.2537638750491173,
+        "y": 3.8006001937929805
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.019281605514777,
-        "y": 7.133434209888363
+        "x": 2.77400395256631,
+        "y": 1.0641680542620358
       },
       "prevControl": {
-        "x": 2.4114851648506717,
-        "y": 6.899551121039565
+        "x": 2.62197994481459,
+        "y": 0.9706148187225148
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,27 +29,22 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "New Constraints Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 0.05,
+      "constraints": {
+        "maxVelocity": 0.05,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    }
+  ],
   "eventMarkers": [
     {
-      "name": "Intake",
-      "waypointRelativePos": 0.55,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Intake_Note_1.5_Sec"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "Shoot",
+      "name": "New Event Marker",
       "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
@@ -58,7 +53,24 @@
             {
               "type": "named",
               "data": {
-                "name": "Shoot"
+                "name": "Prepare Shooter"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.05,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Outtake_Note_1.5_Sec"
               }
             }
           ]
@@ -67,8 +79,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 4.8,
+    "maxAcceleration": 2.2,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -78,9 +90,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Final Autos",
+  "folder": null,
   "previewStartingState": {
-    "rotation": 56.0,
+    "rotation": -60.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

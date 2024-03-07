@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -38,7 +39,7 @@ public class Shoot extends Command {
         public double v_rx;
         public double v_ry;
         // TODO: put in constants for other commands to use
-        private final double REST_VEL = 4; // TODO: determine the fastest idle note-exit velocity that won't kill the
+        private final double REST_VEL = 0; // TODO: determine the fastest idle note-exit velocity that won't kill the
                                            // battery.
         public static final double shooterHeight = ArmConstants.ARM_LENGTH*Math.sin(ArmConstants.standbySetpoint) + ArmConstants.PIVOT_HEIGHT;
         public static final double shooterOffset = ArmConstants.PIVOT_X + ArmConstants.ARM_LENGTH * Math.cos(ArmConstants.standbySetpoint);
@@ -63,21 +64,23 @@ public class Shoot extends Command {
         public void execute() {
                 // Positive x displacement means we are to the left of the speaker
                 // Positive y displacement means we are below the speaker.
-                Pose3d speakerPose = DriverStation.getAlliance().isPresent() &&
-                                DriverStation.getAlliance().get() == Alliance.Red ?
-                                VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
+                // Pose3d speakerPose = DriverStation.getAlliance().isPresent() &&
+                //                 DriverStation.getAlliance().get() == Alliance.Red ?
+                //                 VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
+                Pose3d speakerPose = VisionConstants.RED_SPEAKER_POSE;
                 // shooterHeight and shooterOffset have an additional offset because the shooter is offset from the arm, right?
                 Rotation2d driveYaw = drive.getYaw();
                 // Set displacement to speaker
                 displacement = new Pose3d(
-                        drive.getPose().getX() + shooterOffset * driveYaw.getCos(),
-                        drive.getPose().getY() + shooterOffset * driveYaw.getSin(),
-                        shooterHeight,
+                        drive.getPose().getX() + shooterOffset * driveYaw.getCos()-speakerPose.getX(),
+                        drive.getPose().getY() + shooterOffset * driveYaw.getSin()-speakerPose.getY(),
+                        // shooterHeight-speakerPose.getZ(),
+                        Units.inchesToMeters(22.7)-speakerPose.getZ(),
                         new Rotation3d(
                         0,
                         ShooterConstants.ANGLE_OFFSET - arm.getAngleRad(),
-                        Math.PI + driveYaw.getRadians()))
-                        .relativeTo(speakerPose);
+                        Math.PI + driveYaw.getRadians()));
+                        // .relativeTo(speakerPose);
                         //.times(-1);
                 
                 // get the drivetrain velocities

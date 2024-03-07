@@ -1,12 +1,10 @@
 {
-  "robotWidth": 0.77,
-  "robotLength": 0.911,
+  "robotWidth": 0.67,
+  "robotLength": 0.81,
   "holonomicMode": true,
   "pathFolders": [
-    " Fix or no need",
-    "Final Autos",
-    "SVR Autos",
-    "Previous Stuff"
+    "New Folder",
+    "useless"
   ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,
