@@ -416,6 +416,22 @@
     },
     {
       "anchor": {
+        "x": 5.143463182789409,
+        "y": 2.02308871854211
+      },
+      "prevControl": {
+        "x": 6.43427429305001,
+        "y": 1.5436283864020728
+      },
+      "nextControl": {
+        "x": 3.8811702350291104,
+        "y": 2.49195623229398
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
         "x": 0.83,
         "y": 4.4
       },
@@ -543,12 +559,12 @@
       "rotateFast": false
     },
     {
-      "waypointRelativePos": 26.0,
+      "waypointRelativePos": 27.0,
       "rotationDegrees": -60.0,
       "rotateFast": false
     },
     {
-      "waypointRelativePos": 28.650000000000002,
+      "waypointRelativePos": 29.650000000000002,
       "rotationDegrees": 29.270049867321674,
       "rotateFast": false
     }
@@ -837,7 +853,7 @@
     },
     {
       "name": "Outtake 7 (Final Trial 3rd Outtake)",
-      "waypointRelativePos": 26.2,
+      "waypointRelativePos": 27.2,
       "command": {
         "type": "parallel",
         "data": {
@@ -854,7 +870,7 @@
     },
     {
       "name": "Final Intake (8)",
-      "waypointRelativePos": 28.8,
+      "waypointRelativePos": 29.8,
       "command": {
         "type": "parallel",
         "data": {
