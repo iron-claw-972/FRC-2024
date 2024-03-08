@@ -41,4 +41,7 @@ public final class IntakeConstants {
     //GearBoxes
     public static final DCMotor dcMotorCentering = DCMotor.getNEO(1);
     public static final DCMotor dcMotor = DCMotor.getNeoVortex(1);
+
+    //Motor voltage
+    public static final double motorVoltage = 12.0;
 }
