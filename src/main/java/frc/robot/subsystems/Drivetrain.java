@@ -26,6 +26,7 @@ import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
 import frc.robot.subsystems.module.Module;
 import frc.robot.subsystems.module.ModuleSim;
+import frc.robot.util.LogManager;
 import frc.robot.util.Vision;
 
 import java.util.Arrays;
@@ -58,7 +59,7 @@ public class Drivetrain extends SubsystemBase {
 
     // If vision is enabled for drivetrain odometry updating
     // DO NOT CHANGE THIS HERE TO DISABLE VISION, change VisionConstants.ENABLED instead
-    private boolean visionEnabled = true;
+    private boolean visionEnabled = false;
 
     // If the robot should aim at the speaker
     private boolean isAlign = false;
@@ -117,12 +118,25 @@ public class Drivetrain extends SubsystemBase {
         rotationController = new PIDController(DriveConstants.kHeadingP, 0, DriveConstants.kHeadingD);
         rotationController.enableContinuousInput(-Math.PI, Math.PI);
         rotationController.setTolerance(Units.degreesToRadians(0.25), Units.degreesToRadians(0.25));
+        if (Constants.DO_LOGGING) {
+            LogManager.add("Drivetrain/SpeedX", () -> getChassisSpeeds().vxMetersPerSecond);
+            LogManager.add("Drivetrain/SpeedY", () -> getChassisSpeeds().vyMetersPerSecond);
+            LogManager.add("Drivetrain/Speed", () -> Math.hypot(getChassisSpeeds().vxMetersPerSecond, getChassisSpeeds().vyMetersPerSecond));
+            LogManager.add("Drivetrain/SpeedRot", () -> getChassisSpeeds().omegaRadiansPerSecond);
 
+            LogManager.add("Drivetrain/Pose2d", () -> new Double[]{
+                getPose().getX(),
+                getPose().getY(),
+                getPose().getRotation().getRadians()
+                });
+        }
     }
 
     @Override
     public void periodic() {
         updateOdometry();
+        // System.out.println("x: "+ getPose().getX()); 
+        // System.out.println("y: "+ getPose().getY()); 
     }
 
     // DRIVE
@@ -184,11 +198,28 @@ public class Drivetrain extends SubsystemBase {
      * Updates the field relative position of the robot.
      */
     public void updateOdometry() {
+        Pose2d pose1 = getPose();
+
         // Updates pose based on encoders and gyro. NOTE: must use yaw directly from gyro!
         poseEstimator.update(Rotation2d.fromDegrees(pigeon.getYaw().getValue()), getModulePositions());
 
-        if(RobotBase.isReal() && VisionConstants.ENABLED && visionEnabled){
-            vision.updateOdometry(poseEstimator);
+        Pose2d pose2 = getPose();
+
+        if(VisionConstants.ENABLED){
+            if(RobotBase.isReal() && visionEnabled){
+                vision.updateOdometry(poseEstimator);
+            }
+        }
+
+        Pose2d pose3 = getPose();
+        
+        //if the drivetrain pose is over 30: 
+        if(Math.abs(pose2.getX())>30){
+            //reset our odometry to the pose before(this is the right pose)
+            resetOdometry(pose1);
+        }else if(Math.abs(pose3.getX())>30){
+            //if our vision+drivetrain odometry is more than 30, reset our odometry to the pose before(this is the right pose)
+            resetOdometry(pose2);
         }
     }
 

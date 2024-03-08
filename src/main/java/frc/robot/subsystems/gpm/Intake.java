@@ -1,5 +1,7 @@
 package frc.robot.subsystems.gpm;
 
+import java.time.Duration;
+
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
@@ -12,15 +14,18 @@ import edu.wpi.first.wpilibj.simulation.DIOSim;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.Constants;
 import frc.robot.constants.IntakeConstants;
+import frc.robot.util.LogManager;
 import edu.wpi.first.wpilibj.Timer;
+
 
 
 public class Intake extends SubsystemBase {
 
     public enum Mode {
         DISABLED(0,0),
-        INTAKE(.8,.3),
+        INTAKE(.6,.5),
         PickedUpNote(.8,.3),
         Wait(.8,.3),
         Pause (0,0),
@@ -72,20 +77,22 @@ public class Intake extends SubsystemBase {
     private double motorRPMSim;
     private double centeringMotorRPMSim;
 
-    private DIOSim intakeSensorDioSim;
+    private int countSim = 0;
+    private DIOSim IntakeSensorDioSim;
+    private boolean simDIOValue = true;
     private FlywheelSim flywheelSim;
     private FlywheelSim centeringFlywheelSim;
 
     private Mode mode;
 
     private Timer waitTimer = new Timer();
-    private Timer point2Timer = new Timer();
 
     public Intake() {
         // set the motor parameters
         // motor.setIdleMode(IntakeConstants.idleMode);***
         centeringMotor.setIdleMode(IntakeConstants.idleMode);
-
+        centeringMotor.setInverted(true);
+        motor.setInverted(true);
         // set the mode to Idle; this will turn off the motors
         setMode(Mode.DISABLED);
 
@@ -96,18 +103,22 @@ public class Intake extends SubsystemBase {
 
         // Simulation objects
         if (RobotBase.isSimulation()) {
-            intakeSensorDioSim = new DIOSim(sensor);
-            intakeSensorDioSim.setValue(true);
-
+            IntakeSensorDioSim = new DIOSim(sensor);
             // assuming gearing is 1:1 for both
             flywheelSim = new FlywheelSim(dcMotor, 1.0, MOI_TOTAL);
             centeringFlywheelSim = new FlywheelSim(dcMotorCentering ,  1.0, MOI_CENTERING_TOTAL);
         }
 
         waitTimer.start();
-        point2Timer.start();
 
         publish();
+        if (Constants.DO_LOGGING) {
+            LogManager.add("Intake/motorVolts", () -> motor.get() * Constants.ROBOT_VOLTAGE);
+            LogManager.add("Intake/centeringMotorVolts", () -> centeringMotor.get() * Constants.ROBOT_VOLTAGE);
+            
+            LogManager.add("Intake/motorRPM", () -> motor.getAbsoluteEncoder().getVelocity(), Duration.ofSeconds(1));
+            LogManager.add("Intake/centeringMotorRPM", () -> centeringMotor.getAbsoluteEncoder().getVelocity(), Duration.ofSeconds(1));            
+        }
     }
 
     // publish sensor to Smart Dashboard
@@ -138,7 +149,7 @@ public class Intake extends SubsystemBase {
     public void periodic() {
         publish();
 
-        /* */
+        /* 
         switch (mode) {
             case DISABLED:
                 // don't have to do anything
@@ -181,7 +192,7 @@ public class Intake extends SubsystemBase {
 
             default:
                 break;
-        }
+        }*/
     }
 
     /**
@@ -211,10 +222,6 @@ public class Intake extends SubsystemBase {
         }
     }
 
-    public boolean intakeInactive() {
-        return mode == Mode.DISABLED;
-    }
-
     @Override
     public void simulationPeriodic() {
         flywheelSim.setInputVoltage(mode.power * motorVoltage);
@@ -226,15 +233,15 @@ public class Intake extends SubsystemBase {
         motorRPMSim = flywheelSim.getAngularVelocityRPM();
         centeringMotorRPMSim = centeringFlywheelSim.getAngularVelocityRPM();
 
-        if (mode == Mode.INTAKE) {
-            if (point2Timer.hasElapsed(.2)) {
-                intakeSensorDioSim.setValue(false);
-                point2Timer.reset();
-            }
+        // change values every 1/2 second
+        if (countSim++ > 25) {
+            countSim = 0;
+
+            IntakeSensorDioSim.setValue(simDIOValue);
+
+            simDIOValue = !simDIOValue;
         }
-        else if (mode==Mode.DISABLED) {
-            intakeSensorDioSim.setValue(true);
-        }
+
     }
 
     public void close() {

@@ -95,15 +95,17 @@ public class DriveConstants {
     public static final COTSFalconSwerveConstants kModuleConstants = COTSFalconSwerveConstants.SDSMK4i(COTSFalconSwerveConstants.DriveGearRatios.SDSMK4i_L2);
 
     /* Swerve Current Limiting */
-    public static final int kAngleContinuousCurrentLimit = 25;
-    public static final int kAnglePeakCurrentLimit = 40;
-    public static final double kAnglePeakCurrentDuration = 0.1;
+    public static final int kAngleContinuousCurrentLimit = 15;
+    public static final int kAnglePeakCurrentLimit = 15;
+    public static final double kAnglePeakCurrentDuration = 0.01;
     public static final boolean kAngleEnableCurrentLimit = true;
 
-    public static final int kDriveContinuousCurrentLimit = 35;
-    public static final int kDrivePeakCurrentLimit = 60;
-    public static final double kDrivePeakCurrentDuration = 0.1;
+    public static final int kDriveContinuousCurrentLimit = 20;
+    public static final int kDrivePeakCurrentLimit = 20;
+    public static final double kDrivePeakCurrentDuration = 0.01;
     public static final boolean kDriveEnableCurrentLimit = true;
+
+    // TODO put slew rate limiter to reduce drift on drivetrain without killing battery.
 
     /* Motor inversions */
     public static final boolean kDriveMotorInvert = true;//kModuleConstants.driveMotorInvert;

@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.ArmToPos;
 import frc.robot.constants.ArmConstants;
+import frc.robot.constants.ShooterConstants;
 import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.subsystems.gpm.StorageIndex; 
@@ -15,10 +16,9 @@ public class ShootKnownPos extends SequentialCommandGroup {
 	* A preset shot that can be taken by the {@link frc.robot.commands.gpm.ShootKnownPos} command
 	*/
 	public enum ShotPosition {
+		STAGE_ISH(ShooterConstants.ANGLE_OFFSET - .6, Shooter.shooterSpeedToRPM(10)/0.64),
 		// TODO: add actual values
-		SUBWOOFER_TOP(0.0, 0.0),
-		SUBWOOFER_MIDDLE(0.0, 0.0),
-		SUBWOOFER_BOTTOM(0.0, 0.0);
+		SUBWOOFER(ArmConstants.subwooferSetpoint, 1750);
 		
 		private double armAngle;
 		private double shooterSpeed;
@@ -49,9 +49,9 @@ public class ShootKnownPos extends SequentialCommandGroup {
 		addRequirements(shooter, arm, storageIndex);
 
 		addCommands(
-			new ParallelCommandGroup(
-				new ArmToPos(arm, shot.getArmAngle()),
-				new SetShooterSpeed(shooter, shot.getShooterSpeed())),
+			// new ParallelCommandGroup(
+			// 	new ArmToPos(arm, shot.getArmAngle()),
+			// 	new SetShooterSpeed(shooter, shot.getShooterSpeed())),
 			new IndexerFeed(storageIndex),
 			new ParallelCommandGroup(
 				new InstantCommand(() -> arm.setAngle(ArmConstants.stowedSetpoint)),

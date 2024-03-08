@@ -1,8 +1,8 @@
 {
   "download": {
     "localDir": "C:\\Users\\micd2\\OneDrive\\Documents\\Characterization",
-    "remoteDir": "/home/lvuse",
-    "serverTeam": "10.9.72.2",
+    "remoteDir": "/home/lvuser/deploy/pathplanner/paths",
+    "serverTeam": "972",
     "username": "admin"
   }
 }
