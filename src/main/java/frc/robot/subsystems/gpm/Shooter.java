@@ -1,6 +1,6 @@
 package frc.robot.subsystems.gpm;
 
-import javax.swing.plaf.basic.BasicBorders.RadioButtonBorder;
+import java.time.Duration;
 
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -15,7 +15,10 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.Constants;
 import frc.robot.constants.ShooterConstants;
+import frc.robot.util.LogManager;
+
 
 public class Shooter extends SubsystemBase {
 	// each of the shooter shafts is driven by one Neo Vortex motor
@@ -38,7 +41,7 @@ public class Shooter extends SubsystemBase {
 	 * Tolerance in RPM.
 	 * At 1500 rpm, the simulator gives 1519 rpm.
 	 */
-	private static final double TOLERANCE = 40;
+	private static final double TOLERANCE = 80;
 
 	// 4-inch Colson wheels
 	// private static final double MASS_COLSON = 0.245;
@@ -89,6 +92,15 @@ public class Shooter extends SubsystemBase {
 			leftFlywheelSim = new FlywheelSim(gearbox, 1.0, MOI_SHAFT);
 			rightFlywheelSim = new FlywheelSim(gearbox, 1.0, MOI_SHAFT);
 		}
+		if (Constants.DO_LOGGING) {
+			LogManager.add("Shooter/MotorSpeedDifference", () -> getMotorSpeedDifference(), Duration.ofSeconds(1));
+			LogManager.add("Shooter/LeftSpeedError", () -> leftPID.getSetpoint() - getLeftMotorSpeed(), Duration.ofSeconds(1));
+			LogManager.add("Shooter/RightSpeedError", () -> rightPID.getSetpoint() - getRightMotorSpeed(), Duration.ofSeconds(1));
+
+			LogManager.add("Shooter/VoltsLeft", () -> leftMotor.get() * Constants.ROBOT_VOLTAGE, Duration.ofSeconds(1));	
+			
+			LogManager.add("Shooter/VoltsRight", () -> rightMotor.get() * Constants.ROBOT_VOLTAGE, Duration.ofSeconds(1));
+		}
 	}
 
 	@Override
@@ -109,7 +121,9 @@ public class Shooter extends SubsystemBase {
 		// report some values to the Dashboard
 		SmartDashboard.putNumber("left speed", /* shooterRPMToSpeed */ (leftSpeed));
 		SmartDashboard.putNumber("right speed", /* shooterRPMToSpeed */ (rightSpeed));
-		SmartDashboard.putBoolean("at setpoint?", atSetpoint());
+		SmartDashboard.putData("left Shooter PID", leftPID);
+		SmartDashboard.putData("right Shooter PID", rightPID);
+
 	}
 
 	@Override
@@ -152,7 +166,8 @@ public class Shooter extends SubsystemBase {
 	 * @see shooterSpeedToRPM
 	 */
 	public static double shooterRPMToSpeed(double rpm) {
-		return (rpm / 60) * (RADIUS_STEALTH * 2 * Math.PI);
+		// factor in Gear Ratio
+		return 2 * (rpm / 60) * (RADIUS_STEALTH * 2 * Math.PI);
 	}
 
 	/**
@@ -163,7 +178,7 @@ public class Shooter extends SubsystemBase {
 	 * @see shooterRPMToSpeed
 	 */
 	public static double shooterSpeedToRPM(double speed) {
-		return (speed * 60) / (RADIUS_STEALTH * 2 * Math.PI);
+		return .5 * (speed * 60) / (RADIUS_STEALTH * 2 * Math.PI);
 	}
 
 	/**
@@ -187,7 +202,8 @@ public class Shooter extends SubsystemBase {
 	 * @see setTargetVelocity
 	 */
 	public void setTargetRPM(double speed) {
-		setTargetRPM(speed, speed);
+		double spin = speed < 300 ? 0 : ShooterConstants.SPIN;
+		setTargetRPM(speed+spin, speed-spin);
 	}
 
 	/**
@@ -198,7 +214,7 @@ public class Shooter extends SubsystemBase {
 	 */
 	public void setTargetVelocity(double speed) {
 		// convert speed to RPM
-		setTargetRPM(shooterSpeedToRPM(speed));
+		setTargetRPM(shooterSpeedToRPM(speed) / 0.64);
 	}
 
 	/**

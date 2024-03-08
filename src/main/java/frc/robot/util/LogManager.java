@@ -1,190 +1,58 @@
 package frc.robot.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-import java.util.function.IntSupplier;
-
-import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.util.datalog.DataLog;
-import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
-import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.util.datalog.IntegerLogEntry;
 import edu.wpi.first.util.datalog.StringLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
+import frc.robot.constants.Constants;
+
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.function.Supplier;
 
 /**
  * Utilty class for logging data to the DataLogManager.
- * View logs using MechanicalAdvantage's advantage scope (https://github.com/Mechanical-Advantage/AdvantageScope)
+ * View logs using MechanicalAdvantage's advantage scope (<a href="https://github.com/Mechanical-Advantage/AdvantageScope">...</a>)
  */
 public class LogManager {
 
-  private static DataLog log = DataLogManager.getLog();
+  public static DataLog DATA_LOG = DataLogManager.getLog();
 
-  // These are array lists of log entry classes from WPI. appending to a log entry automatically adds to the log file.
-  private static ArrayList<DoubleLogEntry> doubleLogs = new ArrayList<>();
-  private static ArrayList<DoubleArrayLogEntry> doubleArrayLogs = new ArrayList<>();
-  private static ArrayList<BooleanLogEntry> booleanLogs = new ArrayList<>();
-  private static ArrayList<IntegerLogEntry> intLogs = new ArrayList<>();
+  private static final ArrayList<Log<?>> logs = new ArrayList<>();
 
-  // These are the suppliers, or functions that return values. This is how the values are accessed.
-  private static ArrayList<DoubleSupplier> doubleValues = new ArrayList<>();
-  private static ArrayList<DoubleSupplier[]> doubleArrayValues = new ArrayList<>();
-  private static ArrayList<BooleanSupplier> booleanValues = new ArrayList<>();
-  private static ArrayList<IntSupplier> intValues = new ArrayList<>();
+  public static <T> void add(Log<T> log) {
+    logs.add(log);
+  }
 
-  // These are the log entries that are not updated periodically, they just receive individual values.
-  private static HashMap<String, DoubleLogEntry> individualDoubleLogs = new HashMap<>();
-  private static HashMap<String, DoubleArrayLogEntry> individualDoubleArrayLogs = new HashMap<>();
-  private static HashMap<String, BooleanLogEntry> individualBooleanLogs = new HashMap<>();
-  private static HashMap<String, IntegerLogEntry> individualIntegerLogs = new HashMap<>();
+  public static <T> void add(String name, T value) {
+    add(name, ()->value);
+  }
+  public static <T> void add(String name, Supplier<T> value) {
+    add(new Log<>(name, value));
+  }
+
+  public static <T> void add(String name, Supplier<T> value, Duration duration) {
+    add(new Log<>(name, value, duration));
+  }
+
+  public static void update() {
+    if (!Constants.DO_LOGGING) return;
+    logs.forEach(Log::update);
+  }
 
   /**
    * Records the metadata supplied by gversion (https://github.com/lessthanoptimal/gversion-plugin) in BuildData.java.
    */
   public static void recordMetadata() {
-    new StringLogEntry(log, "BuildData/Maven Group").append(BuildData.MAVEN_GROUP);
-    new StringLogEntry(log, "BuildData/Maven Name").append(BuildData.MAVEN_NAME); // The name of the repository
-    new StringLogEntry(log, "BuildData/Version").append(BuildData.VERSION);
-    new IntegerLogEntry(log, "BuildData/Git Revision").append(BuildData.GIT_REVISION);
-    new StringLogEntry(log, "BuildData/Git SHA").append(BuildData.GIT_SHA); // The SHA code for the latest commit
-    new StringLogEntry(log, "BuildData/Git date").append(BuildData.GIT_DATE);
-    new StringLogEntry(log, "BuildData/Git Branch").append(BuildData.GIT_BRANCH); // The branch name
-    new StringLogEntry(log, "BuildData/Build Date").append(BuildData.BUILD_DATE);
-    new IntegerLogEntry(log, "BuildData/Build Unix Time").append(BuildData.BUILD_UNIX_TIME);
-    new IntegerLogEntry(log, "BuildData/Dirty").append(BuildData.DIRTY);
-  }
-
-  /**
-   * @deprecated Use {@link #addDouble(String, double)} with a single value instead.
-   */
-  @Deprecated
-  public static void addDouble(String name, DoubleSupplier logged) {
-    DoubleLogEntry myDoubleLog = new DoubleLogEntry(log, name);
-    doubleLogs.add(myDoubleLog);
-    doubleValues.add(logged);
-    
-  }
-
-  /**
-   * Logs a single double value to the log. Do not use with the other addDouble() that takes a double supplier.
-   * This will only log the value once, so it should be called periodically or when needed. If you have a function that consistently 
-   * returns values, it may be easier to use the double supplier log.
-   * 
-   * @param name The name of the log. Use / to create subdirectories, and keep names unique.
-   * @param value the value to be logged.
-   */
-  public static void addDouble(String name, double value) {
-    if (individualDoubleLogs.containsKey(name)) {
-      individualDoubleLogs.get(name).append(value);
-    } else {
-      individualDoubleLogs.put(name, new DoubleLogEntry(log, name));
-      individualDoubleLogs.get(name).append(value);
-    }
-  }
-
-  /**
-   * @deprecated Use {@link #addDoubleArray(String, double[])} with a single value instead.
-   */
-  @Deprecated
-  public static void addDoubleArray(String name, DoubleSupplier[] logged) {
-    DoubleArrayLogEntry myDoubleLog = new DoubleArrayLogEntry(log, name);
-    doubleArrayLogs.add(myDoubleLog);
-    doubleArrayValues.add(logged);
-    
-  }
-
-  /**
-   * Logs a single double array to the log. Do not use with the other addDoubleArray() that takes a double array supplier.
-   * This will only log the value once, so it should be called periodically or when needed. If you have a function that consistently 
-   * returns values, it may be easier to use the double array supplier log.
-   * 
-   * @param name The name of the log. Use / to create subdirectories, and keep names unique.
-   * @param value the value to be logged.
-   */
-  public static void addDoubleArray(String name, double[] value) {
-    if (individualDoubleArrayLogs.containsKey(name)) {
-      individualDoubleArrayLogs.get(name).append(value);
-    } else {
-      individualDoubleArrayLogs.put(name, new DoubleArrayLogEntry(log, name));
-      individualDoubleArrayLogs.get(name).append(value);
-    }
-  }
-
-  /**
-   * @deprecated Use {@link #addInt(String, int)} with a single value instead.
-   */
-  @Deprecated
-  public static void addInt(String name, IntSupplier logged) {
-    IntegerLogEntry IntegerLog = new IntegerLogEntry(log, name);
-    intLogs.add(IntegerLog);
-    intValues.add(logged);
-  }
-
-  /**
-   * Logs a single int to the log. Do not use with the other addInt() that takes a int supplier.
-   * This will only log the value once, so it should be called periodically or when needed. If you have a function that consistently 
-   * returns values, it may be easier to use the int supplier log.
-   * 
-   * @param name The name of the log. Use / to create subdirectories, and keep names unique.
-   * @param value the value to be logged.
-   */
-  public static void addInt(String name, int value) {
-    if (individualIntegerLogs.containsKey(name)) {
-      individualIntegerLogs.get(name).append(value);
-    } else {
-      individualIntegerLogs.put(name, new IntegerLogEntry(log, name));
-      individualIntegerLogs.get(name).append(value);
-    }
-  }
-
-  /**
-   * @deprecated Use {@link #addBoolean(String, boolean)} with a single value instead.
-   */
-  @Deprecated
-  public static void addBoolean(String name, BooleanSupplier logged) {
-    BooleanLogEntry BooleanLog = new BooleanLogEntry(log, name);
-    booleanLogs.add(BooleanLog);
-    booleanValues.add(logged);
-  }
-
-  /**
-   * Logs a single boolean to the log. Do not use with the other addBoolean() that takes a boolean supplier.
-   * This will only log the value once, so it should be called periodically or when needed. If you have a function that consistently 
-   * returns values, it may be easier to use the boolean supplier log.
-   * 
-   * @param name The name of the log. Use / to create subdirectories, and keep names unique.
-   * @param value the value to be logged.
-   */
-  public static void addBoolean(String name, boolean value) {
-    if (individualBooleanLogs.containsKey(name)) {
-      individualBooleanLogs.get(name).append(value);
-    } else {
-      individualBooleanLogs.put(name, new BooleanLogEntry(log, name));
-      individualBooleanLogs.get(name).append(value);
-    }
-  }
-
-  /**
-   * Logs all the values that have been collected. Should be called periodically. 
-   */
-  public static void log() {
-    for (int i = 0; i < doubleLogs.size(); i++) {
-      doubleLogs.get(i).append(doubleValues.get(i).getAsDouble());
-    }
-    for (int i = 0; i < doubleArrayLogs.size(); i++) {
-      double[] values = new double[doubleArrayValues.get(i).length];
-      for (int j = 0; j < doubleArrayValues.get(i).length; j++) {
-        values[j] = doubleArrayValues.get(i)[j].getAsDouble();
-      }
-      doubleArrayLogs.get(i).append(values);
-    }
-    for (int i = 0; i < intLogs.size(); i++) {
-      intLogs.get(i).append(intValues.get(i).getAsInt());
-    }
-    for (int i = 0; i < booleanLogs.size(); i++) {
-      booleanLogs.get(i).append(booleanValues.get(i).getAsBoolean());
-    }
+    new StringLogEntry(DATA_LOG, "BuildData/Maven Group").append(BuildData.MAVEN_GROUP);
+    new StringLogEntry(DATA_LOG, "BuildData/Maven Name").append(BuildData.MAVEN_NAME); // The name of the repository
+    new StringLogEntry(DATA_LOG, "BuildData/Version").append(BuildData.VERSION);
+    new IntegerLogEntry(DATA_LOG, "BuildData/Git Revision").append(BuildData.GIT_REVISION);
+    new StringLogEntry(DATA_LOG, "BuildData/Git SHA").append(BuildData.GIT_SHA); // The SHA code for the latest commit
+    new StringLogEntry(DATA_LOG, "BuildData/Git date").append(BuildData.GIT_DATE);
+    new StringLogEntry(DATA_LOG, "BuildData/Git Branch").append(BuildData.GIT_BRANCH); // The branch name
+    new StringLogEntry(DATA_LOG, "BuildData/Build Date").append(BuildData.BUILD_DATE);
+    new IntegerLogEntry(DATA_LOG, "BuildData/Build Unix Time").append(BuildData.BUILD_UNIX_TIME);
+    new IntegerLogEntry(DATA_LOG, "BuildData/Dirty").append(BuildData.DIRTY);
   }
 }

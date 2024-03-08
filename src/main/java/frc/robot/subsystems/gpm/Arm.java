@@ -1,5 +1,9 @@
 package frc.robot.subsystems.gpm;
 
+import java.time.Duration;
+import java.util.ArrayList;
+
+// import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
@@ -24,6 +28,9 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ArmConstants;
+import frc.robot.constants.Constants;
+import frc.robot.util.LogManager;
+
 
 /**
  * Subsystem that controls the arm.
@@ -41,20 +48,7 @@ public class Arm extends SubsystemBase {
      */
     private final TalonFX[] motors = new TalonFX[ArmConstants.MOTOR_IDS.length];
     // DCMotor model is 4 Kraken X60
-    protected static final DCMotor motorModel = DCMotor.getKrakenX60(ArmConstants.MOTOR_IDS.length);
-
-    /**
-     * Gearbox ratio
-     * <p>
-     * The gearing starting from the motor is:
-     * <p>
-     * 8T : 72T
-     * <p>
-     * 18T : 84T
-     * <p>
-     * 16T : 64T
-     */
-    protected static final double GEARING = (72.0 / 8.0) * (84.0 / 18.0) * (64.0 / 16.0);
+    private static final DCMotor motorModel = DCMotor.getKrakenX60(ArmConstants.MOTOR_IDS.length);
 
     // Encoder in the TalonFX....
     //   check docs. Normal update is 4 Hz.
@@ -63,6 +57,7 @@ public class Arm extends SubsystemBase {
     // DutyCycle control
     // TODO: change to voltage control
     private final DutyCycleOut m_request = new DutyCycleOut(0);
+    public double dutyCycle = 0;
 
     /**
      * REV absolute encoder.
@@ -77,14 +72,14 @@ public class Arm extends SubsystemBase {
      * <p>
      * WARNING: This value will change if the belt driving the REV encoder slips!
      */
-    protected static final double OFFSET = 0.54+Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
+    protected static final double OFFSET = 0.77+Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
     /** REV encoder scale factor. This is fixed. */
     private static final double DISTANCE_PER_ROTATION = -2 * Math.PI;
 
     // Motor PID control
-    private static final double TOLERANCE = Units.degreesToRadians(1.0);
+    private static final double TOLERANCE = Units.degreesToRadians(6.0);
     // P = 5 worked during simulation simulation
-    private static final double P = 0.4;
+    private static final double P = 0.6;
     private static final double I = 0;
     private static final double D = 0;
     private final PIDController pid = new PIDController(P, I, D);
@@ -125,6 +120,7 @@ public class Arm extends SubsystemBase {
         for (int i = 0; i < motors.length; i++) {
             // create the motor
             motors[i] = new TalonFX(ArmConstants.MOTOR_IDS[i]);
+            motors[i].setNeutralMode(NeutralModeValue.Brake);
 
             // i==0 is the master; the others are slaves
             if (i > 0) {
@@ -147,7 +143,7 @@ public class Arm extends SubsystemBase {
         // possibly set up simulations
         if (RobotBase.isSimulation()) {
             simulation = new SingleJointedArmSim(motorModel,
-                    Arm.GEARING,
+                    ArmConstants.GEARING,
                     ArmConstants.MOMENT_OF_INERTIA,
                     ArmConstants.ARM_LENGTH,
                     ArmConstants.MIN_ANGLE_RADS,
@@ -168,6 +164,17 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putData("Set Angle to 0.0", new InstantCommand(() -> setAngle(0.0)));
         SmartDashboard.putData("Set Angle to 1.0 Rad", new InstantCommand(() -> setAngle(0.6)));
         SmartDashboard.putData("arm pid", pid);
+        if (Constants.DO_LOGGING) {
+            LogManager.add("Arm/PositionError", () -> getAngleRad() - pid.getSetpoint(), Duration.ofSeconds(1));
+            // pid setpoint and get radians
+
+            ArrayList<Double> slave_errors = new ArrayList<Double>();
+            for (TalonFX each_talon: motors) { // could use TalonFX as it originally was. tomato tomahto
+                slave_errors.add(each_talon.getPosition().getValue()-motors[0].getPosition().getValue());
+            }
+
+            LogManager.add("Arm/SlaveErrors(ticks)", () -> slave_errors);
+        }
     }
 
     /**
@@ -187,18 +194,27 @@ public class Arm extends SubsystemBase {
     @Override
     public void periodic() {
         // TODO: possibly clamp the setpoint ...
-        
         // calculate the desired duty cycle
-        double dutyCycle = MathUtil.clamp(
-                        pid.calculate(getRadians()) + feedforward.calculate(pid.getSetpoint(), 0),
+       // if(encoder.getDistance() < ArmConstants.MAX_ANGLE_RADS + .2 && encoder.getDistance() > ArmConstants.MIN_ANGLE_RADS - .2)  {
+        dutyCycle = MathUtil.clamp(
+                        pid.calculate(getPosition()) + feedforward.calculate(pid.getSetpoint(), 0),
                         -1,
                         1);
+        // }
+        // else 
+        // {
+        //     for(int i=0;i<motors.length;i++) {
+        //         motors[i].setNeutralMode(NeutralModeValue.Coast);
+        //     }
+            
+        // }
 
         // use the Phoenix 6 version of setting the motor "power"
         motors[0].setControl(m_request.withOutput(dutyCycle));
 
         // report the arm angle in rotations
         SmartDashboard.putNumber("Arm angle", encoder.getDistance());
+        SmartDashboard.putNumber("Get Position", getPosition());
 
         // TODO: Clean these up when not needed.
         // report dutycycle
@@ -209,6 +225,8 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putNumber("Rotor delay", rotorPositionSignal.getTimestamp().getLatency());
         // the absolute position is the one used to set the offset.
         SmartDashboard.putNumber("REV ABS", encoder.getAbsolutePosition());
+        SmartDashboard.putBoolean("at setpoint?", atSetpoint());
+
     }
 
     @Override
@@ -251,6 +269,12 @@ public class Arm extends SubsystemBase {
     public double getAngleRad() {
         return encoder.getDistance();
     }
+
+    public double getPosition()  {
+        return -Units.rotationsToRadians(encoder.getAbsolutePosition() - encoder.getPositionOffset());
+    }
+
+
 
     /**
      * Whether the arm has reached its setpoint

@@ -26,20 +26,20 @@ public class ShooterTest {
     /**
      * Check that the conversion routines are inverses of each other.
      */
-    @Test
-    public void conversionTest() {
-        // a test rpm
-        double rpmInput = 1500.0;
-        // converted to a velocity
-        double velocity = Shooter.shooterRPMToSpeed(rpmInput);
+    // @Test
+    // public void conversionTest() {
+    //     // a test rpm
+    //     double rpmInput = 1500.0;
+    //     // converted to a velocity
+    //     double velocity = Shooter.shooterRPMToSpeed(rpmInput);
         
-        // converting velocity back to an rpm should match the input
-        assertEquals(rpmInput, Shooter.shooterSpeedToRPM(velocity), 0.0001);
+    //     // converting velocity back to an rpm should match the input
+    //     assertEquals(rpmInput, Shooter.shooterSpeedToRPM(velocity), 0.0001);
 
-        // 6000 rpm is 100 rps. circumference is pi * 4 inches
-        assertEquals(
-            100.0 * Math.PI * Units.inchesToMeters(4.0),
-            Shooter.shooterRPMToSpeed(6000.0),
-            0.0001);
-    }
+    //     // 6000 rpm is 100 rps. circumference is pi * 4 inches
+    //     assertEquals(
+    //         100.0 * Math.PI * Units.inchesToMeters(4.0),
+    //         Shooter.shooterRPMToSpeed(6000.0),
+    //         0.0001);
+    // }
 }

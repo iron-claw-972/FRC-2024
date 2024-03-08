@@ -1,5 +1,6 @@
 package frc.robot.commands.gpm;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.constants.ArmConstants;
@@ -10,41 +11,55 @@ import frc.robot.subsystems.gpm.Intake.Mode;
 import lib.controllers.GameController;
 import lib.controllers.PS5Controller;
 
-/**
- * Command to move the arm, turn on the indexer and intake, and acquire a note.
- * <p>
- * The command may not succeed if the intake jams.
- * <p>
- * We want to add Rumble
- */
-public class IntakeNote extends SequentialCommandGroup {
-    /**
-     * Ordinary constructor that does not rumble.
-     * @param intake
-     * @param storageIndex
-     * @param arm
-     */
+public class IntakeNote extends Command{
+
+    private final Intake intake;
+    private final StorageIndex storageIndex;
+    private final Arm arm;
+    Timer timer = new Timer();
+    Boolean detectedNote = false;
+
     public IntakeNote(Intake intake, StorageIndex storageIndex, Arm arm) {
-        addCommands(
-            new MoveArm(arm, ArmConstants.intakeSetpoint),
-            new IntakeNoteBasic(intake, storageIndex),
-            new MoveArm(arm, ArmConstants.stowedSetpoint)
-        );
+        this.intake = intake;
+        this.storageIndex = storageIndex;
+        this.arm = arm;
+        addRequirements(intake, storageIndex, arm);
     }
 
-    /**
-     * Constructor that has rumble.
-     * @param intake
-     * @param storageIndex
-     * @param arm
-     * @param gc
-     */
-    public IntakeNote(Intake intake, StorageIndex storageIndex, Arm arm, GameController gc) {
-        addCommands(
-            new MoveArm(arm, ArmConstants.intakeSetpoint),
-            new IntakeNoteBasic(intake, storageIndex, gc),
-            new MoveArm(arm, ArmConstants.stowedSetpoint)
-        );
-   }
+    @Override
+    public void initialize() {
+        detectedNote = false;
+        timer.reset();
+        timer.stop();
+        intake.setMode(Mode.INTAKE);
+        storageIndex.runIndex();
+        arm.setAngle(ArmConstants.intakeSetpoint);
+    }
+
+    @Override
+    public void execute(){
+        storageIndex.runIndex();
+        if (intake.hasNote()){
+            detectedNote = true;
+        }
+        if(!intake.hasNote() && detectedNote){
+            timer.start();
+        }
+    }
+
+    @Override
+    public boolean isFinished(){
+        return timer.hasElapsed(0.01); 
+    }
+
+    @Override
+    public void end(boolean interupted){
+        intake.setMode(Mode.DISABLED);
+        storageIndex.stopIndex();
+        arm.setAngle(ArmConstants.stowedSetpoint);
+        timer.stop();
+        timer.reset();
+        detectedNote = false;
+    }
     
 }

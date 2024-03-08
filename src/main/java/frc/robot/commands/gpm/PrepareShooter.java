@@ -1,12 +1,9 @@
 package frc.robot.commands.gpm;
 
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.gpm.Shooter;
 
-public class PrepareShooter extends Command {
-	private final Shooter shooter; 
-	private final double target;
-
+public class PrepareShooter extends InstantCommand {
 	/**
 	* Spins the shooter up to the target speed, and exits immediatly.
 	*
@@ -15,28 +12,6 @@ public class PrepareShooter extends Command {
 	* @see           frc.robot.commands.gpm.SetShooterSpeed
 	*/
 	public PrepareShooter(Shooter shooter, double target) {
-		this.shooter = shooter;
-		this.target = target;
-		addRequirements(shooter);
+		super(()->shooter.setTargetRPM(target), shooter);
 	}
-
-    @Override
-    public void initialize() {
-		this.shooter.setTargetVelocity(this.target);
-    }
-
-    @Override
-    public void execute(){
-
-    }
-
-    @Override
-    public boolean isFinished(){
-		return true;
-    }
-
-    @Override
-    public void end(boolean interupted){
-
-    }
 }
