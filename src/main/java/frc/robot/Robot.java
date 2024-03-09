@@ -152,11 +152,16 @@ public class Robot extends TimedRobot {
     public void simulationPeriodic() {
     }
 
+	/**
+	* Gets the set Alliance; defaults to red if not set.
+	* This method replaces {@link edu.first.wpilibj.DriverStation.getAlliance}.
+	* The .get() is not necessary, so DriverStation.getAlliance().get() becomes Robot.getAlliance()
+	*/
 	public Alliance getAlliance() {
 		Optional<Alliance> dsAlliance = DriverStation.getAlliance();
 		if (dsAlliance.isPresent())
 			return dsAlliance.get();
 		else
-			return Alliance.Red;
+			return Alliance.Red; // default to Red alliance
 	}
 }
