@@ -17,7 +17,10 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.gpm.IntakeNote;
+import frc.robot.commands.gpm.PrepareShooter;
 import frc.robot.constants.AutoConstants;
+import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
@@ -30,8 +33,9 @@ import frc.robot.subsystems.gpm.StorageIndex;
 import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
-import frc.robot.commands.gpm.IntakeNote;
-import frc.robot.commands.gpm.PrepareShooter;
+import lib.controllers.GameController;
+import lib.controllers.GameController.Button;
+import lib.controllers.GameController.RumbleStatus;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -67,8 +71,9 @@ public class RobotContainer {
     switch (robotId) {
 
       case TestBed1:
-        index = new StorageIndex();
-        shooter = new Shooter();
+        GameController kDriver = new GameController(Constants.DRIVER_JOY);
+        kDriver.get(Button.X).onTrue(new InstantCommand(() -> kDriver.setRumble(RumbleStatus.RUMBLE_ON)));
+        kDriver.get(Button.X).onFalse(new InstantCommand(() -> kDriver.setRumble(RumbleStatus.RUMBLE_OFF)));
         break;
 
       case TestBed2:
