@@ -162,15 +162,22 @@ public class RobotContainer {
     // NamedCommands.registerCommand("PrepareShooter", new PrepareShooter(shooter, 0));
     // NamedCommands.registerCommand("SetShooterSpeed", new SetShooterSpeed(shooter, 0));
     // NamedCommands.registerCommand("ShootKnownPos", new ShootKnownPos(shooter, arm, index, null));
-    NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new SequentialCommandGroup(
-      new ParallelDeadlineGroup(// TODO: This will end instantly
+    NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new SequentialCommandGroup(// TODO: This will end instantly
       // TODO: Don't use setChassisSpeeds(), use drive() instead and add the drivetrain as a parameter so it is a requirement
-      new InstantCommand(() -> drive.setChassisSpeeds(new ChassisSpeeds(), true)),
+      new ParallelDeadlineGroup(new PrepareShooter(shooter, 1750),
       new WaitCommand(.75)),
+      new WaitCommand(.75),
       new InstantCommand(()-> index.runIndex()),
-      new WaitCommand(.5)));
+      new WaitCommand(.75),
+      new ParallelDeadlineGroup(new PrepareShooter(shooter, 0))
+    ));
+
+      // new InstantCommand(() -> drive.setChassisSpeeds(new ChassisSpeeds(), true)),
+      // new WaitCommand(.75)),
+      // new InstantCommand(()-> index.runIndex()),
+      // new WaitCommand(.5))); 
       //TODO: Stop index after command finishes
-    NamedCommands.registerCommand("Prepare Shooter", new SequentialCommandGroup(new PrepareShooter(shooter, 1750), new WaitCommand(1)));
+    NamedCommands.registerCommand("PrepareShooter", new SequentialCommandGroup(new PrepareShooter(shooter, 1750), new WaitCommand(1)));
   }
 
   public static BooleanSupplier getAllianceColorBooleanSupplier() {
