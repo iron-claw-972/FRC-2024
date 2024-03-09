@@ -30,16 +30,12 @@ public class IndexerFeed extends Command {
 
 	@Override
     public boolean isFinished(){
-
         return timer.hasElapsed(StorageIndexConstants.ejectShootTimeout);
-        
     }
 
 	@Override
     public void end(boolean interupted){
-
         m_index.stopIndex();
-
     }
     
 }

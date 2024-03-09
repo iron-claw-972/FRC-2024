@@ -30,6 +30,7 @@ import frc.robot.subsystems.gpm.StorageIndex;
 import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
+import frc.robot.commands.gpm.IndexerFeed;
 import frc.robot.commands.gpm.IntakeNote;
 import frc.robot.commands.gpm.PrepareShooter;
 
@@ -104,7 +105,7 @@ public class RobotContainer {
         registerCommands();
         PathGroupLoader.loadPathGroups();
  
-        shuffleboardManager = new ShuffleBoardManager(drive, vision);
+        shuffleboardManager = new ShuffleBoardManager(drive, shooter, vision);
         SmartDashboard.putBoolean("Index beam", index.hasNote());
         break;
       }
@@ -156,28 +157,23 @@ public class RobotContainer {
   }
 
   public void registerCommands() {
-    NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index, arm).withTimeout(1)); // 3 seconds used at SVR
+    NamedCommands.registerCommand("Intake", new IntakeNote(intake, index, arm).withTimeout(1)); // 3 seconds used at SVR
+
     // NamedCommands.registerCommand("Stop", new WaitCommand(2)); // to represent stopping for shooting 
     // Mehaan -- Consulted with Jerry, just going to use a constraint zone going at .1 which should be fine instead of stopping for the area in which we are supposed to shoot
     // NamedCommands.registerCommand("PrepareShooter", new PrepareShooter(shooter, 0));
     // NamedCommands.registerCommand("SetShooterSpeed", new SetShooterSpeed(shooter, 0));
     // NamedCommands.registerCommand("ShootKnownPos", new ShootKnownPos(shooter, arm, index, null));
-    NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new SequentialCommandGroup(// TODO: This will end instantly
-      // TODO: Don't use setChassisSpeeds(), use drive() instead and add the drivetrain as a parameter so it is a requirement
-      new ParallelDeadlineGroup(new PrepareShooter(shooter, 1750),
-      new WaitCommand(.75)),
-      new WaitCommand(.75),
-      new InstantCommand(()-> index.runIndex()),
-      new WaitCommand(.75),
-      new ParallelDeadlineGroup(new PrepareShooter(shooter, 0))
-    ));
+
+    NamedCommands.registerCommand("Index", new IndexerFeed(index));
 
       // new InstantCommand(() -> drive.setChassisSpeeds(new ChassisSpeeds(), true)),
       // new WaitCommand(.75)),
       // new InstantCommand(()-> index.runIndex()),
       // new WaitCommand(.5))); 
       //TODO: Stop index after command finishes
-    NamedCommands.registerCommand("PrepareShooter", new SequentialCommandGroup(new PrepareShooter(shooter, 1750), new WaitCommand(1)));
+    NamedCommands.registerCommand("Prepare Shooter", new SequentialCommandGroup(new PrepareShooter(shooter, 1750), new WaitCommand(0.75)));
+    NamedCommands.registerCommand("End Shooter", new PrepareShooter(shooter, 0));
   }
 
   public static BooleanSupplier getAllianceColorBooleanSupplier() {
