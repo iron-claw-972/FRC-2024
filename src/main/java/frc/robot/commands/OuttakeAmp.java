@@ -59,6 +59,7 @@ public class OuttakeAmp extends SequentialCommandGroup {
    * @param drive   The drivetrain
    */
   public OuttakeAmp(Arm arm, StorageIndex index, Shooter shooter, Drivetrain drive) {
+    // TODO: this line kills simulation because the optional may be empty.
     Pose2d ampPose = DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_AMP_POSE
         : VisionConstants.BLUE_AMP_POSE;
     Pose2d ampPose2 = DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_AMP_POSE //TODO
