@@ -102,7 +102,7 @@ public class RobotContainer {
         initializeAutoBuilder();
         drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
         registerCommands();
-        PathGroupLoader.loadPathGroups();
+        // PathGroupLoader.loadPathGroups();
  
         shuffleboardManager = new ShuffleBoardManager(drive, vision);
         SmartDashboard.putBoolean("Index beam", index.hasNote());
