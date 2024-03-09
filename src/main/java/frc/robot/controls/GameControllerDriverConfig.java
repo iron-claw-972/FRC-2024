@@ -22,13 +22,13 @@ import lib.controllers.GameController;
 import lib.controllers.GameController.Axis;
 import lib.controllers.GameController.Button;
 import lib.controllers.GameController.DPad;
-import lib.controllers.GameController.RumbleStatus;
+import lib.controllers.Controller.RumbleStatus;
 
 /**
  * Driver controls for the generic game controller.
  */
 public class GameControllerDriverConfig extends BaseDriverConfig {
-  private final GameController kDriver = new GameController(Constants.DRIVER_JOY);
+  public final GameController kDriver = new GameController(Constants.DRIVER_JOY);
   private Vision vision;
   private Arm arm;
   private Intake intake;

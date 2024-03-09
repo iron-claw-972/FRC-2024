@@ -4,13 +4,15 @@
 
 package frc.robot.controls;
 
+import java.util.function.Consumer;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.IntakeWithRumble;
 import frc.robot.commands.OuttakeAmp;
 import frc.robot.commands.Shoot;
+import frc.robot.commands.gpm.IntakeNote;
 import frc.robot.commands.gpm.PrepareShooter;
 import frc.robot.commands.gpm.ShootKnownPos;
 import frc.robot.commands.gpm.ShootKnownPos.ShotPosition;
@@ -22,14 +24,15 @@ import frc.robot.subsystems.gpm.Intake;
 import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.subsystems.gpm.Intake.Mode;
 import frc.robot.subsystems.gpm.StorageIndex;
+import lib.controllers.Controller;
 import lib.controllers.GameController;
 import lib.controllers.GameController.Button;
-import lib.controllers.GameController.RumbleStatus;
+import lib.controllers.Controller.RumbleStatus;
 
 /** Add your docs here. */
 public class Operator {
 
-    private final GameController kDriver = new GameController(Constants.OPERATOR_JOY);
+    public final GameController kDriver = new GameController(Constants.OPERATOR_JOY);
 
     private Intake intake;
     private Arm arm;
@@ -44,18 +47,15 @@ public class Operator {
         this.shooter = shooter;
         this.drive = drive;
     }
-
-    public void configureControls() {
+    public Operator(Intake intake, StorageIndex index) {
+        this.intake = intake;
+        this.index = index;
+    }
+// failsafe for gamecontrollers without rumble
+    public void configureControls(Consumer<Boolean> reactor) {
         if (intake != null) {
             
-            Command inakeWithRumble =  new IntakeWithRumble(intake, index, arm, (x)->{
-                if (x){
-                    kDriver.setRumble(RumbleStatus.RUMBLE_ON);
-                }
-                else{
-                    kDriver.setRumble(RumbleStatus.RUMBLE_OFF);
-                }
-            });
+            Command inakeWithRumble =  new IntakeNote(intake, index, arm, reactor);
             kDriver.get(Button.X).onTrue(inakeWithRumble);
             kDriver.get(Button.X).onFalse(new InstantCommand(()->inakeWithRumble.cancel()));
             
