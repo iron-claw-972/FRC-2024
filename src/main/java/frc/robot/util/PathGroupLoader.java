@@ -29,13 +29,17 @@ public class PathGroupLoader {
         if (directoryListing != null) {
             for (File file : directoryListing) {
                 if (file.isFile() && file.getName().contains(".")) {
-                    long startTime = System.nanoTime();
-                    String name = file.getName().substring(0, file.getName().indexOf("."));
-                    // pathGroups.put(name, PathPlannerAuto.getPathGroupFromAutoFile(name));
-                     pathGroups.put(name, PathPlannerPath.fromPathFile(name));
-                    double time = (System.nanoTime() - startTime) / 1000000.0;
-                    totalTime += time;
-                    System.out.println("Processed file: " + file.getName() + ", took " + time + " milliseconds.");
+                    try {
+                        long startTime = System.nanoTime();
+                        String name = file.getName().substring(0, file.getName().indexOf("."));
+                        // pathGroups.put(name, PathPlannerAuto.getPathGroupFromAutoFile(name));
+                        pathGroups.put(name, PathPlannerPath.fromPathFile(name));
+                        double time = (System.nanoTime() - startTime) / 1000000.0;
+                        totalTime += time;
+                        System.out.println("Processed file: " + file.getName() + ", took " + time + " milliseconds.");
+                    } catch (Exception e) {
+                        DriverStation.reportError(e.getMessage(), true);
+                    }
                 }
             }
         } else {
