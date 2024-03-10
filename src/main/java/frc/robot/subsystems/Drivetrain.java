@@ -273,7 +273,7 @@ public class Drivetrain extends SubsystemBase {
                     +Units.radiansToDegrees(chassisSpeeds.omegaRadiansPerSecond * Constants.LOOP_TIME));
         }
         currentSetpoint = setpointGenerator.generateSetpoint(
-            new ModuleLimits(DriveConstants.kMaxSpeed, Double.MAX_VALUE, Double.MAX_VALUE),
+            new ModuleLimits(DriveConstants.kMaxSpeed, 10, 10),
             currentSetpoint,chassisSpeeds,
             Constants.LOOP_TIME);
             
