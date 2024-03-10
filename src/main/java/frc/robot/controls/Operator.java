@@ -52,17 +52,7 @@ public class Operator {
         if (intake != null) {
            // Command intakeNote = new IntakeNote(intake, index, arm);
           // kDriver.setRumble(RumbleStatus.RUMBLE_ON);
-            Command inakeWithRumble =  new IntakeWithRumble(intake, index, arm, (x)->{
-                if (x){
-                    kDriver.setRumble(RumbleStatus.RUMBLE_ON);
-                }
-                else{
-                    kDriver.setRumble(RumbleStatus.RUMBLE_OFF);
-                }
-            });
-            kDriver.get(Button.X).onTrue(inakeWithRumble);
-            //kDriver.get(Button.X).toggleOnTrue(intakeNote);
-            kDriver.get(Button.X).onFalse(new InstantCommand(()->inakeWithRumble.cancel()));
+
             kDriver.get(Button.B).onTrue(new InstantCommand(() -> intake.setMode(Mode.ReverseMotors),intake));
             kDriver.get(Button.B).onFalse(new InstantCommand(() -> intake.setMode(Mode.DISABLED), intake));
         }
@@ -116,6 +106,19 @@ public class Operator {
             kDriver.get(Button.RB).onTrue(new InstantCommand(()->arm.setAngle(ArmConstants.preClimbSetpoint), arm));
             kDriver.get(Button.LB).onTrue(new InstantCommand(()->arm.setAngle(ArmConstants.climbSetpoint), arm));
           }
+        if (intake!=null && arm!=null&& index!=null){
+            Command inakeWithRumble =  new IntakeWithRumble(intake, index, arm, (x)->{
+                if (x){
+                    kDriver.setRumble(RumbleStatus.RUMBLE_ON);
+                }
+                else{
+                    kDriver.setRumble(RumbleStatus.RUMBLE_OFF);
+                }
+            });
+            kDriver.get(Button.X).onTrue(inakeWithRumble);
+            //kDriver.get(Button.X).toggleOnTrue(intakeNote);
+            kDriver.get(Button.X).onFalse(new InstantCommand(()->inakeWithRumble.cancel()));
+        }
     }
     public Trigger getRightTrigger(){
         return new Trigger(kDriver.RIGHT_TRIGGER_BUTTON);

@@ -26,7 +26,9 @@ import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
 import frc.robot.subsystems.module.Module;
 import frc.robot.subsystems.module.ModuleSim;
+import frc.robot.util.EqualsUtil;
 import frc.robot.util.LogManager;
+import frc.robot.util.TimeDelayedBoolean;
 import frc.robot.util.Vision;
 import frc.robot.util.SwerveStuff.ModuleLimits;
 import frc.robot.util.SwerveStuff.SwerveSetpoint;
@@ -78,7 +80,15 @@ public class Drivetrain extends SubsystemBase {
     // Angle to align to, null for directly toward speaker
     private Double alignAngle = null;
 
+    double currentHeading = 0;
+
     SwerveSetpointGenerator setpointGenerator = new SwerveSetpointGenerator();
+
+    private final TimeDelayedBoolean maintainHeading = new TimeDelayedBoolean();
+
+    private final TimeDelayedBoolean rotating = new TimeDelayedBoolean();
+    Timer timer = new Timer();
+
 
     /**
      * Creates a new Swerve Style Drivetrain.
@@ -99,7 +109,7 @@ public class Drivetrain extends SubsystemBase {
                 modules[moduleConstants.ordinal()] = new ModuleSim(moduleConstants);
             });
         }
-
+        
         // The Pigeon is a gyroscope and implements WPILib's Gyro interface
         pigeon = new Pigeon2(DriveConstants.kPigeon, DriveConstants.kPigeonCAN);
         pigeon.getConfigurator().apply(new Pigeon2Configuration());
@@ -131,7 +141,7 @@ public class Drivetrain extends SubsystemBase {
         yController = new PIDController(DriveConstants.kTranslationalP, 0, DriveConstants.kTranslationalD);
         rotationController = new PIDController(DriveConstants.kHeadingP, 0, DriveConstants.kHeadingD);
         rotationController.enableContinuousInput(-Math.PI, Math.PI);
-        rotationController.setTolerance(Units.degreesToRadians(0.25), Units.degreesToRadians(0.25));
+        rotationController.setTolerance(Units.degreesToRadians(0), Units.degreesToRadians(0));
         if (Constants.DO_LOGGING) {
             LogManager.add("Drivetrain/SpeedX", () -> getChassisSpeeds().vxMetersPerSecond);
             LogManager.add("Drivetrain/SpeedY", () -> getChassisSpeeds().vyMetersPerSecond);
@@ -164,7 +174,22 @@ public class Drivetrain extends SubsystemBase {
      * @param fieldRelative whether the provided x and y speeds are relative to the field
      * @param isOpenLoop    whether to use velocity control for the drive motors
      */
+
+    boolean drive_turning= false;
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean isOpenLoop) {
+        if((!EqualsUtil.epsilonEquals(getAngularRate(0), 0, 3.5621085461121804E-4)&&EqualsUtil.epsilonEquals(Math.hypot(xSpeed, ySpeed),0,0.1))||!EqualsUtil.epsilonEquals(rot, 0, 3.5621085461121804E-4)){
+             drive_turning = true;
+             currentHeading = getYaw().getRadians();
+             System.out.println("runing");
+        }
+        else{
+            drive_turning = false;
+
+        }
+        if (rotating.update(!drive_turning,0)){
+            rotationController.setSetpoint(currentHeading);
+            rot = Math.abs(rotationController.calculate(getYaw().getRadians())) > Math.abs(rot) ? rotationController.calculate(getYaw().getRadians()) : rot;
+        }
         setChassisSpeeds((
                                  fieldRelative
                                          ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getYaw())
@@ -389,6 +414,7 @@ public class Drivetrain extends SubsystemBase {
      */
     public void resetOdometry(Pose2d pose) {
         // NOTE: must use pigeon yaw for odometer!
+        currentHeading = 0;
         poseEstimator.resetPosition(Rotation2d.fromDegrees(pigeon.getYaw().getValue()), getModulePositions(), pose);
     }
 
