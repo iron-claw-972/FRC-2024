@@ -17,15 +17,15 @@
     {
       "anchor": {
         "x": 8.913435034847279,
-        "y": 0.8185908109707958
+        "y": 0.7897304155653468
       },
       "prevControl": {
-        "x": 8.147414703043161,
-        "y": 0.6096761750242143
+        "x": 6.6468403666394895,
+        "y": 0.28691813650645914
       },
       "nextControl": {
-        "x": 9.299342131447794,
-        "y": 0.9238382009527565
+        "x": 9.089236230728995,
+        "y": 0.8287294484327709
       },
       "isLocked": false,
       "linkedName": null
@@ -80,12 +80,44 @@
     },
     {
       "anchor": {
-        "x": 8.913435034847279,
-        "y": 2.4323841240275086
+        "x": 8.660246869187326,
+        "y": 2.6909332678522846
       },
       "prevControl": {
-        "x": 8.761807016865166,
-        "y": 2.535103965168466
+        "x": 9.0895417787073,
+        "y": 2.8909838623759234
+      },
+      "nextControl": {
+        "x": 2.5527960701072363,
+        "y": -0.1551269492279186
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.2211813497261212,
+        "y": 4.435076061565361
+      },
+      "prevControl": {
+        "x": 1.1711635344540994,
+        "y": 4.4742070771683
+      },
+      "nextControl": {
+        "x": 1.2711991649981431,
+        "y": 4.3959450459624225
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.2211813497261212,
+        "y": 4.435076061565361
+      },
+      "prevControl": {
+        "x": 1.2510651364705603,
+        "y": 4.459384465739745
       },
       "nextControl": null,
       "isLocked": false,
@@ -106,6 +138,11 @@
     {
       "waypointRelativePos": 3.0,
       "rotationDegrees": -56.373764252586525,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 5,
+      "rotationDegrees": 0,
       "rotateFast": false
     }
   ],
@@ -130,7 +167,7 @@
     },
     {
       "name": "Intake 1",
-      "waypointRelativePos": 0.75,
+      "waypointRelativePos": 0.8500000000000001,
       "command": {
         "type": "parallel",
         "data": {
@@ -195,6 +232,23 @@
           ]
         }
       }
+    },
+    {
+      "name": "Index 3",
+      "waypointRelativePos": 6.3,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Index"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "globalConstraints": {
@@ -205,7 +259,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -0.707319368544236,
+    "rotation": -39.721043922360266,
     "rotateFast": false
   },
   "reversed": false,

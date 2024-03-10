@@ -31,9 +31,9 @@ public class AutoTab extends ShuffleBoardTabs {
         tab = Shuffleboard.getTab("Auto");
     
         // Final Autos
-        autoCommand.setDefaultOption("Do nothing", new DoNothing());
+        // autoCommand.setDefaultOption("Do nothing", new DoNothing());
 
-        autoCommand.addOption("2.5 Source Speaker", new AutoShootCommand(shooter, new FollowPathCommand("Two Piece (pos 4) center line", true, drive)));
+        autoCommand.setDefaultOption("2.5 Source Speaker", new AutoShootCommand(shooter, new FollowPathCommand("Two Piece (pos 4) center line", true, drive)));
         
         autoCommand.addOption("God Path", new FollowPathCommand("God Path",true, drive));
 
