@@ -6,6 +6,8 @@ package frc.robot.constants.miscConstants;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
@@ -37,6 +39,12 @@ public class VisionConstants {
 
   // If odometry should be updated using vision while running the GoToPose and GoToPosePID commands in teleop
   public static final boolean ENABLED_GO_TO_POSE = true;
+
+  // PoseStrategy to use in pose estimation
+  public static final PoseStrategy POSE_STRATEGY = PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR;
+
+  // Fallback PoseStrategy if MultiTag doesn't work
+  public static final PoseStrategy MULTITAG_FALLBACK_STRATEGY = PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR;
 
   // If vision should use manual calculations
   public static final boolean USE_MANUAL_CALCULATIONS = false;

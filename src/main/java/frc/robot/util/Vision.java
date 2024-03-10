@@ -269,7 +269,7 @@ public class Vision {
               new Pose3d(pose.getX(), pose.getY(), 0, new Rotation3d(0, 0, pose.getRotation().getRadians())), 
               m_cameras.get(i).getTimeStamp(), 
               List.of(m_cameras.get(i).getBestTarget()),
-              PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR
+              VisionConstants.POSE_STRATEGY
             );
             estimatedPoses.add(estimatedPose);
             if(Constants.DO_LOGGING){
@@ -364,11 +364,11 @@ public class Vision {
       camera = new PhotonCamera(cameraName);
       photonPoseEstimator = new PhotonPoseEstimator(
         m_aprilTagFieldLayout, 
-        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, 
+        VisionConstants.POSE_STRATEGY, 
         camera, 
         robotToCam
       );
-      photonPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR);
+      photonPoseEstimator.setMultiTagFallbackStrategy(VisionConstants.MULTITAG_FALLBACK_STRATEGY);
       photonPoseEstimator.setReferencePose(new Pose2d());
       lastPose = null;
     }
