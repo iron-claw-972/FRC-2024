@@ -59,6 +59,8 @@ public class AutoTab extends ShuffleBoardTabs {
         autoCommand.addOption("God Path", new FollowPathCommand("God Path",true, drive));
         autoCommand.addOption("Test", new FollowPathCommand("Test",true, drive));
         autoCommand.addOption("5 piece (pos 3) (normal)", new FollowPathCommand("5 piece (pos 3) (normal)",true, drive));
+        autoCommand.addOption("5 piece (pos 3) (test)", new FollowPathCommand("5 piece (pos 3) (test)",true, drive));
+        autoCommand.addOption("5 piece (pos 3) (under the stage -- test)", new FollowPathCommand("5 piece (pos 3) (under the stage -- test)",true, drive));
 
         
         // Previous Autos (Some will keep and still have to fix) autoCommand.setDefaultOption("Do Nothing", new PrintCommand("This will do nothing!"));

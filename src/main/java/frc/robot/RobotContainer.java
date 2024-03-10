@@ -164,21 +164,29 @@ public class RobotContainer {
     // NamedCommands.registerCommand("PrepareShooter", new PrepareShooter(shooter, 0));
     // NamedCommands.registerCommand("SetShooterSpeed", new SetShooterSpeed(shooter, 0));
     // NamedCommands.registerCommand("ShootKnownPos", new ShootKnownPos(shooter, arm, index, null));
-    NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new SequentialCommandGroup(// TODO: This will end instantly
-      // TODO: Don't use setChassisSpeeds(), use drive() instead and add the drivetrain as a parameter so it is a requirement
-      new ParallelDeadlineGroup(new PrepareShooter(shooter, 1750),
-      new WaitCommand(.75)),
-      new WaitCommand(.75),
-      new InstantCommand(()-> index.runIndex()),
-      new WaitCommand(.75),
-      new ParallelDeadlineGroup(new PrepareShooter(shooter, 0))
-    ));
 
-      // new InstantCommand(() -> drive.setChassisSpeeds(new ChassisSpeeds(), true)),
-      // new WaitCommand(.75)),
-      // new InstantCommand(()-> index.runIndex()),
-      // new WaitCommand(.5))); 
-      //TODO: Stop index after command finishes
+    //Commented this out for now:
+
+    // NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new SequentialCommandGroup(// TODO: This will end instantly
+    //   // TODO: Don't use setChassisSpeeds(), use drive() instead and add the drivetrain as a parameter so it is a requirement
+    //   new ParallelDeadlineGroup(new PrepareShooter(shooter, 1750),
+    //   new WaitCommand(.75)),
+    //   new WaitCommand(.75),
+    //   new InstantCommand(()-> index.runIndex()),
+    //   new WaitCommand(.75),
+    //   new ParallelDeadlineGroup(new PrepareShooter(shooter, 0))
+    // ));
+
+    // You can change the name later if it works, and we also need to mess with the wait command to see the amount of time the shooter actually needs
+    NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new SequentialCommandGroup(
+    new ParallelDeadlineGroup(new PrepareShooter(shooter, 1750),
+    new WaitCommand(.75)),
+    new WaitCommand(.75),
+    new InstantCommand(()-> index.runIndex()),
+    new WaitCommand(.75),
+  ));
+
+
     NamedCommands.registerCommand("PrepareShooter", new SequentialCommandGroup(new PrepareShooter(shooter, 1750), new WaitCommand(1)));
   }
 
