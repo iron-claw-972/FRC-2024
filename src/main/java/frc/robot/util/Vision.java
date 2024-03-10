@@ -407,21 +407,16 @@ public class Vision {
       
       // if there is a target detected and the timestamp exists, 
       // check the ambiguity isn't too high
-      boolean foundGoodTarget = false;
       if (cameraResult.hasTargets() && cameraResult.getTimestampSeconds() > 0) {
         // go through all the targets
         List<PhotonTrackedTarget> targetsUsed = cameraResult.targets;
         for (int i = targetsUsed.size()-1; i >= 0; i--) {
-          if(onlyUse > 0 && targetsUsed.get(i).getFiducialId() != onlyUse){
+          if(targetsUsed.get(i).getPoseAmbiguity() > VisionConstants.HIGHEST_AMBIGUITY || onlyUse > 0 && targetsUsed.get(i).getFiducialId() != onlyUse){
             targetsUsed.remove(i);
             continue;
           }
-          // check their ambiguity, if it is below the highest wanted amount, use this camera's result
-          if (targetsUsed.get(i).getPoseAmbiguity() <= VisionConstants.HIGHEST_AMBIGUITY) {
-            foundGoodTarget = true;
-          }
         }
-        if(!foundGoodTarget){
+        if(!cameraResult.hasTargets() || targetsUsed.size()==1 && VisionConstants.ONLY_USE_2_TAGS){
           return Optional.empty();
         }
       }

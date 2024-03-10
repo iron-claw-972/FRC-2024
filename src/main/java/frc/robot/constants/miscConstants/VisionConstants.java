@@ -46,6 +46,9 @@ public class VisionConstants {
   // If vision should be simulated
   public static final boolean ENABLED_SIM = true;
 
+  // If vision should only return values if it can see 2 good targets
+  public static final boolean ONLY_USE_2_TAGS = false;
+
   // PoseStrategy to use in pose estimation
   public static final PoseStrategy POSE_STRATEGY = PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR;
 
