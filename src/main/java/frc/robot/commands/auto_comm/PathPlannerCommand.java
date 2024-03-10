@@ -2,11 +2,10 @@ package frc.robot.commands.auto_comm;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import frc.robot.Robot;
 import java.util.List;
-
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+
 import com.pathplanner.lib.commands.FollowPathHolonomic;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
@@ -18,10 +17,10 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Robot;
 import frc.robot.constants.AutoConstants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.subsystems.Drivetrain;

@@ -1,11 +1,10 @@
 package frc.robot.controls;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
-import frc.robot.Robot;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import frc.robot.Robot;
 import frc.robot.commands.drive_comm.SetFormationX;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Drivetrain;

@@ -1,10 +1,9 @@
 package frc.robot.controls;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
-import frc.robot.Robot;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.Robot;
 import frc.robot.commands.GoToPose;
 import frc.robot.commands.OuttakeAmp;
 import frc.robot.commands.drive_comm.SetFormationX;
