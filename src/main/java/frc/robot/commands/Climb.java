@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
+import frc.robot.Robot;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -37,7 +38,7 @@ public class Climb extends SequentialCommandGroup {
     }
 
     private void getPoses(Chain chain){
-        boolean red = DriverStation.getAlliance().get() == Alliance.Red;
+        boolean red = Robot.getAlliance() == Alliance.Red;
         CHAIN_POSES poses = null;
         switch(chain){
             case LEFT:

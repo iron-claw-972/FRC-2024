@@ -2,6 +2,7 @@ package frc.robot.controls;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.Robot;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
@@ -27,12 +28,12 @@ public class PS5ControllerDriverConfig extends BaseDriverConfig {
     public void configureControls() {
         // reset the yaw forward. Mainly useful for testing/driver practice
         kDriver.get(PS5Button.OPTIONS).onTrue(new InstantCommand(() -> super.getDrivetrain().setYaw(
-                new Rotation2d(DriverStation.getAlliance().get() == Alliance.Blue ? 0 : Math.PI)
+                new Rotation2d(Robot.getAlliance() == Alliance.Blue ? 0 : Math.PI)
                                                                                                    )));
 
         // reset the yaw backward. Mainly useful for testing/driver practice
         kDriver.get(PS5Button.CREATE).onTrue(new InstantCommand(() -> super.getDrivetrain().setYaw(
-                new Rotation2d(DriverStation.getAlliance().get() == Alliance.Red ? 0 : Math.PI)
+                new Rotation2d(Robot.getAlliance() == Alliance.Red ? 0 : Math.PI)
                                                                                                   )));
 
         // set the wheels to X

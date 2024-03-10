@@ -2,6 +2,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import frc.robot.Robot;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -60,7 +61,7 @@ public class ShootLock extends Command {
                 setupTimer.start();
                 
                 Pose3d speakerPose = DriverStation.getAlliance().isPresent() &&
-                                DriverStation.getAlliance().get() == Alliance.Red ?
+                                Robot.getAlliance() == Alliance.Red ?
                                 VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
                 // shooterHeight and shooterOffset have an additional offset because the shooter is offset from the arm, right?
                 Rotation2d driveYaw = drive.getYaw();

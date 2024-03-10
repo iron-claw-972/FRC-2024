@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import frc.robot.Robot;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -60,9 +61,9 @@ public class OuttakeAmp extends SequentialCommandGroup {
    */
   public OuttakeAmp(Arm arm, StorageIndex index, Shooter shooter, Drivetrain drive) {
     // TODO: this line kills simulation because the optional may be empty.
-    Pose2d ampPose = DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_AMP_POSE
+    Pose2d ampPose = Robot.getAlliance() == Alliance.Red ? VisionConstants.RED_AMP_POSE
         : VisionConstants.BLUE_AMP_POSE;
-    Pose2d ampPose2 = DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_AMP_POSE //TODO
+    Pose2d ampPose2 = Robot.getAlliance() == Alliance.Red ? VisionConstants.RED_AMP_POSE //TODO
         : VisionConstants.BLUE_AMP_POSE; //TODO FIX this
     addCommands(
       new InstantCommand(()->getPoses()),
@@ -95,9 +96,9 @@ public class OuttakeAmp extends SequentialCommandGroup {
   }
 
   public void getPoses(){
-    ampPose = DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_AMP_POSE
+    ampPose = Robot.getAlliance() == Alliance.Red ? VisionConstants.RED_AMP_POSE
         : VisionConstants.BLUE_AMP_POSE;
-    ampPose2 = DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_AMP_POSE_2
+    ampPose2 = Robot.getAlliance() == Alliance.Red ? VisionConstants.RED_AMP_POSE_2
         : VisionConstants.BLUE_AMP_POSE_2;
   }
 }

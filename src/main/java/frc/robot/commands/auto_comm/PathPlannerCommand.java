@@ -2,6 +2,7 @@ package frc.robot.commands.auto_comm;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import frc.robot.Robot;
 import java.util.List;
 
 import java.util.function.Consumer;
@@ -94,21 +95,21 @@ public class PathPlannerCommand extends SequentialCommandGroup {
     addCommands(
       new InstantCommand( () -> {
         PathPlannerPath path = pathGroup.get(pathIndex);
-        if(DriverStation.getAlliance().get()==Alliance.Red){
+        if(Robot.getAlliance()==Alliance.Red){
           path.flipPath();
         }
         if (resetPose) {
           drive.resetOdometry(path.getPreviewStartingHolonomicPose());
         }
         //TODO: This might be unnecessary, maybe delete it
-        if(DriverStation.getAlliance().get()==Alliance.Red){
+        if(Robot.getAlliance()==Alliance.Red){
           path.flipPath();
         }
       }),
       createSwerveControllerCommand(
         pathGroup.get(pathIndex), 
         useAllianceColor ? // Pose supplier
-          () -> ConversionUtils.absolutePoseToPathPlannerPose(drive.getPose(), DriverStation.getAlliance().get()) : 
+          () -> ConversionUtils.absolutePoseToPathPlannerPose(drive.getPose(), Robot.getAlliance()) : 
           () -> drive.getPose(), 
         ()-> drive.getChassisSpeeds(),
         (chassisSpeeds) -> { drive.setChassisSpeeds(chassisSpeeds, false); }, // chassis Speeds consumer

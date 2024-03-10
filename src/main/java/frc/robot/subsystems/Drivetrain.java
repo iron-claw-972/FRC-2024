@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
+import frc.robot.Robot;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -405,7 +406,7 @@ public class Drivetrain extends SubsystemBase {
             return alignAngle;
         }
         Pose2d pose = getPose();
-        return Math.PI + (DriverStation.getAlliance().get() == Alliance.Blue ?
+        return Math.PI + (Robot.getAlliance() == Alliance.Blue ?
             Math.atan2(VisionConstants.BLUE_SPEAKER_POSE.getY() - pose.getY(), VisionConstants.BLUE_SPEAKER_POSE.getX() - pose.getX()) :
             Math.atan2(VisionConstants.RED_SPEAKER_POSE.getY() - pose.getY(), VisionConstants.RED_SPEAKER_POSE.getX() - pose.getX()));
     }

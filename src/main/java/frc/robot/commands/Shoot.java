@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.Robot;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -65,7 +66,7 @@ public class Shoot extends Command {
                 // Positive x displacement means we are to the left of the speaker
                 // Positive y displacement means we are below the speaker.
                 // Pose3d speakerPose = DriverStation.getAlliance().isPresent() &&
-                //                 DriverStation.getAlliance().get() == Alliance.Red ?
+                //                 Robot.getAlliance() == Alliance.Red ?
                 //                 VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
                 Pose3d speakerPose = VisionConstants.RED_SPEAKER_POSE;
                 // shooterHeight and shooterOffset have an additional offset because the shooter is offset from the arm, right?
