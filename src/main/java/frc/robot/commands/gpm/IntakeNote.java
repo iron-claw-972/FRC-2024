@@ -12,16 +12,22 @@ public class IntakeNote extends Command{
 
     private final Intake intake;
     private final StorageIndex storageIndex;
-    private final Arm arm;
+    //private final Arm arm;
     Timer timer = new Timer();
     Boolean detectedNote = false;
 
-    public IntakeNote(Intake intake, StorageIndex storageIndex, Arm arm) {
+    public IntakeNote(Intake intake, StorageIndex storageIndex) {
         this.intake = intake;
         this.storageIndex = storageIndex;
-        this.arm = arm;
-        addRequirements(intake, storageIndex, arm);
+        addRequirements(intake, storageIndex);
     }
+
+//  public IntakeNote(Intake intake, StorageIndex storageIndex, Arm arm) {
+//         this.intake = intake;
+//         this.storageIndex = storageIndex;
+//         this.arm = arm;
+//         addRequirements(intake, storageIndex, arm);
+//     }
 
     @Override
     public void initialize() {
@@ -30,7 +36,7 @@ public class IntakeNote extends Command{
         timer.stop();
         intake.setMode(Mode.INTAKE);
         storageIndex.runIndex();
-        arm.setAngle(ArmConstants.intakeSetpoint);
+        //arm.setAngle(ArmConstants.intakeSetpoint);
     }
 
     @Override
@@ -53,7 +59,7 @@ public class IntakeNote extends Command{
     public void end(boolean interupted){
         intake.setMode(Mode.DISABLED);
         storageIndex.stopIndex();
-        arm.setAngle(ArmConstants.stowedSetpoint);
+       // arm.setAngle(ArmConstants.stowedSetpoint);
         timer.stop();
         timer.reset();
         detectedNote = false;

@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.DefaultDriveCommand;
@@ -74,7 +75,7 @@ public class RobotContainer {
       case TestBed2:
         intake = new Intake();
         index = new StorageIndex();
-        SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index, arm));
+        SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index));
         break;
         
       default:
@@ -83,7 +84,7 @@ public class RobotContainer {
         intake = new Intake();
         index = new StorageIndex();
         shooter = new Shooter();
-
+ 
       case SwerveTest:
         vision = new Vision(VisionConstants.APRIL_TAG_CAMERAS);
 
@@ -101,11 +102,11 @@ public class RobotContainer {
         operator.configureControls();
         initializeAutoBuilder();
         drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
-       // registerCommands();
-       // PathGroupLoader.loadPathGroups();
+        registerCommands();
+        PathGroupLoader.loadPathGroups();
  
-       // shuffleboardManager = new ShuffleBoardManager(drive, vision);
-       // SmartDashboard.putBoolean("Index beam", index.hasNote());
+        shuffleboardManager = new ShuffleBoardManager(drive, vision);
+        SmartDashboard.putBoolean("Index beam", index.hasNote());
         break;
       }
 
@@ -156,7 +157,8 @@ public class RobotContainer {
   }
 
   public void registerCommands() {
-    NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index, arm).withTimeout(1)); // 3 seconds used at SVR
+    NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index).withTimeout(1)); // 3 seconds used at SVR
+    NamedCommands.registerCommand("Stop", new RunCommand(()->drive.stop()).withTimeout(1)); 
     // NamedCommands.registerCommand("Stop", new WaitCommand(2)); // to represent stopping for shooting 
     // Mehaan -- Consulted with Jerry, just going to use a constraint zone going at .1 which should be fine instead of stopping for the area in which we are supposed to shoot
     // NamedCommands.registerCommand("PrepareShooter", new PrepareShooter(shooter, 0));

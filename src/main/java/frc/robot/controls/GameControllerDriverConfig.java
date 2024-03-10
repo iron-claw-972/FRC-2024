@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.GoToPose;
 import frc.robot.commands.OuttakeAmp;
 import frc.robot.commands.drive_comm.SetFormationX;
-import frc.robot.commands.vision.AcquireGamePiece;
+//import frc.robot.commands.vision.AcquireGamePiece;
 import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
@@ -54,11 +54,11 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     // Enable state deadband after setting formation to X
     kDriver.get(Button.X).onFalse(new InstantCommand(()->getDrivetrain().setStateDeadband(true)));
 
-    if(VisionConstants.OBJECT_DETECTION_ENABLED){
-      if(intake != null && index != null && arm != null){
-        kDriver.get(Button.RIGHT_JOY).whileTrue(new AcquireGamePiece(()->vision.getBestGamePiece(Math.PI/2), getDrivetrain(), intake, index, arm));
-      }
-    }
+    // if(VisionConstants.OBJECT_DETECTION_ENABLED){
+    //   if(intake != null && index != null && arm != null){
+    //     kDriver.get(Button.RIGHT_JOY).whileTrue(new AcquireGamePiece(()->vision.getBestGamePiece(Math.PI/2), getDrivetrain(), intake, index, arm));
+    //   }
+    // }
 
     // Resets the modules to absolute if they are having the unresolved zeroing
     // error
