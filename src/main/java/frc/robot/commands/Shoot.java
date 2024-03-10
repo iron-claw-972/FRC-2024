@@ -64,10 +64,8 @@ public class Shoot extends Command {
         public void execute() {
                 // Positive x displacement means we are to the left of the speaker
                 // Positive y displacement means we are below the speaker.
-                // Pose3d speakerPose = DriverStation.getAlliance().isPresent() &&
-                //                 DriverStation.getAlliance().get() == Alliance.Red ?
-                //                 VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
-                Pose3d speakerPose = VisionConstants.RED_SPEAKER_POSE;
+                Pose3d speakerPose = DriverStation.getAlliance().get() == Alliance.Red ?
+                                VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
                 // shooterHeight and shooterOffset have an additional offset because the shooter is offset from the arm, right?
                 Rotation2d driveYaw = drive.getYaw();
                 // Set displacement to speaker
