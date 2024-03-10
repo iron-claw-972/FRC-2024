@@ -1,9 +1,9 @@
 package frc.robot.controls;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.Robot;
 import frc.robot.commands.GoToPose;
 import frc.robot.commands.OuttakeAmp;
 import frc.robot.commands.drive_comm.SetFormationX;
@@ -47,7 +47,7 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     // Reset yaw to be away from driver
     //kDriver.setRumble(RumbleStatus.RUMBLE_ON);
     kDriver.get(Button.START).onTrue(new InstantCommand(() -> super.getDrivetrain().setYaw(
-        new Rotation2d(DriverStation.getAlliance().get() == Alliance.Blue ? 0 : Math.PI))));
+        new Rotation2d(Robot.getAlliance() == Alliance.Blue ? 0 : Math.PI))));
 
     // set the wheels to X
     kDriver.get(Button.X).whileTrue(new SetFormationX(super.getDrivetrain()));
@@ -66,15 +66,15 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
 
     // Align to subwoofer
     kDriver.get(DPad.LEFT).whileTrue(new GoToPose(()->
-      DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_SUBWOOFER_LEFT
+      Robot.getAlliance() == Alliance.Red ? VisionConstants.RED_SUBWOOFER_LEFT
       : VisionConstants.BLUE_SUBWOOFER_LEFT,
       getDrivetrain()));
     kDriver.get(DPad.UP).whileTrue(new GoToPose(()->
-      DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_SUBWOOFER_CENTER
+      Robot.getAlliance() == Alliance.Red ? VisionConstants.RED_SUBWOOFER_CENTER
       : VisionConstants.BLUE_SUBWOOFER_CENTER,
       getDrivetrain()));
     kDriver.get(DPad.RIGHT).whileTrue(new GoToPose(()->
-      DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_SUBWOOFER_RIGHT
+      Robot.getAlliance() == Alliance.Red ? VisionConstants.RED_SUBWOOFER_RIGHT
       : VisionConstants.BLUE_SUBWOOFER_RIGHT,
       getDrivetrain()));
 
@@ -87,7 +87,7 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     // Podium alignment
     kDriver.get(Button.LB)
         .whileTrue(new GoToPose(
-            () -> DriverStation.getAlliance().get() == Alliance.Blue ? VisionConstants.BLUE_PODIUM_POSE
+            () -> Robot.getAlliance() == Alliance.Blue ? VisionConstants.BLUE_PODIUM_POSE
                 : VisionConstants.RED_PODIUM_POSE,
             getDrivetrain()));
   }
