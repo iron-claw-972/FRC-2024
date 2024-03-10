@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.gpm.IntakeNote;
+import frc.robot.commands.gpm.PrepareShooter;
 import frc.robot.constants.AutoConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
@@ -30,8 +32,6 @@ import frc.robot.subsystems.gpm.StorageIndex;
 import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
-import frc.robot.commands.gpm.IntakeNote;
-import frc.robot.commands.gpm.PrepareShooter;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -74,7 +74,7 @@ public class RobotContainer {
       case TestBed2:
         intake = new Intake();
         index = new StorageIndex();
-        SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index, arm));
+        //SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index, arm));
         break;
         
       default:
