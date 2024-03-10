@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import java.util.Optional;
+
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -148,4 +152,16 @@ public class Robot extends TimedRobot {
     public void simulationPeriodic() {
     }
 
+	/**
+	* Gets the set Alliance; defaults to red if not set.
+	* This method replaces {@link edu.first.wpilibj.DriverStation.getAlliance}.
+	* The .get() is not necessary, so DriverStation.getAlliance().get() becomes Robot.getAlliance()
+	*/
+	public static Alliance getAlliance() {
+		Optional<Alliance> dsAlliance = DriverStation.getAlliance();
+		if (dsAlliance.isPresent())
+			return dsAlliance.get();
+		else
+			return Alliance.Red; // default to Red alliance
+	}
 }

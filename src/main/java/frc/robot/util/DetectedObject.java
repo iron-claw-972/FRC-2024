@@ -5,8 +5,8 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.Robot;
 import frc.robot.subsystems.Drivetrain;
 
 /**
@@ -156,14 +156,14 @@ public class DetectedObject {
      * @return If the object is a robot on the same alliance
      */
     public boolean isSameAllianceRobot(){
-        return type == (DriverStation.getAlliance().get()==Alliance.Red?ObjectType.RED_ROBOT:ObjectType.BLUE_ROBOT);
+        return type == (Robot.getAlliance()==Alliance.Red?ObjectType.RED_ROBOT:ObjectType.BLUE_ROBOT);
     }
     /**
      * Returns if the object is a robot on the other alliance
      * @return If the object is a robot on the other alliance
      */
     public boolean isOtherAllianceRobot(){
-        return type == (DriverStation.getAlliance().get()==Alliance.Red?ObjectType.BLUE_ROBOT:ObjectType.RED_ROBOT);
+        return type == (Robot.getAlliance()==Alliance.Red?ObjectType.BLUE_ROBOT:ObjectType.RED_ROBOT);
     }
 
     /**

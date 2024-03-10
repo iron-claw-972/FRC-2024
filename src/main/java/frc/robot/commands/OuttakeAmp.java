@@ -2,13 +2,13 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.Robot;
 import frc.robot.constants.ArmConstants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.constants.StorageIndexConstants;
@@ -59,11 +59,6 @@ public class OuttakeAmp extends SequentialCommandGroup {
    * @param drive   The drivetrain
    */
   public OuttakeAmp(Arm arm, StorageIndex index, Shooter shooter, Drivetrain drive) {
-    // TODO: this line kills simulation because the optional may be empty.
-    Pose2d ampPose = DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_AMP_POSE
-        : VisionConstants.BLUE_AMP_POSE;
-    Pose2d ampPose2 = DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_AMP_POSE //TODO
-        : VisionConstants.BLUE_AMP_POSE; //TODO FIX this
     addCommands(
       new InstantCommand(()->getPoses()),
       new SequentialCommandGroup(
@@ -95,9 +90,9 @@ public class OuttakeAmp extends SequentialCommandGroup {
   }
 
   public void getPoses(){
-    ampPose = DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_AMP_POSE
+    ampPose = Robot.getAlliance() == Alliance.Red ? VisionConstants.RED_AMP_POSE
         : VisionConstants.BLUE_AMP_POSE;
-    ampPose2 = DriverStation.getAlliance().get() == Alliance.Red ? VisionConstants.RED_AMP_POSE_2
+    ampPose2 = Robot.getAlliance() == Alliance.Red ? VisionConstants.RED_AMP_POSE_2
         : VisionConstants.BLUE_AMP_POSE_2;
   }
 }
