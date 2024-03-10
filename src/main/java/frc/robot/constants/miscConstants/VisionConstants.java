@@ -54,7 +54,7 @@ public class VisionConstants {
   // To find this, set it to 1 and measure the actual distance and the calculated distance
   public static final double DISTANCE_SCALE = 1;
 
-  /*
+  /**
    * The standard deviations to use for the vision
    */
   public static final Matrix<N3, N1> VISION_STD_DEVS = MatBuilder.fill(Nat.N3(), Nat.N1(),

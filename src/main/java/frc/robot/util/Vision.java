@@ -299,6 +299,7 @@ public class Vision {
         }
       }
     }
+    //TODO: If poses are different, return nothing
     return estimatedPoses; 
   }
 
@@ -410,7 +411,7 @@ public class Vision {
       
       if(pose.isPresent() && pose.get()!=null && pose.get().estimatedPose!=null && Math.abs(pose.get().estimatedPose.getX()) < 20){
         double timestamp = getTimeStamp();
-        if(lastPose==null || lastPose.getTranslation().getDistance(pose.get().estimatedPose.toPose2d().getTranslation()) > DriveConstants.kMaxSpeed*(timestamp-lastTimestamp)){
+        if(lastPose==null || lastPose.getTranslation().getDistance(pose.get().estimatedPose.toPose2d().getTranslation()) > DriveConstants.kMaxSpeed*1.25*(timestamp-lastTimestamp)){
           lastPose = pose.get().estimatedPose.toPose2d();
           lastTimestamp = timestamp;
           return Optional.empty();
@@ -450,12 +451,6 @@ public class Vision {
       translation = translation.times((targetPose.getZ()-robotToCamera.getZ())/translation.getZ());
       translation = translation.plus(robotToCamera.getTranslation());
       translation = translation.rotateBy(new Rotation3d(0, 0, yaw));
-
-      System.out.println("id: "+ id);
-      System.out.println("id x: "+ translation.getX());
-      System.out.println("id y: "+ translation.getY());
-      System.out.println("id z: "+ translation.getZ());
-
 
       // Invert it to get the robot position relative to the April tag
       translation = translation.times(-1);
