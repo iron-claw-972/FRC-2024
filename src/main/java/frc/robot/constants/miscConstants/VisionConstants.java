@@ -32,6 +32,9 @@ public class VisionConstants {
    */
   public static final boolean ENABLED = true;
 
+  /**
+   * If object detection should be enabled
+   */
   public static final boolean OBJECT_DETECTION_ENABLED = false;
 
   // If odometry should be updated using vision during auto
@@ -162,7 +165,7 @@ public class VisionConstants {
     FieldConstants.APRIL_TAGS.get(6).pose.getX()+Units.inchesToMeters(27.562),
     FieldConstants.APRIL_TAGS.get(6).pose.getY()+Units.inchesToMeters(45.292),
     Rotation2d.fromDegrees(60)
-    );
+  );
   public static final Pose2d BLUE_SUBWOOFER_RIGHT = new Pose2d(
     FieldConstants.APRIL_TAGS.get(6).pose.getX()+Units.inchesToMeters(27.562),
     FieldConstants.APRIL_TAGS.get(6).pose.getY()-Units.inchesToMeters(45.292),
@@ -202,6 +205,9 @@ public class VisionConstants {
     )
   );
 
+  /**
+   * The transformations from the robot to object detection cameras
+   */
   public static final ArrayList<Transform3d> OBJECT_DETECTION_CAMERAS = new ArrayList<>(List.of(
     new Transform3d(
       new Translation3d(Units.inchesToMeters(10), 0, Units.inchesToMeters(24)),
