@@ -20,12 +20,12 @@
         "y": 1.6488757763840323
       },
       "prevControl": {
-        "x": 2.1887438575598086,
-        "y": 2.195025323731727
+        "x": 2.809086415893629,
+        "y": 2.268665961833349
       },
       "nextControl": {
-        "x": 4.563209582259623,
-        "y": 1.3799102242079144
+        "x": 4.508320937204624,
+        "y": 1.1836125928034364
       },
       "isLocked": false,
       "linkedName": null
@@ -36,12 +36,12 @@
         "y": 0.7718141932010376
       },
       "prevControl": {
-        "x": 5.65096929649833,
-        "y": 0.814510016963094
+        "x": 5.627377636521655,
+        "y": 0.8653674287405564
       },
       "nextControl": {
-        "x": 6.843569698535406,
-        "y": 0.7367317298737166
+        "x": 6.839656573760824,
+        "y": 0.6981565408454996
       },
       "isLocked": false,
       "linkedName": null
@@ -60,12 +60,18 @@
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 2.9499999999999997,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [
     {
-      "name": "New Constraints Zone",
+      "name": "Outtake",
       "minWaypointRelativePos": 0,
-      "maxWaypointRelativePos": 0.25,
+      "maxWaypointRelativePos": 0.15000000000000002,
       "constraints": {
         "maxVelocity": 0.25,
         "maxAcceleration": 0.25,
