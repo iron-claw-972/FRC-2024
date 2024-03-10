@@ -46,20 +46,20 @@ public class Operator {
     }
 
     public void configureControls() {
-        if (intake != null) {
-            Command inakeWithRumble =  new IntakeWithRumble(intake, index, arm, (x)->{
-                if (x){
-                    kDriver.setRumble(RumbleStatus.RUMBLE_ON);
-                }
-                else{
-                    kDriver.setRumble(RumbleStatus.RUMBLE_OFF);
-                }
-            });
-            kDriver.get(Button.X).onTrue(inakeWithRumble);
-            kDriver.get(Button.X).onFalse(new InstantCommand(()->inakeWithRumble.cancel()));
-            kDriver.get(Button.B).onTrue(new InstantCommand(() -> intake.setMode(Mode.ReverseMotors),intake));
-            kDriver.get(Button.B).onFalse(new InstantCommand(() -> intake.setMode(Mode.DISABLED), intake));
-        }
+        // if (intake != null) {
+        //     Command inakeWithRumble =  new IntakeWithRumble(intake, index, arm, (x)->{
+        //         if (x){
+        //             kDriver.setRumble(RumbleStatus.RUMBLE_ON);
+        //         }
+        //         else{
+        //             kDriver.setRumble(RumbleStatus.RUMBLE_OFF);
+        //         }
+        //     });
+        //     kDriver.get(Button.X).onTrue(inakeWithRumble);
+        //     kDriver.get(Button.X).onFalse(new InstantCommand(()->inakeWithRumble.cancel()));
+        //     kDriver.get(Button.B).onTrue(new InstantCommand(() -> intake.setMode(Mode.ReverseMotors),intake));
+        //     kDriver.get(Button.B).onFalse(new InstantCommand(() -> intake.setMode(Mode.DISABLED), intake));
+        // }
         if(index != null){
             kDriver.get(Button.B).onTrue(new InstantCommand(() -> index.ejectBack(), index));
             kDriver.get(Button.B).onFalse(new InstantCommand(() -> index.stopIndex(), index));

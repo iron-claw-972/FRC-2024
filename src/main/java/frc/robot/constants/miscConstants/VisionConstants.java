@@ -68,7 +68,7 @@ public class VisionConstants {
 
   // The highest ambiguity to use. Ambiguities higher than this will be ignored.
   // Only affects calculations using PhotonVision, not manual calculations
-  public static final double HIGHEST_AMBIGUITY = 0.02;
+  public static final double HIGHEST_AMBIGUITY = 0.2;
 
   // Speaker poses
   public static final Pose3d BLUE_SPEAKER_POSE = new Pose3d(
@@ -199,8 +199,8 @@ public class VisionConstants {
     new Pair<String, Transform3d>(
       "CameraRear",
       new Transform3d(
-        new Translation3d(Units.inchesToMeters(16.627), Units.inchesToMeters(11.924), Units.inchesToMeters(12.7)),
-        new Rotation3d(0, Units.degreesToRadians(-50), 0)
+        new Translation3d(Units.inchesToMeters(-11.5), Units.inchesToMeters(0), Units.inchesToMeters(13+5/8)),
+        new Rotation3d(0, Units.degreesToRadians(-20), Math.PI)
       ))
     )
   );

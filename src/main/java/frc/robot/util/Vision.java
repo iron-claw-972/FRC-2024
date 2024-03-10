@@ -317,6 +317,10 @@ public class Vision {
         continue;
       }
       // Adds the vision measurement for this camera
+      System.out.println("vision pose x: "+ estimatedPose.estimatedPose.getX());
+      System.out.println("vision pose y: "+ estimatedPose.estimatedPose.getY());
+
+
       poseEstimator.addVisionMeasurement(
         estimatedPose.estimatedPose.toPose2d(),
         estimatedPose.timestampSeconds,

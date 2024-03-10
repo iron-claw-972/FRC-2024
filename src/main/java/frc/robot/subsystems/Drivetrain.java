@@ -59,7 +59,7 @@ public class Drivetrain extends SubsystemBase {
 
     // If vision is enabled for drivetrain odometry updating
     // DO NOT CHANGE THIS HERE TO DISABLE VISION, change VisionConstants.ENABLED instead
-    private boolean visionEnabled = false;
+    private boolean visionEnabled = true;
 
     // If the robot should aim at the speaker
     private boolean isAlign = false;
@@ -135,8 +135,8 @@ public class Drivetrain extends SubsystemBase {
     @Override
     public void periodic() {
         updateOdometry();
-        // System.out.println("x: "+ getPose().getX()); 
-        // System.out.println("y: "+ getPose().getY()); 
+        System.out.println("drivetrain x: "+ getPose().getX()); 
+        System.out.println("drivetrain y: "+ getPose().getY()); 
     }
 
     // DRIVE
