@@ -35,7 +35,7 @@ public class VisionConstants {
   public static final boolean OBJECT_DETECTION_ENABLED = false;
 
   // If odometry should be updated using vision during auto
-  public static final boolean ENABLED_AUTO = false;
+  public static final boolean ENABLED_AUTO = true;
 
   // If odometry should be updated using vision while running the GoToPose and GoToPosePID commands in teleop
   public static final boolean ENABLED_GO_TO_POSE = true;
@@ -44,7 +44,7 @@ public class VisionConstants {
   public static final PoseStrategy POSE_STRATEGY = PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR;
 
   // Fallback PoseStrategy if MultiTag doesn't work
-  public static final PoseStrategy MULTITAG_FALLBACK_STRATEGY = PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR;
+  public static final PoseStrategy MULTITAG_FALLBACK_STRATEGY = PoseStrategy.LOWEST_AMBIGUITY;
 
   // If vision should use manual calculations
   public static final boolean USE_MANUAL_CALCULATIONS = false;
@@ -53,8 +53,6 @@ public class VisionConstants {
   // Only affects manual calculations
   // To find this, set it to 1 and measure the actual distance and the calculated distance
   public static final double DISTANCE_SCALE = 1;
-  public static final double X_OFFSET_SCALE = 139.28/94.24;
-  public static final double Y_OFFSET_SCALE = 114/60.84;
 
   /*
    * The standard deviations to use for the vision
