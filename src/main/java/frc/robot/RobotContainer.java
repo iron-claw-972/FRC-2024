@@ -79,7 +79,7 @@ public class RobotContainer {
         
       default:
       case SwerveCompetition:
-        arm = new Arm();
+        //arm = new Arm();
         intake = new Intake();
         index = new StorageIndex();
         shooter = new Shooter();
@@ -101,11 +101,11 @@ public class RobotContainer {
         operator.configureControls();
         initializeAutoBuilder();
         drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
-        registerCommands();
-        PathGroupLoader.loadPathGroups();
+       // registerCommands();
+       // PathGroupLoader.loadPathGroups();
  
-        shuffleboardManager = new ShuffleBoardManager(drive, vision);
-        SmartDashboard.putBoolean("Index beam", index.hasNote());
+       // shuffleboardManager = new ShuffleBoardManager(drive, vision);
+       // SmartDashboard.putBoolean("Index beam", index.hasNote());
         break;
       }
 
