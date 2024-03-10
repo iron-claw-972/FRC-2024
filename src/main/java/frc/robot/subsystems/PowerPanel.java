@@ -10,7 +10,7 @@ public class PowerPanel extends SubsystemBase {
 	private static final PowerDistribution PDH = new PowerDistribution();
 	private static PDPSim PDHSim; // not sure if this is only CTRE or what
 	
-	private PowerPanel() {
+	public PowerPanel() {
 		if (RobotBase.isSimulation()) {
 			PDHSim = new PDPSim(PDH);
 

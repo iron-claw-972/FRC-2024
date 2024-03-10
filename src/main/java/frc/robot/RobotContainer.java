@@ -25,6 +25,7 @@ import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
 import frc.robot.controls.Operator;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.PowerPanel;
 import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
 import frc.robot.subsystems.gpm.Shooter;
@@ -51,6 +52,7 @@ public class RobotContainer {
   private Shooter shooter = null;
   private Intake intake = null;
   private StorageIndex index = null;
+  private PowerPanel powerpanel = null;
 
   // Controllers are defined here
   private BaseDriverConfig driver = null;
@@ -67,6 +69,7 @@ public class RobotContainer {
     switch (robotId) {
 
       case TestBed1:
+		powerpanel = new PowerPanel();
         index = new StorageIndex();
         shooter = new Shooter();
         break;
