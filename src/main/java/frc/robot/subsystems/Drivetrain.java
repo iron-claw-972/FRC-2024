@@ -206,7 +206,7 @@ public class Drivetrain extends SubsystemBase {
         Pose2d pose2 = getPose();
 
         if(VisionConstants.ENABLED){
-            if(RobotBase.isReal() && visionEnabled){
+            if(visionEnabled){
                 vision.updateOdometry(poseEstimator);
             }
         }
