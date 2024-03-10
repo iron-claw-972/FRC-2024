@@ -8,6 +8,8 @@ import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.simulation.PhotonCameraSim;
+import org.photonvision.simulation.VisionSystemSim;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
@@ -27,6 +29,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.FieldConstants;
@@ -47,6 +50,8 @@ public class Vision {
   private AprilTagFieldLayout m_aprilTagFieldLayout;
   // A list of the cameras on the robot
   private ArrayList<VisionCamera> m_cameras = new ArrayList<>();
+
+  private VisionSystemSim visionSim;
 
   /**
    * Creates a new instance of Vision and sets up the cameras and field layout
@@ -80,6 +85,15 @@ public class Vision {
     // Puts the cameras in an array list
     for (int i = 0; i < camList.size(); i++) {
       m_cameras.add(new VisionCamera(camList.get(i).getFirst(), camList.get(i).getSecond()));
+    }
+
+    if(RobotBase.isSimulation()){
+      visionSim = new VisionSystemSim("Vision");
+      visionSim.addAprilTags(m_aprilTagFieldLayout);
+      for(VisionCamera c : m_cameras){
+        PhotonCameraSim cameraSim = new PhotonCameraSim(c.camera);
+        visionSim.addCamera(cameraSim, c.photonPoseEstimator.getRobotToCameraTransform());
+      }
     }
   }
 
@@ -308,6 +322,10 @@ public class Vision {
    * @param poseEstimator The pose estimator to update
    */
   public void updateOdometry(SwerveDrivePoseEstimator poseEstimator){
+    if(RobotBase.isSimulation() && VisionConstants.ENABLED_SIM){
+      visionSim.update(poseEstimator.getEstimatedPosition());
+    }
+
     // An array list of poses returned by different cameras
     ArrayList<EstimatedRobotPose> estimatedPoses = getEstimatedPoses(poseEstimator.getEstimatedPosition());
     for (int i = 0; i < estimatedPoses.size(); i++) {
@@ -393,21 +411,16 @@ public class Vision {
       
       // if there is a target detected and the timestamp exists, 
       // check the ambiguity isn't too high
-      boolean foundGoodTarget = false;
       if (cameraResult.hasTargets() && cameraResult.getTimestampSeconds() > 0) {
         // go through all the targets
         List<PhotonTrackedTarget> targetsUsed = cameraResult.targets;
         for (int i = targetsUsed.size()-1; i >= 0; i--) {
-          if(onlyUse > 0 && targetsUsed.get(i).getFiducialId() != onlyUse){
+          if(targetsUsed.get(i).getPoseAmbiguity() > VisionConstants.HIGHEST_AMBIGUITY || onlyUse > 0 && targetsUsed.get(i).getFiducialId() != onlyUse){
             targetsUsed.remove(i);
             continue;
           }
-          // check their ambiguity, if it is below the highest wanted amount, use this camera's result
-          if (targetsUsed.get(i).getPoseAmbiguity() <= VisionConstants.HIGHEST_AMBIGUITY) {
-            foundGoodTarget = true;
-          }
         }
-        if(!foundGoodTarget){
+        if(!cameraResult.hasTargets() || targetsUsed.size()==1 && VisionConstants.ONLY_USE_2_TAGS){
           return Optional.empty();
         }
       }
