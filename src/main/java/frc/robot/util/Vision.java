@@ -423,6 +423,10 @@ public class Vision {
           }
         }
 
+      if(!cameraResult.hasTargets() || cameraResult.getTimestampSeconds()<0 || targetsUsed.size()==1 && VisionConstants.ONLY_USE_2_TAGS){
+          return Optional.empty();
+      }
+
         Optional<EstimatedRobotPose> pose = photonPoseEstimator.update(cameraResult);
         
         if(pose.isPresent() && pose.get()!=null && pose.get().estimatedPose!=null && Math.abs(pose.get().estimatedPose.getX()) < 20){

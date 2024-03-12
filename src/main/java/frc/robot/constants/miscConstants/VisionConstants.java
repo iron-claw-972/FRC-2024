@@ -50,7 +50,7 @@ public class VisionConstants {
   public static final boolean ONLY_USE_2_TAGS = false;
 
   // PoseStrategy to use in pose estimation
-  public static final PoseStrategy POSE_STRATEGY = PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR;
+  public static final PoseStrategy POSE_STRATEGY = PoseStrategy.MULTI_TAG_PNP_ON_RIO;
 
   // Fallback PoseStrategy if MultiTag doesn't work
   public static final PoseStrategy MULTITAG_FALLBACK_STRATEGY = PoseStrategy.LOWEST_AMBIGUITY;
