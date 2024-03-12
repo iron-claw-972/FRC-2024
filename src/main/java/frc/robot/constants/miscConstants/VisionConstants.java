@@ -212,9 +212,8 @@ public class VisionConstants {
     new Pair<String, Transform3d>(
       "CameraRear",
       new Transform3d(
-        //-15.5
-        new Translation3d(Units.inchesToMeters(-15.5), Units.inchesToMeters(0), Units.inchesToMeters(13+5/8)),
-        new Rotation3d(0, Units.degreesToRadians(-15), Math.PI)
+        new Translation3d(Units.inchesToMeters(-12), Units.inchesToMeters(0), Units.inchesToMeters(13+5.0/8)),
+        new Rotation3d(0, Units.degreesToRadians(-20), Math.PI)
       ))
     )
   );
