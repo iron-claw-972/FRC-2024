@@ -59,6 +59,9 @@ public class Shooter extends SubsystemBase {
 	private static final double RADIUS_STEALTH = Units.inchesToMeters(2.0);
 	private static final double MOI_STEALTH = MASS_RIM * RADIUS_STEALTH * RADIUS_STEALTH;
 
+	/** Magic number to predict output velocity. <p> Found empirically. */
+	private static final double OUTPUT_COEF = 0.64;
+
 	// each motor spins 6 stealth wheels
 	private static final double MOI_SHAFT = MOI_STEALTH * 6;
 
@@ -190,6 +193,42 @@ public class Shooter extends SubsystemBase {
 	}
 
 	/**
+	 * Accounts for slip in a speed or RPM.
+	 * <p>
+	 * This method transforms a speed/RPM that does account for slip into one 
+	 * that doesn't. As it's a simple proportional aproximation, it can be 
+	 * applied to both speeds and RPMs.
+	 * <p>
+	 * This method should typically be used for gets. Example: 
+	 * System.out.println(removeSlip(getLeftMotorRPM()));
+	 * 
+	 * @param speed The speed to add slip to.
+	 * @return The output, accounting for slip.
+	 * @see frc.robot.subsystems.gpm.Shooter.addSlip
+	 */
+	public static double removeSlip(double speed) {
+		return speed * OUTPUT_COEF;
+	}
+
+	/**
+	 * Accounts for slip in a speed or RPM.
+	 * <p>
+	 * This method transforms a speed/RPM that doesn't account for slip into 
+	 * one that does. As it's a simple proportional aproximation, it can be 
+	 * applied to both speeds and RPMs.
+	 * <p>
+	 * This method should typically be used for sets. Example: 
+	 * setTargetRPM(addSlip(outputSpeed));
+	 * 
+	 * @param speed The speed to add slip to.
+	 * @return The output, accounting for slip.
+	 * @see frc.robot.subsystems.gpm.Shooter.removeSlip
+	 */
+	public static double addSlip(double output) {
+		return output / OUTPUT_COEF;
+	}
+
+	/**
 	 * Sets the speed both shooter motors try to spin up to independantly.
 	 *
 	 * @param speedLeft  the speed tho left motor will spin to in RPM
@@ -221,12 +260,12 @@ public class Shooter extends SubsystemBase {
 	 * <p>
 	 * Empirical fit.
 	 *
-	 * @param speed speed to spin to in m/s
+	 * @param output speed to spin to in m/s
 	 * @see setTargetRPM
 	 */
-	public void setTargetVelocity(double speed) {
+	public void setTargetVelocity(double output) {
 		// convert speed to RPM
-		setTargetRPM(shooterSpeedToRPM(speed) / 0.64);
+		setTargetRPM(addSlip(shooterSpeedToRPM(output)));
 	}
 
 	/**
