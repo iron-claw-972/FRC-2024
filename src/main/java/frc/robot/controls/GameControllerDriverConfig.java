@@ -54,11 +54,11 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     // Enable state deadband after setting formation to X
     kDriver.get(Button.X).onFalse(new InstantCommand(()->getDrivetrain().setStateDeadband(true)));
 
-    if(VisionConstants.OBJECT_DETECTION_ENABLED){
-      if(intake != null && index != null && arm != null){
-        kDriver.get(Button.RIGHT_JOY).whileTrue(new AcquireGamePiece(()->vision.getBestGamePiece(Math.PI/2), getDrivetrain(), intake, index, arm));
-      }
-    }
+    // if(VisionConstants.OBJECT_DETECTION_ENABLED){
+    //   if(intake != null && index != null && arm != null){
+    //     kDriver.get(Button.RIGHT_JOY).whileTrue(new AcquireGamePiece(()->vision.getBestGamePiece(Math.PI/2), getDrivetrain(), intake, index, arm));
+    //   }
+    // }
 
     // Resets the modules to absolute if they are having the unresolved zeroing
     // error

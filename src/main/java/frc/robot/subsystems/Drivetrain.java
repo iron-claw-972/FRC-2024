@@ -135,8 +135,8 @@ public class Drivetrain extends SubsystemBase {
     @Override
     public void periodic() {
         updateOdometry();
-        System.out.println("drivetrain x: "+ getPose().getX()); 
-        System.out.println("drivetrain y: "+ getPose().getY()); 
+        System.out.println("drivetrain x: "+ getPose().getX() + "drivetrain y: "+ getPose().getY()); 
+
     }
 
     // DRIVE
@@ -208,6 +208,7 @@ public class Drivetrain extends SubsystemBase {
         if(VisionConstants.ENABLED){
             if(visionEnabled){
                 vision.updateOdometry(poseEstimator);
+
             }
         }
 

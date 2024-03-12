@@ -44,7 +44,7 @@ public class VisionConstants {
   public static final boolean ENABLED_GO_TO_POSE = true;
 
   // If vision should be simulated
-  public static final boolean ENABLED_SIM = true;
+  public static final boolean ENABLED_SIM = false;
 
   // If vision should only return values if it can see 2 good targets
   public static final boolean ONLY_USE_2_TAGS = false;
@@ -61,7 +61,7 @@ public class VisionConstants {
   // The number to multiply the distance to the April tag by
   // Only affects manual calculations
   // To find this, set it to 1 and measure the actual distance and the calculated distance
-  public static final double DISTANCE_SCALE = 1;
+  public static final double DISTANCE_SCALE = 0.8;
 
   /**
    * The standard deviations to use for the vision
@@ -75,6 +75,13 @@ public class VisionConstants {
   // The highest ambiguity to use. Ambiguities higher than this will be ignored.
   // Only affects calculations using PhotonVision, not manual calculations
   public static final double HIGHEST_AMBIGUITY = 0.2;
+
+  // public static final Pose2d POINT_POSE = new Pose2d(
+  //   BLUE_AMP_POSE.getX(),
+  //   BLUE_AMP_POSE.getY() - AMP_DISTANCE,
+  //   0
+  // );
+
 
   // Speaker poses
   public static final Pose3d BLUE_SPEAKER_POSE = new Pose3d(
@@ -205,8 +212,9 @@ public class VisionConstants {
     new Pair<String, Transform3d>(
       "CameraRear",
       new Transform3d(
-        new Translation3d(Units.inchesToMeters(-11.5), Units.inchesToMeters(0), Units.inchesToMeters(13+5/8)),
-        new Rotation3d(0, Units.degreesToRadians(-20), Math.PI)
+        //-15.5
+        new Translation3d(Units.inchesToMeters(-15.5), Units.inchesToMeters(0), Units.inchesToMeters(13+5/8)),
+        new Rotation3d(0, Units.degreesToRadians(-15), Math.PI)
       ))
     )
   );
