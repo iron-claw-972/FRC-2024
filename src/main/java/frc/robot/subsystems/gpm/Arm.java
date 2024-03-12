@@ -105,6 +105,8 @@ public class Arm extends SubsystemBase {
             6,
             new Color8Bit(Color.kYellow)));
 
+    private double angle;
+
     public Arm() {
         // set the PID tolerance
         pid.setTolerance(TOLERANCE);
@@ -174,7 +176,7 @@ public class Arm extends SubsystemBase {
             }
 
             LogManager.add("Arm/SlaveErrors(ticks)", () -> slave_errors);
-        }
+        } 
     }
 
     /**
@@ -194,6 +196,10 @@ public class Arm extends SubsystemBase {
     @Override
     public void periodic() {
         // TODO: possibly clamp the setpoint ...
+        if (getAngleRad() > ArmConstants.MIN_ANGLE_RADS || getAngleRad() < ArmConstants.MAX_ANGLE_RADS) {
+            motors[0].set(0);
+        }
+
         // calculate the desired duty cycle
        // if(encoder.getDistance() < ArmConstants.MAX_ANGLE_RADS + .2 && encoder.getDistance() > ArmConstants.MIN_ANGLE_RADS - .2)  {
         dutyCycle = MathUtil.clamp(
@@ -252,6 +258,7 @@ public class Arm extends SubsystemBase {
      * @param angle (in radians)
      */
     public void setAngle(double angle) {
+        this.angle = angle;
         // zero the integrator portion of the PID controller
         pid.reset();
 
