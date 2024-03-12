@@ -316,7 +316,7 @@ public class Vision {
    * @param poseEstimator The pose estimator to update
    */
   public void updateOdometry(SwerveDrivePoseEstimator poseEstimator){
-
+    // Simulate vision
     if(RobotBase.isSimulation() && VisionConstants.ENABLED_SIM){
       visionSim.update(poseEstimator.getEstimatedPosition());
     }
@@ -330,7 +330,10 @@ public class Vision {
         continue;
       }
 
-      System.out.println("VIsion x:" + estimatedPose.estimatedPose.getX() + "    "+ "Vision Y: " + estimatedPose.estimatedPose.getY());
+      System.out.println("\nVIsion x:" + estimatedPose.estimatedPose.getX() + "    "+ "Vision Y: " + estimatedPose.estimatedPose.getY());
+      for(PhotonTrackedTarget t : estimatedPose.targetsUsed){
+        System.out.printf("Dist to tag %d: %.3fm\n", t.getFiducialId(), getTagPose(t.getFiducialId()).getTranslation().toTranslation2d().getDistance(poseEstimator.getEstimatedPosition().getTranslation()));
+      }
       poseEstimator.addVisionMeasurement(
         estimatedPose.estimatedPose.toPose2d(),
         estimatedPose.timestampSeconds,
