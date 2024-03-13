@@ -55,6 +55,8 @@ public class Vision {
 
   private VisionSystemSim visionSim;
 
+  private boolean sawTag = false;
+
   /**
    * Creates a new instance of Vision and sets up the cameras and field layout
    */
@@ -323,6 +325,8 @@ public class Vision {
       visionSim.update(poseEstimator.getEstimatedPosition());
     }
 
+    sawTag = false;
+
     // An array list of poses returned by different cameras
     ArrayList<EstimatedRobotPose> estimatedPoses = getEstimatedPoses(poseEstimator.getEstimatedPosition());
     for (int i = 0; i < estimatedPoses.size(); i++) {
@@ -333,15 +337,24 @@ public class Vision {
       }
 
       // System.out.println("\nVIsion x:" + estimatedPose.estimatedPose.getX() + "    "+ "Vision Y: " + estimatedPose.estimatedPose.getY());
-      for(PhotonTrackedTarget t : estimatedPose.targetsUsed){
-        // System.out.printf("Dist to tag %d: %.3fm\n", t.getFiducialId(), getTagPose(t.getFiducialId()).getTranslation().toTranslation2d().getDistance(poseEstimator.getEstimatedPosition().getTranslation()));
-      }
+      // for(PhotonTrackedTarget t : estimatedPose.targetsUsed){
+      //   System.out.printf("Dist to tag %d: %.3fm\n", t.getFiducialId(), getTagPose(t.getFiducialId()).getTranslation().toTranslation2d().getDistance(poseEstimator.getEstimatedPosition().getTranslation()));
+      // }
       poseEstimator.addVisionMeasurement(
         estimatedPose.estimatedPose.toPose2d(),
         estimatedPose.timestampSeconds,
         VisionConstants.VISION_STD_DEVS
       );
+      sawTag = true;
     }
+  }
+
+  /**
+   * If vision saw any April tags last frame
+   * @return If vision saw an April tag last frame
+   */
+  public boolean canSeeTag(){
+    return sawTag;
   }
 
   /**

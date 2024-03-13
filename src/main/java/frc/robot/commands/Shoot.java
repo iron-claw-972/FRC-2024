@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -44,6 +46,8 @@ public class Shoot extends Command {
         public static final double shooterHeight = ArmConstants.ARM_LENGTH*Math.sin(ArmConstants.standbySetpoint) + ArmConstants.PIVOT_HEIGHT;
         public static final double shooterOffset = ArmConstants.PIVOT_X + ArmConstants.ARM_LENGTH * Math.cos(ArmConstants.standbySetpoint);
 
+        private Debouncer visionSawTagDebouncer = new Debouncer(0.2, DebounceType.kFalling);
+
         public Shoot(Shooter shooter, Arm arm, Drivetrain drivetrain, StorageIndex index) {
                 this.shooter = shooter;
                 this.arm = arm;
@@ -58,6 +62,7 @@ public class Shoot extends Command {
                 shootTimer.reset();
                 shootTimer.stop();
                 drive.setIsAlign(true); // Enable alignment mode on the drivetrain
+                drive.onlyUseTags(new int[]{3, 4, 7, 8});
         }
 
         @Override
@@ -146,13 +151,13 @@ public class Shoot extends Command {
 
                 // Sets the angle to align to for the drivetrain, uses driveHeading in DefaultDriveCommand
                 drive.setAlignAngle(Math.PI + theta_h); // would only pause rotational
-                // use driveheading with x, y speed (keep same), angle;
-                drive.driveHeading(v_rx, v_ry, Math.PI+theta_h, true);
 
                 // Set the outtake velocity
                 shooter.setTargetVelocity(v_shoot);
 
-                if (arm.atSetpoint() && shooter.atSetpoint() && drive.atAlignAngle()) {
+                boolean sawTag = visionSawTagDebouncer.calculate(drive.canSeeTag());
+
+                if (arm.atSetpoint() && shooter.atSetpoint() && drive.atAlignAngle() && sawTag) {
                         index.ejectIntoShooter();
                         shootTimer.start();
                 }
@@ -170,5 +175,6 @@ public class Shoot extends Command {
                 drive.setIsAlign(false); // Use normal driver controls
                 arm.setAngle(ArmConstants.standbySetpoint);
                 index.stopIndex();
+                drive.onlyUseTags(new int[0]);
         }
 }

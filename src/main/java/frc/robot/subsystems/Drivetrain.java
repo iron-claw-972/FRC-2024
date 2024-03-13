@@ -411,6 +411,23 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /**
+     * Sets vision to only use certain April tags
+     * @param ids An array of the tags to only use
+     */
+    public void onlyUseTags(int[] ids){
+        if(vision != null){
+            vision.onlyUse(ids);
+        }
+    }
+    /**
+     * Returns if vision has seen an April tag in the last frame
+     * @return If vision saw a tag last frame or if vision is disabled
+     */
+    public boolean canSeeTag(){
+        return vision.canSeeTag() || !visionEnabled || !VisionConstants.ENABLED;
+    }
+
+    /**
      * Resets the swerve modules from the absolute encoders
      */
     public void resetModulesToAbsolute() {
