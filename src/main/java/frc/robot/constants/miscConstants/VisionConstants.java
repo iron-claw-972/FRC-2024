@@ -50,10 +50,10 @@ public class VisionConstants {
   public static final boolean ONLY_USE_2_TAGS = false;
 
   // PoseStrategy to use in pose estimation
-  public static final PoseStrategy POSE_STRATEGY = PoseStrategy.MULTI_TAG_PNP_ON_RIO;
+  public static final PoseStrategy POSE_STRATEGY = PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR;
 
   // Fallback PoseStrategy if MultiTag doesn't work
-  public static final PoseStrategy MULTITAG_FALLBACK_STRATEGY = PoseStrategy.LOWEST_AMBIGUITY;
+  public static final PoseStrategy MULTITAG_FALLBACK_STRATEGY = PoseStrategy.CLOSEST_TO_CAMERA_HEIGHT;
 
   // If vision should use manual calculations
   public static final boolean USE_MANUAL_CALCULATIONS = false;
@@ -67,21 +67,14 @@ public class VisionConstants {
    * The standard deviations to use for the vision
    */
   public static final Matrix<N3, N1> VISION_STD_DEVS = MatBuilder.fill(Nat.N3(), Nat.N1(),
-    0.00443, // x in meters (default=0.9)
-    0.00630, // y in meters (default=0.9)
-    1000  // heading in radians. The gyroscope is very accurate, so as long as it is reset correctly it is unnecessary to correct it with vision
+    0.01350, // x in meters (default=0.9)
+    0.03101, // y in meters (default=0.9)
+    0.1  // heading in radians. The gyroscope is very accurate, so as long as it is reset correctly it is unnecessary to correct it with vision
   );
 
   // The highest ambiguity to use. Ambiguities higher than this will be ignored.
   // Only affects calculations using PhotonVision, not manual calculations
   public static final double HIGHEST_AMBIGUITY = 0.2;
-
-  // public static final Pose2d POINT_POSE = new Pose2d(
-  //   BLUE_AMP_POSE.getX(),
-  //   BLUE_AMP_POSE.getY() - AMP_DISTANCE,
-  //   0
-  // );
-
 
   // Speaker poses
   public static final Pose3d BLUE_SPEAKER_POSE = new Pose3d(
@@ -97,12 +90,12 @@ public class VisionConstants {
     BLUE_SPEAKER_POSE.getRotation().rotateBy(new Rotation3d(0, 0, Math.PI))
   );
 
-  public static final double AMP_DISTANCE = 1;
+  public static final double AMP_DISTANCE = 2;
 
   // The amp poses to align to
   public static final Pose2d BLUE_AMP_POSE = new Pose2d(
     FieldConstants.APRIL_TAGS.get(5).pose.getX(),
-    FieldConstants.APRIL_TAGS.get(5).pose.getY() - DriveConstants.kRobotWidthWithBumpers/2,
+    FieldConstants.APRIL_TAGS.get(5).pose.getY() - DriveConstants.kRobotWidthWithBumpers/2 + Units.inchesToMeters(5),
     new Rotation2d(-Math.PI/2)
   );
 
@@ -136,7 +129,7 @@ public class VisionConstants {
   );
 
   // How close we have to get to the amp before scoring in it (meters and radians)
-  public static final double AMP_TOLERANCE_DISTANCE = 0.3;
+  public static final double AMP_TOLERANCE_DISTANCE = 0.1;
   public static final double AMP_TOLERANCE_ANGLE = Units.degreesToRadians(15);
 
   // The podium poses to align to

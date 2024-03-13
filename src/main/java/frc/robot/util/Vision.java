@@ -16,6 +16,8 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.MatBuilder;
+import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -326,13 +328,13 @@ public class Vision {
     for (int i = 0; i < estimatedPoses.size(); i++) {
       EstimatedRobotPose estimatedPose = estimatedPoses.get(i);
       // Continue if this pose doesn't exist
-      if(estimatedPose==null || estimatedPose.estimatedPose==null || estimatedPose.timestampSeconds < 0 || Math.abs(estimatedPose.estimatedPose.getX()) > 20 || Math.abs(estimatedPose.estimatedPose.getY()) > 10 || Timer.getFPGATimestamp() < estimatedPose.timestampSeconds || Timer.getFPGATimestamp() > estimatedPose.timestampSeconds + 5){
+      if(estimatedPose==null || estimatedPose.estimatedPose==null || estimatedPose.timestampSeconds < 0 || estimatedPose.estimatedPose.getX() < 0 || estimatedPose.estimatedPose.getX() > FieldConstants.kFieldLength || estimatedPose.estimatedPose.getY() < 0 || estimatedPose.estimatedPose.getY() > FieldConstants.kFieldWidth || Timer.getFPGATimestamp() < estimatedPose.timestampSeconds || Timer.getFPGATimestamp() > estimatedPose.timestampSeconds + 1){
         continue;
       }
 
-      System.out.println("\nVIsion x:" + estimatedPose.estimatedPose.getX() + "    "+ "Vision Y: " + estimatedPose.estimatedPose.getY());
+      // System.out.println("\nVIsion x:" + estimatedPose.estimatedPose.getX() + "    "+ "Vision Y: " + estimatedPose.estimatedPose.getY());
       for(PhotonTrackedTarget t : estimatedPose.targetsUsed){
-        System.out.printf("Dist to tag %d: %.3fm\n", t.getFiducialId(), getTagPose(t.getFiducialId()).getTranslation().toTranslation2d().getDistance(poseEstimator.getEstimatedPosition().getTranslation()));
+        // System.out.printf("Dist to tag %d: %.3fm\n", t.getFiducialId(), getTagPose(t.getFiducialId()).getTranslation().toTranslation2d().getDistance(poseEstimator.getEstimatedPosition().getTranslation()));
       }
       poseEstimator.addVisionMeasurement(
         estimatedPose.estimatedPose.toPose2d(),

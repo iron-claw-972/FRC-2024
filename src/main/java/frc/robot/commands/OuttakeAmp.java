@@ -73,9 +73,9 @@ public class OuttakeAmp extends SequentialCommandGroup {
           new OuttakeAmp(arm, index, shooter)).deadlineWith(
               // Go to the pose and stay at it until the command finishes
               new SequentialCommandGroup(
-                // new GoToPose(ampPose2, drive).until(()->{
-                //   return drive.getPose().getTranslation().getDistance(ampPose2.getTranslation()) < VisionConstants.AMP_TOLERANCE_DISTANCE;
-                // }),
+                new GoToPose(ampPose2, drive).until(()->{
+                  return drive.getPose().getTranslation().getDistance(ampPose2.getTranslation()) < VisionConstants.AMP_TOLERANCE_DISTANCE;
+                }),
                 new GoToPose(()->ampPose, drive))
               ));
   }
@@ -83,9 +83,9 @@ public class OuttakeAmp extends SequentialCommandGroup {
   public OuttakeAmp(Drivetrain drive){
     addCommands(
       new InstantCommand(()->getPoses()),
-      // new GoToPose(ampPose2, drive).until(()->{
-      //   return drive.getPose().getTranslation().getDistance(ampPose2.getTranslation()) < VisionConstants.AMP_TOLERANCE_DISTANCE;
-      // }),
+      new GoToPose(ampPose2, drive).until(()->{
+        return drive.getPose().getTranslation().getDistance(ampPose2.getTranslation()) < VisionConstants.AMP_TOLERANCE_DISTANCE;
+      }),
       new GoToPose(() -> ampPose, drive)
     );
   }
