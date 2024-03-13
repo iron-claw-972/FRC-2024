@@ -360,9 +360,9 @@ public class Vision {
    * Sets the cameras to only use one April tag
    * @param id The id of the tag to use
    */
-  public void onlyUse(int id){
+  public void onlyUse(int[] ids){
     for(VisionCamera c : m_cameras){
-      c.setOnlyUse(id);
+      c.setOnlyUse(ids);
     }
   }
   
@@ -372,7 +372,7 @@ public class Vision {
     Pose2d lastPose;
     double lastTimestamp = 0;
     boolean enabled = true;
-    int onlyUse = 0;
+    int[] onlyUse = new int[0];
   
     /**
      * Stores information about a camera
@@ -415,9 +415,14 @@ public class Vision {
       else{
         List<PhotonTrackedTarget> targetsUsed = cameraResult.targets;
         for (int i = targetsUsed.size()-1; i >= 0; i--) {
-          if(targetsUsed.get(i).getPoseAmbiguity() > VisionConstants.HIGHEST_AMBIGUITY || onlyUse > 0 && targetsUsed.get(i).getFiducialId() != onlyUse){
+          boolean found = onlyUse.length == 0;
+          for(int id : onlyUse){
+            if(targetsUsed.get(i).getFiducialId() == id){
+              found = true;
+            }
+          }
+          if(!found || targetsUsed.get(i).getPoseAmbiguity() > VisionConstants.HIGHEST_AMBIGUITY){
             targetsUsed.remove(i);
-            continue;
           }
         }
 
@@ -512,8 +517,8 @@ public class Vision {
      * Sets the camera to only use 1 April tag
      * @param id The id of the tag to use, or 0 to use all
      */
-    public void setOnlyUse(int id){
-      onlyUse = id;
+    public void setOnlyUse(int[] ids){
+      onlyUse = ids;
     }
   }
 }
