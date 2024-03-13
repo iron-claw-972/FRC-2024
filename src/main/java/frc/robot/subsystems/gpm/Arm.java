@@ -272,7 +272,8 @@ public class Arm extends SubsystemBase {
     }
 
     private void setupLogs() {
-        LogManager.add("Arm/PositionError", () -> angle - simulation.getAngleRads(), Duration.ofSeconds(1));
+        LogManager.add("Arm/PositionErrorSim", () -> angle - simulation.getAngleRads(), Duration.ofSeconds(1));
+        LogManager.add("Arm/PositionError", () -> angle - getAngleRad(), Duration.ofSeconds(1));
         LogManager.add("Arm/Volts", () -> motors[0].get() * voltsBattery);
 
         ArrayList<Double> slave_errors = new ArrayList();
