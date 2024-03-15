@@ -203,14 +203,13 @@ public class VisionConstants {
     new Rotation2d(Math.PI-BLUE_SUBWOOFER_LEFT.getRotation().getRadians())
   );
 
-<<<<<<< HEAD
-  /** The camera poses */
-=======
-  // The camera poses
-  // + X: Front of Robot
-  // + Y: Left of Robot
-  // + Z: Top of Robot
->>>>>>> cb173bfcdb762a2c1843340732b0f51c5f0a900b
+  /**
+   * The camera poses
+   * <p>
+   * + X: Front of Robot <p>
+   * + Y: Left of Robot <p>
+   * + Z: Top of Robot
+   */
   public static final ArrayList<Pair<String, Transform3d>> APRIL_TAG_CAMERAS = new ArrayList<Pair<String, Transform3d>>(List.of(
     new Pair<String, Transform3d>(
       "CameraFront",
