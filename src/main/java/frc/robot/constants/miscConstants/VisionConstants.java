@@ -55,6 +55,9 @@ public class VisionConstants {
   // Fallback PoseStrategy if MultiTag doesn't work
   public static final PoseStrategy MULTITAG_FALLBACK_STRATEGY = PoseStrategy.CLOSEST_TO_CAMERA_HEIGHT;
 
+  // Any April tags we always want to ignore. To ignore a tag, put its id in this array
+  public static final int[] TAGS_TO_IGNORE = {};
+
   // If vision should use manual calculations
   public static final boolean USE_MANUAL_CALCULATIONS = false;
 
@@ -207,7 +210,6 @@ public class VisionConstants {
       new Transform3d(
         new Translation3d(Units.inchesToMeters(-12.5), Units.inchesToMeters(6.5), Units.inchesToMeters(19.75)),
         new Rotation3d(0, Units.degreesToRadians(-40), Math.PI)
-        // if fails, try the complement
       ))
     )
   );
