@@ -229,10 +229,10 @@
     {
       "name": "Outtake 1",
       "minWaypointRelativePos": 0.0,
-      "maxWaypointRelativePos": 0.3,
+      "maxWaypointRelativePos": 0.25,
       "constraints": {
-        "maxVelocity": 0.15,
-        "maxAcceleration": 0.15,
+        "maxVelocity": 0.21,
+        "maxAcceleration": 0.21,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
       }
@@ -400,8 +400,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.25,
-    "maxAcceleration": 3.25,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
