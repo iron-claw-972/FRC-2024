@@ -37,30 +37,34 @@ public class VisionConstants {
    */
   public static final boolean OBJECT_DETECTION_ENABLED = false;
 
-  // If odometry should be updated using vision during auto
+  /** If odometry should be updated using vision during auto */
   public static final boolean ENABLED_AUTO = false;
 
-  // If odometry should be updated using vision while running the GoToPose and GoToPosePID commands in teleop
+  /** If odometry should be updated using vision while running the GoToPose and GoToPosePID commands in teleop */
   public static final boolean ENABLED_GO_TO_POSE = true;
 
-  // If vision should be simulated
+  /** If vision should be simulated */
   public static final boolean ENABLED_SIM = true;
 
-  // If vision should only return values if it can see 2 good targets
+  /** If vision should only return values if it can see 2 good targets */
   public static final boolean ONLY_USE_2_TAGS = false;
 
-  // PoseStrategy to use in pose estimation
+  /** PoseStrategy to use in pose estimation */
   public static final PoseStrategy POSE_STRATEGY = PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR;
 
-  // Fallback PoseStrategy if MultiTag doesn't work
+  /** Fallback PoseStrategy if MultiTag doesn't work */
   public static final PoseStrategy MULTITAG_FALLBACK_STRATEGY = PoseStrategy.CLOSEST_TO_CAMERA_HEIGHT;
 
-  // If vision should use manual calculations
+  /** If vision should use manual calculations */
   public static final boolean USE_MANUAL_CALCULATIONS = false;
 
-  // The number to multiply the distance to the April tag by
-  // Only affects manual calculations
-  // To find this, set it to 1 and measure the actual distance and the calculated distance
+  /**
+   * The number to multiply the distance to the April tag by.
+   * <p>
+   * Only affects manual calculations.
+   * <p>
+   * To find this, set it to 1 and measure the actual distance and the calculated distance.
+   */
   public static final double DISTANCE_SCALE = 0.8;
 
   /**
@@ -72,8 +76,11 @@ public class VisionConstants {
     .9  // heading in radians. The gyroscope is very accurate, so as long as it is reset correctly it is unnecessary to correct it with vision
   );
 
-  // The highest ambiguity to use. Ambiguities higher than this will be ignored.
-  // Only affects calculations using PhotonVision, not manual calculations
+  /**
+   * The highest ambiguity to use. Ambiguities higher than this will be ignored.
+   * <p>
+   * Only affects calculations using PhotonVision, not manual calculations.
+   */
   public static final double HIGHEST_AMBIGUITY = 0.2;
 
   // Speaker poses
@@ -128,7 +135,7 @@ public class VisionConstants {
     RED_AMP_POSE.getRotation()
   );
 
-  // How close we have to get to the amp before scoring in it (meters and radians)
+  /** How close we have to get to the amp before scoring in it (meters and radians) */
   public static final double AMP_TOLERANCE_DISTANCE = 0.1;
   public static final double AMP_TOLERANCE_ANGLE = Units.degreesToRadians(15);
 
@@ -193,7 +200,7 @@ public class VisionConstants {
     new Rotation2d(Math.PI-BLUE_SUBWOOFER_LEFT.getRotation().getRadians())
   );
 
-  // The camera poses
+  /** The camera poses */
   public static final ArrayList<Pair<String, Transform3d>> APRIL_TAG_CAMERAS = new ArrayList<Pair<String, Transform3d>>(List.of(
     new Pair<String, Transform3d>(
       "CameraFront",
