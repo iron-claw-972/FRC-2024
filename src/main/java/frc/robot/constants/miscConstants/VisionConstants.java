@@ -9,10 +9,9 @@ import java.util.List;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 import edu.wpi.first.apriltag.AprilTag;
-import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.Pair;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -69,10 +68,10 @@ public class VisionConstants {
   /**
    * The standard deviations to use for the vision
    */
-  public static final Matrix<N3, N1> VISION_STD_DEVS = MatBuilder.fill(Nat.N3(), Nat.N1(),
+  public static final Matrix<N3, N1> VISION_STD_DEVS = VecBuilder.fill(
     0.007340, // x in meters (default=0.9)
     0.00571, // y in meters (default=0.9)
-    .9  // heading in radians. The gyroscope is very accurate, so as long as it is reset correctly it is unnecessary to correct it with vision
+    0.9  // heading in radians. The gyroscope is very accurate, so as long as it is reset correctly it is unnecessary to correct it with vision
   );
 
   // The highest ambiguity to use. Ambiguities higher than this will be ignored.
@@ -199,17 +198,17 @@ public class VisionConstants {
   // The camera poses
   public static final ArrayList<Pair<String, Transform3d>> APRIL_TAG_CAMERAS = new ArrayList<Pair<String, Transform3d>>(List.of(
     new Pair<String, Transform3d>(
-      "CameraFront",
+      "CameraLeft",
       new Transform3d(
-        new Translation3d(Units.inchesToMeters(-10.429), Units.inchesToMeters(-10.078), Units.inchesToMeters(8.874)),
-        new Rotation3d(0, Units.degreesToRadians(-50), Math.PI-Units.degreesToRadians(20))
+        new Translation3d(Units.inchesToMeters(-12.5), Units.inchesToMeters(-6.5), Units.inchesToMeters(19.75)),
+        new Rotation3d(0, Units.degreesToRadians(-35), Math.PI)
       )
     ),
     new Pair<String, Transform3d>(
-      "CameraRear",
+      "CameraRight",
       new Transform3d(
         new Translation3d(Units.inchesToMeters(-12.5), Units.inchesToMeters(6.5), Units.inchesToMeters(19.75)),
-        new Rotation3d(0, Units.degreesToRadians(-40), Math.PI)
+        new Rotation3d(0, Units.degreesToRadians(-35), Math.PI)
       ))
     )
   );
