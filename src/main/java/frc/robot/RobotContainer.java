@@ -20,7 +20,6 @@ import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.gpm.IntakeNote;
 import frc.robot.commands.gpm.PrepareShooter;
 import frc.robot.constants.AutoConstants;
-import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
@@ -30,11 +29,8 @@ import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
 import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.subsystems.gpm.StorageIndex;
-import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
-import lib.controllers.GameController;
-import lib.controllers.GameController.Button;
 import lib.controllers.Controller.RumbleStatus;
 
 /**
@@ -92,7 +88,7 @@ public class RobotContainer {
       case TestBed2:
         intake = new Intake();
         index = new StorageIndex();
-        SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index, arm));
+        //SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index, arm));
         break;
         
       default:
