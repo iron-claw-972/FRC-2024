@@ -10,10 +10,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.IntakeWithRumble;
 import frc.robot.commands.OuttakeAmp;
-import frc.robot.commands.Rumbler;
 import frc.robot.commands.Shoot;
-import frc.robot.commands.gpm.IndexerFeed;
-import frc.robot.commands.gpm.IntakeNote;
 import frc.robot.commands.gpm.PrepareShooter;
 import frc.robot.commands.gpm.ShootKnownPos;
 import frc.robot.commands.gpm.ShootKnownPos.ShotPosition;
@@ -50,9 +47,16 @@ public class Operator {
 
     public void configureControls() {
         if (intake != null) {
-           // Command intakeNote = new IntakeNote(intake, index, arm);
-          // kDriver.setRumble(RumbleStatus.RUMBLE_ON);
-
+            Command inakeWithRumble =  new IntakeWithRumble(intake, index, arm, (x)->{
+                if (x){
+                    kDriver.setRumble(RumbleStatus.RUMBLE_ON);
+                }
+                else{
+                    kDriver.setRumble(RumbleStatus.RUMBLE_OFF);
+                }
+            });
+            kDriver.get(Button.X).onTrue(inakeWithRumble);
+            kDriver.get(Button.X).onFalse(new InstantCommand(()->inakeWithRumble.cancel()));
             kDriver.get(Button.B).onTrue(new InstantCommand(() -> intake.setMode(Mode.ReverseMotors),intake));
             kDriver.get(Button.B).onFalse(new InstantCommand(() -> intake.setMode(Mode.DISABLED), intake));
         }
@@ -83,23 +87,6 @@ public class Operator {
         }
         if(arm != null && shooter != null && index != null){
             kDriver.get(Button.Y).onTrue(new ShootKnownPos(shooter, arm, index, ShotPosition.SUBWOOFER));
-            //kDriver.get(Button.Y).onTrue(new IndexerFeed(index));
-            // kDriver.get(Button.Y).whileTrue(new Rumbler(shooter,(x)->{
-            //     if (x){
-            //         kDriver.setRumble(RumbleStatus.RUMBLE_ON);
-            //     }
-            //     else{
-            //         kDriver.setRumble(RumbleStatus.RUMBLE_OFF);
-            //     }
-            // }));
-            // kDriver.get(Button.Y).whileFalse(new Rumbler(shooter,(x)->{
-            //     if (x){
-            //         kDriver.setRumble(RumbleStatus.RUMBLE_ON);
-            //     }
-            //     else{
-            //         kDriver.setRumble(RumbleStatus.RUMBLE_OFF);
-            //     }
-            // }));
             kDriver.get(Button.A).onTrue(new OuttakeAmp(arm, index, shooter));
         }
         if(arm != null){

@@ -24,6 +24,9 @@ public class LogManager {
     logs.add(log);
   }
 
+  public static <T> void add(String name, T value) {
+    add(name, ()->value);
+  }
   public static <T> void add(String name, Supplier<T> value) {
     add(new Log<>(name, value));
   }

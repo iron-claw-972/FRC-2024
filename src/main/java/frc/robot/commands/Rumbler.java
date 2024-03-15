@@ -16,7 +16,6 @@ public class Rumbler extends Command {
   public Rumbler(Shooter shooter,Consumer<Boolean> consumer) {
     this.consumer = consumer;
     this.shooter = shooter;
-    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
