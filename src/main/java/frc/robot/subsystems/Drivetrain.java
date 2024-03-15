@@ -79,15 +79,13 @@ public class Drivetrain extends SubsystemBase {
     private boolean isAlign = false;
     // Angle to align to, null for directly toward speaker
     private Double alignAngle = null;
-
-    double currentHeading = 0;
+    // used for drift control
+    private double currentHeading = 0;
+    // used for drift control
+    private boolean drive_turning = false;
 
     SwerveSetpointGenerator setpointGenerator = new SwerveSetpointGenerator();
 
-    private final TimeDelayedBoolean maintainHeading = new TimeDelayedBoolean();
-
-    private final TimeDelayedBoolean rotating = new TimeDelayedBoolean();
-    Timer timer = new Timer();
 
 
     /**
@@ -175,21 +173,9 @@ public class Drivetrain extends SubsystemBase {
      * @param isOpenLoop    whether to use velocity control for the drive motors
      */
 
-    boolean drive_turning= false;
+    
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean isOpenLoop) {
-        if((!EqualsUtil.epsilonEquals(getAngularRate(0), 0, 3.5621085461121804E-4)&&EqualsUtil.epsilonEquals(Math.hypot(xSpeed, ySpeed),0,0.1))||!EqualsUtil.epsilonEquals(rot, 0, 3.5621085461121804E-4)){
-             drive_turning = true;
-             currentHeading = getYaw().getRadians();
-             System.out.println("runing");
-        }
-        else{
-            drive_turning = false;
-
-        }
-        if (rotating.update(!drive_turning,0)){
-            rotationController.setSetpoint(currentHeading);
-            rot = Math.abs(rotationController.calculate(getYaw().getRadians())) > Math.abs(rot) ? rotationController.calculate(getYaw().getRadians()) : rot;
-        }
+        rot = headingControl(rot, xSpeed, ySpeed);
         setChassisSpeeds((
                                  fieldRelative
                                          ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getYaw())
@@ -453,6 +439,25 @@ public class Drivetrain extends SubsystemBase {
         return Math.PI + (DriverStation.getAlliance().get() == Alliance.Blue ?
             Math.atan2(VisionConstants.BLUE_SPEAKER_POSE.getY() - pose.getY(), VisionConstants.BLUE_SPEAKER_POSE.getX() - pose.getX()) :
             Math.atan2(VisionConstants.RED_SPEAKER_POSE.getY() - pose.getY(), VisionConstants.RED_SPEAKER_POSE.getX() - pose.getX()));
+    }
+
+    /**
+     * Uses pigeon and rotational input to return a rotation that accounts for drift
+     * @return A rotation
+     */
+    public double headingControl(double rot, double xSpeed, double ySpeed){
+        if((!EqualsUtil.epsilonEquals(getAngularRate(0), 0, 3.5621085461121804E-4)&&EqualsUtil.epsilonEquals(Math.hypot(xSpeed, ySpeed),0,0.1))||!EqualsUtil.epsilonEquals(rot, 0, 3.5621085461121804E-4)){
+             drive_turning = true;
+             currentHeading = getYaw().getRadians();
+        }
+        else{
+            drive_turning = false;
+        }
+        if (!drive_turning){
+            rotationController.setSetpoint(currentHeading);
+            rot = Math.abs(rotationController.calculate(getYaw().getRadians())) > Math.abs(rot) ? rotationController.calculate(getYaw().getRadians()) : rot;
+        }
+        return rot;
     }
 
     /**
