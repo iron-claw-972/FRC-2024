@@ -90,6 +90,9 @@ public class Vision {
       visionSim.addAprilTags(m_aprilTagFieldLayout);
       for(VisionCamera c : m_cameras){
         PhotonCameraSim cameraSim = new PhotonCameraSim(c.camera);
+        cameraSim.enableDrawWireframe(true);
+        cameraSim.prop.setAvgLatencyMs(30);
+        cameraSim.prop.setCalibration(720, 1280, Rotation2d.fromDegrees(100));
         visionSim.addCamera(cameraSim, c.photonPoseEstimator.getRobotToCameraTransform());
       }
     }
@@ -419,7 +422,7 @@ public class Vision {
 
       PhotonPipelineResult cameraResult = camera.getLatestResult();
 
-      if(!cameraResult.hasTargets() || cameraResult.getTimestampSeconds()<0){// || targetsUsed.size()==1 && VisionConstants.ONLY_USE_2_TAGS){
+      if(!cameraResult.hasTargets() || cameraResult.getTimestampSeconds()<0){
           return Optional.empty();
       }
       
@@ -432,6 +435,13 @@ public class Vision {
           for(int id : onlyUse){
             if(targetsUsed.get(i).getFiducialId() == id){
               found = true;
+              break;
+            }
+          }
+          for(int id : VisionConstants.TAGS_TO_IGNORE){
+            if(targetsUsed.get(i).getFiducialId() == id){
+              found = false;
+              break;
             }
           }
           if(!found || targetsUsed.get(i).getPoseAmbiguity() > VisionConstants.HIGHEST_AMBIGUITY){
