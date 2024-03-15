@@ -23,7 +23,7 @@ public class DriveConstants {
     public static double kTrackWidth = Units.inchesToMeters(20.75);//22.75 swerve bot, 20.75 comp bot
 
     // use the gear ratios
-    public static double kDriveGearRatio = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
+    public static double kDriveGearRatio = (50.0 / 16.0) * (17.0 / 27.0) * (45.0 / 15.0);
     public static double kSteerGearRatio = 150.0 / 7.0;
 
     public static double kMaxSpeed = (Constants.MAX_RPM / 60.0) * kWheelRadius * 2 * Math.PI / kDriveGearRatio;
@@ -92,7 +92,7 @@ public class DriveConstants {
     public static String kPigeonCAN = Constants.CANIVORE_CAN;
 
 
-    public static final COTSFalconSwerveConstants kModuleConstants = COTSFalconSwerveConstants.SDSMK4i(COTSFalconSwerveConstants.DriveGearRatios.SDSMK4i_L2);
+    public static final COTSFalconSwerveConstants kModuleConstants = COTSFalconSwerveConstants.SDSMK4i(kDriveGearRatio);
 
     /* Swerve Current Limiting */
     public static final int kAngleContinuousCurrentLimit = 15;
