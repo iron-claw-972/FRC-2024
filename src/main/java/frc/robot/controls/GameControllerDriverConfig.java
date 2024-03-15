@@ -80,7 +80,8 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
 
     // Amp alignment
     if(arm != null && index != null && shooter != null){
-      kDriver.get(Button.B).whileTrue(new OuttakeAmp(arm, index, shooter, getDrivetrain()));
+      // kDriver.get(Button.B).whileTrue(new OuttakeAmp(arm, index, shooter, getDrivetrain()));
+      kDriver.get(Button.B).whileTrue(new OuttakeAmp(getDrivetrain()));
     }else{
       kDriver.get(Button.B).whileTrue(new OuttakeAmp(getDrivetrain()));
     }

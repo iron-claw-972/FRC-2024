@@ -67,9 +67,9 @@ public class VisionConstants {
    * The standard deviations to use for the vision
    */
   public static final Matrix<N3, N1> VISION_STD_DEVS = MatBuilder.fill(Nat.N3(), Nat.N1(),
-    0.01350, // x in meters (default=0.9)
-    0.03101, // y in meters (default=0.9)
-    0.1  // heading in radians. The gyroscope is very accurate, so as long as it is reset correctly it is unnecessary to correct it with vision
+    0.007340, // x in meters (default=0.9)
+    0.00571, // y in meters (default=0.9)
+    .9  // heading in radians. The gyroscope is very accurate, so as long as it is reset correctly it is unnecessary to correct it with vision
   );
 
   // The highest ambiguity to use. Ambiguities higher than this will be ignored.
@@ -205,8 +205,9 @@ public class VisionConstants {
     new Pair<String, Transform3d>(
       "CameraRear",
       new Transform3d(
-        new Translation3d(Units.inchesToMeters(-12), Units.inchesToMeters(0), Units.inchesToMeters(13+5.0/8)),
-        new Rotation3d(0, Units.degreesToRadians(-20), Math.PI)
+        new Translation3d(Units.inchesToMeters(-12.5), Units.inchesToMeters(6.5), Units.inchesToMeters(19.75)),
+        new Rotation3d(0, Units.degreesToRadians(-40), Math.PI)
+        // if fails, try the complement
       ))
     )
   );

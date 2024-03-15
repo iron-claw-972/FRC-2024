@@ -78,6 +78,10 @@ public class Arm extends SubsystemBase {
     private final DutyCycleEncoder encoder = new DutyCycleEncoder(ArmConstants.ENCODER_ID);
     /** this instance sets the REV absolute encoder value during simulations */
     private DutyCycleEncoderSim encoderSim;
+    /* New value for OFFSET
+     * stow is 0.599
+     * high is 0.357
+     * */
     /** 
      * REV encoder offset in radians.
      * <p>
