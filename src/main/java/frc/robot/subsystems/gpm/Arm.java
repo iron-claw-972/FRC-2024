@@ -86,7 +86,7 @@ public class Arm extends SubsystemBase {
      * stow is 0.599
      * high is 0.357
      */
-    protected static final double OFFSET = 0.59 + Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
+    protected static double OFFSET = 0.59 + Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
     /** REV encoder scale factor. This is fixed. */
     protected static final double DISTANCE_PER_ROTATION = -2 * Math.PI;
 
@@ -125,6 +125,10 @@ public class Arm extends SubsystemBase {
 
         // set the PID the starting position
         pid.setSetpoint(ArmConstants.START_ANGLE_RADS);
+
+		// set the arm offset
+		// assumes the arm is at its lowest position on startup
+		OFFSET = getAngleRad() - ArmConstants.MIN_ANGLE_RADS;
 
         // make the encoder report arm angle in radians
         encoder.setDistancePerRotation(DISTANCE_PER_ROTATION);
