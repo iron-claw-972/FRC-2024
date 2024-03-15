@@ -197,6 +197,9 @@ public class VisionConstants {
   );
 
   // The camera poses
+  // + X: Front of Robot
+  // + Y: Left of Robot
+  // + Z: Top of Robot
   public static final ArrayList<Pair<String, Transform3d>> APRIL_TAG_CAMERAS = new ArrayList<Pair<String, Transform3d>>(List.of(
     new Pair<String, Transform3d>(
       "CameraFront",
