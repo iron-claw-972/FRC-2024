@@ -3,9 +3,9 @@ package frc.robot.commands.auto_comm;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+
 import com.pathplanner.lib.commands.FollowPathHolonomic;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
@@ -17,10 +17,10 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Robot;
 import frc.robot.constants.AutoConstants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.subsystems.Drivetrain;
@@ -94,21 +94,21 @@ public class PathPlannerCommand extends SequentialCommandGroup {
     addCommands(
       new InstantCommand( () -> {
         PathPlannerPath path = pathGroup.get(pathIndex);
-        if(DriverStation.getAlliance().get()==Alliance.Red){
+        if(Robot.getAlliance()==Alliance.Red){
           path.flipPath();
         }
         if (resetPose) {
           drive.resetOdometry(path.getPreviewStartingHolonomicPose());
         }
         //TODO: This might be unnecessary, maybe delete it
-        if(DriverStation.getAlliance().get()==Alliance.Red){
+        if(Robot.getAlliance()==Alliance.Red){
           path.flipPath();
         }
       }),
       createSwerveControllerCommand(
         pathGroup.get(pathIndex), 
         useAllianceColor ? // Pose supplier
-          () -> ConversionUtils.absolutePoseToPathPlannerPose(drive.getPose(), DriverStation.getAlliance().get()) : 
+          () -> ConversionUtils.absolutePoseToPathPlannerPose(drive.getPose(), Robot.getAlliance()) : 
           () -> drive.getPose(), 
         ()-> drive.getChassisSpeeds(),
         (chassisSpeeds) -> { drive.setChassisSpeeds(chassisSpeeds, false); }, // chassis Speeds consumer
