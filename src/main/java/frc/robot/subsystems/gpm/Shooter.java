@@ -60,7 +60,7 @@ public class Shooter extends SubsystemBase {
 	private static final double MOI_STEALTH = MASS_RIM * RADIUS_STEALTH * RADIUS_STEALTH;
 
 	// each motor spins 6 stealth wheels
-	private static final double MOI_SHAFT = MOI_STEALTH * 6;
+	protected static final double MOI_SHAFT = MOI_STEALTH * 6;
 
 	// left motor
 	private final CANSparkFlex leftMotor = new CANSparkFlex(ShooterConstants.LEFT_MOTOR_ID, MotorType.kBrushless);
@@ -221,7 +221,7 @@ public class Shooter extends SubsystemBase {
 	 * <p>
 	 * Empirical fit.
 	 *
-	 * @param speed speed to spin to in m/s
+	 * @param speed speed to shoot note in m/s
 	 * @see setTargetRPM
 	 */
 	public void setTargetVelocity(double speed) {
