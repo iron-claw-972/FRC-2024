@@ -22,6 +22,7 @@ import frc.robot.subsystems.gpm.StorageIndex;
 
 // TODO make the version with delay have correct math
 public class Shoot extends Command {
+        // the subsystems
         private final Shooter shooter;
         public final Arm arm;
         public final Drivetrain drive;
@@ -37,9 +38,25 @@ public class Shoot extends Command {
         public double v_rx;
         public double v_ry;
         // TODO: put in constants for other commands to use
-        private final double REST_VEL = 0; // TODO: determine the fastest idle note-exit velocity that won't kill the
-                                           // battery.
+        private final double REST_VEL = 0;
+        // TODO: determine the fastest idle note-exit velocity that won't kill the battery.
+
+        /**
+         * Shooter height when the arm is at the standbySetpoint.
+         * <p>
+         * This value should be in the Shooter subsystem.
+         * <p>
+         * The arm height is the pivot height + armLength * sin(standbyAngle).
+         * This calculation seems wrong because the shooter sits on top of the arm.
+         */
         public static final double shooterHeight = ArmConstants.ARM_LENGTH*Math.sin(ArmConstants.standbySetpoint) + ArmConstants.PIVOT_HEIGHT;
+        /**
+         * Shooter position relative to the robot center.
+         * <p>
+         * This value should be in the Shooter subsystem.
+         * <p>
+         * The shooter exit is the pivot x + armLength * cos(standbyAngle).
+         */
         public static final double shooterOffset = ArmConstants.PIVOT_X + ArmConstants.ARM_LENGTH * Math.cos(ArmConstants.standbySetpoint);
 
         public Shoot(Shooter shooter, Arm arm, Drivetrain drivetrain, StorageIndex index) {
@@ -62,6 +79,7 @@ public class Shoot extends Command {
         public void execute() {
                 // Positive x displacement means we are to the left of the speaker
                 // Positive y displacement means we are below the speaker.
+                // TODO: assumes RED_SPEAKER_POSE!
                 // Pose3d speakerPose = DriverStation.getAlliance().isPresent() &&
                 //                 Robot.getAlliance() == Alliance.Red ?
                 //                 VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
@@ -104,18 +122,24 @@ public class Shoot extends Command {
                                 + displacement.getY() * displacement.getY());
                 // height (sorry that it's called y)
                 double y = displacement.getZ();
+
                 // Basic vertical angle calculation (static robot)
                 double phi_v = Math.atan(Math.pow(v_note, 2) / 9.8 / x * (1 - Math.sqrt(1
                                 + 19.6 / Math.pow(v_note, 2) * (y - 4.9 * x * x / Math.pow(v_note, 2)))));
+                // TODO: phi_v is often a NaN
                 System.err.println("*pv " + phi_v);
+
                 // Angle to goal
                 double phi_h = Math.atan(displacement.getY()/ displacement.getX());
+
                 // flip angle
                 if (displacement.getX()>=0) phi_h += Math.PI;
                 System.err.println("*ph " + phi_h);
+
                 double theta_h = Math.atan((v_note * Math.cos(phi_v) * Math.sin(phi_h) - v_ry) / (v_note * Math.cos(phi_v) * Math.cos(phi_h) - v_rx));
                 // flip angle
                 if (displacement.getX()>=0) theta_h += Math.PI;
+                
                 // random quirk that using -v_rx, -v_ry works instead of +v_rx, +v_ry
                 // theta_h conversion (i.e. pi-theta_h if necessary)
                 // if the mirrored angle is the same-ish direction??? logic may break at high
