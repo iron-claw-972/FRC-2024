@@ -86,7 +86,7 @@ public class Arm extends SubsystemBase {
      * stow is 0.599
      * high is 0.357
      */
-    protected static double OFFSET = 0.59 + Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
+    protected static final double OFFSET = 0.59 + Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
     /** REV encoder scale factor. This is fixed. */
     protected static final double DISTANCE_PER_ROTATION = -2 * Math.PI;
 
@@ -128,21 +128,13 @@ public class Arm extends SubsystemBase {
 
 		// set the arm offset
 		// assumes the arm is at its lowest position on startup
-		// IF THE ARM IS NOT AT ITS stowedSetpoint, THEN THIS WILL LIKELY BREAK THE ARM
-		OFFSET = getAngleRad() - ArmConstants.MIN_ANGLE_RADS;
+		// if the arm is not at its stowedSetpoint, then this will likely break the arm
+		//OFFSET = getAngleRad() - ArmConstants.MIN_ANGLE_RADS;
 
         // make the encoder report arm angle in radians
         encoder.setDistancePerRotation(DISTANCE_PER_ROTATION);
         encoder.setPositionOffset(OFFSET);
 
-		// some checks for the arm position
-		if (getAngleRad() < ArmConstants.MIN_ANGLE_RADS - 0.005 || getAngleRad() > ArmConstants.MAX_ANGLE_RADS + 0.005)
-			throw new RuntimeException("The arm is in a position that should be unreachable. Please double check the arm constants. Found: " + getAngleRad() + ", Expected: " + ArmConstants.stowedSetpoint);
-		else if (ArmConstants.ASSERT_AT_SETPOINT && (getAngleRad() < ArmConstants.stowedSetpoint - 0.01 || getAngleRad() > ArmConstants.stowedSetpoint + 0.01))
-			throw new RuntimeException("The arm is not at its lowest position. Please move it there and redeploy. If the arm is at its lowest position, check the arm constants. If you know what you're doing, you can override this warning by setting ArmConstants.ASSERT_AT_SETPOINT to false. Found: " + getAngleRad() + ", Expected: " + ArmConstants.stowedSetpoint);
-			//System.err.println("WARNING: THE ARM IS NOT AT ITS STOWED SETPOINT.\nIf this was expected, continue. If not, please DOUBLE CHECK THE ARM CONSTANTS or YOU RISK BREAKING THE ARM.");
-			// TODO: decide if we want to error or simply display a warning here (or something else)
-   
         // consider each of the motors
         for (int i = 0; i < motors.length; i++) {
             // create the motor
@@ -185,8 +177,16 @@ public class Arm extends SubsystemBase {
 
             // put the display on the SmartDashboard
             SmartDashboard.putData("ArmSim", wristDisplay);
-            SmartDashboard.putData(pid);
+            SmartDashboard.putData("arm pid", pid);
         }
+
+		// some checks for the arm position
+		if (getAngleRad() < ArmConstants.MIN_ANGLE_RADS - 0.005 || getAngleRad() > ArmConstants.MAX_ANGLE_RADS + 0.005)
+			throw new RuntimeException("The arm is in a position that should be unreachable. Please double check the arm constants. Found: " + getAngleRad() + ", Expected: " + ArmConstants.stowedSetpoint);
+		else if (ArmConstants.ASSERT_AT_SETPOINT && (getAngleRad() < ArmConstants.stowedSetpoint - 0.01 || getAngleRad() > ArmConstants.stowedSetpoint + 0.01))
+			throw new RuntimeException("The arm is not at its lowest position. Please move it there and redeploy. If the arm is at its lowest position, check the arm constants. If you know what you're doing, you can override this warning by setting ArmConstants.ASSERT_AT_SETPOINT to false. Found: " + getAngleRad() + ", Expected: " + ArmConstants.stowedSetpoint);
+			//System.err.println("WARNING: THE ARM IS NOT AT ITS STOWED SETPOINT.\nIf this was expected, continue. If not, please DOUBLE CHECK THE ARM CONSTANTS or YOU RISK BREAKING THE ARM.");
+			// TODO: decide if we want to error or simply display a warning here (or something else)
 
         // TODO: remove when not needed.
         // Add some test commands
