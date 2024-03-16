@@ -52,7 +52,7 @@ public class VisionConstants {
   public static final PoseStrategy POSE_STRATEGY = PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR;
 
   /** Fallback PoseStrategy if MultiTag doesn't work */
-  public static final PoseStrategy MULTITAG_FALLBACK_STRATEGY = PoseStrategy.CLOSEST_TO_CAMERA_HEIGHT;
+  public static final PoseStrategy MULTITAG_FALLBACK_STRATEGY = PoseStrategy.LOWEST_AMBIGUITY;
 
   /** Any April tags we always want to ignore. To ignore a tag, put its id in this array. */
   public static final int[] TAGS_TO_IGNORE = {};
@@ -213,14 +213,14 @@ public class VisionConstants {
     new Pair<String, Transform3d>(
       "CameraPort",
       new Transform3d(
-        new Translation3d(Units.inchesToMeters(-12.5), Units.inchesToMeters(-6.5), Units.inchesToMeters(19.75)),
+        new Translation3d(Units.inchesToMeters(-12.125), Units.inchesToMeters(6.5), Units.inchesToMeters(19.5)),
         new Rotation3d(0, Units.degreesToRadians(-35), Math.PI)
       )
     ),
     new Pair<String, Transform3d>(
       "CameraStarboard",
       new Transform3d(
-        new Translation3d(Units.inchesToMeters(-12.5), Units.inchesToMeters(6.5), Units.inchesToMeters(19.75)),
+        new Translation3d(Units.inchesToMeters(-12.125), Units.inchesToMeters(-6.5), Units.inchesToMeters(19.5)),
         new Rotation3d(0, Units.degreesToRadians(-35), Math.PI)
       ))
     )
