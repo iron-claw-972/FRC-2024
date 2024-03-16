@@ -119,6 +119,8 @@ public class Arm extends SubsystemBase {
             6,
             new Color8Bit(Color.kYellow)));
 
+	private boolean armEnabled = true;
+
     public Arm() {
         // set the PID tolerance
         pid.setTolerance(TOLERANCE);
@@ -183,12 +185,27 @@ public class Arm extends SubsystemBase {
 		double cachedAngleRad = getAngleRad(); // don't get the angle five times
 		// some checks for the arm position
 		// TODO: decide if we want this
-		if (cachedAngleRad < ArmConstants.MIN_ANGLE_RADS - 0.005 || cachedAngleRad > ArmConstants.MAX_ANGLE_RADS + 0.005)
-			throw new RuntimeException("The arm is in a position that should be unreachable. Please double check the arm constants. Found: " + cachedAngleRad + ", Expected: " + ArmConstants.stowedSetpoint);
-		else if (ArmConstants.ASSERT_AT_SETPOINT && (cachedAngleRad < ArmConstants.stowedSetpoint - 0.01 || cachedAngleRad > ArmConstants.stowedSetpoint + 0.01))
-			throw new RuntimeException("The arm is not at its lowest position. Please move it there and redeploy. If the arm is at its lowest position, check the arm constants. If you know what you're doing, you can override this warning by setting ArmConstants.ASSERT_AT_SETPOINT to false. Found: " + cachedAngleRad + ", Expected: " + ArmConstants.stowedSetpoint);
-			//System.err.println("WARNING: THE ARM IS NOT AT ITS STOWED SETPOINT.\nIf this was expected, continue. If not, please DOUBLE CHECK THE ARM CONSTANTS or YOU RISK BREAKING THE ARM.");
-			// TODO: decide if we want to error or simply display a warning here (or something else)
+		if (cachedAngleRad < ArmConstants.MIN_ANGLE_RADS - 0.005 || cachedAngleRad > ArmConstants.MAX_ANGLE_RADS + 0.005) {
+			System.err.println("▄▄      ▄▄    ▄▄     ▄▄▄▄▄▄    ▄▄▄   ▄▄   ▄▄▄▄▄▄   ▄▄▄   ▄▄     ▄▄▄▄ ");
+			System.err.println("██      ██   ████    ██▀▀▀▀██  ███   ██   ▀▀██▀▀   ███   ██   ██▀▀▀▀█");
+			System.err.println("▀█▄ ██ ▄█▀   ████    ██    ██  ██▀█  ██     ██     ██▀█  ██  ██      ");
+ 			System.err.println(" ██ ██ ██   ██  ██   ███████   ██ ██ ██     ██     ██ ██ ██  ██  ▄▄▄▄");
+ 			System.err.println(" ███▀▀███   ██████   ██  ▀██▄  ██  █▄██     ██     ██  █▄██  ██  ▀▀██");
+ 			System.err.println(" ███  ███  ▄██  ██▄  ██    ██  ██   ███   ▄▄██▄▄   ██   ███   ██▄▄▄██");
+ 			System.err.println(" ▀▀▀  ▀▀▀  ▀▀    ▀▀  ▀▀    ▀▀▀ ▀▀   ▀▀▀   ▀▀▀▀▀▀   ▀▀   ▀▀▀     ▀▀▀▀ ");
+			System.err.println("WARNING: THE ARM IS IN A SUPPOSEDLY UNREACHABLE POSITION AND HAS BEEN DISABLED. Please double check the arm constants and redeploy. Found: " + cachedAngleRad + ", Expected: " + ArmConstants.stowedSetpoint);
+			armEnabled = false;
+		} else if (ArmConstants.ASSERT_AT_SETPOINT && (cachedAngleRad < ArmConstants.stowedSetpoint - 0.01 || cachedAngleRad > ArmConstants.stowedSetpoint + 0.01)) {
+			System.err.println("▄▄      ▄▄    ▄▄     ▄▄▄▄▄▄    ▄▄▄   ▄▄   ▄▄▄▄▄▄   ▄▄▄   ▄▄     ▄▄▄▄ ");
+			System.err.println("██      ██   ████    ██▀▀▀▀██  ███   ██   ▀▀██▀▀   ███   ██   ██▀▀▀▀█");
+			System.err.println("▀█▄ ██ ▄█▀   ████    ██    ██  ██▀█  ██     ██     ██▀█  ██  ██      ");
+ 			System.err.println(" ██ ██ ██   ██  ██   ███████   ██ ██ ██     ██     ██ ██ ██  ██  ▄▄▄▄");
+ 			System.err.println(" ███▀▀███   ██████   ██  ▀██▄  ██  █▄██     ██     ██  █▄██  ██  ▀▀██");
+ 			System.err.println(" ███  ███  ▄██  ██▄  ██    ██  ██   ███   ▄▄██▄▄   ██   ███   ██▄▄▄██");
+ 			System.err.println(" ▀▀▀  ▀▀▀  ▀▀    ▀▀  ▀▀    ▀▀▀ ▀▀   ▀▀▀   ▀▀▀▀▀▀   ▀▀   ▀▀▀     ▀▀▀▀ ");
+			System.err.println("WARNING: THE ARM IS NOT AT ITS STOWED SETPOINT AND HAS BEEN DISABLED. Please double check the arm constants, move the arm to it's lowest position, and redeploy. If you know what you're doing, you can set ArmConstants.ASSERT_AT_SETPOINT to false to disable this check. Found: " + cachedAngleRad + ", Expected: " + ArmConstants.stowedSetpoint);
+			armEnabled = false;
+		}
 
         // TODO: remove when not needed.
         // Add some test commands
@@ -224,6 +241,8 @@ public class Arm extends SubsystemBase {
 
     @Override
     public void periodic() {
+		if (!armEnabled) return;
+
         // Clamp the PID setpoint in case an out of range value slips in ...
         double setpoint = pid.getSetpoint();
         if (setpoint < ArmConstants.MIN_ANGLE_RADS) {
@@ -275,6 +294,8 @@ public class Arm extends SubsystemBase {
 
     @Override
     public void simulationPeriodic() {
+		if (!armEnabled) return;
+
         // Assuming the volts
         double voltsBattery = 12.8;
 
@@ -296,6 +317,11 @@ public class Arm extends SubsystemBase {
      * @param angle (in radians)
      */
     public void setAngle(double angle) {
+		if (!armEnabled) {
+			System.out.println("WARNING: Set failed because the arm is disabled.");
+			return;
+		}
+
         // zero the integrator portion of the PID controller
         pid.reset();
 
