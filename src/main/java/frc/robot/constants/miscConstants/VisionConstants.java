@@ -193,12 +193,12 @@ public class VisionConstants {
   );
   public static final Pose2d RED_SUBWOOFER_LEFT = new Pose2d(
     FieldConstants.APRIL_TAGS.get(3).pose.getX()-Units.inchesToMeters(27.562),
-    BLUE_SUBWOOFER_LEFT.getY(),
+    BLUE_SUBWOOFER_RIGHT.getY(),
     new Rotation2d(Math.PI-BLUE_SUBWOOFER_RIGHT.getRotation().getRadians())
   );
   public static final Pose2d RED_SUBWOOFER_RIGHT = new Pose2d(
     FieldConstants.APRIL_TAGS.get(3).pose.getX()-Units.inchesToMeters(27.562),
-    BLUE_SUBWOOFER_RIGHT.getY(),
+    BLUE_SUBWOOFER_LEFT.getY(),
     new Rotation2d(Math.PI-BLUE_SUBWOOFER_LEFT.getRotation().getRadians())
   );
 
@@ -214,14 +214,14 @@ public class VisionConstants {
       "CameraPort",
       new Transform3d(
         new Translation3d(Units.inchesToMeters(-12.125), Units.inchesToMeters(6.5), Units.inchesToMeters(19.5)),
-        new Rotation3d(0, Units.degreesToRadians(-35), Math.PI)
+        new Rotation3d(0, Units.degreesToRadians(-35), Math.PI+Units.degreesToRadians(10))
       )
     ),
     new Pair<String, Transform3d>(
       "CameraStarboard",
       new Transform3d(
         new Translation3d(Units.inchesToMeters(-12.125), Units.inchesToMeters(-6.5), Units.inchesToMeters(19.5)),
-        new Rotation3d(0, Units.degreesToRadians(-35), Math.PI)
+        new Rotation3d(0, Units.degreesToRadians(-35), Math.PI-Units.degreesToRadians(10))
       ))
     )
   );

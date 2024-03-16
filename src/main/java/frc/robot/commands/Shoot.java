@@ -48,6 +48,8 @@ public class Shoot extends Command {
 
         private Debouncer visionSawTagDebouncer = new Debouncer(0.2, DebounceType.kFalling);
 
+        private boolean shooting = false;
+
         public Shoot(Shooter shooter, Arm arm, Drivetrain drivetrain, StorageIndex index) {
                 this.shooter = shooter;
                 this.arm = arm;
@@ -159,12 +161,12 @@ public class Shoot extends Command {
                 System.out.println("Arm Setpoint: "+arm.atSetpoint());
                 System.out.println("Shooter Setpoint: "+shooter.atSetpoint());
                 System.out.println("drive Setpoint: "+drive.atAlignAngle());
+                sawTag = true;
                 if (arm.atSetpoint() && shooter.atSetpoint() && drive.atAlignAngle() && sawTag || shooting) {
                         shooting = true;
                         index.ejectIntoShooter();
                         shootTimer.start();
                 }
-                // TODO: Else reset timer?
         }
 
         @Override
@@ -176,7 +178,7 @@ public class Shoot extends Command {
         public void end(boolean interrupted) {
                 shooter.setTargetVelocity(REST_VEL);
                 drive.setIsAlign(false); // Use normal driver controls
-                arm.setAngle(ArmConstants.standbySetpoint);
+                arm.setAngle(ArmConstants.stowedSetpoint);
                 index.stopIndex();
                 drive.onlyUseTags(new int[0]);
         }
