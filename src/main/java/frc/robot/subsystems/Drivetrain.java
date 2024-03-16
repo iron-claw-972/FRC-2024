@@ -132,6 +132,14 @@ public class Drivetrain extends SubsystemBase {
         }
     }
 
+    public void close() {
+        pigeon.close();
+
+        for (int i = 0; i < modules.length; i++) {
+            modules[i].close();
+        }
+    }
+
     @Override
     public void periodic() {
         updateOdometry();

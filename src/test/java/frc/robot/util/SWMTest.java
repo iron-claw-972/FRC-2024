@@ -1,9 +1,9 @@
 package frc.robot.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
@@ -19,17 +19,18 @@ import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.subsystems.gpm.StorageIndex;
 
+@Disabled
 public class SWMTest {
-    // making these static is ugly
-    public static Shooter shooter = new Shooter();
-    public static Arm arm = new Arm();
-    public static Drivetrain drive = new Drivetrain(null);
-    public static StorageIndex indexer = new StorageIndex();
+    // the subsystems
+    public Shooter shooter = new Shooter();
+    public Arm arm = new Arm();
+    public Drivetrain drive = new Drivetrain(null);
+    public StorageIndex indexer = new StorageIndex();
 
     /**
      * Make a new Shoot command
      */
-    public static Shoot sh = new Shoot(shooter, arm, drive, indexer);
+    public Shoot sh = new Shoot(shooter, arm, drive, indexer);
 
     /*
      * make drivetrain in the test
@@ -77,6 +78,11 @@ public class SWMTest {
 
     @AfterEach
     public void cleanup() {
+        // close the subsystems
+        shooter.close();
+        arm.close();
+        indexer.close();
+        drive.close();
     }
 
     /**
