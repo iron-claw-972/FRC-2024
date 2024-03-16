@@ -97,7 +97,7 @@ public class DriveConstants {
     public static String kPigeonCAN = Constants.CANIVORE_CAN;
 
 
-    public static final COTSFalconSwerveConstants kModuleConstants = COTSFalconSwerveConstants.SDSMK4i(kDriveGearRatio);
+    public static COTSFalconSwerveConstants kModuleConstants = COTSFalconSwerveConstants.SDSMK4i(kDriveGearRatio);
 
     /* Swerve Current Limiting */
     public static final int kAngleContinuousCurrentLimit = 15;
@@ -193,6 +193,10 @@ public class DriveConstants {
             kSteerOffsetBackLeft = 38.997+180;//-2.540267050266266;//0.650406539440155+Math.PI;
 
             kSteerOffsetBackRight = 242.847-90;//2.626169800758362;//2.771897681057453;
+            
+            kDriveGearRatio = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
+            kModuleConstants = COTSFalconSwerveConstants.SDSMK4i(kDriveGearRatio);
+            
             // Talon Speed
             Constants.MAX_RPM = 6080.0;
         } 
@@ -213,6 +217,9 @@ public class DriveConstants {
             kSteerOffsetBackRight = 333.241;
             // Talon Speed
             Constants.MAX_RPM = 6080.0;
+
+            kDriveGearRatio = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
+            kModuleConstants = COTSFalconSwerveConstants.SDSMK4i(kDriveGearRatio);
         }
     }
 }
