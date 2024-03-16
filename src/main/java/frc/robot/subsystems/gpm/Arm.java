@@ -128,11 +128,18 @@ public class Arm extends SubsystemBase {
 
 		// set the arm offset
 		// assumes the arm is at its lowest position on startup
+		// IF THE ARM IS NOT AT ITS stowedSetpoint, THEN THIS WILL LIKELY BREAK THE ARM
 		OFFSET = getAngleRad() - ArmConstants.MIN_ANGLE_RADS;
 
         // make the encoder report arm angle in radians
         encoder.setDistancePerRotation(DISTANCE_PER_ROTATION);
         encoder.setPositionOffset(OFFSET);
+
+		// some checks for the arm position
+		if (getAngleRad() < ArmConstants.MIN_ANGLE_RADS || getAngleRad() > ArmConstants.MAX_ANGLE_RADS)
+			throw new RuntimeException("The arm is in a position that should be unreachable. Please double check the arm constants.");
+		else if (getAngleRad() < ArmConstants.stowedSetpoint - 0.01 || getAngleRad() > ArmConstants.stowedSetpoint + 0.01)
+			System.err.println("WARNING: THE ARM IS NOT AT ITS STOWED SETPOINT.\nIf this was expected, continue. If not, please DOUBLE CHECK THE ARM CONSTANTS or YOU RISK BREAKING THE ARM.");
    
         // consider each of the motors
         for (int i = 0; i < motors.length; i++) {
