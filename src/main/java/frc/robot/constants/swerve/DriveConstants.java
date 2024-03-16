@@ -22,8 +22,13 @@ public class DriveConstants {
 
     public static double kTrackWidth = Units.inchesToMeters(20.75);//22.75 swerve bot, 20.75 comp bot
 
-    // use the gear ratios
+    // Mk4i gear ratios
+    // https://www.swervedrivespecialties.com/products/mk4i-swerve-module
+    //   standard gear ratios
+    // https://www.swervedrivespecialties.com/products/kit-adapter-16t-drive-pinion-gear-mk4i
+    //   changes 14-tooth pinion to 16-tooth pinion -- (50.0 / 14.0) becomes (50.0 / 16.0).
     public static double kDriveGearRatio = (50.0 / 16.0) * (17.0 / 27.0) * (45.0 / 15.0);
+    // all MK4i modules have the same steering gear ratio
     public static double kSteerGearRatio = 150.0 / 7.0;
 
     public static double kMaxSpeed = (Constants.MAX_RPM / 60.0) * kWheelRadius * 2 * Math.PI / kDriveGearRatio;
