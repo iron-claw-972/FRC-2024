@@ -139,7 +139,7 @@ public class Drivetrain extends SubsystemBase {
         yController = new PIDController(DriveConstants.kTranslationalP, 0, DriveConstants.kTranslationalD);
         rotationController = new PIDController(DriveConstants.kHeadingP, 0, DriveConstants.kHeadingD);
         rotationController.enableContinuousInput(-Math.PI, Math.PI);
-        rotationController.setTolerance(Units.degreesToRadians(0), Units.degreesToRadians(0));
+        rotationController.setTolerance(Units.degreesToRadians(0.25), Units.degreesToRadians(0.25));
         if (Constants.DO_LOGGING) {
             LogManager.add("Drivetrain/SpeedX", () -> getChassisSpeeds().vxMetersPerSecond);
             LogManager.add("Drivetrain/SpeedY", () -> getChassisSpeeds().vyMetersPerSecond);
