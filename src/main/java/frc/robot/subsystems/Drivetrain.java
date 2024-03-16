@@ -133,8 +133,10 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void close() {
+        // close the gyro
         pigeon.close();
 
+        // close each of the modules
         for (int i = 0; i < modules.length; i++) {
             modules[i].close();
         }

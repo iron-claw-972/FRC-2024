@@ -19,16 +19,25 @@ import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.subsystems.gpm.StorageIndex;
 
+/**
+ * Shoot-While-Moving tests.
+ * <p>
+ * Currently disabled because the tests are creating NaNs.
+ * <p>
+ * The math tests should also not need to build the subsystems.
+ * The math in the Shoot command is opaque.
+ */
 @Disabled
 public class SWMTest {
     // the subsystems
+    //   if these are static, then the tests run faster (but the .close() calls should be removed)
     public Shooter shooter = new Shooter();
     public Arm arm = new Arm();
     public Drivetrain drive = new Drivetrain(null);
     public StorageIndex indexer = new StorageIndex();
 
     /**
-     * Make a new Shoot command
+     * The Shoot command
      */
     public Shoot sh = new Shoot(shooter, arm, drive, indexer);
 
@@ -37,6 +46,7 @@ public class SWMTest {
      * method to set pose, reset pose
      * set chassis speed or drive() to make x,y velocities.
      */
+    // TODO: these have the input conditions, but they do not have the appropriate answer
     public static final double[][] test_cases = {
         // x, y, z, vx, vy
         {12.922, 5.537, 0, 0, 0},
@@ -189,6 +199,7 @@ public class SWMTest {
         Pose3d disp = new Pose3d(1, 4, .4,new Rotation3d()).relativeTo(new Pose3d(0, 0, 2.055, new Rotation3d()));
 
         // System.out.println(disp.getX()+","+disp.getY()+","+disp.getZ()+" done");
+        // System.out.println(disp);
 
         // make sure the displacement is as expected
         assertEquals(1.0, disp.getX(), 0.00001);
