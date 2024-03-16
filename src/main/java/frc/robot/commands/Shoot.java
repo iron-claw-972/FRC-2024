@@ -159,7 +159,8 @@ public class Shoot extends Command {
                 System.out.println("Arm Setpoint: "+arm.atSetpoint());
                 System.out.println("Shooter Setpoint: "+shooter.atSetpoint());
                 System.out.println("drive Setpoint: "+drive.atAlignAngle());
-                if (arm.atSetpoint() && shooter.atSetpoint() && drive.atAlignAngle() && sawTag) {
+                if (arm.atSetpoint() && shooter.atSetpoint() && drive.atAlignAngle() && sawTag || shooting) {
+                        shooting = true;
                         index.ejectIntoShooter();
                         shootTimer.start();
                 }
