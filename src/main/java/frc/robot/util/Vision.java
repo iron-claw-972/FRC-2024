@@ -427,52 +427,56 @@ public class Vision {
       
       // if there is a target detected and the timestamp exists, 
       // check the ambiguity isn't too high
-      else{
-        List<PhotonTrackedTarget> targetsUsed = cameraResult.targets;
-        for (int i = targetsUsed.size()-1; i >= 0; i--) {
-          boolean found = onlyUse.length == 0;
-          for(int id : onlyUse){
-            if(targetsUsed.get(i).getFiducialId() == id){
-              found = true;
-              break;
-            }
-          }
-          for(int id : VisionConstants.TAGS_TO_IGNORE){
-            if(targetsUsed.get(i).getFiducialId() == id){
-              found = false;
-              break;
-            }
-          }
-          if(!found || targetsUsed.get(i).getPoseAmbiguity() > VisionConstants.HIGHEST_AMBIGUITY){
-            targetsUsed.remove(i);
+      List<PhotonTrackedTarget> targetsUsed = cameraResult.targets;
+      for (int i = targetsUsed.size()-1; i >= 0; i--) {
+        // found = only use is empty or this tag is in only use
+        boolean found = onlyUse.length == 0;
+        for(int id : onlyUse){
+          if(targetsUsed.get(i).getFiducialId() == id){
+            found = true;
+            break;
           }
         }
-
-      if(targetsUsed.size() == 0 || cameraResult.getTimestampSeconds()<0 || targetsUsed.size()==1 && VisionConstants.ONLY_USE_2_TAGS){
-          return Optional.empty();
+        // Set found to false if it is in the list of tags to ignore
+        for(int id : VisionConstants.TAGS_TO_IGNORE){
+          if(targetsUsed.get(i).getFiducialId() == id){
+            found = false;
+            break;
+          }
+        }
+        // Remove it from the list if it should not be used or if it has too high of an ambiguity
+        if(!found || targetsUsed.get(i).getPoseAmbiguity() > VisionConstants.HIGHEST_AMBIGUITY){
+          targetsUsed.remove(i);
+        }
       }
 
-        photonPoseEstimator.setPrimaryStrategy(targetsUsed.size() > 1  ? VisionConstants.POSE_STRATEGY : VisionConstants.MULTITAG_FALLBACK_STRATEGY);
-        Optional<EstimatedRobotPose> pose = photonPoseEstimator.update(cameraResult);
-        
-        if(pose.isPresent() && pose.get()!=null && pose.get().estimatedPose!=null && Math.abs(pose.get().estimatedPose.getX()) < 20){
-          double timestamp = getTimeStamp();
-          if(lastPose==null || lastPose.getTranslation().getDistance(pose.get().estimatedPose.toPose2d().getTranslation()) > DriveConstants.kMaxSpeed*1.25*(timestamp-lastTimestamp)){
-            lastPose = pose.get().estimatedPose.toPose2d();
-            lastTimestamp = timestamp;
-            return Optional.empty();
-          }
+      // If there are no targets, the timestamp doesn't exist, or there there is only 1 tag and the constant is set to only use 2 tags, return nothing
+      if(targetsUsed.size() == 0 || cameraResult.getTimestampSeconds()<0 || targetsUsed.size()==1 && VisionConstants.ONLY_USE_2_TAGS){
+        return Optional.empty();
+      }
 
+      // Set strategy to single tag if there is only 1 good tag and update
+      photonPoseEstimator.setPrimaryStrategy(targetsUsed.size() > 1  ? VisionConstants.POSE_STRATEGY : VisionConstants.MULTITAG_FALLBACK_STRATEGY);
+      Optional<EstimatedRobotPose> pose = photonPoseEstimator.update(cameraResult);
+      
+      if(pose.isPresent() && pose.get()!=null && pose.get().estimatedPose!=null && Math.abs(pose.get().estimatedPose.getX()) < 20){
+        double timestamp = getTimeStamp();
+
+        // If the pose moved too much, don't use it
+        if(lastPose==null || lastPose.getTranslation().getDistance(pose.get().estimatedPose.toPose2d().getTranslation()) > DriveConstants.kMaxSpeed*1.25*(timestamp-lastTimestamp)){
           lastPose = pose.get().estimatedPose.toPose2d();
           lastTimestamp = timestamp;
-          return pose;
-        }
-        
-        else{
           return Optional.empty();
         }
 
+        // Otherwise, retrun the pose
+        lastPose = pose.get().estimatedPose.toPose2d();
+        lastTimestamp = timestamp;
+        return pose;
       }
+
+      // Return nothing if it gets tot his point and doesn't return anything
+      return Optional.empty();
     }
     
     /**
