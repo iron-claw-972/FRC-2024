@@ -446,7 +446,7 @@ public class Drivetrain extends SubsystemBase {
      * @return A rotation
      */
     public double headingControl(double rot, double xSpeed, double ySpeed){
-        if((!EqualsUtil.epsilonEquals(getAngularRate(0), 0, 3.5621085461121804E-4)&&EqualsUtil.epsilonEquals(Math.hypot(xSpeed, ySpeed),0,0.1))||!EqualsUtil.epsilonEquals(rot, 0, 3.5621085461121804E-4)){
+        if((!EqualsUtil.epsilonEquals(getAngularRate(0), 0, 0.0004)&&EqualsUtil.epsilonEquals(Math.hypot(xSpeed, ySpeed),0,0.1))||!EqualsUtil.epsilonEquals(rot, 0, 0.0004)){
              drive_turning = true;
              currentHeading = getYaw().getRadians();
         }
