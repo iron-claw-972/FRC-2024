@@ -211,14 +211,14 @@ public class VisionConstants {
    */
   public static final ArrayList<Pair<String, Transform3d>> APRIL_TAG_CAMERAS = new ArrayList<Pair<String, Transform3d>>(List.of(
     new Pair<String, Transform3d>(
-      "CameraLeft",
+      "CameraPort",
       new Transform3d(
         new Translation3d(Units.inchesToMeters(-12.5), Units.inchesToMeters(-6.5), Units.inchesToMeters(19.75)),
         new Rotation3d(0, Units.degreesToRadians(-35), Math.PI)
       )
     ),
     new Pair<String, Transform3d>(
-      "CameraRight",
+      "CameraStarboard",
       new Transform3d(
         new Translation3d(Units.inchesToMeters(-12.5), Units.inchesToMeters(6.5), Units.inchesToMeters(19.75)),
         new Rotation3d(0, Units.degreesToRadians(-35), Math.PI)
