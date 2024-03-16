@@ -30,7 +30,6 @@ import frc.robot.subsystems.module.Module;
 import frc.robot.subsystems.module.ModuleSim;
 import frc.robot.util.EqualsUtil;
 import frc.robot.util.LogManager;
-import frc.robot.util.TimeDelayedBoolean;
 import frc.robot.util.Vision;
 import frc.robot.util.SwerveStuff.ModuleLimits;
 import frc.robot.util.SwerveStuff.SwerveSetpoint;
