@@ -156,7 +156,9 @@ public class Shoot extends Command {
                 shooter.setTargetVelocity(v_shoot);
 
                 boolean sawTag = visionSawTagDebouncer.calculate(drive.canSeeTag());
-
+                System.out.println("Arm Setpoint: "+arm.atSetpoint());
+                System.out.println("Shooter Setpoint: "+shooter.atSetpoint());
+                System.out.println("drive Setpoint: "+drive.atAlignAngle());
                 if (arm.atSetpoint() && shooter.atSetpoint() && drive.atAlignAngle() && sawTag) {
                         index.ejectIntoShooter();
                         shootTimer.start();
