@@ -64,7 +64,7 @@ public class Shoot extends Command {
                 drive.setIsAlign(true); // Enable alignment mode on the drivetrain
                 drive.onlyUseTags(new int[]{3, 4, 7, 8});
         }
-
+        Timer timer = new Timer();
         @Override
         public void execute() {
                 // Positive x displacement means we are to the left of the speaker
@@ -91,15 +91,15 @@ public class Shoot extends Command {
                 double heading = driveYaw.getRadians() + Math.atan2(drive.getChassisSpeeds().vyMetersPerSecond, drive.getChassisSpeeds().vxMetersPerSecond);
                 v_rx = driveSpeed * Math.cos(heading);
                 v_ry = driveSpeed * Math.sin(heading);
-                System.err.println(displacement.getX()+" " +
-                                displacement.getY()+" " +
-                                displacement.getZ()+" " +
-                                        v_rx+" " +
-                                        v_ry+" "+
-                                        heading+" "+
-                                        drive.getChassisSpeeds().vxMetersPerSecond+" "+
-                                        drive.getChassisSpeeds().vyMetersPerSecond
-                );
+                //System.err.println(displacement.getX()+" " +
+                //                 displacement.getY()+" " +
+                //                 displacement.getZ()+" " +
+                //                         v_rx+" " +
+                //                         v_ry+" "+
+                //                         heading+" "+
+                //                         drive.getChassisSpeeds().vxMetersPerSecond+" "+
+                //                         drive.getChassisSpeeds().vyMetersPerSecond
+                // );
                 // TODO: Figure out what v_note is empirically
                 double v_note = 10;
 
@@ -112,12 +112,12 @@ public class Shoot extends Command {
                 // Basic vertical angle calculation (static robot)
                 double phi_v = Math.atan(Math.pow(v_note, 2) / 9.8 / x * (1 - Math.sqrt(1
                                 + 19.6 / Math.pow(v_note, 2) * (y - 4.9 * x * x / Math.pow(v_note, 2)))));
-                System.err.println("*pv " + phi_v);
+                //System.err.println("*pv " + phi_v);
                 // Angle to goal
                 double phi_h = Math.atan(displacement.getY()/ displacement.getX());
                 // flip angle
                 if (displacement.getX()>=0) phi_h += Math.PI;
-                System.err.println("*ph " + phi_h);
+                //System.err.println("*ph " + phi_h);
                 double theta_h = Math.atan((v_note * Math.cos(phi_v) * Math.sin(phi_h) - v_ry) / (v_note * Math.cos(phi_v) * Math.cos(phi_h) - v_rx));
                 // flip angle
                 if (displacement.getX()>=0) theta_h += Math.PI;
@@ -139,9 +139,9 @@ public class Shoot extends Command {
                 horiz_angle = theta_h;
                 vert_angle = theta_v;
                 exit_vel = v_shoot;
-                System.err.println(horiz_angle);
-                System.err.println(vert_angle);
-                System.err.println(exit_vel);
+                // System.err.println(horiz_angle);
+                // System.err.println(vert_angle);
+                // System.err.println(exit_vel);
 
                 arm.setAngle(ShooterConstants.ANGLE_OFFSET - theta_v);
                 // theta_h is relative to the horizontal, so
