@@ -49,7 +49,7 @@ public class VisionTab extends ShuffleBoardTabs {
         // tab.add("Distance test (backward)", new TestVisionDistance(-0.2, drive, vision));
         SmartDashboard.putData("Vision align to tag", new AlignToTag(drive));
         tab.add("Align to tag", new AlignToTag(drive));
-        // SmartDashboard.putData("Return visin data", new ReturnData(vision));
+        // SmartDashboard.putData("Return vision data", new ReturnData(vision));
         // tab.add("Return data", new ReturnData(vision));
     }
 
