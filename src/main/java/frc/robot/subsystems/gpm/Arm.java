@@ -180,11 +180,12 @@ public class Arm extends SubsystemBase {
             SmartDashboard.putData("arm pid", pid);
         }
 
+		double cachedAngleRad = getAngleRad(); // don't get the angle five times
 		// some checks for the arm position
-		if (getAngleRad() < ArmConstants.MIN_ANGLE_RADS - 0.005 || getAngleRad() > ArmConstants.MAX_ANGLE_RADS + 0.005)
-			throw new RuntimeException("The arm is in a position that should be unreachable. Please double check the arm constants. Found: " + getAngleRad() + ", Expected: " + ArmConstants.stowedSetpoint);
-		else if (ArmConstants.ASSERT_AT_SETPOINT && (getAngleRad() < ArmConstants.stowedSetpoint - 0.01 || getAngleRad() > ArmConstants.stowedSetpoint + 0.01))
-			throw new RuntimeException("The arm is not at its lowest position. Please move it there and redeploy. If the arm is at its lowest position, check the arm constants. If you know what you're doing, you can override this warning by setting ArmConstants.ASSERT_AT_SETPOINT to false. Found: " + getAngleRad() + ", Expected: " + ArmConstants.stowedSetpoint);
+		if (cachedAngleRad < ArmConstants.MIN_ANGLE_RADS - 0.005 || cachedAngleRad > ArmConstants.MAX_ANGLE_RADS + 0.005)
+			throw new RuntimeException("The arm is in a position that should be unreachable. Please double check the arm constants. Found: " + cachedAngleRad + ", Expected: " + ArmConstants.stowedSetpoint);
+		else if (ArmConstants.ASSERT_AT_SETPOINT && (cachedAngleRad < ArmConstants.stowedSetpoint - 0.01 || cachedAngleRad > ArmConstants.stowedSetpoint + 0.01))
+			throw new RuntimeException("The arm is not at its lowest position. Please move it there and redeploy. If the arm is at its lowest position, check the arm constants. If you know what you're doing, you can override this warning by setting ArmConstants.ASSERT_AT_SETPOINT to false. Found: " + cachedAngleRad + ", Expected: " + ArmConstants.stowedSetpoint);
 			//System.err.println("WARNING: THE ARM IS NOT AT ITS STOWED SETPOINT.\nIf this was expected, continue. If not, please DOUBLE CHECK THE ARM CONSTANTS or YOU RISK BREAKING THE ARM.");
 			// TODO: decide if we want to error or simply display a warning here (or something else)
 
