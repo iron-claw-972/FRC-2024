@@ -22,8 +22,13 @@ public class DriveConstants {
 
     public static double kTrackWidth = Units.inchesToMeters(20.75);//22.75 swerve bot, 20.75 comp bot
 
-    // use the gear ratios
-    public static double kDriveGearRatio = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
+    // Mk4i gear ratios
+    // https://www.swervedrivespecialties.com/products/mk4i-swerve-module
+    //   standard gear ratios
+    // https://www.swervedrivespecialties.com/products/kit-adapter-16t-drive-pinion-gear-mk4i
+    //   changes 14-tooth pinion to 16-tooth pinion -- (50.0 / 14.0) becomes (50.0 / 16.0).
+    public static double kDriveGearRatio = (50.0 / 16.0) * (17.0 / 27.0) * (45.0 / 15.0);
+    // all MK4i modules have the same steering gear ratio
     public static double kSteerGearRatio = 150.0 / 7.0;
 
     public static double kMaxSpeed = (Constants.MAX_RPM / 60.0) * kWheelRadius * 2 * Math.PI / kDriveGearRatio;
@@ -70,7 +75,7 @@ public class DriveConstants {
 
     // heading PID
     public static double kHeadingP = 5.5;
-    public static double kHeadingD = 0.2;
+    public static double kHeadingD = 0;
 
     public static final double HEADING_TOLERANCE = Units.degreesToRadians(1.5);
 
@@ -92,7 +97,7 @@ public class DriveConstants {
     public static String kPigeonCAN = Constants.CANIVORE_CAN;
 
 
-    public static final COTSFalconSwerveConstants kModuleConstants = COTSFalconSwerveConstants.SDSMK4i(COTSFalconSwerveConstants.DriveGearRatios.SDSMK4i_L2);
+    public static COTSFalconSwerveConstants kModuleConstants = COTSFalconSwerveConstants.SDSMK4i(kDriveGearRatio);
 
     /* Swerve Current Limiting */
     public static final int kAngleContinuousCurrentLimit = 15;
@@ -188,6 +193,10 @@ public class DriveConstants {
             kSteerOffsetBackLeft = 38.997+180;//-2.540267050266266;//0.650406539440155+Math.PI;
 
             kSteerOffsetBackRight = 242.847-90;//2.626169800758362;//2.771897681057453;
+            
+            kDriveGearRatio = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
+            kModuleConstants = COTSFalconSwerveConstants.SDSMK4i(kDriveGearRatio);
+            
             // Talon Speed
             Constants.MAX_RPM = 6080.0;
         } 
@@ -208,6 +217,9 @@ public class DriveConstants {
             kSteerOffsetBackRight = 333.241;
             // Talon Speed
             Constants.MAX_RPM = 6080.0;
+
+            kDriveGearRatio = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
+            kModuleConstants = COTSFalconSwerveConstants.SDSMK4i(kDriveGearRatio);
         }
     }
 }
