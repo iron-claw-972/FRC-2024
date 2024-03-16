@@ -28,8 +28,12 @@ import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
 import frc.robot.subsystems.module.Module;
 import frc.robot.subsystems.module.ModuleSim;
+import frc.robot.util.EqualsUtil;
 import frc.robot.util.LogManager;
 import frc.robot.util.Vision;
+import frc.robot.util.SwerveStuff.ModuleLimits;
+import frc.robot.util.SwerveStuff.SwerveSetpoint;
+import frc.robot.util.SwerveStuff.SwerveSetpointGenerator;
 
 /**
  * Represents a swerve drive style drivetrain.
@@ -44,6 +48,15 @@ public class Drivetrain extends SubsystemBase {
 
     protected final Module[] modules;
 
+    private SwerveSetpoint currentSetpoint =
+    new SwerveSetpoint(
+        new ChassisSpeeds(),
+        new SwerveModuleState[] {
+          new SwerveModuleState(),
+          new SwerveModuleState(),
+          new SwerveModuleState(),
+          new SwerveModuleState()
+        });
     // Odometry
     private final SwerveDrivePoseEstimator poseEstimator;
 
@@ -65,6 +78,14 @@ public class Drivetrain extends SubsystemBase {
     private boolean isAlign = false;
     // Angle to align to, null for directly toward speaker
     private Double alignAngle = null;
+    // used for drift control
+    private double currentHeading = 0;
+    // used for drift control
+    private boolean drive_turning = false;
+
+    SwerveSetpointGenerator setpointGenerator = new SwerveSetpointGenerator();
+
+
 
     /**
      * Creates a new Swerve Style Drivetrain.
@@ -85,7 +106,7 @@ public class Drivetrain extends SubsystemBase {
                 modules[moduleConstants.ordinal()] = new ModuleSim(moduleConstants);
             });
         }
-
+        
         // The Pigeon is a gyroscope and implements WPILib's Gyro interface
         pigeon = new Pigeon2(DriveConstants.kPigeon, DriveConstants.kPigeonCAN);
         pigeon.getConfigurator().apply(new Pigeon2Configuration());
@@ -152,7 +173,10 @@ public class Drivetrain extends SubsystemBase {
      * @param fieldRelative whether the provided x and y speeds are relative to the field
      * @param isOpenLoop    whether to use velocity control for the drive motors
      */
+
+    
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean isOpenLoop) {
+        rot = headingControl(rot, xSpeed, ySpeed);
         setChassisSpeeds((
                                  fieldRelative
                                          ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getYaw())
@@ -260,7 +284,12 @@ public class Drivetrain extends SubsystemBase {
             pigeon.getSimState().addYaw(
                     +Units.radiansToDegrees(chassisSpeeds.omegaRadiansPerSecond * Constants.LOOP_TIME));
         }
-        SwerveModuleState[] swerveModuleStates = DriveConstants.KINEMATICS.toSwerveModuleStates(chassisSpeeds);
+        currentSetpoint = setpointGenerator.generateSetpoint(
+            new ModuleLimits(DriveConstants.kMaxSpeed, Double.MAX_VALUE, Double.MAX_VALUE),
+            currentSetpoint,chassisSpeeds,
+            Constants.LOOP_TIME);
+            
+        SwerveModuleState[] swerveModuleStates = currentSetpoint.moduleStates();
         setModuleStates(swerveModuleStates, isOpenLoop);
     }
 
@@ -372,6 +401,7 @@ public class Drivetrain extends SubsystemBase {
      */
     public void resetOdometry(Pose2d pose) {
         // NOTE: must use pigeon yaw for odometer!
+        currentHeading = pose.getRotation().getRadians();
         poseEstimator.resetPosition(Rotation2d.fromDegrees(pigeon.getYaw().getValue()), getModulePositions(), pose);
     }
 
@@ -428,6 +458,25 @@ public class Drivetrain extends SubsystemBase {
      */
     public boolean canSeeTag(){
         return vision.canSeeTag() || !visionEnabled || !VisionConstants.ENABLED;
+    }
+
+    /**
+     * Uses pigeon and rotational input to return a rotation that accounts for drift
+     * @return A rotation
+     */
+    public double headingControl(double rot, double xSpeed, double ySpeed){
+        if((!EqualsUtil.epsilonEquals(getAngularRate(0), 0, 0.0004)&&EqualsUtil.epsilonEquals(Math.hypot(xSpeed, ySpeed),0,0.1))||!EqualsUtil.epsilonEquals(rot, 0, 0.0004)){
+             drive_turning = true;
+             currentHeading = getYaw().getRadians();
+        }
+        else{
+            drive_turning = false;
+        }
+        if (!drive_turning){
+            rotationController.setSetpoint(currentHeading);
+            rot = Math.abs(rotationController.calculate(getYaw().getRadians())) > Math.abs(rot) ? rotationController.calculate(getYaw().getRadians()) : rot;
+        }
+        return rot;
     }
 
     /**

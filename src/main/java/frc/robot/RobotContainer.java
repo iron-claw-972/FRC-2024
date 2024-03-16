@@ -3,6 +3,7 @@ package frc.robot;
 import java.util.Optional;
 import java.util.function.BooleanSupplier;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -75,8 +76,13 @@ public class RobotContainer {
       case TestBed2:
         intake = new Intake();
         index = new StorageIndex();
-        //SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index, arm));
         break;
+      case Vertigo:
+          drive = new Drivetrain(vision);
+          driver = new GameControllerDriverConfig(drive, vision, arm, intake, index, shooter);
+          driver.configureControls();
+          drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
+          break;
         
       default:
       case SwerveCompetition:
@@ -95,7 +101,7 @@ public class RobotContainer {
         // Detected objects need access to the drivetrain
         DetectedObject.setDrive(drive);
         
-        //SignalLogger.start();
+        SignalLogger.start();
 
         driver.configureControls();
         operator.configureControls();
@@ -105,8 +111,8 @@ public class RobotContainer {
         // PathGroupLoader.loadPathGroups();
  
         shuffleboardManager = new ShuffleBoardManager(drive, vision);
-        // SmartDashboard.putBoolean("Index beam", index.hasNote());
         break;
+        
       }
 
     // This is really annoying so it's disabled
