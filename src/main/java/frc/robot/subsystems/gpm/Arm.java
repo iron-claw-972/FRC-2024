@@ -236,7 +236,7 @@ public class Arm extends SubsystemBase {
         // calculate the desired duty cycle
         // if(encoder.getDistance() < ArmConstants.MAX_ANGLE_RADS + .2 && encoder.getDistance() > ArmConstants.MIN_ANGLE_RADS - .2)  {
         dutyCycle = MathUtil.clamp(
-                        pid.calculate(getPosition()) + feedforward.calculate(pid.getSetpoint(), 0),
+                        pid.calculate(getAngleRad()) + feedforward.calculate(pid.getSetpoint(), 0),
                         -1,
                         1);
         // }
@@ -253,7 +253,7 @@ public class Arm extends SubsystemBase {
 
         // report the arm angle in radians
         SmartDashboard.putNumber("Arm angle", encoder.getDistance());
-        SmartDashboard.putNumber("Get Position", getPosition());
+        SmartDashboard.putNumber("Get Position", getAngleRad());
 
         // TODO: Clean these up when not needed.
         // report dutycycle
