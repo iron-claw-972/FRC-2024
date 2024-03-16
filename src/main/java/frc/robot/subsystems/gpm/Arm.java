@@ -97,7 +97,7 @@ public class Arm extends SubsystemBase {
     // Motor PID control
     private static final double TOLERANCE = Units.degreesToRadians(6.0);
     // P = 5 worked during simulation
-    private static final double P = 0.1;
+    private static final double P = 0.6;
     private static final double I = 0;
     private static final double D = 0;
     private final PIDController pid = new PIDController(P, I, D);
