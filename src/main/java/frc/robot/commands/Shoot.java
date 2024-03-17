@@ -49,8 +49,8 @@ public class Shoot extends Command {
 
         private Debouncer visionSawTagDebouncer = new Debouncer(0.2, DebounceType.kFalling);
 
+        Timer timer = new Timer();
         private boolean shooting = false;
-        private double t;
 
         public Shoot(Shooter shooter, Arm arm, Drivetrain drivetrain, StorageIndex index) {
                 this.shooter = shooter;
@@ -69,12 +69,8 @@ public class Shoot extends Command {
                 drive.onlyUseTags(new int[]{3, 4, 7, 8});
                 shooting = false;
         }
-        Timer timer = new Timer();
         @Override
         public void execute() {
-                if(t<0){
-                        t = Timer.getFPGATimestamp();
-                }
                 // Positive x displacement means we are to the left of the speaker
                 // Positive y displacement means we are below the speaker.
                 Pose3d speakerPose = Robot.getAlliance() == Alliance.Red ?
@@ -164,10 +160,10 @@ public class Shoot extends Command {
                 shooter.setTargetVelocity(v_note);
 
                 boolean sawTag = visionSawTagDebouncer.calculate(drive.canSeeTag());
-                System.out.println("Arm Setpoint: "+arm.atSetpoint());
-                System.out.println("Shooter Setpoint: "+shooter.atSetpoint());
-                System.out.println("drive Setpoint: "+drive.atAlignAngle());
-                sawTag = true;
+                // System.out.println("Arm Setpoint: "+arm.atSetpoint());
+                // System.out.println("Shooter Setpoint: "+shooter.atSetpoint());
+                // System.out.println("drive Setpoint: "+drive.atAlignAngle());
+                // TODO: Make this commented out if statement work (arm and shooter weren't getting to setpoint)
                 // if (arm.atSetpoint() && shooter.atSetpoint() && drive.atAlignAngle() && sawTag || shooting) {
                 if (EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - theta_v, Units.degreesToRadians(1)) && 
                 shooter.atSetpoint() && drive.atAlignAngle() && sawTag || shooting) {

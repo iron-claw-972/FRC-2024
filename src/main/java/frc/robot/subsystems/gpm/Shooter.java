@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.ShooterConstants;
-import frc.robot.util.EqualsUtil;
 import frc.robot.util.LogManager;
 
 public class Shooter extends SubsystemBase {
@@ -46,7 +45,7 @@ public class Shooter extends SubsystemBase {
 	 * Tolerance in RPM.
 	 * At 1500 rpm, the simulator gives 1519 rpm.
 	 */
-	private static final double TOLERANCE = 200;
+	private static final double TOLERANCE = 80;
 
 	// 4-inch Colson wheels
 	// private static final double MASS_COLSON = 0.245;
@@ -227,7 +226,7 @@ public class Shooter extends SubsystemBase {
 	 */
 	public void setTargetVelocity(double speed) {
 		// convert speed to RPM
-		setTargetRPM(shooterSpeedToRPM(speed) / 0.64*0.95);
+		setTargetRPM(shooterSpeedToRPM(speed) / 0.64);
 	}
 
 	/**
@@ -236,8 +235,7 @@ public class Shooter extends SubsystemBase {
 	 * @return boolean indicating whether both PIDs are at their setpoints
 	 */
 	public boolean atSetpoint() {
-		return EqualsUtil.epsilonEquals(rightPID.getSetpoint(), getRightMotorRPM(), TOLERANCE);
-		// return leftPID.atSetpoint() && rightPID.atSetpoint();
+		return leftPID.atSetpoint() && rightPID.atSetpoint();
 	}
 
 	/**
