@@ -1,5 +1,7 @@
 package frc.robot.subsystems.module;
 
+import java.time.Duration;
+
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
@@ -8,7 +10,6 @@ import com.ctre.phoenix6.configs.OpenLoopRampsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
-import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -30,6 +31,7 @@ import frc.robot.constants.swerve.ModuleType;
 import frc.robot.util.ConversionUtils;
 import frc.robot.util.LogManager;
 import lib.CTREModuleState;
+
 
 public class Module extends SubsystemBase {
     private final ModuleType type;
@@ -102,20 +104,16 @@ public class Module extends SubsystemBase {
             driveMotor.setControl(m_VelocityVoltage.withVelocity(velocity).withEnableFOC(true).withFeedForward(feedforward.calculate(velocity)));
         }
         if (Constants.DO_LOGGING) {
-            double motorSpeed = ConversionUtils.falconToMPS(ConversionUtils.RPMToFalcon(driveMotor.getVelocity().getValue()/60, 1), DriveConstants.kWheelCircumference,
-                                                            DriveConstants.kDriveGearRatio);
-            LogManager.addDouble("Swerve/Modules/DriveSpeed/" + type.name(),
-                                 motorSpeed
-                                );
-            LogManager.addDouble("Swerve/Modules/DriveSpeedError/" + type.name(),
-                                 motorSpeed - desiredState.speedMetersPerSecond
-                                );
-            LogManager.addDouble("Swerve/Modules/DriveVoltage/" + type.name(),
-                                 driveMotor.getMotorVoltage().getValue()
-                                );
-            LogManager.addDouble("Swerve/Modules/DriveCurrent/" + type.name(),
-                                 driveMotor.getStatorCurrent().getValue()
-                                );
+            String directory_name = "Drivetrain/Module" + type.name();
+            LogManager.add(directory_name +"/DriveSpeedActual/" , () -> ConversionUtils.falconToMPS(ConversionUtils.RPMToFalcon(driveMotor.getVelocity().getValue()/60, 1), DriveConstants.kWheelCircumference,
+                DriveConstants.kDriveGearRatio), Duration.ofSeconds(1));
+            LogManager.add(directory_name +"/DriveSpeedDesired/", () -> desiredState.speedMetersPerSecond, Duration.ofSeconds(1));
+            LogManager.add(directory_name +"/AngleDesired/", () -> getDesiredAngle().getRadians(), Duration.ofSeconds(1));
+            LogManager.add(directory_name +"/AngleActual/", () -> getAngle().getRadians(), Duration.ofSeconds(1));
+            LogManager.add(directory_name +"/VelocityDesired/", () -> getDesiredVelocity(), Duration.ofSeconds(1));
+            LogManager.add(directory_name +"/VelocityActual/", () -> getState().speedMetersPerSecond, Duration.ofSeconds(1));
+            LogManager.add(directory_name +"/DriveVoltage/", () -> driveMotor.getMotorVoltage().getValue(), Duration.ofSeconds(1));
+            LogManager.add(directory_name +"/DriveCurrent/", () -> driveMotor.getStatorCurrent().getValue(), Duration.ofSeconds(1));
         }
     }
 

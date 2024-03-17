@@ -1,6 +1,5 @@
 package lib.controllers;
 
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -82,16 +81,6 @@ public class GameController extends Controller {
         }
     }
 
-    public enum RumbleStatus {
-        RUMBLE_ON(0.7),
-        RUMBLE_OFF(0);
-
-        public final double rumbleValue;
-
-        RumbleStatus(final double rumbleValue) {
-            this.rumbleValue = rumbleValue;
-        }
-    }
 
     public Trigger get(Button button) {
         return new Trigger(() -> controller.getRawButton(button.id));
@@ -109,8 +98,4 @@ public class GameController extends Controller {
         return controller;
     }
 
-    public void setRumble(RumbleStatus rumbleStatus) {
-        controller.setRumble(RumbleType.kLeftRumble, rumbleStatus.rumbleValue);
-        controller.setRumble(RumbleType.kRightRumble, rumbleStatus.rumbleValue);
-    }
 }

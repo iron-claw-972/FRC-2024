@@ -4,11 +4,17 @@
 
 package frc.robot;
 
+import java.util.Optional;
+
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
+import frc.robot.util.LogManager;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -57,6 +63,8 @@ public class Robot extends TimedRobot {
         robotContainer.updateShuffleBoard();
 
         CommandScheduler.getInstance().run();
+        
+        LogManager.update();
     }
 
     /**
@@ -79,7 +87,6 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        // TODO: why is this here? A robot may not have vision. The container may not have the method.
         // Disable vision if the constant is false.
         robotContainer.setVisionEnabled(VisionConstants.ENABLED_AUTO);
 
@@ -134,7 +141,7 @@ public class Robot extends TimedRobot {
         // Cancels all running commands at the start of test mode.
         CommandScheduler.getInstance().cancelAll();
     }
-
+// rather be stronger?
     /**
      * This function is called periodically during test mode.
      */
@@ -146,4 +153,16 @@ public class Robot extends TimedRobot {
     public void simulationPeriodic() {
     }
 
+	/**
+	* Gets the set Alliance; defaults to red if not set.
+	* This method replaces {@link edu.first.wpilibj.DriverStation.getAlliance}.
+	* The .get() is not necessary, so DriverStation.getAlliance().get() becomes Robot.getAlliance()
+	*/
+	public static Alliance getAlliance() {
+		Optional<Alliance> dsAlliance = DriverStation.getAlliance();
+		if (dsAlliance.isPresent())
+			return dsAlliance.get();
+		else
+			return Alliance.Red; // default to Red alliance
+	}
 }

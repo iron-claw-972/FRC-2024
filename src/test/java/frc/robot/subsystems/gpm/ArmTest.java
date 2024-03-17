@@ -3,6 +3,8 @@ package frc.robot.subsystems.gpm;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import edu.wpi.first.math.util.Units;
@@ -10,7 +12,16 @@ import frc.robot.constants.ArmConstants;
 import frc.robot.constants.Constants;
 
 public class ArmTest {
+    @BeforeEach
+    public void prepare() {
 
+    }
+
+    @AfterEach
+    public void cleanup() {
+
+    }
+    
     /**
      * Make sure that the arm position parameters make sense.
      * <p>
@@ -21,20 +32,22 @@ public class ArmTest {
         // min angle better be less than max
         assertTrue(ArmConstants.MIN_ANGLE_RADS < ArmConstants.MAX_ANGLE_RADS);
 
-        // range should be small
-        assertTrue(-Math.PI / 4 < ArmConstants.MIN_ANGLE_RADS);
-        assertTrue(ArmConstants.MAX_ANGLE_RADS < Math.PI/2);
+        // range of motion should be small
+        assertTrue(Units.degreesToRadians(-15.0) < ArmConstants.MIN_ANGLE_RADS);
+        assertTrue(ArmConstants.MAX_ANGLE_RADS < Units.degreesToRadians(90.0));
+        // total range of motion is less than pi/2
         assertTrue(ArmConstants.MAX_ANGLE_RADS - ArmConstants.MIN_ANGLE_RADS < Math.PI / 2);
 
-        // start angle better be reasonable
-        assertTrue(ArmConstants.MIN_ANGLE_RADS <= ArmConstants.START_ANGLE_RADS);
-        assertTrue(ArmConstants.START_ANGLE_RADS <= ArmConstants.MAX_ANGLE_RADS);
-
-        // the offset should be in the range 0 to 1 (less the range of movement)
-        assertTrue(0.0 <= Arm.OFFSET);
-        assertTrue(Arm.OFFSET <= 1.0 - Units.radiansToRotations(ArmConstants.MAX_ANGLE_RADS - ArmConstants.MIN_ANGLE_RADS));
+        // the Arm.OFFSET should be in the range 0 to 1 (less the range of movement)
+        // In the stow position, there must be enough negative travel to cover all of the arm movement (about 0.25 rotations)
+        // For example, an OFFSET of 0.77 revolutions is OK because top of travel will then be 0.77-0.25 = 0.52.
+        // However, an OFFSET of 0.20 is not OK because top of travel will then be 0.20 - 0.25 = -0.05, which implies a sensor wrap around.
+        assertTrue(Units.radiansToRotations(ArmConstants.MAX_ANGLE_RADS - ArmConstants.MIN_ANGLE_RADS) < Arm.OFFSET);
+        assertTrue(Arm.OFFSET < 1.0);
 
         // the tests below actually caught a bad value...
+        // the tests below caught a second bad value.
+        assertTrue(rangeCheck(ArmConstants.START_ANGLE_RADS));
         assertTrue(rangeCheck(ArmConstants.intakeSetpoint));
         assertTrue(rangeCheck(ArmConstants.stowedSetpoint));
         assertTrue(rangeCheck(ArmConstants.subwooferSetpoint));
@@ -44,16 +57,26 @@ public class ArmTest {
     }
 
     /**
-     * Check that an angle is within the min-max range.
+     * Check that an arm angle is within the min-max range of motion.
      * @param setpoint arm setpoint in radians
      * @return true if the value is acceptable.
      */
     private static boolean rangeCheck(double setpoint) {
         return ArmConstants.MIN_ANGLE_RADS <= setpoint && setpoint <= ArmConstants.MAX_ANGLE_RADS;
     }
+
+    /**
+     * Check that the encoder has the correct scale value.
+     */
+    @Test
+    public void encoderScaleTest() {
+        assertEquals(-2.0 * Math.PI, Arm.DISTANCE_PER_ROTATION);
+    }
     
     /**
      * Make sure the gearing is what Kaushik says it is...
+     * <p>
+     * This test caught a value error.
      */
     @Test
     public void gearRatioTest() {

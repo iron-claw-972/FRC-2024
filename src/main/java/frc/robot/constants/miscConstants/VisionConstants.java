@@ -28,13 +28,15 @@ public class VisionConstants {
   /**
    * If April tag vision is enabled on the robot
    */
-  public static final boolean ENABLED = true;
+  public static final boolean ENABLED = false;
+
+  public static final boolean OBJECT_DETECTION_ENABLED = false;
 
   // If odometry should be updated using vision during auto
-  public static final boolean ENABLED_AUTO = true;
+  public static final boolean ENABLED_AUTO = false;
 
   // If odometry should be updated using vision while running the GoToPose and GoToPosePID commands in teleop
-  public static final boolean ENABLED_GO_TO_POSE = true;
+  public static final boolean ENABLED_GO_TO_POSE = false;
 
   // If vision should use manual calculations
   public static final boolean USE_MANUAL_CALCULATIONS = false;
@@ -73,16 +75,42 @@ public class VisionConstants {
     BLUE_SPEAKER_POSE.getRotation().rotateBy(new Rotation3d(0, 0, Math.PI))
   );
 
+  public static final double AMP_DISTANCE = 1;
+
   // The amp poses to align to
   public static final Pose2d BLUE_AMP_POSE = new Pose2d(
     FieldConstants.APRIL_TAGS.get(5).pose.getX(),
     FieldConstants.APRIL_TAGS.get(5).pose.getY() - DriveConstants.kRobotWidthWithBumpers/2,
     new Rotation2d(-Math.PI/2)
   );
+
+  public static final Pose2d BLUE_AMP_POSE_2 = new Pose2d(
+    BLUE_AMP_POSE.getX(),
+    BLUE_AMP_POSE.getY() - AMP_DISTANCE,
+    BLUE_AMP_POSE.getRotation()
+  );
+
+  public static final Pose2d BLUE_AMP_POSE_3 = new Pose2d(
+    BLUE_AMP_POSE.getX(),
+    BLUE_AMP_POSE.getY() - 2*AMP_DISTANCE,
+    BLUE_AMP_POSE.getRotation()
+  );
+
   public static final Pose2d RED_AMP_POSE = new Pose2d(
     FieldConstants.APRIL_TAGS.get(4).pose.getX(),
     BLUE_AMP_POSE.getY(),
     BLUE_AMP_POSE.getRotation()
+  );
+  public static final Pose2d RED_AMP_POSE_2 = new Pose2d(
+    RED_AMP_POSE.getX(),
+    RED_AMP_POSE.getY() - AMP_DISTANCE,
+    RED_AMP_POSE.getRotation()
+  );
+
+  public static final Pose2d RED_AMP_POSE_3 = new Pose2d(
+    RED_AMP_POSE.getX(),
+    RED_AMP_POSE.getY() - 2*AMP_DISTANCE,
+    RED_AMP_POSE.getRotation()
   );
 
   // How close we have to get to the amp before scoring in it (meters and radians)
@@ -119,21 +147,58 @@ public class VisionConstants {
     }
   }
 
+  public static final Pose2d BLUE_SUBWOOFER_CENTER = new Pose2d(
+    FieldConstants.APRIL_TAGS.get(6).pose.getX()+Units.inchesToMeters(53.904),
+    FieldConstants.APRIL_TAGS.get(6).pose.getY(),
+    new Rotation2d()
+  );
+  public static final Pose2d BLUE_SUBWOOFER_LEFT = new Pose2d(
+    FieldConstants.APRIL_TAGS.get(6).pose.getX()+Units.inchesToMeters(27.562),
+    FieldConstants.APRIL_TAGS.get(6).pose.getY()+Units.inchesToMeters(45.292),
+    Rotation2d.fromDegrees(60)
+    );
+  public static final Pose2d BLUE_SUBWOOFER_RIGHT = new Pose2d(
+    FieldConstants.APRIL_TAGS.get(6).pose.getX()+Units.inchesToMeters(27.562),
+    FieldConstants.APRIL_TAGS.get(6).pose.getY()-Units.inchesToMeters(45.292),
+    Rotation2d.fromDegrees(-60)
+  );
+  public static final Pose2d RED_SUBWOOFER_CENTER = new Pose2d(
+    FieldConstants.APRIL_TAGS.get(3).pose.getX()-Units.inchesToMeters(53.904),
+    BLUE_SUBWOOFER_CENTER.getY(),
+    new Rotation2d(Math.PI-BLUE_SUBWOOFER_CENTER.getRotation().getRadians())
+  );
+  public static final Pose2d RED_SUBWOOFER_LEFT = new Pose2d(
+    FieldConstants.APRIL_TAGS.get(3).pose.getX()-Units.inchesToMeters(27.562),
+    BLUE_SUBWOOFER_LEFT.getY(),
+    new Rotation2d(Math.PI-BLUE_SUBWOOFER_LEFT.getRotation().getRadians())
+  );
+  public static final Pose2d RED_SUBWOOFER_RIGHT = new Pose2d(
+    FieldConstants.APRIL_TAGS.get(3).pose.getX()-Units.inchesToMeters(27.562),
+    BLUE_SUBWOOFER_RIGHT.getY(),
+    new Rotation2d(Math.PI-BLUE_SUBWOOFER_RIGHT.getRotation().getRadians())
+  );
+
   // The camera poses
-  // TODO: Add these
   public static final ArrayList<Pair<String, Transform3d>> APRIL_TAG_CAMERAS = new ArrayList<Pair<String, Transform3d>>(List.of(
     new Pair<String, Transform3d>(
       "Camera1",
       new Transform3d(
-        new Translation3d(Units.inchesToMeters(-12.55), Units.inchesToMeters(-9.705), Units.inchesToMeters(9.5)),
-        new Rotation3d(0, Units.degreesToRadians(-50), Math.PI)
-      )),
+        new Translation3d(Units.inchesToMeters(-10.429), Units.inchesToMeters(-10.078), Units.inchesToMeters(8.874)),
+        new Rotation3d(0, Units.degreesToRadians(-50), Math.PI-Units.degreesToRadians(20))
+      )
+    ),
     new Pair<String, Transform3d>(
       "Camera2",
       new Transform3d(
-        new Translation3d(Units.inchesToMeters(-0.75), Units.inchesToMeters(-7.125), Units.inchesToMeters(21)),
-        new Rotation3d(0, 0, Math.PI)
-      )
+        new Translation3d(Units.inchesToMeters(16.627), Units.inchesToMeters(11.924), Units.inchesToMeters(12.7)),
+        new Rotation3d(0, Units.degreesToRadians(-50), 0)
+      ))
     )
+  );
+
+  public static final ArrayList<Transform3d> OBJECT_DETECTION_CAMERAS = new ArrayList<>(List.of(
+    new Transform3d(
+      new Translation3d(Units.inchesToMeters(10), 0, Units.inchesToMeters(24)),
+      new Rotation3d(0, Units.degreesToRadians(20), 0))
   ));
 }

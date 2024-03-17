@@ -1,11 +1,13 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Robot;
+import frc.robot.constants.Constants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.util.LogManager;
 
 /**
  * Default drive command. Drives robot using driver controls.
@@ -25,6 +27,11 @@ public class DefaultDriveCommand extends Command {
     @Override
     public void initialize() {
         swerve.setStateDeadband(true);
+        if (Constants.DO_LOGGING) {
+            LogManager.add("DriveControls/ForwardTranslation", () -> driver.getForwardTranslation());
+            LogManager.add("DriveControls/SideTranslation", () -> driver.getSideTranslation());
+            LogManager.add("DriveControls/Rotation", () -> driver.getRotation());
+        }
     }
 
     @Override
@@ -40,7 +47,7 @@ public class DefaultDriveCommand extends Command {
         sideTranslation *= slowFactor;
         rotation *= driver.getIsSlowMode() ? DriveConstants.kSlowRotFactor : 1;
 
-        int allianceReversal = DriverStation.getAlliance().get() == Alliance.Red ? 1 : -1;
+        int allianceReversal = Robot.getAlliance() == Alliance.Red ? 1 : -1;
         forwardTranslation *= allianceReversal;
         sideTranslation *= allianceReversal;
 
