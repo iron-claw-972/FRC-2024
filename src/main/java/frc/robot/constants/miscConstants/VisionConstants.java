@@ -213,14 +213,14 @@ public class VisionConstants {
     new Pair<String, Transform3d>(
       "CameraPort",
       new Transform3d(
-        new Translation3d(Units.inchesToMeters(-12.125), Units.inchesToMeters(6.5), Units.inchesToMeters(19.5)),
+        new Translation3d(Units.inchesToMeters(-11.75), Units.inchesToMeters(6.25), Units.inchesToMeters(18.75)),
         new Rotation3d(0, Units.degreesToRadians(-20), Math.PI+Units.degreesToRadians(15))
       )
     ),
     new Pair<String, Transform3d>(
       "CameraStarboard",
       new Transform3d(
-        new Translation3d(Units.inchesToMeters(-12.125), Units.inchesToMeters(-6.5), Units.inchesToMeters(19.5)),
+        new Translation3d(Units.inchesToMeters(-11.75), Units.inchesToMeters(-6.25), Units.inchesToMeters(18.75)),
         new Rotation3d(0, Units.degreesToRadians(-20), Math.PI-Units.degreesToRadians(15))
       ))
     )
