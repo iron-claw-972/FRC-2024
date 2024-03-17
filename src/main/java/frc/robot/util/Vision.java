@@ -82,9 +82,22 @@ public class Vision {
     for (int i = 0; i < camList.size(); i++) {
       m_cameras.add(new VisionCamera(camList.get(i).getFirst(), camList.get(i).getSecond()));
     }
+    visionLogging();
   }
 
-
+  public void visionLogging() {
+    ArrayList<Pose2d> loggedPoses = new ArrayList<>();
+     if(Constants.DO_LOGGING)  {
+      for(int i = 0; i < m_cameras.size(); i++) {
+      Pose2d pose = getPose2d(loggedPoses.get(i));
+              LogManager.add("Vision/camera " + i + "/estimated pose2d", () -> new Double[] {
+                pose.getX(),
+                pose.getY(),
+                pose.getRotation().getRadians()
+      }, Duration.ofSeconds(1));
+    }
+   }
+  }
   /**
    * Get the horizontal offsets from the crosshair to the targets
    * @return An array of offsets in degrees
@@ -272,13 +285,6 @@ public class Vision {
               PoseStrategy.LOWEST_AMBIGUITY
             );
             estimatedPoses.add(estimatedPose);
-            if(Constants.DO_LOGGING){
-              LogManager.add("Vision/camera " + i + "/estimated pose2d", () -> new Double[] {
-                pose.getX(),
-                pose.getY(),
-                pose.getRotation().getRadians()
-              }, Duration.ofSeconds(1));
-            }
           }catch(Exception e){
             System.out.println(e.getStackTrace());
             DriverStation.reportWarning("EXCEPTION THROWN:", true);
@@ -290,13 +296,6 @@ public class Vision {
         // April tags that don't exist might return a result that is present but doesn't have a pose
         if (estimatedPose.isPresent() && estimatedPose.get().estimatedPose != null) {
           estimatedPoses.add(estimatedPose.get());
-          if(Constants.DO_LOGGING){
-            LogManager.add("Vision/camera " + i + "/estimated pose2d", () -> new Double[] {
-              estimatedPose.get().estimatedPose.getX(),
-              estimatedPose.get().estimatedPose.getY(),
-              estimatedPose.get().estimatedPose.getRotation().getZ()
-            }, Duration.ofSeconds(1));
-          }
         }
       }
     }
@@ -373,6 +372,11 @@ public class Vision {
       lastPose = null;
     }
   
+    public Pose2d getLatestResult() {
+      // TODO Auto-generated method stub
+      throw new UnsupportedOperationException("Unimplemented method 'getLatestResult'");
+    }
+
     /**
      * Gets the estimated pose from the camera
      * @param referencePose Pose to use for reference, usually the previous estimated robot pose
@@ -500,6 +504,10 @@ public class Vision {
      */
     public void setOnlyUse(int id){
       onlyUse = id;
+    }
+
+    public PhotonCamera getCamera(){
+      return camera;
     }
   }
 }
