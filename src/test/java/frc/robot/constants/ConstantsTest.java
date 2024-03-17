@@ -50,9 +50,15 @@ public class ConstantsTest {
      */
     enum SwerveDriveSpecialties {
         // Gearbox ratios from the SDS webpage
+        //  https://www.swervedrivespecialties.com/products/mk4i-swerve-module
         L1((50.0 / 14.0) * (19.0 / 25.0) * (45.0 / 15.0)),
         L2((50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0)),
-        L3((50.0 / 14.0) * (16.0 / 28.0) * (45.0 / 15.0));
+        L3((50.0 / 14.0) * (16.0 / 28.0) * (45.0 / 15.0)),
+        // 16-tooth pinion
+        //    https://www.swervedrivespecialties.com/products/kit-adapter-16t-drive-pinion-gear-mk4i
+        L1P((50.0 / 16.0) * (19.0 / 25.0) * (45.0 / 15.0)),
+        L2P((50.0 / 16.0) * (17.0 / 27.0) * (45.0 / 15.0)),
+        L3P((50.0 / 16.0) * (16.0 / 28.0) * (45.0 / 15.0));
 
         /**
          * Drive gear ratio varies for each module
@@ -76,11 +82,11 @@ public class ConstantsTest {
         assertEquals(6.12, SwerveDriveSpecialties.L3.driveRatio, 0.01);
 
         // The drive ratio could be more accurate, but does not hurt
-        assertEquals(SwerveDriveSpecialties.L2.driveRatio, DriveConstants.kDriveGearRatio, 0.01);
+        assertEquals(SwerveDriveSpecialties.L2P.driveRatio, DriveConstants.kDriveGearRatio, 0.01);
 
         // The steer ratio
         // print the relative error: 0.6e-4. After 100 rotations, error would be 0.6e-2 rotations (about 1.5 degrees)
         // System.out.println((DriveConstants.kSteerGearRatio - SwerveDriveSpecialties.L2.steerRatio) / SwerveDriveSpecialties.L2.steerRatio);
-        assertEquals(SwerveDriveSpecialties.L2.steerRatio, DriveConstants.kSteerGearRatio, 0.01);
+        assertEquals(SwerveDriveSpecialties.L2P.steerRatio, DriveConstants.kSteerGearRatio, 0.01);
     }
 }

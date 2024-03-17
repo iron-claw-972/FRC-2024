@@ -84,7 +84,8 @@ public class Constants {
     public static final int OPERATOR_JOY = 1;
     public static final int TEST_JOY = 2;
     public static final int MANUAL_JOY = 3;
-    public static final double DEADBAND = 0.005;
+    public static final double DEADBAND = 0.00005;
+    public static final double HEADINGDEADBAND = 0.05;
 
     //TODO: change sensitivity to 1?
 

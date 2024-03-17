@@ -35,7 +35,7 @@ public class Robot extends TimedRobot {
         //   SimGUI: Persistent Values, Preferences, RobotId, then restart Simulation
         //     changes networktables.json, networktables.json.bck (both Untracked)
         //   Uncomment the next line, set the desired RobotId, deploy, and then comment the line out
-        // RobotId.setRobotId(RobotId.Vertigo);
+        //RobotId.setRobotId(RobotId.Vertigo);
         DriveConstants.update(RobotId.getRobotId());
         // obtain this robot's identity
         RobotId robotId = RobotId.getRobotId();
