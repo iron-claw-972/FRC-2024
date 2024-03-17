@@ -19,7 +19,7 @@ public class IntakeNote extends Command{
     public IntakeNote(Intake intake, StorageIndex storageIndex) {
         this.intake = intake;
         this.storageIndex = storageIndex;
-        //addRequirements(intake, storageIndex);
+        addRequirements(intake, storageIndex);
     }
 
 //  public IntakeNote(Intake intake, StorageIndex storageIndex, Arm arm) {
@@ -28,6 +28,7 @@ public class IntakeNote extends Command{
 //         this.arm = arm;
 //         addRequirements(intake, storageIndex, arm);
 //     }
+
 
     @Override
     public void initialize() {
