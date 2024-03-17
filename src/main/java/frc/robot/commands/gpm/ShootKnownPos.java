@@ -3,6 +3,7 @@ package frc.robot.commands.gpm;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.ArmToPos;
 import frc.robot.constants.ArmConstants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.subsystems.gpm.Arm;
@@ -48,9 +49,9 @@ public class ShootKnownPos extends SequentialCommandGroup {
 		addRequirements(shooter, arm, storageIndex);
 
 		addCommands(
-			// new ParallelCommandGroup(
-			// 	new ArmToPos(arm, shot.getArmAngle()),
-			// 	new SetShooterSpeed(shooter, shot.getShooterSpeed())),
+			new ParallelCommandGroup(
+				new ArmToPos(arm, shot.getArmAngle()),
+				new SetShooterSpeed(shooter, shot.getShooterSpeed())),
 			new IndexerFeed(storageIndex),
 			new ParallelCommandGroup(
 				new InstantCommand(() -> arm.setAngle(ArmConstants.stowedSetpoint)),
