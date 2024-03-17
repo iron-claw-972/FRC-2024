@@ -223,6 +223,8 @@ public class Arm extends SubsystemBase {
 
             LogManager.add("Arm/SlaveErrors(ticks)", () -> slave_errors);
         }
+
+	SmartDashboard.putBoolean("Arm Enabled", armEnabled);
     }
 
     /**
