@@ -23,7 +23,7 @@ import frc.robot.subsystems.gpm.StorageIndex;
  */
 public class OuttakeAmp extends SequentialCommandGroup {
   private Pose2d ampPose;
-  private Pose2d ampPose2;
+  // private Pose2d ampPose2;
 
   /**
    * Scores in the amp
@@ -75,7 +75,7 @@ public class OuttakeAmp extends SequentialCommandGroup {
                 // new GoToPose(ampPose2, drive).until(()->{
                 //   return drive.getPose().getTranslation().getDistance(ampPose2.getTranslation()) < VisionConstants.AMP_TOLERANCE_DISTANCE;
                 // }),
-                new GoToPose(ampPose, drive))
+                new GoToPose(()->ampPose, drive))
               ));
   }
 
@@ -85,14 +85,14 @@ public class OuttakeAmp extends SequentialCommandGroup {
       // new GoToPose(ampPose2, drive).until(()->{
       //   return drive.getPose().getTranslation().getDistance(ampPose2.getTranslation()) < VisionConstants.AMP_TOLERANCE_DISTANCE;
       // }),
-      new GoToPose(ampPose, drive)
+      new GoToPose(() -> ampPose, drive)
     );
   }
 
   public void getPoses(){
     ampPose = Robot.getAlliance() == Alliance.Red ? VisionConstants.RED_AMP_POSE
         : VisionConstants.BLUE_AMP_POSE;
-    ampPose2 = Robot.getAlliance() == Alliance.Red ? VisionConstants.RED_AMP_POSE_2
-        : VisionConstants.BLUE_AMP_POSE_2;
+    // ampPose2 = Robot.getAlliance() == Alliance.Red ? VisionConstants.RED_AMP_POSE_2
+    //     : VisionConstants.BLUE_AMP_POSE_2;
   }
 }

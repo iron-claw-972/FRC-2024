@@ -6,6 +6,7 @@ import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -17,7 +18,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -28,8 +28,12 @@ import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
 import frc.robot.subsystems.module.Module;
 import frc.robot.subsystems.module.ModuleSim;
+import frc.robot.util.EqualsUtil;
 import frc.robot.util.LogManager;
 import frc.robot.util.Vision;
+import frc.robot.util.SwerveStuff.ModuleLimits;
+import frc.robot.util.SwerveStuff.SwerveSetpoint;
+import frc.robot.util.SwerveStuff.SwerveSetpointGenerator;
 
 /**
  * Represents a swerve drive style drivetrain.
@@ -44,6 +48,15 @@ public class Drivetrain extends SubsystemBase {
 
     protected final Module[] modules;
 
+    private SwerveSetpoint currentSetpoint =
+    new SwerveSetpoint(
+        new ChassisSpeeds(),
+        new SwerveModuleState[] {
+          new SwerveModuleState(),
+          new SwerveModuleState(),
+          new SwerveModuleState(),
+          new SwerveModuleState()
+        });
     // Odometry
     private final SwerveDrivePoseEstimator poseEstimator;
 
@@ -59,12 +72,20 @@ public class Drivetrain extends SubsystemBase {
 
     // If vision is enabled for drivetrain odometry updating
     // DO NOT CHANGE THIS HERE TO DISABLE VISION, change VisionConstants.ENABLED instead
-    private boolean visionEnabled = false;
+    private boolean visionEnabled = true;
 
     // If the robot should aim at the speaker
     private boolean isAlign = false;
     // Angle to align to, null for directly toward speaker
     private Double alignAngle = null;
+    // used for drift control
+    private double currentHeading = 0;
+    // used for drift control
+    private boolean drive_turning = false;
+
+    SwerveSetpointGenerator setpointGenerator = new SwerveSetpointGenerator();
+
+
 
     /**
      * Creates a new Swerve Style Drivetrain.
@@ -85,7 +106,7 @@ public class Drivetrain extends SubsystemBase {
                 modules[moduleConstants.ordinal()] = new ModuleSim(moduleConstants);
             });
         }
-
+        
         // The Pigeon is a gyroscope and implements WPILib's Gyro interface
         pigeon = new Pigeon2(DriveConstants.kPigeon, DriveConstants.kPigeonCAN);
         pigeon.getConfigurator().apply(new Pigeon2Configuration());
@@ -108,7 +129,10 @@ public class Drivetrain extends SubsystemBase {
                 DriveConstants.KINEMATICS,
                 Rotation2d.fromDegrees(pigeon.getYaw().getValue()),
                 getModulePositions(),
-                new Pose2d() 
+                new Pose2d(),
+                // Defaults, except trust pigeon more
+                VecBuilder.fill(0.1, 0.1, 0),
+                VisionConstants.VISION_STD_DEVS
         );
        poseEstimator.setVisionMeasurementStdDevs(VisionConstants.VISION_STD_DEVS);
         
@@ -135,8 +159,7 @@ public class Drivetrain extends SubsystemBase {
     @Override
     public void periodic() {
         updateOdometry();
-        // System.out.println("x: "+ getPose().getX()); 
-        // System.out.println("y: "+ getPose().getY()); 
+        // System.out.println("drivetrain x: "+ getPose().getX() + "drivetrain y: "+ getPose().getY()); 
     }
 
     // DRIVE
@@ -150,7 +173,10 @@ public class Drivetrain extends SubsystemBase {
      * @param fieldRelative whether the provided x and y speeds are relative to the field
      * @param isOpenLoop    whether to use velocity control for the drive motors
      */
+
+    
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean isOpenLoop) {
+        rot = headingControl(rot, xSpeed, ySpeed);
         setChassisSpeeds((
                                  fieldRelative
                                          ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getYaw())
@@ -206,7 +232,7 @@ public class Drivetrain extends SubsystemBase {
         Pose2d pose2 = getPose();
 
         if(VisionConstants.ENABLED){
-            if(RobotBase.isReal() && visionEnabled){
+            if(visionEnabled){
                 vision.updateOdometry(poseEstimator);
             }
         }
@@ -258,7 +284,12 @@ public class Drivetrain extends SubsystemBase {
             pigeon.getSimState().addYaw(
                     +Units.radiansToDegrees(chassisSpeeds.omegaRadiansPerSecond * Constants.LOOP_TIME));
         }
-        SwerveModuleState[] swerveModuleStates = DriveConstants.KINEMATICS.toSwerveModuleStates(chassisSpeeds);
+        currentSetpoint = setpointGenerator.generateSetpoint(
+            new ModuleLimits(DriveConstants.kMaxSpeed, Double.MAX_VALUE, Double.MAX_VALUE),
+            currentSetpoint,chassisSpeeds,
+            Constants.LOOP_TIME);
+            
+        SwerveModuleState[] swerveModuleStates = currentSetpoint.moduleStates();
         setModuleStates(swerveModuleStates, isOpenLoop);
     }
 
@@ -370,6 +401,7 @@ public class Drivetrain extends SubsystemBase {
      */
     public void resetOdometry(Pose2d pose) {
         // NOTE: must use pigeon yaw for odometer!
+        currentHeading = pose.getRotation().getRadians();
         poseEstimator.resetPosition(Rotation2d.fromDegrees(pigeon.getYaw().getValue()), getModulePositions(), pose);
     }
 
@@ -404,10 +436,47 @@ public class Drivetrain extends SubsystemBase {
         if(alignAngle != null){
             return alignAngle;
         }
-        Pose2d pose = getPose();
-        return Math.PI + (Robot.getAlliance() == Alliance.Blue ?
-            Math.atan2(VisionConstants.BLUE_SPEAKER_POSE.getY() - pose.getY(), VisionConstants.BLUE_SPEAKER_POSE.getX() - pose.getX()) :
-            Math.atan2(VisionConstants.RED_SPEAKER_POSE.getY() - pose.getY(), VisionConstants.RED_SPEAKER_POSE.getX() - pose.getX()));
+        return -Math.PI/2;
+        // Pose2d pose = getPose();
+        // return Math.PI + (Robot.getAlliance() == Alliance.Blue ?
+        //     Math.atan2(VisionConstants.BLUE_SPEAKER_POSE.getY() - pose.getY(), VisionConstants.BLUE_SPEAKER_POSE.getX() - pose.getX()) :
+        //     Math.atan2(VisionConstants.RED_SPEAKER_POSE.getY() - pose.getY(), VisionConstants.RED_SPEAKER_POSE.getX() - pose.getX()));
+    }
+
+    /**
+     * Sets vision to only use certain April tags
+     * @param ids An array of the tags to only use
+     */
+    public void onlyUseTags(int[] ids){
+        if(vision != null){
+            vision.onlyUse(ids);
+        }
+    }
+    /**
+     * Returns if vision has seen an April tag in the last frame
+     * @return If vision saw a tag last frame or if vision is disabled
+     */
+    public boolean canSeeTag(){
+        return vision.canSeeTag() || !visionEnabled || !VisionConstants.ENABLED;
+    }
+
+    /**
+     * Uses pigeon and rotational input to return a rotation that accounts for drift
+     * @return A rotation
+     */
+    public double headingControl(double rot, double xSpeed, double ySpeed){
+        if((!EqualsUtil.epsilonEquals(getAngularRate(0), 0, 0.0004)&&EqualsUtil.epsilonEquals(Math.hypot(xSpeed, ySpeed),0,0.1))||!EqualsUtil.epsilonEquals(rot, 0, 0.0004)){
+             drive_turning = true;
+             currentHeading = getYaw().getRadians();
+        }
+        else{
+            drive_turning = false;
+        }
+        if (!drive_turning){
+            rotationController.setSetpoint(currentHeading);
+            rot = Math.abs(rotationController.calculate(getYaw().getRadians())) > Math.abs(rot) ? rotationController.calculate(getYaw().getRadians()) : rot;
+        }
+        return rot;
     }
 
     /**

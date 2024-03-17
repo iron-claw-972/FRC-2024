@@ -19,10 +19,15 @@ import frc.robot.constants.Constants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.util.LogManager;
 
-
 public class Shooter extends SubsystemBase {
 	// each of the shooter shafts is driven by one Neo Vortex motor
 	protected static final DCMotor gearbox = DCMotor.getNeoVortex(1);
+	/**
+	 * Shooter gearing.
+	 * <p>
+	 * Each turn of the motor is two turns of the shooter wheel
+	*/
+	protected static final double gearRatio = 0.5;
 	// get the motor freespeed
 	private static final double rpmFreeSpeed = Units
 			.radiansPerSecondToRotationsPerMinute(Shooter.gearbox.freeSpeedRadPerSec);
@@ -31,7 +36,6 @@ public class Shooter extends SubsystemBase {
 	private static final double P = 0.00070;
 	private static final double I = 0.00009;
 	private static final double D = 0.0;
-
 
 	// FeedForward constants
 	private static final double S = 0;
@@ -55,25 +59,28 @@ public class Shooter extends SubsystemBase {
 	private static final double RADIUS_STEALTH = Units.inchesToMeters(2.0);
 	private static final double MOI_STEALTH = MASS_RIM * RADIUS_STEALTH * RADIUS_STEALTH;
 
+	/** Magic number to predict output velocity. <p> Found empirically. */
+	private static final double OUTPUT_COEF = 0.64;
+
 	// each motor spins 6 stealth wheels
-	private static final double MOI_SHAFT = MOI_STEALTH * 6;
+	protected static final double MOI_SHAFT = MOI_STEALTH * 6;
 
 	// left motor
 	private final CANSparkFlex leftMotor = new CANSparkFlex(ShooterConstants.LEFT_MOTOR_ID, MotorType.kBrushless);
 	private final RelativeEncoder leftMotorEncoder = leftMotor.getEncoder();
 	/** PID controller uses RPM as input and outputs motor power */
-	private final PIDController leftPID = new PIDController(P, I, D);
+	protected final PIDController leftPID = new PIDController(P, I, D);
 	private FlywheelSim leftFlywheelSim;
-	private double leftMotorSpeedSim;
+	private double leftMotorSpeedSim = 0.0;
 	private double leftPower = 0.0;
 
 	// right motor
 	private final CANSparkFlex rightMotor = new CANSparkFlex(ShooterConstants.RIGHT_MOTOR_ID, MotorType.kBrushless);
 	private final RelativeEncoder rightMotorEncoder = rightMotor.getEncoder();
 	/** PID controller uses RPM as input and outputs motor power */
-	private final PIDController rightPID = new PIDController(P, I, D);
+	protected final PIDController rightPID = new PIDController(P, I, D);
 	private FlywheelSim rightFlywheelSim;
-	private double rightMotorSpeedSim;
+	private double rightMotorSpeedSim = 0.0;
 	private double rightPower = 0.0;
 
 	// TODO: TUNE THIS
@@ -89,9 +96,11 @@ public class Shooter extends SubsystemBase {
 
 		// are we simulating?
 		if (RobotBase.isSimulation()) {
-			leftFlywheelSim = new FlywheelSim(gearbox, 1.0, MOI_SHAFT);
-			rightFlywheelSim = new FlywheelSim(gearbox, 1.0, MOI_SHAFT);
+			// make the linear system simulation instances
+			leftFlywheelSim = new FlywheelSim(gearbox, gearRatio, MOI_SHAFT);
+			rightFlywheelSim = new FlywheelSim(gearbox, gearRatio, MOI_SHAFT);
 		}
+
 		if (Constants.DO_LOGGING) {
 			LogManager.add("Shooter/MotorSpeedDifference", () -> getMotorSpeedDifference(), Duration.ofSeconds(1));
 			LogManager.add("Shooter/LeftSpeedError", () -> leftPID.getSetpoint() - getLeftMotorSpeed(), Duration.ofSeconds(1));
@@ -109,8 +118,7 @@ public class Shooter extends SubsystemBase {
 		double leftSpeed = getLeftMotorRPM();
 		double rightSpeed = getRightMotorRPM();
 
-		// TODO: having problems: a set and get do not match, so keep powers around for
-		// simulation
+		// A set and get of the NEO motors do not match, so keep powers around for simulation
 		leftPower = leftPID.calculate(leftSpeed) + feedforward.calculate(leftPID.getSetpoint());
 		rightPower = rightPID.calculate(rightSpeed) + feedforward.calculate(rightPID.getSetpoint());
 
@@ -123,7 +131,6 @@ public class Shooter extends SubsystemBase {
 		SmartDashboard.putNumber("right speed", /* shooterRPMToSpeed */ (rightSpeed));
 		SmartDashboard.putData("left Shooter PID", leftPID);
 		SmartDashboard.putData("right Shooter PID", rightPID);
-
 	}
 
 	@Override
@@ -160,6 +167,8 @@ public class Shooter extends SubsystemBase {
 
 	/**
 	 * Converts an RPM to a speed at the surface of the shooter wheels.
+	 * <p>
+	 * Does not compensate for slipping.
 	 *
 	 * @param rpm the RPM to convert
 	 * @return the converted value in m/s
@@ -167,18 +176,56 @@ public class Shooter extends SubsystemBase {
 	 */
 	public static double shooterRPMToSpeed(double rpm) {
 		// factor in Gear Ratio
-		return 2 * (rpm / 60) * (RADIUS_STEALTH * 2 * Math.PI);
+		return (1.0 / gearRatio) * (rpm / 60) * (RADIUS_STEALTH * 2 * Math.PI);
 	}
 
 	/**
 	 * Converts a speed at the surface of the shooter wheels to an RPM value.
+	 * <p>
+	 * Does not compensate for slipping.
 	 *
 	 * @param speed the speed to convert in m/s
 	 * @return the converted value in RPM
 	 * @see shooterRPMToSpeed
 	 */
 	public static double shooterSpeedToRPM(double speed) {
-		return .5 * (speed * 60) / (RADIUS_STEALTH * 2 * Math.PI);
+		return gearRatio * (speed * 60) / (RADIUS_STEALTH * 2 * Math.PI);
+	}
+
+	/**
+	 * Accounts for slip in a speed or RPM.
+	 * <p>
+	 * This method transforms a speed/RPM that does account for slip into one 
+	 * that doesn't. As it's a simple proportional aproximation, it can be 
+	 * applied to both speeds and RPMs.
+	 * <p>
+	 * This method should typically be used for gets. Example: 
+	 * System.out.println(removeSlip(getLeftMotorRPM()));
+	 * 
+	 * @param speed The speed to add slip to.
+	 * @return The output, accounting for slip.
+	 * @see frc.robot.subsystems.gpm.Shooter.addSlip
+	 */
+	public static double removeSlip(double speed) {
+		return speed * OUTPUT_COEF;
+	}
+
+	/**
+	 * Accounts for slip in a speed or RPM.
+	 * <p>
+	 * This method transforms a speed/RPM that doesn't account for slip into 
+	 * one that does. As it's a simple proportional aproximation, it can be 
+	 * applied to both speeds and RPMs.
+	 * <p>
+	 * This method should typically be used for sets. Example: 
+	 * setTargetRPM(addSlip(outputSpeed));
+	 * 
+	 * @param speed The speed to add slip to.
+	 * @return The output, accounting for slip.
+	 * @see frc.robot.subsystems.gpm.Shooter.removeSlip
+	 */
+	public static double addSlip(double output) {
+		return output / OUTPUT_COEF;
 	}
 
 	/**
@@ -197,6 +244,8 @@ public class Shooter extends SubsystemBase {
 
 	/**
 	 * Sets the RPM both shooter motors try to spin up to.
+	 * <p>
+	 * Adds a constant spin of plus/minus 300 RPM if that makes sense.
 	 *
 	 * @param speed speed to spin to in RPM
 	 * @see setTargetVelocity
@@ -208,13 +257,15 @@ public class Shooter extends SubsystemBase {
 
 	/**
 	 * Set the target velocity of a note exiting the shooter.
+	 * <p>
+	 * Empirical fit.
 	 *
-	 * @param speed speed to spin to in m/s
+	 * @param output speed to shoot note in m/s
 	 * @see setTargetRPM
 	 */
-	public void setTargetVelocity(double speed) {
+	public void setTargetVelocity(double output) {
 		// convert speed to RPM
-		setTargetRPM(shooterSpeedToRPM(speed) / 0.64);
+		setTargetRPM(addSlip(shooterSpeedToRPM(output)));
 	}
 
 	/**
@@ -228,6 +279,8 @@ public class Shooter extends SubsystemBase {
 
 	/**
 	 * Gets the RPM of the left motor, checking whether this is a simulation.
+	 * <p>
+	 * If a simulation, uses the simulated speed.
 	 *
 	 * @return the left motor's RPM
 	 * @see getRightMotorRPM
@@ -238,14 +291,18 @@ public class Shooter extends SubsystemBase {
 		// REV does not let us set the encoder velocity in a simulation, so use
 		// simulated value
 		if (RobotBase.isSimulation()) {
+			// use the RPM calculated in the simulation
 			return leftMotorSpeedSim;
 		} else {
+			// ask the encoder for the RPM
 			return leftMotorEncoder.getVelocity();
 		}
 	}
 
 	/**
 	 * Gets the RPM of the right motor, checking whether this is a simulation.
+	 * <p>
+	 * If a simulation, uses the simulated RPM.
 	 *
 	 * @return the right motor's RPM
 	 * @see getLeftMotorRPM
@@ -264,6 +321,8 @@ public class Shooter extends SubsystemBase {
 
 	/**
 	 * Gets the speed at the surface of the left wheels.
+	 * <p>
+	 * If a simulation, returns the simulated speed.
 	 *
 	 * @return the left wheel's speed in m/s
 	 * @see getLeftMotorSpeed

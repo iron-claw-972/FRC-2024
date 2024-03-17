@@ -27,6 +27,7 @@ public class SwerveTab extends ShuffleBoardTabs {
     private GenericEntry rotOdemetry;
     private GenericEntry[] steerSpeed = new GenericEntry[4];
     private GenericEntry[] driveSpeed = new GenericEntry[4];
+    private GenericEntry[] driveAccel = new GenericEntry[4];
     private GenericEntry[] rotationalPosition = new GenericEntry[4];
     private GenericEntry[] voltage = new GenericEntry[4];
     private GenericEntry[] current = new GenericEntry[4];
@@ -69,6 +70,11 @@ public class SwerveTab extends ShuffleBoardTabs {
             .add("current", 0)
             .withPosition(0, 4)
             .getEntry();
+            
+            driveAccel[i] = driveLayouts[i]
+            .add("drive accel", 0)
+            .withPosition(0, 4)
+            .getEntry();
         }
 
         xOdemetry = tab.add("x odemetry", 0).withPosition(0, 3).getEntry();
@@ -84,6 +90,7 @@ public class SwerveTab extends ShuffleBoardTabs {
             rotationalPosition[i].setDouble(truncate(MathUtil.inputModulus(modules[i].getAngle().getDegrees(), 0, 360)));
             voltage[i].setDouble(truncate(drive.getModules()[i].getDriveVoltage()));
             current[i].setDouble(truncate(drive.getModules()[i].getDriveStatorCurrent()));
+            driveAccel[i].setDouble(modules[i].getDriveMotor().getAcceleration().getValueAsDouble());
 
         }
         xOdemetry.setDouble(truncate(drive.getPose().getX()));

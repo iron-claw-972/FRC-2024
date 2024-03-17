@@ -87,10 +87,6 @@ public class StorageIndex extends SubsystemBase {
     this.runIndex(StorageIndexConstants.ejectAmpFrontSpeed);
   }
 
-  public void ejectAmpBack() {
-    this.runIndex(StorageIndexConstants.ejectAmpBackSpeed);
-  }
-
   public void ejectTrap() {
     this.runIndex(StorageIndexConstants.ejectTrapSpeed);
   }
