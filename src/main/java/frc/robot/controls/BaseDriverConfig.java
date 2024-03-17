@@ -6,6 +6,7 @@ import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.DynamicSlewRateLimiter;
 import frc.robot.util.MathUtils;
+import lib.controllers.Controller;
 
 /**
  * Abstract class for different controller types.
@@ -13,6 +14,7 @@ import frc.robot.util.MathUtils;
 public abstract class BaseDriverConfig {
 
     private final Drivetrain drive;
+    public final Controller kDriver = null;
 
     // Some of these are not currently used, but we might want them later
     @SuppressWarnings("unused")

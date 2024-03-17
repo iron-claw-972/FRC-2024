@@ -30,9 +30,9 @@ import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
 import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.subsystems.gpm.StorageIndex;
-import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
+import lib.controllers.Controller.RumbleStatus;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -68,8 +68,22 @@ public class RobotContainer {
     switch (robotId) {
 
       case TestBed1:
+        // GameController kDriver = new GameController(Constants.DRIVER_JOY);
+        // kDriver.get(Button.X).onTrue(new InstantCommand(() -> kDriver.setRumble(RumbleStatus.RUMBLE_ON)));
+        // kDriver.get(Button.X).onFalse(new InstantCommand(() -> kDriver.setRumble(RumbleStatus.RUMBLE_OFF)));
+        intake = new Intake();
         index = new StorageIndex();
-        shooter = new Shooter();
+        operator = new Operator(intake, index);
+        operator.configureControls((x)->{
+                if (x){
+                    operator.kDriver.setRumble(RumbleStatus.RUMBLE_ON);
+                }
+                else{
+                    operator.kDriver.setRumble(RumbleStatus.RUMBLE_OFF);
+                }
+            });
+ 
+        SmartDashboard.putBoolean("Index beam", index.hasNote());
         break;
 
       case TestBed2:
@@ -104,11 +118,20 @@ public class RobotContainer {
         SignalLogger.start();
 
         driver.configureControls();
-        operator.configureControls();
+        operator.configureControls((x)->{
+                if (x){
+                    operator.kDriver.setRumble(RumbleStatus.RUMBLE_ON);
+                    driver.kDriver.setRumble(RumbleStatus.RUMBLE_ON);
+                }
+                else{
+                    operator.kDriver.setRumble(RumbleStatus.RUMBLE_OFF);
+                    driver.kDriver.setRumble(RumbleStatus.RUMBLE_OFF);
+                }
+            });
         initializeAutoBuilder();
         drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
         registerCommands();
-        PathGroupLoader.loadPathGroups();
+        // PathGroupLoader.loadPathGroups();
  
         shuffleboardManager = new ShuffleBoardManager(drive, vision);
         break;

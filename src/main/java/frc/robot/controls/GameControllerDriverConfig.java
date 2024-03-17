@@ -13,6 +13,7 @@ import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
+import frc.robot.subsystems.gpm.Intake.Mode;
 import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.subsystems.gpm.StorageIndex;
 import frc.robot.util.MathUtils;
@@ -21,12 +22,13 @@ import lib.controllers.GameController;
 import lib.controllers.GameController.Axis;
 import lib.controllers.GameController.Button;
 import lib.controllers.GameController.DPad;
+import lib.controllers.Controller.RumbleStatus;
 
 /**
  * Driver controls for the generic game controller.
  */
 public class GameControllerDriverConfig extends BaseDriverConfig {
-  private final GameController kDriver = new GameController(Constants.DRIVER_JOY);
+  public final GameController kDriver = new GameController(Constants.DRIVER_JOY);
   private Vision vision;
   private Arm arm;
   private Intake intake;
@@ -91,6 +93,16 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
                 : VisionConstants.RED_PODIUM_POSE,
             getDrivetrain()));
   }
+ 
+  public void ControllerRumble() {
+    if (intake.waiting()) {
+      kDriver.setRumble(RumbleStatus.RUMBLE_ON);
+    } else {
+      kDriver.setRumble(RumbleStatus.RUMBLE_OFF);
+    }
+  }
+  
+  
 
   @Override
   public double getRawForwardTranslation() {
