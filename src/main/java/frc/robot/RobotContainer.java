@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.constants.AutoConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
@@ -167,15 +166,15 @@ public class RobotContainer {
     // NamedCommands.registerCommand("ShootKnownPos", new ShootKnownPos(shooter, arm, index, null));
     
     //Original
-    // NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new SequentialCommandGroup(// TODO: This will end instantly
-    //   // TODO: Don't use setChassisSpeeds(), use drive() instead and add the drivetrain as a parameter so it is a requirement
-    //   new ParallelDeadlineGroup(new PrepareShooter(shooter, 1750),
-    //   new WaitCommand(.75)),
-    //   new WaitCommand(.75),
-    //   new InstantCommand(()-> index.runIndex()),
-    //   new WaitCommand(.75),
-    //   new ParallelDeadlineGroup(new PrepareShooter(shooter, 0))
-    // ));
+    NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new SequentialCommandGroup(// TODO: This will end instantly
+    // TODO: Don't use setChassisSpeeds(), use drive() instead and add the drivetrain as a parameter so it is a requirement
+      new ParallelDeadlineGroup(new PrepareShooter(shooter, 1750),
+      new WaitCommand(.75)),
+      new WaitCommand(.75),
+      new InstantCommand(()-> index.runIndex()),
+      new WaitCommand(.75),
+      new ParallelDeadlineGroup(new PrepareShooter(shooter, 0))
+     ));
 
     // Whole time running
     NamedCommands.registerCommand("Set_Shooter", new SequentialCommandGroup(// TODO: This will end instantly
