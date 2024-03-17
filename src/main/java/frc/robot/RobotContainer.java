@@ -52,7 +52,8 @@ public class RobotContainer {
   private Shooter shooter = null;
   private Intake intake = null;
   private StorageIndex index = null;
-  private PowerPanel powerpanel = null;
+  // always make the PowerPanel
+  private PowerPanel powerPanel = new PowerPanel();
 
   // Controllers are defined here
   private BaseDriverConfig driver = null;
@@ -69,20 +70,21 @@ public class RobotContainer {
     switch (robotId) {
 
       case TestBed1:
-		powerpanel = new PowerPanel();
         index = new StorageIndex();
         shooter = new Shooter();
         break;
 
       case TestBed2:
-        intake = new Intake();
-        index = new StorageIndex();
+        // intake = new Intake();
+        // index = new StorageIndex();
         //SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index, arm));
+        arm = new Arm(powerPanel);
+        SmartDashboard.putData("Move Arm", new InstantCommand(() -> arm.setAngle(0.5)));
         break;
         
       default:
       case SwerveCompetition:
-        arm = new Arm();
+        arm = new Arm(powerPanel);
         intake = new Intake();
         index = new StorageIndex();
         shooter = new Shooter();

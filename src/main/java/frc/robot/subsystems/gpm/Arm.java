@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ArmConstants;
 import frc.robot.constants.Constants;
 import frc.robot.util.LogManager;
+import frc.robot.subsystems.PowerPanel;
 
 /**
  * Subsystem that controls the arm.
@@ -116,7 +117,10 @@ public class Arm extends SubsystemBase {
             6,
             new Color8Bit(Color.kYellow)));
 
-    public Arm() {
+    private PowerPanel m_powerPanel;
+
+    public Arm(PowerPanel powerPanel) {
+        m_powerPanel = powerPanel;
         // set the PID tolerance
         pid.setTolerance(TOLERANCE);
 
@@ -271,6 +275,15 @@ public class Arm extends SubsystemBase {
 
         // update the DutyCycleEncoder
         encoderSim.setDistance(simulation.getAngleRads());
+
+        // TODO: tell the PowerPanel that we are drawing this current
+        double ampsPerMotor = simulation.getCurrentDrawAmps() / 4;
+
+        SmartDashboard.putNumber("arm current", ampsPerMotor);
+        m_powerPanel.setCurrent(2, ampsPerMotor);
+        m_powerPanel.setCurrent(3, ampsPerMotor);
+        m_powerPanel.setCurrent(4, ampsPerMotor);
+        m_powerPanel.setCurrent(5, ampsPerMotor);
     }
 
     /**
