@@ -1,4 +1,6 @@
 package frc.robot.commands;
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -49,7 +51,7 @@ public class ShootLock extends Command {
                 this.arm = arm;
                 this.drive = drivetrain;
                 this.index = index;
-                addRequirements(shooter, arm, index);
+                addRequirements(shooter, arm, index, drive);
         }
 
         @Override

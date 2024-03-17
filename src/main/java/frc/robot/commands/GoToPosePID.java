@@ -29,6 +29,10 @@ public class GoToPosePID extends Command {
     addRequirements(drive);
   }
 
+  public GoToPosePID(Pose2d pose, Drivetrain drive){
+    this(()->pose, drive);
+  }
+
   @Override
   public void initialize() {
     pose = poseSupplier.get();
