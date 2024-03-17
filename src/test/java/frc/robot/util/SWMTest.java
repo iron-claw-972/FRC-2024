@@ -202,8 +202,8 @@ public class SWMTest {
         // System.out.println(disp);
 
         // make sure the displacement is as expected
-        assertEquals(1.0, disp.getX(), 0.00001);
-        assertEquals(4.0, disp.getY(), 0.00001);
-        assertEquals(-1.655, disp.getZ(), 0.00001);
+        assertEquals(1.0 - 0.000, disp.getX(), 0.00001);
+        assertEquals(4.0 - 0.000, disp.getY(), 0.00001);
+        assertEquals(0.4 - 2.055, disp.getZ(), 0.00001);
     }
 }
