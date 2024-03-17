@@ -13,5 +13,6 @@ public class PrepareShooter extends InstantCommand {
 	*/
 	public PrepareShooter(Shooter shooter, double target) {
 		super(()->shooter.setTargetRPM(target), shooter);
+		shooter.resetPID();
 	}
 }

@@ -170,5 +170,7 @@ public class Shoot extends Command {
                 drive.setIsAlign(false); // Use normal driver controls
                 arm.setAngle(ArmConstants.standbySetpoint);
                 index.stopIndex();
+                drive.onlyUseTags(new int[0]);
+                shooter.resetPID();
         }
 }

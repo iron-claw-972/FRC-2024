@@ -67,6 +67,7 @@ public class Operator {
         kDriver.get(Button.BACK).onTrue(new InstantCommand(()->{
             if(shooter != null){
                 shooter.setTargetRPM(0);
+                shooter.resetPID();
             }
             if(intake != null){
                 intake.setMode(Mode.DISABLED);
