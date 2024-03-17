@@ -3,6 +3,7 @@ package frc.robot.commands.gpm;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.ArmToPos;
 import frc.robot.constants.ArmConstants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.subsystems.gpm.Arm;
