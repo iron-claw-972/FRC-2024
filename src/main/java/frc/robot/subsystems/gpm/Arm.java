@@ -78,12 +78,19 @@ public class Arm extends SubsystemBase {
     private final DutyCycleEncoder encoder = new DutyCycleEncoder(ArmConstants.ENCODER_ID);
     /** this instance sets the REV absolute encoder value during simulations */
     private DutyCycleEncoderSim encoderSim;
+    /* New value for OFFSET
+     * stow is 0.599
+     * high is 0.357
+     * */
     /** 
      * REV encoder offset in radians.
      * <p>
      * WARNING: This value will change if the belt driving the REV encoder slips!
+     * New value for OFFSET
+     * stow is 0.599
+     * high is 0.357
      */
-    protected static final double OFFSET = 0.77+Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
+    protected static final double OFFSET = 0.822 + Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
     /** REV encoder scale factor. This is fixed. */
     protected static final double DISTANCE_PER_ROTATION = -2 * Math.PI;
 
@@ -220,7 +227,7 @@ public class Arm extends SubsystemBase {
         // calculate the desired duty cycle
         // if(encoder.getDistance() < ArmConstants.MAX_ANGLE_RADS + .2 && encoder.getDistance() > ArmConstants.MIN_ANGLE_RADS - .2)  {
         dutyCycle = MathUtil.clamp(
-                        pid.calculate(getPosition()) + feedforward.calculate(pid.getSetpoint(), 0),
+                        pid.calculate(getAngleRad()) + feedforward.calculate(pid.getSetpoint(), 0),
                         -1,
                         1);
         // }
@@ -237,7 +244,7 @@ public class Arm extends SubsystemBase {
 
         // report the arm angle in radians
         SmartDashboard.putNumber("Arm angle", encoder.getDistance());
-        SmartDashboard.putNumber("Get Position", getPosition());
+        SmartDashboard.putNumber("Get Position", getAngleRad());
 
         // TODO: Clean these up when not needed.
         // report dutycycle

@@ -16,7 +16,7 @@ public class ShootKnownPos extends SequentialCommandGroup {
 	* A preset shot that can be taken by the {@link frc.robot.commands.gpm.ShootKnownPos} command
 	*/
 	public enum ShotPosition {
-		STAGE_ISH(ShooterConstants.ANGLE_OFFSET - .6, Shooter.shooterSpeedToRPM(10)/0.64),
+		STAGE_ISH(ShooterConstants.ANGLE_OFFSET - .6, Shooter.addSlip(Shooter.shooterSpeedToRPM(10))),
 		// TODO: add actual values
 		SUBWOOFER(ArmConstants.subwooferSetpoint, 1750);
 		
@@ -49,9 +49,9 @@ public class ShootKnownPos extends SequentialCommandGroup {
 		addRequirements(shooter, arm, storageIndex);
 
 		addCommands(
-			// new ParallelCommandGroup(
-			// 	new ArmToPos(arm, shot.getArmAngle()),
-			// 	new SetShooterSpeed(shooter, shot.getShooterSpeed())),
+			new ParallelCommandGroup(
+				new ArmToPos(arm, shot.getArmAngle()),
+				new SetShooterSpeed(shooter, shot.getShooterSpeed())),
 			new IndexerFeed(storageIndex),
 			new ParallelCommandGroup(
 				new InstantCommand(() -> arm.setAngle(ArmConstants.stowedSetpoint)),

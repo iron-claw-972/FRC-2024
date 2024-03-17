@@ -1,12 +1,15 @@
 package frc.robot.commands;
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Robot;
 import frc.robot.constants.ArmConstants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.constants.StorageIndexConstants;
@@ -48,7 +51,7 @@ public class ShootLock extends Command {
                 this.arm = arm;
                 this.drive = drivetrain;
                 this.index = index;
-                addRequirements(shooter, arm, index);
+                addRequirements(shooter, arm, index, drive);
         }
 
         @Override
@@ -60,7 +63,7 @@ public class ShootLock extends Command {
                 setupTimer.start();
                 
                 Pose3d speakerPose = DriverStation.getAlliance().isPresent() &&
-                                DriverStation.getAlliance().get() == Alliance.Red ?
+                                Robot.getAlliance() == Alliance.Red ?
                                 VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
                 // shooterHeight and shooterOffset have an additional offset because the shooter is offset from the arm, right?
                 Rotation2d driveYaw = drive.getYaw();

@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.util.ShuffleBoard.ShuffleBoardTabs;
 import frc.robot.subsystems.module.Module;
+import frc.robot.util.ShuffleBoard.ShuffleBoardTabs;
 
 
 
@@ -27,6 +27,7 @@ public class SwerveTab extends ShuffleBoardTabs {
     private GenericEntry rotOdemetry;
     private GenericEntry[] steerSpeed = new GenericEntry[4];
     private GenericEntry[] driveSpeed = new GenericEntry[4];
+    private GenericEntry[] driveAccel = new GenericEntry[4];
     private GenericEntry[] rotationalPosition = new GenericEntry[4];
     private GenericEntry[] voltage = new GenericEntry[4];
     private GenericEntry[] current = new GenericEntry[4];
@@ -69,6 +70,11 @@ public class SwerveTab extends ShuffleBoardTabs {
             .add("current", 0)
             .withPosition(0, 4)
             .getEntry();
+            
+            driveAccel[i] = driveLayouts[i]
+            .add("drive accel", 0)
+            .withPosition(0, 4)
+            .getEntry();
         }
 
         xOdemetry = tab.add("x odemetry", 0).withPosition(0, 3).getEntry();
@@ -84,6 +90,8 @@ public class SwerveTab extends ShuffleBoardTabs {
             rotationalPosition[i].setDouble(truncate(MathUtil.inputModulus(modules[i].getAngle().getDegrees(), 0, 360)));
             voltage[i].setDouble(truncate(drive.getModules()[i].getDriveVoltage()));
             current[i].setDouble(truncate(drive.getModules()[i].getDriveStatorCurrent()));
+            //driveAccel[i].setDouble(modules[i].getDriveMotor().getAcceleration().getValueAsDouble());
+			// TODO: find out why this crashes sim
 
         }
         xOdemetry.setDouble(truncate(drive.getPose().getX()));
