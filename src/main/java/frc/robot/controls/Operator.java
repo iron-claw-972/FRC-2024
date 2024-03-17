@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.IntakeWithRumble;
 import frc.robot.commands.OuttakeAmp;
 import frc.robot.commands.Shoot;
+import frc.robot.commands.ShootLock;
 import frc.robot.commands.gpm.PrepareShooter;
 import frc.robot.commands.gpm.ShootKnownPos;
 import frc.robot.commands.gpm.ShootKnownPos.ShotPosition;

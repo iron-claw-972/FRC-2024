@@ -18,6 +18,7 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.subsystems.gpm.StorageIndex;
+import frc.robot.util.EqualsUtil;
 
 //00 is the bottom right corner of blue wall in m
 /**
@@ -49,6 +50,7 @@ public class Shoot extends Command {
         private Debouncer visionSawTagDebouncer = new Debouncer(0.2, DebounceType.kFalling);
 
         private boolean shooting = false;
+        private double t;
 
         public Shoot(Shooter shooter, Arm arm, Drivetrain drivetrain, StorageIndex index) {
                 this.shooter = shooter;
@@ -65,10 +67,14 @@ public class Shoot extends Command {
                 shootTimer.stop();
                 drive.setIsAlign(true); // Enable alignment mode on the drivetrain
                 drive.onlyUseTags(new int[]{3, 4, 7, 8});
+                shooting = false;
         }
         Timer timer = new Timer();
         @Override
         public void execute() {
+                if(t<0){
+                        t = Timer.getFPGATimestamp();
+                }
                 // Positive x displacement means we are to the left of the speaker
                 // Positive y displacement means we are below the speaker.
                 Pose3d speakerPose = Robot.getAlliance() == Alliance.Red ?
@@ -103,7 +109,7 @@ public class Shoot extends Command {
                 //                         drive.getChassisSpeeds().vyMetersPerSecond
                 // );
                 // TODO: Figure out what v_note is empirically
-                double v_note = 10;
+                double v_note = 15;
 
                 // X distance to speaker
                 double x = Math.sqrt((displacement.getX() * displacement.getX())
@@ -155,14 +161,16 @@ public class Shoot extends Command {
                 drive.setAlignAngle(Math.PI + theta_h); // would only pause rotational
 
                 // Set the outtake velocity
-                shooter.setTargetVelocity(v_shoot);
+                shooter.setTargetVelocity(v_note);
 
                 boolean sawTag = visionSawTagDebouncer.calculate(drive.canSeeTag());
                 System.out.println("Arm Setpoint: "+arm.atSetpoint());
                 System.out.println("Shooter Setpoint: "+shooter.atSetpoint());
                 System.out.println("drive Setpoint: "+drive.atAlignAngle());
                 sawTag = true;
-                if (arm.atSetpoint() && shooter.atSetpoint() && drive.atAlignAngle() && sawTag || shooting) {
+                // if (arm.atSetpoint() && shooter.atSetpoint() && drive.atAlignAngle() && sawTag || shooting) {
+                if (EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - theta_v, Units.degreesToRadians(1)) && 
+                shooter.atSetpoint() && drive.atAlignAngle() && sawTag || shooting) {
                         shooting = true;
                         index.ejectIntoShooter();
                         shootTimer.start();
