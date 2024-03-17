@@ -78,6 +78,10 @@ public class Arm extends SubsystemBase {
     private final DutyCycleEncoder encoder = new DutyCycleEncoder(ArmConstants.ENCODER_ID);
     /** this instance sets the REV absolute encoder value during simulations */
     private DutyCycleEncoderSim encoderSim;
+    /* New value for OFFSET
+     * stow is 0.599
+     * high is 0.357
+     * */
     /** 
      * REV encoder offset in radians.
      * <p>
@@ -86,7 +90,7 @@ public class Arm extends SubsystemBase {
      * stow is 0.599
      * high is 0.357
      */
-    protected static final double OFFSET = 0.59 + Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
+    protected static final double OFFSET = 0.822 + Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
     /** REV encoder scale factor. This is fixed. */
     protected static final double DISTANCE_PER_ROTATION = -2 * Math.PI;
 

@@ -48,9 +48,9 @@ public class ShootKnownPos extends SequentialCommandGroup {
 		addRequirements(shooter, arm, storageIndex);
 
 		addCommands(
-			// new ParallelCommandGroup(
-			// 	new ArmToPos(arm, shot.getArmAngle()),
-			// 	new SetShooterSpeed(shooter, shot.getShooterSpeed())),
+			new ParallelCommandGroup(
+				new ArmToPos(arm, shot.getArmAngle()),
+				new SetShooterSpeed(shooter, shot.getShooterSpeed())),
 			new IndexerFeed(storageIndex),
 			new ParallelCommandGroup(
 				new InstantCommand(() -> arm.setAngle(ArmConstants.stowedSetpoint)),

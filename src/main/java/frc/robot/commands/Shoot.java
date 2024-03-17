@@ -1,11 +1,15 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Robot;
 import frc.robot.constants.ArmConstants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.constants.StorageIndexConstants;
@@ -14,6 +18,7 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.subsystems.gpm.StorageIndex;
+import frc.robot.util.EqualsUtil;
 
 //00 is the bottom right corner of blue wall in m
 /**
@@ -42,6 +47,11 @@ public class Shoot extends Command {
         public static final double shooterHeight = ArmConstants.ARM_LENGTH*Math.sin(ArmConstants.standbySetpoint) + ArmConstants.PIVOT_HEIGHT;
         public static final double shooterOffset = ArmConstants.PIVOT_X + ArmConstants.ARM_LENGTH * Math.cos(ArmConstants.standbySetpoint);
 
+        private Debouncer visionSawTagDebouncer = new Debouncer(0.2, DebounceType.kFalling);
+
+        private boolean shooting = false;
+        private double t;
+
         public Shoot(Shooter shooter, Arm arm, Drivetrain drivetrain, StorageIndex index) {
                 this.shooter = shooter;
                 this.arm = arm;
@@ -56,16 +66,19 @@ public class Shoot extends Command {
                 shootTimer.reset();
                 shootTimer.stop();
                 drive.setIsAlign(true); // Enable alignment mode on the drivetrain
+                drive.onlyUseTags(new int[]{3, 4, 7, 8});
+                shooting = false;
         }
-
+        Timer timer = new Timer();
         @Override
         public void execute() {
+                if(t<0){
+                        t = Timer.getFPGATimestamp();
+                }
                 // Positive x displacement means we are to the left of the speaker
                 // Positive y displacement means we are below the speaker.
-                // Pose3d speakerPose = DriverStation.getAlliance().isPresent() &&
-                //                 Robot.getAlliance() == Alliance.Red ?
-                //                 VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
-                Pose3d speakerPose = VisionConstants.RED_SPEAKER_POSE;
+                Pose3d speakerPose = Robot.getAlliance() == Alliance.Red ?
+                                VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
                 // shooterHeight and shooterOffset have an additional offset because the shooter is offset from the arm, right?
                 Rotation2d driveYaw = drive.getYaw();
                 // Set displacement to speaker
@@ -86,17 +99,17 @@ public class Shoot extends Command {
                 double heading = driveYaw.getRadians() + Math.atan2(drive.getChassisSpeeds().vyMetersPerSecond, drive.getChassisSpeeds().vxMetersPerSecond);
                 v_rx = driveSpeed * Math.cos(heading);
                 v_ry = driveSpeed * Math.sin(heading);
-                System.err.println(displacement.getX()+" " +
-                                displacement.getY()+" " +
-                                displacement.getZ()+" " +
-                                        v_rx+" " +
-                                        v_ry+" "+
-                                        heading+" "+
-                                        drive.getChassisSpeeds().vxMetersPerSecond+" "+
-                                        drive.getChassisSpeeds().vyMetersPerSecond
-                );
+                //System.err.println(displacement.getX()+" " +
+                //                 displacement.getY()+" " +
+                //                 displacement.getZ()+" " +
+                //                         v_rx+" " +
+                //                         v_ry+" "+
+                //                         heading+" "+
+                //                         drive.getChassisSpeeds().vxMetersPerSecond+" "+
+                //                         drive.getChassisSpeeds().vyMetersPerSecond
+                // );
                 // TODO: Figure out what v_note is empirically
-                double v_note = 10;
+                double v_note = 15;
 
                 // X distance to speaker
                 double x = Math.sqrt((displacement.getX() * displacement.getX())
@@ -107,12 +120,12 @@ public class Shoot extends Command {
                 // Basic vertical angle calculation (static robot)
                 double phi_v = Math.atan(Math.pow(v_note, 2) / 9.8 / x * (1 - Math.sqrt(1
                                 + 19.6 / Math.pow(v_note, 2) * (y - 4.9 * x * x / Math.pow(v_note, 2)))));
-                System.err.println("*pv " + phi_v);
+                //System.err.println("*pv " + phi_v);
                 // Angle to goal
                 double phi_h = Math.atan(displacement.getY()/ displacement.getX());
                 // flip angle
                 if (displacement.getX()>=0) phi_h += Math.PI;
-                System.err.println("*ph " + phi_h);
+                //System.err.println("*ph " + phi_h);
                 double theta_h = Math.atan((v_note * Math.cos(phi_v) * Math.sin(phi_h) - v_ry) / (v_note * Math.cos(phi_v) * Math.cos(phi_h) - v_rx));
                 // flip angle
                 if (displacement.getX()>=0) theta_h += Math.PI;
@@ -134,9 +147,9 @@ public class Shoot extends Command {
                 horiz_angle = theta_h;
                 vert_angle = theta_v;
                 exit_vel = v_shoot;
-                System.err.println(horiz_angle);
-                System.err.println(vert_angle);
-                System.err.println(exit_vel);
+                // System.err.println(horiz_angle);
+                // System.err.println(vert_angle);
+                // System.err.println(exit_vel);
 
                 arm.setAngle(ShooterConstants.ANGLE_OFFSET - theta_v);
                 // theta_h is relative to the horizontal, so
@@ -146,17 +159,22 @@ public class Shoot extends Command {
 
                 // Sets the angle to align to for the drivetrain, uses driveHeading in DefaultDriveCommand
                 drive.setAlignAngle(Math.PI + theta_h); // would only pause rotational
-                // use driveheading with x, y speed (keep same), angle;
-                drive.driveHeading(v_rx, v_ry, Math.PI+theta_h, true);
 
                 // Set the outtake velocity
-                shooter.setTargetVelocity(v_shoot);
+                shooter.setTargetVelocity(v_note);
 
-                if (arm.atSetpoint() && shooter.atSetpoint() && drive.atAlignAngle()) {
+                boolean sawTag = visionSawTagDebouncer.calculate(drive.canSeeTag());
+                System.out.println("Arm Setpoint: "+arm.atSetpoint());
+                System.out.println("Shooter Setpoint: "+shooter.atSetpoint());
+                System.out.println("drive Setpoint: "+drive.atAlignAngle());
+                sawTag = true;
+                // if (arm.atSetpoint() && shooter.atSetpoint() && drive.atAlignAngle() && sawTag || shooting) {
+                if (EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - theta_v, Units.degreesToRadians(1)) && 
+                shooter.atSetpoint() && drive.atAlignAngle() && sawTag || shooting) {
+                        shooting = true;
                         index.ejectIntoShooter();
                         shootTimer.start();
                 }
-                // TODO: Else reset timer?
         }
 
         @Override
@@ -168,7 +186,7 @@ public class Shoot extends Command {
         public void end(boolean interrupted) {
                 shooter.setTargetVelocity(REST_VEL);
                 drive.setIsAlign(false); // Use normal driver controls
-                arm.setAngle(ArmConstants.standbySetpoint);
+                arm.setAngle(ArmConstants.stowedSetpoint);
                 index.stopIndex();
                 drive.onlyUseTags(new int[0]);
                 shooter.resetPID();
