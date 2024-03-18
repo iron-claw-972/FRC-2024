@@ -361,7 +361,8 @@ public class Arm extends SubsystemBase {
      */
     @Deprecated
     public double getPosition()  {
-        return -Units.rotationsToRadians(encoder.getAbsolutePosition() - encoder.getPositionOffset());
+        double angle = -Units.rotationsToRadians(encoder.getAbsolutePosition() - encoder.getPositionOffset());
+        return MathUtil.angleModulus(angle);
     }
 
     /**
