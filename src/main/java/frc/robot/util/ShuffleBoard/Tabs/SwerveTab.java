@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.util.ShuffleBoard.ShuffleBoardTabs;
 import frc.robot.subsystems.module.Module;
+import frc.robot.util.ShuffleBoard.ShuffleBoardTabs;
 
 
 
