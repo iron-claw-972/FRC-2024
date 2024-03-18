@@ -26,10 +26,12 @@ import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
 import frc.robot.controls.Operator;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.PowerPanel;
 import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
 import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.subsystems.gpm.StorageIndex;
+import frc.robot.util.DetectedObject;
 import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
@@ -52,6 +54,8 @@ public class RobotContainer {
   private Shooter shooter = null;
   private Intake intake = null;
   private StorageIndex index = null;
+  // always make the PowerPanel
+  private PowerPanel powerPanel = new PowerPanel();
 
   // Controllers are defined here
   private BaseDriverConfig driver = null;
@@ -73,8 +77,11 @@ public class RobotContainer {
         break;
 
       case TestBed2:
-        intake = new Intake();
-        index = new StorageIndex();
+        // intake = new Intake();
+        // index = new StorageIndex();
+        //SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index, arm));
+        arm = new Arm(powerPanel);
+        SmartDashboard.putData("Move Arm", new InstantCommand(() -> arm.setAngle(0.5)));
         break;
       case Vertigo:
           drive = new Drivetrain(vision);
@@ -85,21 +92,20 @@ public class RobotContainer {
         
       default:
       case SwerveCompetition:
-        arm = new Arm();
+        arm = new Arm(powerPanel);
         intake = new Intake();
         index = new StorageIndex();
         shooter = new Shooter();
 
       case SwerveTest:
         vision = new Vision(VisionConstants.APRIL_TAG_CAMERAS);
-
-
+        
         drive = new Drivetrain(vision);
         driver = new GameControllerDriverConfig(drive, vision, arm, intake, index, shooter);
         operator = new Operator(intake, arm, index, shooter, drive);
 
         // Detected objects need access to the drivetrain
-        //DetectedObject.setDrive(drive);
+        DetectedObject.setDrive(drive);
         
         SignalLogger.start();
 
@@ -107,8 +113,8 @@ public class RobotContainer {
         operator.configureControls();
         initializeAutoBuilder();
         drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
-        registerCommands();
-        PathGroupLoader.loadPathGroups();
+        //registerCommands();
+        // PathGroupLoader.loadPathGroups();
  
         shuffleboardManager = new ShuffleBoardManager(drive, vision);
         break;

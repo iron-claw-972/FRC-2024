@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ArmConstants;
 import frc.robot.constants.Constants;
 import frc.robot.util.LogManager;
+import frc.robot.subsystems.PowerPanel;
 
 /**
  * Subsystem that controls the arm.
@@ -78,6 +79,10 @@ public class Arm extends SubsystemBase {
     private final DutyCycleEncoder encoder = new DutyCycleEncoder(ArmConstants.ENCODER_ID);
     /** this instance sets the REV absolute encoder value during simulations */
     private DutyCycleEncoderSim encoderSim;
+    /* New value for OFFSET
+     * stow is 0.599
+     * high is 0.357
+     * */
     /** 
      * REV encoder offset in radians.
      * <p>
@@ -86,7 +91,7 @@ public class Arm extends SubsystemBase {
      * stow is 0.599
      * high is 0.357
      */
-    protected static final double OFFSET = 0.59 + Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
+    protected static final double OFFSET = 0.822 + Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
     /** REV encoder scale factor. This is fixed. */
     protected static final double DISTANCE_PER_ROTATION = -2 * Math.PI;
 
@@ -121,7 +126,10 @@ public class Arm extends SubsystemBase {
 
 	private boolean armEnabled = true;
 
-    public Arm() {
+    private PowerPanel m_powerPanel;
+
+    public Arm(PowerPanel powerPanel) {
+        m_powerPanel = powerPanel;
         // set the PID tolerance
         pid.setTolerance(TOLERANCE);
 
@@ -298,6 +306,8 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putNumber("REV ABS", encoder.getAbsolutePosition());
         // report whether the arm has reached its setpoint
         SmartDashboard.putBoolean("at setpoint?", atSetpoint());
+        // report the arm current
+        SmartDashboard.putNumber("arm current", m_powerPanel.getCurrent(1));
     }
 
     @Override
@@ -318,6 +328,16 @@ public class Arm extends SubsystemBase {
 
         // update the DutyCycleEncoder
         encoderSim.setDistance(simulation.getAngleRads());
+
+        // Calculate the current drawn by one of the motors
+        double ampsPerMotor = simulation.getCurrentDrawAmps() / 4;
+
+        // see https://docs.google.com/spreadsheets/d/1UiHZFYeZiHPAPIu39uRrskQuQYfvJ03UjLeQVq--Mzg/edit#gid=0
+        // Arm motors uses channels 1, 2, 4, 5
+        m_powerPanel.setCurrent(1, ampsPerMotor);
+        m_powerPanel.setCurrent(2, ampsPerMotor);
+        m_powerPanel.setCurrent(4, ampsPerMotor);
+        m_powerPanel.setCurrent(5, ampsPerMotor);
     }
 
     /**

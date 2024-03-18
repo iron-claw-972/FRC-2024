@@ -27,36 +27,36 @@ public class AutoTab extends ShuffleBoardTabs {
         tab = Shuffleboard.getTab("Auto");
     
         // Final Autos
-        autoCommand.setDefaultOption("Do nothing", new DoNothing());
-        autoCommand.addOption("Basic Shoot Middle", new FollowPathCommand("Basic Shoot Middle",true, drive));
-        autoCommand.addOption("Two Piece (pos 4) center line", new FollowPathCommand("Two Piece (pos 4) center line",true, drive));
-        autoCommand.addOption("(II) Two Piece (pos 4) center line", new FollowPathCommand("(II) Two Piece (pos 4) center line",true, drive));
-        autoCommand.addOption("Shoot and Leave pos 4", new FollowPathCommand("Shoot and Leave pos 4",true, drive));
-         autoCommand.addOption("Basic Shoot and Leave (pos 2)", new FollowPathCommand("Basic Shoot and Leave (pos 2)",true, drive));
-        autoCommand.addOption("Three Piece (pos 2) [B]", new FollowPathCommand("Three Piece (pos 2) [B]",true, drive));
-        autoCommand.addOption("Two Piece (pos 3) [B]", new FollowPathCommand("Two Piece (pos 3) [B]",true, drive));
-        autoCommand.addOption("Three Piece (pos 2) [B] 2 center line", new FollowPathCommand("Three Piece (pos 2) [B] 2 center line",true, drive));
+        // autoCommand.setDefaultOption("Do nothing", new DoNothing());
+        // autoCommand.addOption("Basic Shoot Middle", new FollowPathCommand("Basic Shoot Middle",true, drive));
+        // autoCommand.addOption("Two Piece (pos 4) center line", new FollowPathCommand("Two Piece (pos 4) center line",true, drive));
+        // autoCommand.addOption("(II) Two Piece (pos 4) center line", new FollowPathCommand("(II) Two Piece (pos 4) center line",true, drive));
+        // autoCommand.addOption("Shoot and Leave pos 4", new FollowPathCommand("Shoot and Leave pos 4",true, drive));
+        //  autoCommand.addOption("Basic Shoot and Leave (pos 2)", new FollowPathCommand("Basic Shoot and Leave (pos 2)",true, drive));
+        // autoCommand.addOption("Three Piece (pos 2) [B]", new FollowPathCommand("Three Piece (pos 2) [B]",true, drive));
+        // autoCommand.addOption("Two Piece (pos 3) [B]", new FollowPathCommand("Two Piece (pos 3) [B]",true, drive));
+        // autoCommand.addOption("Three Piece (pos 2) [B] 2 center line", new FollowPathCommand("Three Piece (pos 2) [B] 2 center line",true, drive));
+        // // autoCommand.addOption("0 Piece Auto (pos 1)", new FollowPathCommand("0 Piece Auto (pos 1)",true, drive));
+        // // autoCommand.addOption("0 Auto (pos 7)", new FollowPathCommand("0 Auto (pos 7)",true, drive));
+        // // autoCommand.addOption("[Under the stage] One Piece (pos 4) (destroy) (B2)", new FollowPathCommand("[Under the stage] One Piece (pos 4) (destroy) (B2)",true, drive));
+        // // autoCommand.addOption("[Under the stage] One Piece (pos 4) (destroy) (B1)", new FollowPathCommand("[Under the stage] One Piece (pos 4) (destroy) (B1)",true, drive));
+        // // autoCommand.addOption("[Around the stage] One Piece (pos 4) (destroy) (B)", new FollowPathCommand("[Around the stage] One Piece (pos 4) (destroy) (B)",true, drive));
+        // // autoCommand.addOption("Four Piece (M)", new FollowPathCommand("Four Piece (M)",true, drive));
+        // autoCommand.addOption("One Piece (pos 4) (B)", new FollowPathCommand("One Piece (pos 4) (B)",true, drive));
+        // //autoCommand.addOption("Pos 1 Path", new FollowPathCommand("Pos 1 Path",true, drive));
+        // //autoCommand.addOption("Pos 1 Path", new FollowPathCommand("Pos 1 Path",true, drive));
+        // autoCommand.addOption("Basic Shoot", new FollowPathCommand("Basic Shoot",true, drive));
+        // autoCommand.addOption("Two Piece (pos 2) [B]", new FollowPathCommand("Two Piece (pos 2) [B]",true, drive));
         // autoCommand.addOption("0 Piece Auto (pos 1)", new FollowPathCommand("0 Piece Auto (pos 1)",true, drive));
         // autoCommand.addOption("0 Auto (pos 7)", new FollowPathCommand("0 Auto (pos 7)",true, drive));
         // autoCommand.addOption("[Under the stage] One Piece (pos 4) (destroy) (B2)", new FollowPathCommand("[Under the stage] One Piece (pos 4) (destroy) (B2)",true, drive));
         // autoCommand.addOption("[Under the stage] One Piece (pos 4) (destroy) (B1)", new FollowPathCommand("[Under the stage] One Piece (pos 4) (destroy) (B1)",true, drive));
         // autoCommand.addOption("[Around the stage] One Piece (pos 4) (destroy) (B)", new FollowPathCommand("[Around the stage] One Piece (pos 4) (destroy) (B)",true, drive));
         // autoCommand.addOption("Four Piece (M)", new FollowPathCommand("Four Piece (M)",true, drive));
-        autoCommand.addOption("One Piece (pos 4) (B)", new FollowPathCommand("One Piece (pos 4) (B)",true, drive));
-        //autoCommand.addOption("Pos 1 Path", new FollowPathCommand("Pos 1 Path",true, drive));
-        //autoCommand.addOption("Pos 1 Path", new FollowPathCommand("Pos 1 Path",true, drive));
-        autoCommand.addOption("Basic Shoot", new FollowPathCommand("Basic Shoot",true, drive));
-        autoCommand.addOption("Two Piece (pos 2) [B]", new FollowPathCommand("Two Piece (pos 2) [B]",true, drive));
-        autoCommand.addOption("0 Piece Auto (pos 1)", new FollowPathCommand("0 Piece Auto (pos 1)",true, drive));
-        autoCommand.addOption("0 Auto (pos 7)", new FollowPathCommand("0 Auto (pos 7)",true, drive));
-        autoCommand.addOption("[Under the stage] One Piece (pos 4) (destroy) (B2)", new FollowPathCommand("[Under the stage] One Piece (pos 4) (destroy) (B2)",true, drive));
-        autoCommand.addOption("[Under the stage] One Piece (pos 4) (destroy) (B1)", new FollowPathCommand("[Under the stage] One Piece (pos 4) (destroy) (B1)",true, drive));
-        autoCommand.addOption("[Around the stage] One Piece (pos 4) (destroy) (B)", new FollowPathCommand("[Around the stage] One Piece (pos 4) (destroy) (B)",true, drive));
-        autoCommand.addOption("Four Piece (M)", new FollowPathCommand("Four Piece (M)",true, drive));
-        autoCommand.addOption("One Piece (pos 4) (B)", new FollowPathCommand("One Piece (pos 4) (B)",true, drive));
-        // autoCommand.addOption("Pos 1 Path", new FollowPathCommand("Pos 1 Path",true, drive));
+        // autoCommand.addOption("One Piece (pos 4) (B)", new FollowPathCommand("One Piece (pos 4) (B)",true, drive));
+        // // autoCommand.addOption("Pos 1 Path", new FollowPathCommand("Pos 1 Path",true, drive));
         
-        autoCommand.addOption("God Path", new FollowPathCommand("God Path",true, drive));
+        // autoCommand.addOption("God Path", new FollowPathCommand("God Path",true, drive));
 
         
         // Previous Autos (Some will keep and still have to fix) autoCommand.setDefaultOption("Do Nothing", new PrintCommand("This will do nothing!"));

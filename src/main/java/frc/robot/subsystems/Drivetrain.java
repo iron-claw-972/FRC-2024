@@ -6,6 +6,7 @@ import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -17,7 +18,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -72,7 +72,7 @@ public class Drivetrain extends SubsystemBase {
 
     // If vision is enabled for drivetrain odometry updating
     // DO NOT CHANGE THIS HERE TO DISABLE VISION, change VisionConstants.ENABLED instead
-    private boolean visionEnabled = false;
+    private boolean visionEnabled = true;
 
     // If the robot should aim at the speaker
     private boolean isAlign = false;
@@ -129,7 +129,10 @@ public class Drivetrain extends SubsystemBase {
                 DriveConstants.KINEMATICS,
                 Rotation2d.fromDegrees(pigeon.getYaw().getValue()),
                 getModulePositions(),
-                new Pose2d() 
+                new Pose2d(),
+                // Defaults, except trust pigeon more
+                VecBuilder.fill(0.1, 0.1, 0),
+                VisionConstants.VISION_STD_DEVS
         );
        poseEstimator.setVisionMeasurementStdDevs(VisionConstants.VISION_STD_DEVS);
         
@@ -156,8 +159,7 @@ public class Drivetrain extends SubsystemBase {
     @Override
     public void periodic() {
         updateOdometry();
-        // System.out.println("x: "+ getPose().getX()); 
-        // System.out.println("y: "+ getPose().getY()); 
+        // System.out.println("drivetrain x: "+ getPose().getX() + "drivetrain y: "+ getPose().getY()); 
     }
 
     // DRIVE
@@ -230,7 +232,7 @@ public class Drivetrain extends SubsystemBase {
         Pose2d pose2 = getPose();
 
         if(VisionConstants.ENABLED){
-            if(RobotBase.isReal() && visionEnabled){
+            if(visionEnabled){
                 vision.updateOdometry(poseEstimator);
             }
         }
@@ -434,10 +436,28 @@ public class Drivetrain extends SubsystemBase {
         if(alignAngle != null){
             return alignAngle;
         }
-        Pose2d pose = getPose();
-        return Math.PI + (Robot.getAlliance() == Alliance.Blue ?
-            Math.atan2(VisionConstants.BLUE_SPEAKER_POSE.getY() - pose.getY(), VisionConstants.BLUE_SPEAKER_POSE.getX() - pose.getX()) :
-            Math.atan2(VisionConstants.RED_SPEAKER_POSE.getY() - pose.getY(), VisionConstants.RED_SPEAKER_POSE.getX() - pose.getX()));
+        return -Math.PI/2;
+        // Pose2d pose = getPose();
+        // return Math.PI + (Robot.getAlliance() == Alliance.Blue ?
+        //     Math.atan2(VisionConstants.BLUE_SPEAKER_POSE.getY() - pose.getY(), VisionConstants.BLUE_SPEAKER_POSE.getX() - pose.getX()) :
+        //     Math.atan2(VisionConstants.RED_SPEAKER_POSE.getY() - pose.getY(), VisionConstants.RED_SPEAKER_POSE.getX() - pose.getX()));
+    }
+
+    /**
+     * Sets vision to only use certain April tags
+     * @param ids An array of the tags to only use
+     */
+    public void onlyUseTags(int[] ids){
+        if(vision != null){
+            vision.onlyUse(ids);
+        }
+    }
+    /**
+     * Returns if vision has seen an April tag in the last frame
+     * @return If vision saw a tag last frame or if vision is disabled
+     */
+    public boolean canSeeTag(){
+        return vision.canSeeTag() || !visionEnabled || !VisionConstants.ENABLED;
     }
 
     /**
