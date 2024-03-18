@@ -244,9 +244,11 @@ public class Arm extends SubsystemBase {
     public void periodic() {
 		if (!armEnabled) return;
 
+        // Disable the arm for this frame if it is out of range
 		if (getAngleRad() < ArmConstants.MIN_ANGLE_RADS - 0.01 || getAngleRad() > ArmConstants.MAX_ANGLE_RADS + 0.01) {
 			System.err.println("WARNING: THE ARM IS IN A SUPPOSEDLY UNREACHABLE POSITION AND HAS BEEN DISABLED. Found: " + getAngleRad() + ", Expected: " + ArmConstants.stowedSetpoint);
-			armEnabled = false;
+			motors[0].set(0);
+            return;
 		}
 
         // Clamp the PID setpoint in case an out of range value slips in ...
@@ -343,7 +345,11 @@ public class Arm extends SubsystemBase {
      * @returns arm angle in radians
      */
     public double getAngleRad() {
-        return encoder.getDistance();
+        if(RobotBase.isSimulation()){
+            return encoder.getDistance();
+        }else{
+            return getPosition();
+        }
     }
 
     /**
