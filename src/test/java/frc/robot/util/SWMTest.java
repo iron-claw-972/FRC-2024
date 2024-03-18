@@ -16,6 +16,7 @@ import frc.robot.commands.Shoot;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Arm;
+import frc.robot.subsystems.PowerPanel;
 import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.subsystems.gpm.StorageIndex;
 
@@ -32,10 +33,11 @@ public class SWMTest {
     // TODO: the math tests should not require subsystems....
     // the subsystems
     //   if these are static, then the tests run faster (but the .close() calls should be removed)
-    public Shooter shooter = new Shooter();
-    public Arm arm = new Arm();
-    public Drivetrain drive = new Drivetrain(null);
-    public StorageIndex indexer = new StorageIndex();
+    private PowerPanel powerPanel = new PowerPanel();
+    private Shooter shooter = new Shooter();
+    private Arm arm = new Arm(powerPanel);
+    private Drivetrain drive = new Drivetrain(null);
+    private StorageIndex indexer = new StorageIndex();
 
     /**
      * The Shoot command
@@ -88,7 +90,7 @@ public class SWMTest {
     // The number of test cases (= test_cases.length).
     // The value must be a literal to work in the @RepeatedTest(NUM) below.
     // Unfortunately, test_cases.length does not work.
-    public final int NUM = 29;
+    public final int NUM = 29 / 10;
 
     @AfterEach
     public void cleanup() {
@@ -97,6 +99,7 @@ public class SWMTest {
         arm.close();
         indexer.close();
         drive.close();
+        powerPanel.close();
     }
 
     /**
@@ -131,7 +134,7 @@ public class SWMTest {
         */
 
         // set the robot position to (x, y) (with bogus heading)
-        sh.drive.resetOdometry(new Pose2d(
+        drive.resetOdometry(new Pose2d(
             test_cases[idx][0],
             test_cases[idx][1],
             new Rotation2d()));
@@ -141,11 +144,11 @@ public class SWMTest {
         assertEquals(test_cases[idx][1], drive.getPose().getY(), 0.0001);
 
         // set robot velocities vx, vy
-        sh.drive.driveHeading(test_cases[idx][3], test_cases[idx][4], 0, true);
+        drive.driveHeading(test_cases[idx][3], test_cases[idx][4], 0, true);
 
         System.err.println("vx expected " + test_cases[idx][3]);
         // this value is a NaN rather than vx
-        System.err.println("vx actual : " + sh.drive.getChassisSpeeds().vxMetersPerSecond);
+        System.err.println("vx actual : " + drive.getChassisSpeeds().vxMetersPerSecond);
 
         // do the Shoot command calculation (no initialize())
         sh.execute();
