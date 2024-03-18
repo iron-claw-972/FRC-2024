@@ -265,7 +265,7 @@ public class Arm extends SubsystemBase {
         // report whether the arm has reached its setpoint
         SmartDashboard.putBoolean("at setpoint?", atSetpoint());
         // report the arm current
-        SmartDashboard.putNumber("arm current", m_powerPanel.getCurrent(2));
+        SmartDashboard.putNumber("arm current", m_powerPanel.getCurrent(1));
     }
 
     @Override
@@ -288,8 +288,10 @@ public class Arm extends SubsystemBase {
         // Calculate the current drawn by one of the motors
         double ampsPerMotor = simulation.getCurrentDrawAmps() / 4;
 
+        // see https://docs.google.com/spreadsheets/d/1UiHZFYeZiHPAPIu39uRrskQuQYfvJ03UjLeQVq--Mzg/edit#gid=0
+        // Arm motors uses channels 1, 2, 4, 5
+        m_powerPanel.setCurrent(1, ampsPerMotor);
         m_powerPanel.setCurrent(2, ampsPerMotor);
-        m_powerPanel.setCurrent(3, ampsPerMotor);
         m_powerPanel.setCurrent(4, ampsPerMotor);
         m_powerPanel.setCurrent(5, ampsPerMotor);
     }

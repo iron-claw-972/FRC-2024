@@ -6,6 +6,11 @@ import edu.wpi.first.wpilibj.simulation.PDPSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+/**
+ * Power Distribution.
+ * <p>
+ * See https://docs.google.com/spreadsheets/d/1UiHZFYeZiHPAPIu39uRrskQuQYfvJ03UjLeQVq--Mzg/edit#gid=0 for PDH assignments.
+ */
 public class PowerPanel extends SubsystemBase {
 	private static final PowerDistribution PDH = new PowerDistribution();
 	private static PDPSim PDHSim; // not sure if this is only CTRE or what
