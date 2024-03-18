@@ -467,6 +467,9 @@ public class Drivetrain extends SubsystemBase {
      * @return If vision saw a tag last frame or if vision is disabled
      */
     public boolean canSeeTag(){
+        // if no vision system, then return false
+        if (vision == null) return false;
+
         return vision.canSeeTag() || !visionEnabled || !VisionConstants.ENABLED;
     }
 

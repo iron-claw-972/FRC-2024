@@ -29,8 +29,8 @@ import frc.robot.util.EqualsUtil;
 public class Shoot extends Command {
         // the subsystems
         private final Shooter shooter;
-        public final Arm arm;
-        public final Drivetrain drive;
+        private final Arm arm;
+        private final Drivetrain drive;
         private final StorageIndex index;
 
         private final Timer shootTimer = new Timer();
