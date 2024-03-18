@@ -29,6 +29,7 @@ import frc.robot.subsystems.gpm.StorageIndex;
  */
 @Disabled
 public class SWMTest {
+    // TODO: the math tests should not require subsystems....
     // the subsystems
     //   if these are static, then the tests run faster (but the .close() calls should be removed)
     public Shooter shooter = new Shooter();
@@ -83,7 +84,10 @@ public class SWMTest {
 
         {.2, 3 ,1.7, 1, 1},
     };
-    // number of test cases (= test_case.length). The value must be a literal to work in the tests below.
+
+    // The number of test cases (= test_cases.length).
+    // The value must be a literal to work in the @RepeatedTest(NUM) below.
+    // Unfortunately, test_cases.length does not work.
     public final int NUM = 29;
 
     @AfterEach
@@ -97,6 +101,7 @@ public class SWMTest {
 
     /**
      * Make sure we will run all the tests.
+     * This test makes sure that NUM == test_cases.length.
      */
     @Test
     public void testLength() {
@@ -111,6 +116,8 @@ public class SWMTest {
     public void test_SWM(RepetitionInfo ri) {
         // get the zero-based index into test cases
         int idx = ri.getCurrentRepetition() - 1;
+
+        // TODO: should test both the Blue and Red Alliance
 
         /* sh.displacement = new Pose3d(
             test_cases[idx][0],

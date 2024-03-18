@@ -52,9 +52,11 @@ public class Shoot extends Command {
          * This value should be in the Shooter subsystem.
          * <p>
          * The arm height is the pivot height + armLength * sin(standbyAngle).
-         * This calculation seems wrong because the shooter sits on top of the arm.
+         * This calculation seems wrong because the shooter sits on top of the arm;
+         * the exit is not level when the arm is level.
          */
         public static final double shooterHeight = ArmConstants.ARM_LENGTH*Math.sin(ArmConstants.standbySetpoint) + ArmConstants.PIVOT_HEIGHT;
+
         /**
          * Shooter position relative to the robot center.
          * <p>
@@ -64,6 +66,7 @@ public class Shoot extends Command {
          */
         public static final double shooterOffset = ArmConstants.PIVOT_X + ArmConstants.ARM_LENGTH * Math.cos(ArmConstants.standbySetpoint);
 
+        // TODO: why should this class know anything about about tags?
         private Debouncer visionSawTagDebouncer = new Debouncer(0.2, DebounceType.kFalling);
 
         Timer timer = new Timer();
@@ -83,18 +86,26 @@ public class Shoot extends Command {
                 shootTimer.reset();
                 shootTimer.stop();
                 drive.setIsAlign(true); // Enable alignment mode on the drivetrain
+                // TODO: use a static set.
+                // April Tags 3, 4, 7, and 8 are the speaker tags on the Alliance Wall.
                 drive.onlyUseTags(new int[]{3, 4, 7, 8});
                 shooting = false;
         }
         @Override
         public void execute() {
+                // TODO: positive x displacement -> left of speaker only for Blue Alliance
                 // Positive x displacement means we are to the left of the speaker
+                // TODO: doesn't positive y displacement mean we are above the speaker?
                 // Positive y displacement means we are below the speaker.
+                // the alliance determines which speaker
+                // TODO: this does not need to be calculated every execute; do it in initialize()
                 Pose3d speakerPose = Robot.getAlliance() == Alliance.Red ?
                                 VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
                 // shooterHeight and shooterOffset have an additional offset because the shooter is offset from the arm, right?
+                // get the direction the robot is facing
                 Rotation2d driveYaw = drive.getYaw();
-                // Set displacement to speaker
+                // calculate the displacement to the speaker
+                // TODO: 22.7 inches - speaker.z should be negative? speakerPose.getZ() is 80.5 inches.
                 displacement = new Pose3d(
                         drive.getPose().getX() + shooterOffset * driveYaw.getCos()-speakerPose.getX(),
                         drive.getPose().getY() + shooterOffset * driveYaw.getSin()-speakerPose.getY(),
@@ -103,6 +114,7 @@ public class Shoot extends Command {
                         new Rotation3d(
                         0,
                         ShooterConstants.ANGLE_OFFSET - arm.getAngleRad(),
+                        // PI + yaw because we are shooting out the stern
                         Math.PI + driveYaw.getRadians()));
                         // .relativeTo(speakerPose);
                         //.times(-1);
@@ -121,26 +133,29 @@ public class Shoot extends Command {
                 //                         drive.getChassisSpeeds().vxMetersPerSecond+" "+
                 //                         drive.getChassisSpeeds().vyMetersPerSecond
                 // );
+
                 // TODO: Figure out what v_note is empirically
                 double v_note = 15;
 
-                // X distance to speaker
-                double x = Math.sqrt((displacement.getX() * displacement.getX())
-                                // Y distance to speaker
-                                + displacement.getY() * displacement.getY());
+                // X distance to speaker (along the floor)
+                double x = Math.hypot(displacement.getX(), displacement.getY());
                 // height (sorry that it's called y)
+                // TODO: but y is negative from above?
                 double y = displacement.getZ();
 
                 // Basic vertical angle calculation (static robot)
                 double phi_v = Math.atan(Math.pow(v_note, 2) / 9.8 / x * (1 - Math.sqrt(1
                                 + 19.6 / Math.pow(v_note, 2) * (y - 4.9 * x * x / Math.pow(v_note, 2)))));
                 //System.err.println("*pv " + phi_v);
-                // Angle to goal
-                double phi_h = Math.atan(displacement.getY()/ displacement.getX());
 
+                // Angle to goal
+                // TODO: isn't this calculation simplified with atan2()?
+                double phi_h = Math.atan(displacement.getY()/ displacement.getX());
                 // flip angle
                 if (displacement.getX()>=0) phi_h += Math.PI;
                 //System.err.println("*ph " + phi_h);
+
+                // TODO: isn't this calculation simplified with atan2()?
                 double theta_h = Math.atan((v_note * Math.cos(phi_v) * Math.sin(phi_h) - v_ry) / (v_note * Math.cos(phi_v) * Math.cos(phi_h) - v_rx));
                 // flip angle
                 if (displacement.getX()>=0) theta_h += Math.PI;
@@ -160,6 +175,8 @@ public class Shoot extends Command {
                                 (v_note * Math.cos(phi_v) * Math.cos(phi_h) - v_rx));
                 // also here
                 double v_shoot = v_note * Math.sin(phi_v) / Math.sin(theta_v);
+
+                // save the results
                 horiz_angle = theta_h;
                 vert_angle = theta_v;
                 exit_vel = v_shoot;
@@ -167,6 +184,7 @@ public class Shoot extends Command {
                 // System.err.println(vert_angle);
                 // System.err.println(exit_vel);
 
+                // set the shooter angle
                 arm.setAngle(ShooterConstants.ANGLE_OFFSET - theta_v);
                 // theta_h is relative to the horizontal, so
                 // drive.setAlignAngle switches from theta_h to pi/2-theta_h
@@ -183,12 +201,14 @@ public class Shoot extends Command {
                 // System.out.println("Arm Setpoint: "+arm.atSetpoint());
                 // System.out.println("Shooter Setpoint: "+shooter.atSetpoint());
                 // System.out.println("drive Setpoint: "+drive.atAlignAngle());
+
                 // TODO: Make this commented out if statement work (arm and shooter weren't getting to setpoint)
                 // if (arm.atSetpoint() && shooter.atSetpoint() && drive.atAlignAngle() && sawTag || shooting) {
                 if (EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - theta_v, Units.degreesToRadians(1)) && 
                 shooter.atSetpoint() && drive.atAlignAngle() && sawTag || shooting) {
                         shooting = true;
                         index.ejectIntoShooter();
+                        // shooting is true, so the timer is started continually....
                         shootTimer.start();
                 }
         }
@@ -200,10 +220,19 @@ public class Shoot extends Command {
 
         @Override
         public void end(boolean interrupted) {
+                // slow down/turn off the shooter
                 shooter.setTargetVelocity(REST_VEL);
-                drive.setIsAlign(false); // Use normal driver controls
+
+                // use normal driver controls
+                drive.setIsAlign(false);
+
+                // stow the arm
                 arm.setAngle(ArmConstants.stowedSetpoint);
+
+                // stop feeding the shooter
                 index.stopIndex();
+
+                // do not use any AprilTags
                 drive.onlyUseTags(new int[0]);
         }
 }
