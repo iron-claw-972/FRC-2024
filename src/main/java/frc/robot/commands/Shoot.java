@@ -35,6 +35,9 @@ public class Shoot extends Command {
 
         private final Timer shootTimer = new Timer();
 
+        /** Speaker pose determined when Command runs initialize() */
+        public Pose3d speakerPose;
+
         // for testing sakes
         public double horiz_angle;
         public double vert_angle;
@@ -85,22 +88,29 @@ public class Shoot extends Command {
                 // Reset the timer
                 shootTimer.reset();
                 shootTimer.stop();
-                drive.setIsAlign(true); // Enable alignment mode on the drivetrain
-                // TODO: use a static set.
+
+                // Enable alignment mode on the drivetrain
+                drive.setIsAlign(true);
+
                 // April Tags 3, 4, 7, and 8 are the speaker tags on the Alliance Wall.
+                // TODO: use a static set
                 drive.onlyUseTags(new int[]{3, 4, 7, 8});
+
+                // we are not shooting yet
                 shooting = false;
+
+                // the alliance determines which speaker we target
+                // the speakerPose need not be calculated every execute; do it in initialize()
+                speakerPose = (Robot.getAlliance() == Alliance.Red) ?
+                                VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
         }
+
         @Override
         public void execute() {
                 // TODO: positive x displacement -> left of speaker only for Blue Alliance
                 // Positive x displacement means we are to the left of the speaker
                 // TODO: doesn't positive y displacement mean we are above the speaker?
                 // Positive y displacement means we are below the speaker.
-                // the alliance determines which speaker
-                // TODO: this does not need to be calculated every execute; do it in initialize()
-                Pose3d speakerPose = Robot.getAlliance() == Alliance.Red ?
-                                VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
                 // shooterHeight and shooterOffset have an additional offset because the shooter is offset from the arm, right?
                 // get the direction the robot is facing
                 Rotation2d driveYaw = drive.getYaw();
@@ -140,8 +150,9 @@ public class Shoot extends Command {
                 // X distance to speaker (along the floor)
                 double x = Math.hypot(displacement.getX(), displacement.getY());
                 // height (sorry that it's called y)
-                // TODO: but y is negative from above?
+                // TODO: but y is negative from above
                 double y = displacement.getZ();
+                // System.err.println("Negative y " + y);
 
                 // Basic vertical angle calculation (static robot)
                 double phi_v = Math.atan(Math.pow(v_note, 2) / 9.8 / x * (1 - Math.sqrt(1
