@@ -131,7 +131,7 @@ public class Arm extends SubsystemBase {
 		// set the arm offset
 		// assumes the arm is at its lowest position on startup
 		// if the arm is not at its stowedSetpoint, then this will likely break the arm
-		//OFFSET = getAngleRad() - ArmConstants.MIN_ANGLE_RADS; // TODO: decide if we want this
+		//OFFSET = getAngleRad() - ArmConstants.MIN_ANGLE_RADS;
 
         // make the encoder report arm angle in radians
         encoder.setDistancePerRotation(DISTANCE_PER_ROTATION);
@@ -184,8 +184,7 @@ public class Arm extends SubsystemBase {
 
 		double cachedAngleRad = getAngleRad(); // don't get the angle five times
 		// some checks for the arm position
-		// TODO: decide if we want this
-		if (cachedAngleRad < ArmConstants.MIN_ANGLE_RADS - 0.005 || cachedAngleRad > ArmConstants.MAX_ANGLE_RADS + 0.005) {
+		if (cachedAngleRad < ArmConstants.MIN_ANGLE_RADS - 0.01 || cachedAngleRad > ArmConstants.MAX_ANGLE_RADS + 0.01) {
 			System.err.println("▄▄      ▄▄    ▄▄     ▄▄▄▄▄▄    ▄▄▄   ▄▄   ▄▄▄▄▄▄   ▄▄▄   ▄▄     ▄▄▄▄ ");
 			System.err.println("██      ██   ████    ██▀▀▀▀██  ███   ██   ▀▀██▀▀   ███   ██   ██▀▀▀▀█");
 			System.err.println("▀█▄ ██ ▄█▀   ████    ██    ██  ██▀█  ██     ██     ██▀█  ██  ██      ");
