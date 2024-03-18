@@ -264,6 +264,8 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putNumber("REV ABS", encoder.getAbsolutePosition());
         // report whether the arm has reached its setpoint
         SmartDashboard.putBoolean("at setpoint?", atSetpoint());
+        // report the arm current
+        SmartDashboard.putNumber("arm current", m_powerPanel.getCurrent(2));
     }
 
     @Override
@@ -283,10 +285,9 @@ public class Arm extends SubsystemBase {
         // update the DutyCycleEncoder
         encoderSim.setDistance(simulation.getAngleRads());
 
-        // TODO: tell the PowerPanel that we are drawing this current
+        // Calculate the current drawn by one of the motors
         double ampsPerMotor = simulation.getCurrentDrawAmps() / 4;
 
-        SmartDashboard.putNumber("arm current", ampsPerMotor);
         m_powerPanel.setCurrent(2, ampsPerMotor);
         m_powerPanel.setCurrent(3, ampsPerMotor);
         m_powerPanel.setCurrent(4, ampsPerMotor);

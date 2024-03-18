@@ -35,8 +35,22 @@ public class PowerPanel extends SubsystemBase {
 
 	}
 
-	public void setCurrent(int port, double current) {
-		PDHSim.setCurrent(port, current);
+	/**
+	 * Return the current drawn by the PDH channel.
+	 * @param channel
+	 * @return current in amperes
+	 */
+	public double getCurrent(int channel) {
+		return PDH.getCurrent(channel);
+	}
+
+	/**
+	 * This method is used by simulators to set the channel current
+	 * @param channel PDH port/channel
+	 * @param current Channel current in amperes.
+	 */
+	public void setCurrent(int channel, double current) {
+		PDHSim.setCurrent(channel, current);
 	}
 
 }
