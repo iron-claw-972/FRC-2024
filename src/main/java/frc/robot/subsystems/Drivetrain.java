@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.constants.Constants;
+import frc.robot.constants.miscConstants.FieldConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
@@ -239,12 +240,17 @@ public class Drivetrain extends SubsystemBase {
 
         Pose2d pose3 = getPose();
         
-        //if the drivetrain pose is over 30: 
-        if(Math.abs(pose2.getX())>30){
-            //reset our odometry to the pose before(this is the right pose)
-            resetOdometry(pose1);
-        }else if(Math.abs(pose3.getX())>30){
-            //if our vision+drivetrain odometry is more than 30, reset our odometry to the pose before(this is the right pose)
+        // Reset the pose to a position on the field if it is off the field
+        if(!Vision.onField(pose1)){
+            // If the pose at the beginning of the method is off the field, reset to a position in the middle of the field
+            // Use the rotation of the pose after updating odometry so the yaw is right
+            resetOdometry(new Pose2d(FieldConstants.kFieldLength/2, FieldConstants.kFieldWidth/2, pose2.getRotation()));
+        }else if(!Vision.onField(pose2)){
+            // if the drivetrain pose is off the field, reset our odometry to the pose before(this is the right pose)
+            // Keep the rotation from pose2 so yaw is correct for driver
+            resetOdometry(new Pose2d(pose1.getTranslation(), pose2.getRotation()));
+        }else if(!Vision.onField(pose3)){
+            //if our vision+drivetrain odometry is off the field, reset our odometry to the pose before(this is the right pose)
             resetOdometry(pose2);
         }
     }
