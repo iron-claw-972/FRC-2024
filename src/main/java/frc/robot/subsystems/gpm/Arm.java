@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ArmConstants;
 import frc.robot.constants.Constants;
 import frc.robot.util.LogManager;
+import frc.robot.subsystems.PowerPanel;
 
 /**
  * Subsystem that controls the arm.
@@ -123,7 +124,10 @@ public class Arm extends SubsystemBase {
             6,
             new Color8Bit(Color.kYellow)));
 
-    public Arm() {
+    private PowerPanel m_powerPanel;
+
+    public Arm(PowerPanel powerPanel) {
+        m_powerPanel = powerPanel;
         // set the PID tolerance
         pid.setTolerance(TOLERANCE);
 
@@ -260,6 +264,8 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putNumber("REV ABS", encoder.getAbsolutePosition());
         // report whether the arm has reached its setpoint
         SmartDashboard.putBoolean("at setpoint?", atSetpoint());
+        // report the arm current
+        SmartDashboard.putNumber("arm current", m_powerPanel.getCurrent(1));
     }
 
     @Override
@@ -278,6 +284,16 @@ public class Arm extends SubsystemBase {
 
         // update the DutyCycleEncoder
         encoderSim.setDistance(simulation.getAngleRads());
+
+        // Calculate the current drawn by one of the motors
+        double ampsPerMotor = simulation.getCurrentDrawAmps() / 4;
+
+        // see https://docs.google.com/spreadsheets/d/1UiHZFYeZiHPAPIu39uRrskQuQYfvJ03UjLeQVq--Mzg/edit#gid=0
+        // Arm motors uses channels 1, 2, 4, 5
+        m_powerPanel.setCurrent(1, ampsPerMotor);
+        m_powerPanel.setCurrent(2, ampsPerMotor);
+        m_powerPanel.setCurrent(4, ampsPerMotor);
+        m_powerPanel.setCurrent(5, ampsPerMotor);
     }
 
     /**
