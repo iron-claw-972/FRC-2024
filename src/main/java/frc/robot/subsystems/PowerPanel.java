@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class PowerPanel extends SubsystemBase {
 	private static final PowerDistribution PDH = new PowerDistribution();
 	private static PDPSim PDHSim; // not sure if this is only CTRE or what
+	/** The simulated battery voltage */
 	private double voltsBattery = 12.6;
 	// assume the battery resistance is about 25 milohms + some wire resistance
 	private static double ohmsResistance = 0.030;
@@ -24,7 +25,10 @@ public class PowerPanel extends SubsystemBase {
 
 	@Override
 	public void periodic() {
+		// put the current draw on the SmartDashboard
 		SmartDashboard.putNumber("PDH Current (Amps)", PDH.getTotalCurrent());
+
+		// TODO: put the Energy draw on the SmartDashboard
 
 		// simulate the voltage on the battery
 		voltsBattery = 12.6 - PDH.getTotalCurrent() * ohmsResistance;
@@ -33,6 +37,15 @@ public class PowerPanel extends SubsystemBase {
 	@Override
 	public void simulationPeriodic() {
 
+	}
+
+	/**
+	 * Return the battery voltage.
+	 * Can be used in simulations.
+	 * @return battery voltage
+	 */
+	public double getSimulatedBatteryVoltage() {
+		return voltsBattery;
 	}
 
 	/**
@@ -54,4 +67,3 @@ public class PowerPanel extends SubsystemBase {
 	}
 
 }
-
