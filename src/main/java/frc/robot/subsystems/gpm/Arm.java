@@ -244,6 +244,11 @@ public class Arm extends SubsystemBase {
     public void periodic() {
 		if (!armEnabled) return;
 
+		if (getAngleRad() < ArmConstants.MIN_ANGLE_RADS - 0.01 || getAngleRad() > ArmConstants.MAX_ANGLE_RADS + 0.01) {
+			System.err.println("WARNING: THE ARM IS IN A SUPPOSEDLY UNREACHABLE POSITION AND HAS BEEN DISABLED. Found: " + getAngleRad() + ", Expected: " + ArmConstants.stowedSetpoint);
+			armEnabled = false;
+		}
+
         // Clamp the PID setpoint in case an out of range value slips in ...
         double setpoint = pid.getSetpoint();
         if (setpoint < ArmConstants.MIN_ANGLE_RADS) {
