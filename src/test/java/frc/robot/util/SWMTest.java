@@ -30,7 +30,7 @@ import frc.robot.subsystems.gpm.StorageIndex;
  * The math tests should also not need to build the subsystems.
  * The math in the Shoot command is opaque.
  */
-// @Disabled
+@Disabled
 public class SWMTest {
     // TODO: the math tests should not require subsystems....
     // the subsystems
@@ -41,9 +41,7 @@ public class SWMTest {
     private Drivetrain drive = new Drivetrain(null);
     private StorageIndex indexer = new StorageIndex();
 
-    /**
-     * The Shoot command
-     */
+    /** The Shoot command */
     private Shoot sh = new Shoot(shooter, arm, drive, indexer);
 
     /*
@@ -51,53 +49,84 @@ public class SWMTest {
      * method to set pose, reset pose
      * set chassis speed or drive() to make x,y velocities.
      */
-    // TODO: these have the input conditions, but they do not have the appropriate answer
-    // TODO: Negative x values do not make sense on the real field
+    /**
+     * Test cases for shooting-on-the-move.
+     * <p>
+     * These test cases have the input conditions, but they did not have the expected answers.
+     * The results of running the tests have been used as the expected answers,
+     * but some of those results are suspect. For example, we do not expect the
+     * exit velocity to be negative.
+     * <p>
+     * TODO: Negative x values do not make sense on the real field
+     */
     private enum TestCase {
-        A(12.922, 5.537, 0, 0, 0),
-        B(2, 1.5, 1.619, 0, 0),
-        C(1.5, 2, 1.619, 0, 0) /**/,
-        D(1, 3, 1.619, 0, 0),
+        A(12.922, 5.537, 0, 0, 0, 0.423905, 3.140748, 15.000000),
+        B(2, 1.5, 1.619, 0, 0, 0.417965, 2.017422, 15.000000),
+        C(1.5, 2, 1.619, 0, 0, 0.452867, 1.956002, 15.000000) /**/,
+        D(1, 3, 1.619, 0, 0, 0.556990, 1.923729, 15.000000),
         
-        E(2, 1.5, 1.619, 3, 0),
-        F(-2, 1.5, 1.619, 3, 0),
-        G(2, -1.5, 1.619, 3, 0),
-        H(-2, -1.5, 1.619, 3, 0),
-        I(1.5, 2, 1.619, 3, 0),
-        J(-1.5, 2, 1.619, 3, 0),
-        K(1.5, -2, 1.619, 3, 0),
+        E(2, 1.5, 1.619, 3, 0, 0.379936, 2.195832, 16.417273),
+        F(-2, 1.5, 1.619, 3, 0, 0.446654, 1.312740, 14.022654),
+        G(2, -1.5, 1.619, 3, 0, 0.342092, 2.032205, 16.008936),
+        H(-2, -1.5, 1.619, 3, 0, 0.379173, 1.501577, 14.505448),
+        I(1.5, 2, 1.619, 3, 0, 0.415474, 2.143980, 16.260643),
+        J(-1.5, 2, 1.619, 3, 0, 0.477584, 1.375839, 14.189854),
+        K(1.5, -2, 1.619, 3, 0, 0.346327, 1.958698, 15.803013),
 
-        L(-1.5, -2, 1.7, 3, 0),
-        M(2, 1.5, 1.7, 0, 3),
-        N(-2, 1.5, 1.7, 0, 3),
-        O(2, -1.5, 1.7, 0, 3),
-        P(-2, -1.5, 1.7, 0, 3),
-        Q(1.5, 2, 1.7, 0, 3),
-        R(-1.5, 2, 1.7, 0, 3),
-        S(1.5, -2, 1.7, 0, 3),
-        T(-1.5, -2, 1.7, 0, 3),
-        U(2, 1.5, 1.7, 3, 2),
+        // TODO: negative vertical angle and negative exit velocity
+        L(-1.5, -2, 1.7, 3, 0, -0.372748, -1.558975, -14.730002),
+        M(2, 1.5, 1.7, 0, 3, 0.502500, 2.134647, 12.641822),
+        N(-2, 1.5, 1.7, 0, 3, 0.498278, 0.977160, 12.674014),
+        O(2, -1.5, 1.7, 0, 3, 0.449152, 1.910680, 12.368301),
+        P(-2, -1.5, 1.7, 0, 3, 0.448474, 1.210690, 12.383165),
+        Q(1.5, 2, 1.7, 0, 3, 0.547424, 2.060889, 12.609623),
+        R(-1.5, 2, 1.7, 0, 3, 0.542072, 1.044368, 12.641980),
+        S(1.5, -2, 1.7, 0, 3, 0.451044, 1.809858, 12.306013),
+        T(-1.5, -2, 1.7, 0, 3, 0.450640, 1.311952, 12.316444),
+        U(2, 1.5, 1.7, 3, 2, 0.418886, 2.281514, 14.968989),
 
-        V(-2, 1.5, 1.7, 3, 2),
-        W(2, -1.5, 1.7, 3, 2),
-        X(-2, -1.5, 1.7, 3, 2),
-        Y(1.5, 2, 1.7, 3, 2),
-        Z(-1.5, 2, 1.7, 3, 2),
-        a(1.5, -2, 1.7, 3, 2),
-        b(-1.5, -2, 1.7, 3, 2),
+        V(-2, 1.5, 1.7, 3, 2, 0.514092, 1.265134, 12.317544),
+        W(2, -1.5, 1.7, 3, 2, 0.383237, 2.099102, 14.362078),
+        X(-2, -1.5, 1.7, 3, 2, 0.437452, 1.489528, 12.674247),
+        Y(1.5, 2, 1.7, 3, 2, 0.460166, 2.225983, 14.778710),
+        Z(-1.5, 2, 1.7, 3, 2, 0.549616, 1.339441, 12.485928),
+        a(1.5, -2, 1.7, 3, 2, 0.390397, 2.016765, 14.095881),
+        // TODO: negative vertical angle and negative exit velocity
+        b(-1.5, -2, 1.7, 3, 2, -0.429288, -1.556958, -12.888089),
 
-        c(.2, 3, 1.7, 1, 1) /* */
+        c(.2, 3, 1.7, 1, 1, 0.614164, 1.715583, 14.258364) /* */
         ;
-        double x, y, vx, vy;
+
+        /** Robot X coordinate [meters] */
+        double x;
+        /** Robot Y coordinate [meters] */
+        double y;
+        /** Robot velocity in x-direction [meters/second] */
+        double vx;
+        /** Robot velocity in y-direction [meters/second] */
+        double vy;
+
+        // the expected answers
+        /** expected vertical angle */
+        double va;
+        /** expected horizontal angle */
+        double ha;
+        /** expected exit velocity */
+        double ev;
 
         // constructor for the test cases
-        TestCase(double x, double y, double z, double vx, double vy) {
+        TestCase(double x, double y, double z, double vx, double vy, double va, double ha, double ev) {
             this.x = x;
             this.y = y;
             // TODO: the z value for a robot pose should be 0
             // this.z = z;
             this.vx = vx;
             this.vy = vy;
+
+            // the answers...
+            this.va = va;
+            this.ha = ha;
+            this.ev = ev;
         }
     };
 
@@ -160,7 +189,7 @@ public class SWMTest {
         sh.execute();
 
         // execute() should set reasonable values for horiz_angle, vert_angle, and exit_vel
-        // System.err.printf("execute() returns: va %f, ha %f, and exit_vel %f\n", sh.vert_angle, sh.horiz_angle, sh.exit_vel);
+        System.err.printf("execute() returns: va %f, ha %f, and exit_vel %f\n", sh.vert_angle, sh.horiz_angle, sh.exit_vel);
         // we should not see any NaNs
         assertFalse(Double.isNaN(sh.vert_angle));
         assertFalse(Double.isNaN(sh.horiz_angle));
@@ -233,6 +262,11 @@ public class SWMTest {
         // test the times are close
         assertEquals(tx, ty, 0.00001);
         assertEquals(tx, tz, 0.00001);
+
+        // Compare the expected answers
+        assertEquals(testCase.va, sh.vert_angle, 0.0001);
+        assertEquals(testCase.ha, sh.horiz_angle, 0.0001);
+        assertEquals(testCase.ev, sh.exit_vel, 0.0001);
     }
 
     @Test
