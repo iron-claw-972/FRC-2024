@@ -35,10 +35,14 @@ public class Shoot extends Command {
 
         private final Timer shootTimer = new Timer();
 
-        /** Speaker pose determined when Command runs initialize() */
+        /** Speaker pose determined when the Shoot command runs initialize() */
         public Pose3d speakerPose;
 
-        // for testing sakes
+        // These are the AprilTags on the speakers
+        private static final int[] aprilTagsSpeaker = {3, 4, 7, 8};
+        private static final int[] aprilTagsNull = {};
+
+        // public for testing sakes; package frc.robot.util looks at these values; those tests should be elsewhere...
         public double horiz_angle;
         public double vert_angle;
         public double exit_vel;
@@ -46,6 +50,7 @@ public class Shoot extends Command {
         public double v_rx;
         public double v_ry;
         // TODO: put in constants for other commands to use
+        
         private final double REST_VEL = 0;
         // TODO: determine the fastest idle note-exit velocity that won't kill the battery.
 
@@ -69,7 +74,7 @@ public class Shoot extends Command {
          */
         public static final double shooterOffset = ArmConstants.PIVOT_X + ArmConstants.ARM_LENGTH * Math.cos(ArmConstants.standbySetpoint);
 
-        // TODO: why should this class know anything about about tags?
+        // TODO: why should this command know anything about about tags?
         private Debouncer visionSawTagDebouncer = new Debouncer(0.2, DebounceType.kFalling);
 
         Timer timer = new Timer();
@@ -92,9 +97,10 @@ public class Shoot extends Command {
                 // Enable alignment mode on the drivetrain
                 drive.setIsAlign(true);
 
+                // only use the April Tags on the speakers
                 // April Tags 3, 4, 7, and 8 are the speaker tags on the Alliance Wall.
-                // TODO: use a static set
-                drive.onlyUseTags(new int[]{3, 4, 7, 8});
+                // this is a backdoor to vision...
+                drive.onlyUseTags(aprilTagsSpeaker);
 
                 // we are not shooting yet
                 shooting = false;
@@ -111,9 +117,11 @@ public class Shoot extends Command {
                 // Positive x displacement means we are to the left of the speaker
                 // TODO: doesn't positive y displacement mean we are above the speaker?
                 // Positive y displacement means we are below the speaker.
+
                 // shooterHeight and shooterOffset have an additional offset because the shooter is offset from the arm, right?
                 // get the direction the robot is facing
                 Rotation2d driveYaw = drive.getYaw();
+
                 // calculate the displacement to the speaker
                 // TODO: 22.7 inches - speaker.z should be negative? speakerPose.getZ() is 80.5 inches.
                 displacement = new Pose3d(
@@ -147,7 +155,7 @@ public class Shoot extends Command {
                 // TODO: Figure out what v_note is empirically
                 double v_note = 15;
 
-                // X distance to speaker (along the floor)
+                // X distance to speaker (along the floor to center of speaker)
                 double x = Math.hypot(displacement.getX(), displacement.getY());
                 // height (sorry that it's called y)
                 // TODO: but y is negative from above
@@ -244,6 +252,6 @@ public class Shoot extends Command {
                 index.stopIndex();
 
                 // do not use any AprilTags
-                drive.onlyUseTags(new int[0]);
+                drive.onlyUseTags(aprilTagsNull);
         }
 }
