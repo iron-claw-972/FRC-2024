@@ -33,13 +33,15 @@ public class Shoot extends Command {
         private final Drivetrain drive;
         private final StorageIndex index;
 
+        // timers prevent faster-than-real-time simulation....
         private final Timer shootTimer = new Timer();
 
         /** Speaker pose determined when the Shoot command runs initialize() */
         public Pose3d speakerPose;
 
-        // These are the AprilTags on the speakers
+        // These are the AprilTags on the speakers. Used to restrict search.
         private static final int[] aprilTagsSpeaker = {3, 4, 7, 8};
+        // The empty set to disable useOnly.
         private static final int[] aprilTagsNull = {};
 
         // public for testing sakes; package frc.robot.util looks at these values; those tests should be elsewhere...
@@ -60,8 +62,8 @@ public class Shoot extends Command {
          * This value should be in the Shooter subsystem.
          * <p>
          * The arm height is the pivot height + armLength * sin(standbyAngle).
-         * This calculation seems wrong because the shooter sits on top of the arm;
-         * the exit is not level when the arm is level.
+         * This calculation seems wrong because the shooter sits on top of the arm.
+         * The shooter exit is not level with the pivot when the arm is level.
          */
         public static final double shooterHeight = ArmConstants.ARM_LENGTH*Math.sin(ArmConstants.standbySetpoint) + ArmConstants.PIVOT_HEIGHT;
 
