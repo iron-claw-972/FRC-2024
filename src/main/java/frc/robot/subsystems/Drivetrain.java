@@ -75,6 +75,9 @@ public class Drivetrain extends SubsystemBase {
     // DO NOT CHANGE THIS HERE TO DISABLE VISION, change VisionConstants.ENABLED instead
     private boolean visionEnabled = true;
 
+    // Disables vision for the first few seconds after deploying
+    private Timer visionEnableTimer = new Timer();
+
     // If the robot should aim at the speaker
     private boolean isAlign = false;
     // Angle to align to, null for directly toward speaker
@@ -84,7 +87,7 @@ public class Drivetrain extends SubsystemBase {
     // used for drift control
     private boolean drive_turning = false;
 
-    SwerveSetpointGenerator setpointGenerator = new SwerveSetpointGenerator();
+    private SwerveSetpointGenerator setpointGenerator = new SwerveSetpointGenerator();
 
 
 
@@ -224,6 +227,9 @@ public class Drivetrain extends SubsystemBase {
      * Updates the field relative position of the robot.
      */
     public void updateOdometry() {
+        // Start the timer if it hasn't started yet
+        visionEnableTimer.start();
+
         Pose2d pose1 = getPose();
 
         // Updates pose based on encoders and gyro. NOTE: must use yaw directly from gyro!
@@ -232,7 +238,7 @@ public class Drivetrain extends SubsystemBase {
         Pose2d pose2 = getPose();
 
         if(VisionConstants.ENABLED){
-            if(visionEnabled){
+            if(visionEnabled && visionEnableTimer.hasElapsed(5)){
                 vision.updateOdometry(poseEstimator);
             }
         }
