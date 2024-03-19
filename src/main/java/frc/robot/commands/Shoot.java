@@ -222,6 +222,7 @@ public class Shoot extends Command {
                 // System.out.println("drive Setpoint: "+drive.atAlignAngle());
 
                 // TODO: Make this commented out if statement work (arm and shooter weren't getting to setpoint)
+                // TODO: the proper test is !shooting && ... to only execute the body once
                 // if (arm.atSetpoint() && shooter.atSetpoint() && drive.atAlignAngle() && sawTag || shooting) {
                 if (EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - theta_v, Units.degreesToRadians(1)) && 
                 shooter.atSetpoint() && drive.atAlignAngle() && sawTag || shooting) {

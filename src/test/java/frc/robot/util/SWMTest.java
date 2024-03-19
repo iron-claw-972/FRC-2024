@@ -56,7 +56,7 @@ public class SWMTest {
     private enum TestCase {
         A(12.922, 5.537, 0, 0, 0),
         B(2, 1.5, 1.619, 0, 0),
-        C(1.5, 2, 1.619, 0, 0) /*,
+        C(1.5, 2, 1.619, 0, 0) /**/,
         D(1, 3, 1.619, 0, 0),
         
         E(2, 1.5, 1.619, 3, 0),
@@ -160,7 +160,7 @@ public class SWMTest {
         sh.execute();
 
         // execute() should set reasonable values for horiz_angle, vert_angle, and exit_vel
-        System.err.printf("execute() returns: va %f, ha %f, and exit_vel %f\n", sh.vert_angle, sh.horiz_angle, sh.exit_vel);
+        // System.err.printf("execute() returns: va %f, ha %f, and exit_vel %f\n", sh.vert_angle, sh.horiz_angle, sh.exit_vel);
         // we should not see any NaNs
         assertFalse(Double.isNaN(sh.vert_angle));
         assertFalse(Double.isNaN(sh.horiz_angle));
@@ -199,20 +199,20 @@ public class SWMTest {
         // the velocity should not be a NaN
         assertFalse(Double.isNaN(vz));
 
-        // these equations do not look right because v_note == 15 != v_shoot != exit_vel
+        // Caution: v_note == 15 != v_shoot == exit_vel
         //   shooter elevation is sh.vert_angle
         //   shooter azimuth is sh.horz_angle
-        //   v_note * cos(sh.vert_angle) is velocity in the X-Y plane
-        //   v_note * cos(sh.vert_angle) * cos(sh.horiz_angle) is velocity in the X direction
+        //   v_shoot * cos(sh.vert_angle) is velocity in the X-Y plane
+        //   v_shoot * cos(sh.vert_angle) * cos(sh.horiz_angle) is velocity in the X direction
         //      but also need to add sh.v_rx to account for robot speed in X direction
-        //   v_note * cos(sh.vert_angle) * sin(sh.horiz_angle) is velocity in the Y direction
+        //   v_shoot * cos(sh.vert_angle) * sin(sh.horiz_angle) is velocity in the Y direction
         //      but also need to add sh.v_ry to account for robot speed in Y direction
         // time to travel the X distance = [X] / velocity-in-X-direction
         double tx= Math.abs(sh.displacement.getX()/(sh.exit_vel*Math.cos(sh.vert_angle)*Math.cos(sh.horiz_angle)+sh.v_rx));
         // time to travel the Y distance = [Y] / velocity-in-Y-direction
         double ty = Math.abs(sh.displacement.getY()/(sh.exit_vel*Math.cos(sh.vert_angle)*Math.sin(sh.horiz_angle)+sh.v_ry));
         // time to reach the Z displacement D = .getZ() ...
-        //    Newton gives the height as
+        //    Newton gives the height z as
         //    z =   D =           v_z t - 0.5 g t^2
         //        2 D =         2 v_z t -     g t^2
         //        0   = - 2 D + 2 v_z t -     g t^2
@@ -224,18 +224,17 @@ public class SWMTest {
         //    the + solution should be infeasible because it will hit the hood in most cases...
         double           tz = (vz-Math.sqrt(vz*vz+19.6*sh.displacement.getZ()))/9.8;
         // empirical hack for positive solution....
-        if (tx-tz > .01) tz = (vz+Math.sqrt(vz*vz+19.6*sh.displacement.getZ()))/9.8;
+        if (tx-tz > .001) tz = (vz+Math.sqrt(vz*vz+19.6*sh.displacement.getZ()))/9.8;
 
         // none of the times should be NaNs
         assertFalse(Double.isNaN(tx));
         assertFalse(Double.isNaN(ty));
         assertFalse(Double.isNaN(tz));
-        System.err.println("ts: " + tx + ", " + ty + ", " + tz + ", vz " + vz);
+        // System.err.println("ts: " + tx + ", " + ty + ", " + tz + ", vz " + vz);
 
-        // test the values are close
+        // test the times are close
         assertEquals(tx, ty, 0.00001);
-        // TODO: increased from 0.001 to 0.007 because 6 tests failed
-        assertEquals(tx, tz, 0.007);
+        assertEquals(tx, tz, 0.00001);
     }
 
     @Test
