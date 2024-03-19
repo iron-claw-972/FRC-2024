@@ -102,7 +102,7 @@ public class RobotContainer {
         // Detected objects need access to the drivetrain
         DetectedObject.setDrive(drive);
         
-        SignalLogger.start();
+        // SignalLogger.start();
 
         driver.configureControls();
         operator.configureControls();

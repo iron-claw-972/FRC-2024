@@ -343,6 +343,9 @@ public class Vision {
       // for(PhotonTrackedTarget t : estimatedPose.targetsUsed){
       //   System.out.printf("Dist to tag %d: %.3fm\n", t.getFiducialId(), getTagPose(t.getFiducialId()).getTranslation().toTranslation2d().getDistance(poseEstimator.getEstimatedPosition().getTranslation()));
       // }
+
+      // System.out.println("vision estimated pose x: " + estimatedPose.estimatedPose.getX() + "Vision estimated pose y: " + estimatedPose.estimatedPose.getY());
+
       poseEstimator.addVisionMeasurement(
         estimatedPose.estimatedPose.toPose2d(),
         estimatedPose.timestampSeconds
