@@ -44,7 +44,7 @@ public class SWMTest {
     /**
      * The Shoot command
      */
-    public Shoot sh = new Shoot(shooter, arm, drive, indexer);
+    private Shoot sh = new Shoot(shooter, arm, drive, indexer);
 
     /*
      * make drivetrain in the test
@@ -213,16 +213,14 @@ public class SWMTest {
         double ty = Math.abs(sh.displacement.getY()/(sh.exit_vel*Math.cos(sh.vert_angle)*Math.sin(sh.horiz_angle)+sh.v_ry));
         // time to reach the Z displacement D = .getZ() ...
         //    Newton gives the height z as
-        //    z =   D =           v_z t - 0.5 g t^2
-        //        2 D =         2 v_z t -     g t^2
-        //        0   = - 2 D + 2 v_z t -     g t^2
-        //        0   =   2 D - 2 v_z t +     g t^2
+        //    z = D =      v_z t - 0.5 g t^2
+        //        0 = -D + v_z t - 0.5 g t^2
+        //        0 =  D - v_z t + 0.5 g t^2
         //    Quadratic formula gives
-        //        t = [ 2 v_z +- sqrt(4 v_z^2 - 4 g 2 D) ] / 2 g
-        //        t = [   v_z +- sqrt(  v_z^2 -   g 2 D) ] /   g
+        //        t = [ v_z +- sqrt(v_z^2 - 2 g D) ] / g
         //    the solution differs because D is negative (flips minus sign)
         //    the + solution should be infeasible because it will hit the hood in most cases...
-        double           tz = (vz-Math.sqrt(vz*vz+19.6*sh.displacement.getZ()))/9.8;
+        double            tz = (vz-Math.sqrt(vz*vz+19.6*sh.displacement.getZ()))/9.8;
         // empirical hack for positive solution....
         if (tx-tz > .001) tz = (vz+Math.sqrt(vz*vz+19.6*sh.displacement.getZ()))/9.8;
 
