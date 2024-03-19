@@ -28,8 +28,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ArmConstants;
 import frc.robot.constants.Constants;
-import frc.robot.util.LogManager;
 import frc.robot.subsystems.PowerPanel;
+import frc.robot.util.LogManager;
 
 /**
  * Subsystem that controls the arm.
@@ -192,7 +192,7 @@ public class Arm extends SubsystemBase {
 
 		double cachedAngleRad = getAngleRad(); // don't get the angle five times
 		// some checks for the arm position
-		if (cachedAngleRad < ArmConstants.MIN_ANGLE_RADS - 0.01 || cachedAngleRad > ArmConstants.MAX_ANGLE_RADS + 0.01) {
+		if (cachedAngleRad < ArmConstants.MIN_ANGLE_RADS - ArmConstants.ANGLE_TOLERANCE || cachedAngleRad > ArmConstants.MAX_ANGLE_RADS + ArmConstants.ANGLE_TOLERANCE) {
 			System.err.println("▄▄      ▄▄    ▄▄     ▄▄▄▄▄▄    ▄▄▄   ▄▄   ▄▄▄▄▄▄   ▄▄▄   ▄▄     ▄▄▄▄ ");
 			System.err.println("██      ██   ████    ██▀▀▀▀██  ███   ██   ▀▀██▀▀   ███   ██   ██▀▀▀▀█");
 			System.err.println("▀█▄ ██ ▄█▀   ████    ██    ██  ██▀█  ██     ██     ██▀█  ██  ██      ");
@@ -202,7 +202,7 @@ public class Arm extends SubsystemBase {
  			System.err.println(" ▀▀▀  ▀▀▀  ▀▀    ▀▀  ▀▀    ▀▀▀ ▀▀   ▀▀▀   ▀▀▀▀▀▀   ▀▀   ▀▀▀     ▀▀▀▀ ");
 			System.err.println("WARNING: THE ARM IS IN A SUPPOSEDLY UNREACHABLE POSITION AND HAS BEEN DISABLED. Please double check the arm constants and redeploy. Found: " + cachedAngleRad + ", Expected: " + ArmConstants.stowedSetpoint);
 			armEnabled = false;
-		} else if (ArmConstants.ASSERT_AT_SETPOINT && (cachedAngleRad < ArmConstants.stowedSetpoint - 0.01 || cachedAngleRad > ArmConstants.stowedSetpoint + 0.01)) {
+		} else if (ArmConstants.ASSERT_AT_SETPOINT && (cachedAngleRad < ArmConstants.stowedSetpoint - ArmConstants.ANGLE_TOLERANCE || cachedAngleRad > ArmConstants.stowedSetpoint + ArmConstants.ANGLE_TOLERANCE)) {
 			System.err.println("▄▄      ▄▄    ▄▄     ▄▄▄▄▄▄    ▄▄▄   ▄▄   ▄▄▄▄▄▄   ▄▄▄   ▄▄     ▄▄▄▄ ");
 			System.err.println("██      ██   ████    ██▀▀▀▀██  ███   ██   ▀▀██▀▀   ███   ██   ██▀▀▀▀█");
 			System.err.println("▀█▄ ██ ▄█▀   ████    ██    ██  ██▀█  ██     ██     ██▀█  ██  ██      ");
@@ -253,9 +253,13 @@ public class Arm extends SubsystemBase {
 		if (!armEnabled) return;
 
         // Disable the arm for this frame if it is out of range
-		if (getAngleRad() < ArmConstants.MIN_ANGLE_RADS - 0.01 || getAngleRad() > ArmConstants.MAX_ANGLE_RADS + 0.01) {
+		if (getAngleRad() < ArmConstants.MIN_ANGLE_RADS - ArmConstants.ANGLE_TOLERANCE || getAngleRad() > ArmConstants.MAX_ANGLE_RADS + ArmConstants.ANGLE_TOLERANCE) {
 			System.err.println("WARNING: THE ARM IS IN A SUPPOSEDLY UNREACHABLE POSITION AND HAS BEEN DISABLED. Found: " + getAngleRad() + ", Expected: " + ArmConstants.stowedSetpoint);
-			motors[0].set(0);
+			for (int i = 0; i < motors.length; i++) {
+				motors[i].setNeutralMode(NeutralModeValue.Coast);
+				motors[i].set(0);
+			}
+			armEnabled = false;
             return;
 		}
 
