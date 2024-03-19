@@ -123,6 +123,7 @@ public class Shoot extends Command {
                 Rotation2d driveYaw = drive.getYaw();
 
                 // calculate the displacement to the speaker
+                //   actually, this calculates the displacement **from** the speaker to the robot, so Z value is negative...
                 // TODO: 22.7 inches - speaker.z should be negative? speakerPose.getZ() is 80.5 inches.
                 displacement = new Pose3d(
                         drive.getPose().getX() + shooterOffset * driveYaw.getCos()-speakerPose.getX(),
