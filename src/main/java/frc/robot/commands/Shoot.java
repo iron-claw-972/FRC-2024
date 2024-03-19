@@ -255,7 +255,7 @@ public class Shoot extends Command {
                 // stop feeding the shooter
                 index.stopIndex();
 
-                // do not use any AprilTags
+                // set onlyUseTags to the empty set
                 drive.onlyUseTags(aprilTagsNull);
         }
 }
