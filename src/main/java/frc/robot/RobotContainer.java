@@ -86,7 +86,7 @@ public class RobotContainer {
         
       default:
       case SwerveCompetition:
-        arm = new Arm();
+        arm=null;
         intake = new Intake();
         index = new StorageIndex();
         shooter = new Shooter();

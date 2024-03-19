@@ -159,7 +159,7 @@ public class Drivetrain extends SubsystemBase {
     @Override
     public void periodic() {
         updateOdometry();
-        // System.out.println("drivetrain x: "+ getPose().getX() + "drivetrain y: "+ getPose().getY()); 
+        System.out.println("drivetrain x: "+ getPose().getX() + "drivetrain y: "+ getPose().getY()); 
     }
 
     // DRIVE
