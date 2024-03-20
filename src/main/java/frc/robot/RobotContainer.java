@@ -1,40 +1,47 @@
 package frc.robot;
 
-import java.util.Optional;
+import java.rmi.server.Operation;
 import java.util.function.BooleanSupplier;
 
 import com.ctre.phoenix6.SignalLogger;
+import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.Climb;
 import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.commands.gpm.IntakeNote;
-import frc.robot.commands.gpm.PrepareShooter;
+import frc.robot.commands.DoNothing;
+import frc.robot.commands.Shoot;
+import frc.robot.commands.Climb.Chain;
 import frc.robot.constants.AutoConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
 import frc.robot.controls.Operator;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.PowerPanel;
+// import frc.robot.util.DetectedObject;
 import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
 import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.subsystems.gpm.StorageIndex;
-import frc.robot.util.DetectedObject;
 import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
+import frc.robot.commands.gpm.IntakeNote;
+import frc.robot.commands.gpm.PrepareShooter;
+import frc.robot.commands.gpm.SetShooterSpeed;
+import frc.robot.commands.gpm.ShootKnownPos;
+import frc.robot.commands.gpm.ShootKnownPos.ShotPosition;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -54,8 +61,6 @@ public class RobotContainer {
   private Shooter shooter = null;
   private Intake intake = null;
   private StorageIndex index = null;
-  // always make the PowerPanel
-  private PowerPanel powerPanel = new PowerPanel();
 
   // Controllers are defined here
   private BaseDriverConfig driver = null;
@@ -77,49 +82,41 @@ public class RobotContainer {
         break;
 
       case TestBed2:
-        // intake = new Intake();
-        // index = new StorageIndex();
-        //SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index, arm));
-        arm = new Arm(powerPanel);
-        SmartDashboard.putData("Move Arm", new InstantCommand(() -> arm.setAngle(0.5)));
+        intake = new Intake();
+        index = new StorageIndex();
+        SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index, arm));
         break;
-      case Vertigo:
-          drive = new Drivetrain(vision);
-          driver = new GameControllerDriverConfig(drive, vision, arm, intake, index, shooter);
-          driver.configureControls();
-          drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
-          break;
         
       default:
       case SwerveCompetition:
-        // arm = new Arm(powerPanel);
-        arm = null;
+        arm = new Arm();
         intake = new Intake();
         index = new StorageIndex();
         shooter = new Shooter();
 
       case SwerveTest:
         vision = new Vision(VisionConstants.APRIL_TAG_CAMERAS);
-        
+
+
         drive = new Drivetrain(vision);
         driver = new GameControllerDriverConfig(drive, vision, arm, intake, index, shooter);
         operator = new Operator(intake, arm, index, shooter, drive);
 
         // Detected objects need access to the drivetrain
-        DetectedObject.setDrive(drive);
+        //DetectedObject.setDrive(drive);
         
-        SignalLogger.start();
+        //SignalLogger.start();
 
         driver.configureControls();
         operator.configureControls();
         initializeAutoBuilder();
         drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
-        //registerCommands();
-        // PathGroupLoader.loadPathGroups();
+       // registerCommands();
+       // PathGroupLoader.loadPathGroups();
  
         shuffleboardManager = new ShuffleBoardManager(drive, vision);
+       // SmartDashboard.putBoolean("Index beam", index.hasNote());
         break;
-        
       }
 
     // This is really annoying so it's disabled
@@ -137,7 +134,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return shuffleboardManager.getSelectedCommand();
+    Command pathCommand = shuffleboardManager.getSelectedCommand();
+    return pathCommand;
   }
 
   public void updateShuffleBoard() {
@@ -169,20 +167,13 @@ public class RobotContainer {
   }
 
   public void registerCommands() {
-    NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index, arm).withTimeout(1)); // 3 seconds used at SVR
-    // NamedCommands.registerCommand("Stop", new WaitCommand(2)); // to represent stopping for shooting 
-    // Mehaan -- Consulted with Jerry, just going to use a constraint zone going at .1 which should be fine instead of stopping for the area in which we are supposed to shoot
-    // NamedCommands.registerCommand("PrepareShooter", new PrepareShooter(shooter, 0));
-    // NamedCommands.registerCommand("SetShooterSpeed", new SetShooterSpeed(shooter, 0));
-    // NamedCommands.registerCommand("ShootKnownPos", new ShootKnownPos(shooter, arm, index, null));
+    NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index, arm).withTimeout(3));
     NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new SequentialCommandGroup(
-      new ParallelDeadlineGroup(// TODO: This will end instantly
-      // TODO: Don't use setChassisSpeeds(), use drive() instead and add the drivetrain as a parameter so it is a requirement
+      new ParallelDeadlineGroup(
       new InstantCommand(() -> drive.setChassisSpeeds(new ChassisSpeeds(), true)),
       new WaitCommand(.75)),
       new InstantCommand(()-> index.runIndex()),
       new WaitCommand(.5)));
-      //TODO: Stop index after command finishes
     NamedCommands.registerCommand("Prepare Shooter", new SequentialCommandGroup(new PrepareShooter(shooter, 1750), new WaitCommand(1)));
   }
 
@@ -193,9 +184,9 @@ public class RobotContainer {
       // This will flip the path being followed to the red side of the field.
       // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-      Optional<Alliance> alliance = DriverStation.getAlliance();
+      var alliance = DriverStation.getAlliance();
       if (alliance.isPresent()) {
-        return alliance.get() == Alliance.Red;
+        return alliance.get() == DriverStation.Alliance.Red;
       }
       return false;
     };
