@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.ShooterConstants;
+import frc.robot.util.EqualsUtil;
 import frc.robot.util.LogManager;
 
 public class Shooter extends SubsystemBase {
@@ -33,9 +34,9 @@ public class Shooter extends SubsystemBase {
 			.radiansPerSecondToRotationsPerMinute(Shooter.gearbox.freeSpeedRadPerSec);
 
 	// PID constants. PID system measures RPM and outputs motor power [-1,1]
-	private static final double P = 0.00070;
-	private static final double I = 0.00009;
-	private static final double D = 0.0;
+	private static final double P = 0.001500;
+	private static final double I = 0.000100;
+	private static final double D = 0.000010;
 
 	// FeedForward constants
 	private static final double S = 0;
@@ -225,7 +226,7 @@ public class Shooter extends SubsystemBase {
 	 * @see frc.robot.subsystems.gpm.Shooter.removeSlip
 	 */
 	public static double addSlip(double output) {
-		return output / OUTPUT_COEF;
+		return output / OUTPUT_COEF*0.93;
 	}
 
 	/**
@@ -235,10 +236,8 @@ public class Shooter extends SubsystemBase {
 	 * @param speedRight the speed the right motor will spin to in RPM
 	 */
 	public void setTargetRPM(double speedLeft, double speedRight) {
-		leftPID.reset();
 		leftPID.setSetpoint(speedLeft);
 
-		rightPID.reset();
 		rightPID.setSetpoint(speedRight);
 	}
 
@@ -274,7 +273,8 @@ public class Shooter extends SubsystemBase {
 	 * @return boolean indicating whether both PIDs are at their setpoints
 	 */
 	public boolean atSetpoint() {
-		return leftPID.atSetpoint() && rightPID.atSetpoint();
+		return EqualsUtil.epsilonEquals(getLeftMotorRPM(),leftPID.getSetpoint(),TOLERANCE);
+		//return leftPID.atSetpoint() && rightPID.atSetpoint();
 	}
 
 	/**
@@ -370,5 +370,10 @@ public class Shooter extends SubsystemBase {
 	 */
 	public double getMotorSpeedDifference() {
 		return getLeftMotorSpeed() - getRightMotorSpeed();
+	}
+	
+	public void resetPID(){
+		leftPID.reset();
+		rightPID.reset();
 	}
 }

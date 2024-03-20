@@ -6,6 +6,7 @@ package frc.robot.util.ShuffleBoard.Tabs;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
@@ -90,8 +91,9 @@ public class SwerveTab extends ShuffleBoardTabs {
             rotationalPosition[i].setDouble(truncate(MathUtil.inputModulus(modules[i].getAngle().getDegrees(), 0, 360)));
             voltage[i].setDouble(truncate(drive.getModules()[i].getDriveVoltage()));
             current[i].setDouble(truncate(drive.getModules()[i].getDriveStatorCurrent()));
-            //driveAccel[i].setDouble(modules[i].getDriveMotor().getAcceleration().getValueAsDouble());
-			// TODO: find out why this crashes sim
+            if(RobotBase.isReal()){
+                driveAccel[i].setDouble(modules[i].getDriveMotor().getAcceleration().getValueAsDouble());
+            }
 
         }
         xOdemetry.setDouble(truncate(drive.getPose().getX()));

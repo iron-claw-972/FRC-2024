@@ -335,7 +335,7 @@ public class Vision {
     for (int i = 0; i < estimatedPoses.size(); i++) {
       EstimatedRobotPose estimatedPose = estimatedPoses.get(i);
       // Continue if this pose doesn't exist
-      if(estimatedPose==null || estimatedPose.estimatedPose==null || estimatedPose.timestampSeconds < 0 || estimatedPose.estimatedPose.getX() < 0 || estimatedPose.estimatedPose.getX() > FieldConstants.kFieldLength || estimatedPose.estimatedPose.getY() < 0 || estimatedPose.estimatedPose.getY() > FieldConstants.kFieldWidth || Timer.getFPGATimestamp() < estimatedPose.timestampSeconds || Timer.getFPGATimestamp() > estimatedPose.timestampSeconds + 1){
+      if(estimatedPose.timestampSeconds < 0 || !onField(estimatedPose.estimatedPose.toPose2d()) || Timer.getFPGATimestamp() < estimatedPose.timestampSeconds || Timer.getFPGATimestamp() > estimatedPose.timestampSeconds + 1){
         continue;
       }
 
@@ -379,6 +379,15 @@ public class Vision {
     for(VisionCamera c : m_cameras){
       c.setOnlyUse(ids);
     }
+  }
+
+  /**
+   * Checks if a pose is on the field
+   * @param pose The pose to check
+   * @return If the pose is on the field
+   */
+  public static boolean onField(Pose2d pose){
+    return pose!=null && pose.getX()>0 && pose.getX()<FieldConstants.kFieldLength && pose.getY()>0 && pose.getY()<FieldConstants.kFieldWidth;
   }
   
   private class VisionCamera {
@@ -459,11 +468,11 @@ public class Vision {
       photonPoseEstimator.setPrimaryStrategy(targetsUsed.size() > 1  ? VisionConstants.POSE_STRATEGY : VisionConstants.MULTITAG_FALLBACK_STRATEGY);
       Optional<EstimatedRobotPose> pose = photonPoseEstimator.update(cameraResult);
       
-      if(pose.isPresent() && pose.get()!=null && pose.get().estimatedPose!=null && Math.abs(pose.get().estimatedPose.getX()) < 20){
+      if(pose.isPresent() && pose.get()!=null && onField(pose.get().estimatedPose.toPose2d())){
         double timestamp = getTimeStamp();
 
         // If the pose moved too much, don't use it
-        if(lastPose==null || lastPose.getTranslation().getDistance(pose.get().estimatedPose.toPose2d().getTranslation()) > DriveConstants.kMaxSpeed*1.25*(timestamp-lastTimestamp)){
+        if(lastPose==null || lastPose.getTranslation().getDistance(pose.get().estimatedPose.toPose2d().getTranslation()) > DriveConstants.kMaxSpeed*1.25*(timestamp-lastTimestamp) || timestamp < lastTimestamp){
           lastPose = pose.get().estimatedPose.toPose2d();
           lastTimestamp = timestamp;
           return Optional.empty();

@@ -15,11 +15,21 @@ import lib.COTSFalconSwerveConstants;
  * GlobalConst get changed if the RobotId detected is not the competition robot.
  */
 public class DriveConstants {
-
+    /**
+     * The robot's width with its bumpers on.
+     * <p>
+     * The frame width is 26.5 inches, and each bumper is 3.25 inches.
+     */
     public static double kRobotWidthWithBumpers = Units.inchesToMeters(26.5 + 3.25 * 2);
 
+    // TODO: missing robot length
+    // TODO: missing robot center of rotation to back bumper and center of rotation to front bumper
+    // the center of rotation need not be the geometric center of the robot.
+
+    /** Radius of the drive wheels [meters]. */
     public static double kWheelRadius = Units.inchesToMeters(2);
 
+    /** Distance between the left and right wheels [meters]. */
     public static double kTrackWidth = Units.inchesToMeters(20.75);//22.75 swerve bot, 20.75 comp bot
 
     // Mk4i gear ratios
@@ -27,10 +37,12 @@ public class DriveConstants {
     //   standard gear ratios
     // https://www.swervedrivespecialties.com/products/kit-adapter-16t-drive-pinion-gear-mk4i
     //   changes 14-tooth pinion to 16-tooth pinion -- (50.0 / 14.0) becomes (50.0 / 16.0).
+    /** Drive gear ratio for an Mk4i with L2-Plus gearing */
     public static double kDriveGearRatio = (50.0 / 16.0) * (17.0 / 27.0) * (45.0 / 15.0);
     // all MK4i modules have the same steering gear ratio
     public static double kSteerGearRatio = 150.0 / 7.0;
 
+    /** Theoretical maximum speed of the robot based on maximum motor RPM, gear ratio, and wheel radius */
     public static double kMaxSpeed = (Constants.MAX_RPM / 60.0) * kWheelRadius * 2 * Math.PI / kDriveGearRatio;
 
     // Need to convert tangential velocity (the m/s of the edge of the robot) to angular velocity (the radians/s of the robot)
@@ -40,6 +52,7 @@ public class DriveConstants {
     // TODO: tune this better.
     public static double kMaxAngularAccel = 8 * 2 * Math.PI; // 8 rotations per second per second
 
+    /** Pigeon2 IMU CAN Id. */
     public static int kPigeon = 13;
 
     public static Rotation2d kStartingHeading = new Rotation2d();
@@ -53,7 +66,7 @@ public class DriveConstants {
 
     public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(swerveModuleLocations);
 
-   public static int kDriveFrontLeft = 1;
+    public static int kDriveFrontLeft = 1;
     public static int kSteerFrontLeft = 2;
     public static int kEncoderFrontLeft = 3;
     public static double kSteerOffsetFrontLeft = 100.184;//0.058291152119637;//-3.060285486280918+Math.PI;
@@ -77,7 +90,7 @@ public class DriveConstants {
     public static double kHeadingP = 5.5;
     public static double kHeadingD = 0;
 
-    public static final double HEADING_TOLERANCE = Units.degreesToRadians(1.5);
+    public static final double HEADING_TOLERANCE = Units.degreesToRadians(3);
 
     //translational PID
     public static double kTranslationalP = 1;
