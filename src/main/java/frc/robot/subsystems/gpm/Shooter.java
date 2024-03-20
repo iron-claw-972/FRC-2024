@@ -236,10 +236,8 @@ public class Shooter extends SubsystemBase {
 	 * @param speedRight the speed the right motor will spin to in RPM
 	 */
 	public void setTargetRPM(double speedLeft, double speedRight) {
-		leftPID.reset();
 		leftPID.setSetpoint(speedLeft);
 
-		rightPID.reset();
 		rightPID.setSetpoint(speedRight);
 	}
 
@@ -372,5 +370,10 @@ public class Shooter extends SubsystemBase {
 	 */
 	public double getMotorSpeedDifference() {
 		return getLeftMotorSpeed() - getRightMotorSpeed();
+	}
+	
+	public void resetPID(){
+		leftPID.reset();
+		rightPID.reset();
 	}
 }

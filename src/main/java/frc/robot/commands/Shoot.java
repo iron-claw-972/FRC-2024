@@ -66,6 +66,7 @@ public class Shoot extends Command {
                 // Reset the timer
                 shootTimer.reset();
                 shootTimer.stop();
+                shooter.resetPID();
                 drive.setIsAlign(true); // Enable alignment mode on the drivetrain
                 drive.onlyUseTags(new int[]{3, 4, 7, 8});
                 shooting = false;
@@ -172,10 +173,11 @@ public class Shoot extends Command {
                 SmartDashboard.putBoolean("saw tag", sawTag);
 
                 if (EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - theta_v, Units.degreesToRadians(1)) && 
-                shooter.atSetpoint() && drive.atAlignAngle()&&sawTag) {
+                shooter.atSetpoint() && drive.atAlignAngle() && sawTag && !shooting) {
                         shooting = true;
                         index.ejectIntoShooter();
                         shootTimer.start();
+                        System.out.println("DONE");
                 }
         }
 
@@ -191,5 +193,6 @@ public class Shoot extends Command {
                 arm.setAngle(ArmConstants.stowedSetpoint);
                 index.stopIndex();
                 drive.onlyUseTags(new int[0]);
+                shooter.resetPID();
         }
 }
