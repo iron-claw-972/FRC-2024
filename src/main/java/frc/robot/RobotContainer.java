@@ -85,7 +85,7 @@ public class RobotContainer {
       case TestBed2:
         intake = new Intake();
         index = new StorageIndex();
-        SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index));
+        SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index, arm));
         break;
       case Vertigo:
           drive = new Drivetrain(vision);
@@ -175,10 +175,30 @@ public class RobotContainer {
   }
 
   public void registerCommands() {
-    NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index, arm).withTimeout(3));
-    NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new SequentialCommandGroup(
+    NamedCommands.registerCommand("Intake_Note_1.75_Sec", new IntakeNote(intake, index, arm).withTimeout(1.75));
+    
+    NamedCommands.registerCommand("Outtake_Note_1.50_Sec", new SequentialCommandGroup(
       new ParallelDeadlineGroup(
       new InstantCommand(() -> drive.setChassisSpeeds(new ChassisSpeeds(), true)),
+      new WaitCommand(.75)),
+      new WaitCommand(.75)
+    ));
+
+    NamedCommands.registerCommand("Intake_Note_2.5_Sec", new IntakeNote(intake, index, arm).withTimeout(2.5)); // 3 seconds used at SVR
+    //Original
+    NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new SequentialCommandGroup(// TODO: This will end instantly
+    // TODO: Don't use setChassisSpeeds(), use drive() instead and add the drivetrain as a parameter so it is a requirement
+      new ParallelDeadlineGroup(new PrepareShooter(shooter, 1750),
+      new WaitCommand(.75)),
+      new WaitCommand(.75),
+      new InstantCommand(()-> index.runIndex()),
+      new WaitCommand(.75),
+      new ParallelDeadlineGroup(new PrepareShooter(shooter, 0))
+     ));
+
+    // Whole time running
+    NamedCommands.registerCommand("Set_Shooter", new SequentialCommandGroup(// TODO: This will end instantly
+      new ParallelDeadlineGroup(new PrepareShooter(shooter, 1750),
       new WaitCommand(.75)),
       new WaitCommand(.75)
     ));
@@ -187,9 +207,40 @@ public class RobotContainer {
     NamedCommands.registerCommand("Outtake", new SequentialCommandGroup(
       new WaitCommand(.25),
       new InstantCommand(()-> index.runIndex()),
-      new WaitCommand(.5)));
+      new WaitCommand(.25)
+    ));
+
+    NamedCommands.registerCommand("Lower_Set_Shooter_Sabotage_Prep", new SequentialCommandGroup(
+      new ParallelDeadlineGroup(new PrepareShooter(shooter, 50))
+    ));
+
+    NamedCommands.registerCommand("Sabotage_Second_Shot_Prep", new SequentialCommandGroup(
+      new ParallelDeadlineGroup(new PrepareShooter(shooter, 1250))
+    ));
+    
+      // new InstantCommand(() -> drive.setChassisSpeeds(new ChassisSpeeds(), true)),
+      // new WaitCommand(.75)),
+      // new InstantCommand(()-> index.runIndex()),
+      // new WaitCommand(.5))); 
+      //TODO: Stop index after command finishes
+
     NamedCommands.registerCommand("Prepare Shooter", new SequentialCommandGroup(new PrepareShooter(shooter, 1750), new WaitCommand(1)));
   }
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
 
   public static BooleanSupplier getAllianceColorBooleanSupplier() {
     return () -> {
