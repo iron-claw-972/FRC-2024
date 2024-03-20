@@ -86,12 +86,32 @@ public class VisionConstants {
   public static final double HIGHEST_AMBIGUITY = 0.2;
 
   // Speaker poses
+  /**
+   * The Blue Alliance speaker pose.
+   * <p>
+   * The game manual says the lower lip of the speaker opening is at 6 feet 6 inches (78 inches).
+   * The hood comes into the arena 1 foot 6 inches (18 inches) and is at 6 feet 10 7/8 inches (82.875).
+   * So the midpoint of the opening is at the average of the heights (approx 80.5 inches but really 80.4375) and
+   * the average of the depths (9 inches).
+   * <p>
+   * April Tag ID 7 is centered on the Blue Alliance wall below the speaker opening.
+   */
   public static final Pose3d BLUE_SPEAKER_POSE = new Pose3d(
     FieldConstants.APRIL_TAGS.get(6).pose.getX() + Units.inchesToMeters(9),
     FieldConstants.APRIL_TAGS.get(6).pose.getY(),
     Units.inchesToMeters(80.5),
     new Rotation3d(0, 0, 0)
   );
+  /**
+   * The Red Alliance speaker pose.
+   * <p>
+   * The game manual says the lower lip of the speaker opening is at 6 feet 6 inches (78 inches).
+   * The hood comes into the arena 1 foot 6 inches (18 inches) and is at 6 feet 10 7/8 inches (82.875).
+   * So the midpoint of the opening is at the average of the heights (approx 80.5 inches but really 80.4375) and
+   * the average of the depths (9 inches).
+   * <p>
+   * April Tag ID 4 is centered on the Red Alliance wall below the speaker opening.
+   */
   public static final Pose3d RED_SPEAKER_POSE = new Pose3d(
     FieldConstants.APRIL_TAGS.get(3).pose.getX() - Units.inchesToMeters(9),
     BLUE_SPEAKER_POSE.getY(),
@@ -99,38 +119,89 @@ public class VisionConstants {
     BLUE_SPEAKER_POSE.getRotation().rotateBy(new Rotation3d(0, 0, Math.PI))
   );
 
+  /**
+   * Random distance of 2 meters.
+   * <p>
+   * This value is only referenced on this page, so it could be private.
+   */
   public static final double AMP_DISTANCE = 2;
 
   // The amp poses to align to
+  /**
+   * The Blue Alliance Amplifier Pose2d to score a note in the amp.
+   * <p>
+   * This pose sets the X coordinate at the center of the amp, and
+   * the Y coordinate away from the amp by half the **width** of the robot + 5 inches.
+   * <p>
+   * TODO: What is going on? Is the 5 inches just to press into the amp?
+   * <p>
+   * Maybe the 5 inches is for the intake on the competition robot,
+   * but why is it being added here? That moves the robot 5 inches into the amp!
+   * It should move the robot negative 5 inches to compensate for the intake.
+   * However, the stern of the robot should be against the amp (we shoot from the stern),
+   * and that should be half the bumper width away from the robot center;
+   * the intake's additional length on the bow should not come into play.
+   * <p>
+   * The robot orientation has the bow facing down so the shooter will eject into the amp.
+   * <p>
+   * April Tag ID 6 is on the amplifier.
+   */
   public static final Pose2d BLUE_AMP_POSE = new Pose2d(
     FieldConstants.APRIL_TAGS.get(5).pose.getX(),
     FieldConstants.APRIL_TAGS.get(5).pose.getY() - DriveConstants.kRobotWidthWithBumpers/2 + Units.inchesToMeters(5),
     new Rotation2d(-Math.PI/2)
   );
-
+  /**
+   * The Blue Alliance Amplifier Pose2d that is an AMP_DISTANCE away from scoring.
+   * <p>
+   * Not used.
+   */
   public static final Pose2d BLUE_AMP_POSE_2 = new Pose2d(
     BLUE_AMP_POSE.getX(),
     BLUE_AMP_POSE.getY() - AMP_DISTANCE,
     BLUE_AMP_POSE.getRotation()
   );
-
+  /**
+   * The Blue Alliance Amplifier Pose2d that is two AMP_DISTANCEs away from scoring.
+   * <p>
+   * Not used.
+   */
   public static final Pose2d BLUE_AMP_POSE_3 = new Pose2d(
     BLUE_AMP_POSE.getX(),
     BLUE_AMP_POSE.getY() - 2*AMP_DISTANCE,
     BLUE_AMP_POSE.getRotation()
   );
 
+  /**
+   * The Red Alliance Amplifier Pose2d to score a note in the amp.
+   * <p>
+   * This pose sets the X coordinate at the center of the amp, and
+   * the Y coordinate away from the amp by half the length of the robot + 5 inches.
+   * <p>
+   * The robot orientation has the bow facing down so the shooter will eject into the amp.
+   * <p>
+   * April Tag ID 5 is on the Red amplifier.
+   */
   public static final Pose2d RED_AMP_POSE = new Pose2d(
     FieldConstants.APRIL_TAGS.get(4).pose.getX(),
     BLUE_AMP_POSE.getY(),
     BLUE_AMP_POSE.getRotation()
   );
+  /**
+   * The Red Alliance Amplifier Pose2d that is an AMP_DISTANCE away from scoring.
+   * <p>
+   * Not used.
+   */
   public static final Pose2d RED_AMP_POSE_2 = new Pose2d(
     RED_AMP_POSE.getX(),
     RED_AMP_POSE.getY() - AMP_DISTANCE,
     RED_AMP_POSE.getRotation()
   );
-
+  /**
+   * The Red Alliance Amplifier Pose2d that is 2 AMP_DISTANCEs away from scoring.
+   * <p>
+   * Not used.
+   */
   public static final Pose2d RED_AMP_POSE_3 = new Pose2d(
     RED_AMP_POSE.getX(),
     RED_AMP_POSE.getY() - 2*AMP_DISTANCE,
@@ -171,6 +242,7 @@ public class VisionConstants {
     }
   }
 
+  // April Tag 7 is centered on the Blue Speaker
   public static final Pose2d BLUE_SUBWOOFER_CENTER = new Pose2d(
     FieldConstants.APRIL_TAGS.get(6).pose.getX()+Units.inchesToMeters(53.904),
     FieldConstants.APRIL_TAGS.get(6).pose.getY(),
@@ -186,6 +258,8 @@ public class VisionConstants {
     FieldConstants.APRIL_TAGS.get(6).pose.getY()-Units.inchesToMeters(45.292),
     Rotation2d.fromDegrees(-60)
   );
+
+  // April Tag 4 is centered on the Red Speaker
   public static final Pose2d RED_SUBWOOFER_CENTER = new Pose2d(
     FieldConstants.APRIL_TAGS.get(3).pose.getX()-Units.inchesToMeters(53.904),
     BLUE_SUBWOOFER_CENTER.getY(),
