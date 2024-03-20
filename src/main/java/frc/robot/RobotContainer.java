@@ -177,15 +177,16 @@ public class RobotContainer {
   public void registerCommands() {
     NamedCommands.registerCommand("Intake_Note_1.75_Sec", new IntakeNote(intake, index, arm).withTimeout(1.75));
     
-    NamedCommands.registerCommand("Outtake_Note_1.50_Sec", new SequentialCommandGroup(
-      new ParallelDeadlineGroup(
-      new InstantCommand(() -> drive.setChassisSpeeds(new ChassisSpeeds(), true)),
-      new WaitCommand(.75)),
-      new WaitCommand(.75)
-    ));
+    // NamedCommands.registerCommand("Outtake_Note_1.50_Sec", new SequentialCommandGroup(
+    //   new ParallelDeadlineGroup(
+    //   new InstantCommand(() -> drive.setChassisSpeeds(new ChassisSpeeds(), true)),
+    //   new WaitCommand(.75)),
+    //   new WaitCommand(.75)
+    // ));
 
     NamedCommands.registerCommand("Intake_Note_2.5_Sec", new IntakeNote(intake, index, arm).withTimeout(2.5)); // 3 seconds used at SVR
-    //Original
+    
+    //Old
     NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new SequentialCommandGroup(// TODO: This will end instantly
     // TODO: Don't use setChassisSpeeds(), use drive() instead and add the drivetrain as a parameter so it is a requirement
       new ParallelDeadlineGroup(new PrepareShooter(shooter, 1750),
