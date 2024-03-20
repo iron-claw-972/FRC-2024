@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.ShooterConstants;
+import frc.robot.util.EqualsUtil;
 import frc.robot.util.LogManager;
 
 public class Shooter extends SubsystemBase {
@@ -274,7 +275,8 @@ public class Shooter extends SubsystemBase {
 	 * @return boolean indicating whether both PIDs are at their setpoints
 	 */
 	public boolean atSetpoint() {
-		return leftPID.atSetpoint() && rightPID.atSetpoint();
+		return EqualsUtil.epsilonEquals(getLeftMotorRPM(),leftPID.getSetpoint(),TOLERANCE);
+		//return leftPID.atSetpoint() && rightPID.atSetpoint();
 	}
 
 	/**
