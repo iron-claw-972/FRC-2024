@@ -16,6 +16,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.simulation.DutyCycleEncoderSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
@@ -91,7 +92,7 @@ public class Arm extends SubsystemBase {
      * stow is 0.599
      * high is 0.357
      */
-    protected static final double OFFSET = 0.822 + Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
+    protected static final double OFFSET = 0.963 + Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
     /** REV encoder scale factor. This is fixed. */
     protected static final double DISTANCE_PER_ROTATION = -2 * Math.PI;
 
@@ -128,8 +129,7 @@ public class Arm extends SubsystemBase {
 
     private PowerPanel m_powerPanel;
 
-    public Arm(PowerPanel powerPanel) {
-        m_powerPanel = powerPanel;
+    public Arm() {
         // set the PID tolerance
         pid.setTolerance(TOLERANCE);
 
@@ -150,7 +150,7 @@ public class Arm extends SubsystemBase {
             // create the motor
             motors[i] = new TalonFX(ArmConstants.MOTOR_IDS[i]);
             // TODO: why is this done here? The slave should follow when neutral mode is set below.
-            motors[i].setNeutralMode(NeutralModeValue.Brake);
+            motors[i].setNeutralMode(NeutralModeValue.Coast);
 
             // i==0 is the master; the others are slaves
             if (i > 0) {
@@ -163,7 +163,7 @@ public class Arm extends SubsystemBase {
 
         // common configuration for each motor
         // configure the master after the slaves have been linked so slaves will copy the same settings.
-        motors[0].setNeutralMode(NeutralModeValue.Brake);
+        motors[0].setNeutralMode(NeutralModeValue.Coast);
         motors[0].setInverted(false);
         motors[0].getConfigurator().apply(ArmConstants.currentConfig);
 
@@ -189,28 +189,13 @@ public class Arm extends SubsystemBase {
             SmartDashboard.putData("ArmSim", wristDisplay);
             SmartDashboard.putData("arm pid", pid);
         }
-
+        Timer.delay(1);
 		double cachedAngleRad = getAngleRad(); // don't get the angle five times
 		// some checks for the arm position
+        SmartDashboard.putNumber("cached angle",cachedAngleRad);
 		if (cachedAngleRad < ArmConstants.MIN_ANGLE_RADS - ArmConstants.ANGLE_TOLERANCE || cachedAngleRad > ArmConstants.MAX_ANGLE_RADS + ArmConstants.ANGLE_TOLERANCE) {
-			System.err.println("▄▄      ▄▄    ▄▄     ▄▄▄▄▄▄    ▄▄▄   ▄▄   ▄▄▄▄▄▄   ▄▄▄   ▄▄     ▄▄▄▄ ");
-			System.err.println("██      ██   ████    ██▀▀▀▀██  ███   ██   ▀▀██▀▀   ███   ██   ██▀▀▀▀█");
-			System.err.println("▀█▄ ██ ▄█▀   ████    ██    ██  ██▀█  ██     ██     ██▀█  ██  ██      ");
- 			System.err.println(" ██ ██ ██   ██  ██   ███████   ██ ██ ██     ██     ██ ██ ██  ██  ▄▄▄▄");
- 			System.err.println(" ███▀▀███   ██████   ██  ▀██▄  ██  █▄██     ██     ██  █▄██  ██  ▀▀██");
- 			System.err.println(" ███  ███  ▄██  ██▄  ██    ██  ██   ███   ▄▄██▄▄   ██   ███   ██▄▄▄██");
- 			System.err.println(" ▀▀▀  ▀▀▀  ▀▀    ▀▀  ▀▀    ▀▀▀ ▀▀   ▀▀▀   ▀▀▀▀▀▀   ▀▀   ▀▀▀     ▀▀▀▀ ");
+
 			System.err.println("WARNING: THE ARM IS IN A SUPPOSEDLY UNREACHABLE POSITION AND HAS BEEN DISABLED. Please double check the arm constants and redeploy. Found: " + cachedAngleRad + ", Expected: " + ArmConstants.stowedSetpoint);
-			armEnabled = false;
-		} else if (ArmConstants.ASSERT_AT_SETPOINT && (cachedAngleRad < ArmConstants.stowedSetpoint - ArmConstants.ANGLE_TOLERANCE || cachedAngleRad > ArmConstants.stowedSetpoint + ArmConstants.ANGLE_TOLERANCE)) {
-			System.err.println("▄▄      ▄▄    ▄▄     ▄▄▄▄▄▄    ▄▄▄   ▄▄   ▄▄▄▄▄▄   ▄▄▄   ▄▄     ▄▄▄▄ ");
-			System.err.println("██      ██   ████    ██▀▀▀▀██  ███   ██   ▀▀██▀▀   ███   ██   ██▀▀▀▀█");
-			System.err.println("▀█▄ ██ ▄█▀   ████    ██    ██  ██▀█  ██     ██     ██▀█  ██  ██      ");
- 			System.err.println(" ██ ██ ██   ██  ██   ███████   ██ ██ ██     ██     ██ ██ ██  ██  ▄▄▄▄");
- 			System.err.println(" ███▀▀███   ██████   ██  ▀██▄  ██  █▄██     ██     ██  █▄██  ██  ▀▀██");
- 			System.err.println(" ███  ███  ▄██  ██▄  ██    ██  ██   ███   ▄▄██▄▄   ██   ███   ██▄▄▄██");
- 			System.err.println(" ▀▀▀  ▀▀▀  ▀▀    ▀▀  ▀▀    ▀▀▀ ▀▀   ▀▀▀   ▀▀▀▀▀▀   ▀▀   ▀▀▀     ▀▀▀▀ ");
-			System.err.println("WARNING: THE ARM IS NOT AT ITS STOWED SETPOINT AND HAS BEEN DISABLED. Please double check the arm constants, move the arm to it's lowest position, and redeploy. If you know what you're doing, you can set ArmConstants.ASSERT_AT_SETPOINT to false to disable this check. Found: " + cachedAngleRad + ", Expected: " + ArmConstants.stowedSetpoint);
 			armEnabled = false;
 		}
 
@@ -250,7 +235,7 @@ public class Arm extends SubsystemBase {
 
     @Override
     public void periodic() {
-		if (!armEnabled) return;
+
 
         // Disable the arm if it is out of range
 		if (getAngleRad() < ArmConstants.MIN_ANGLE_RADS - ArmConstants.ANGLE_TOLERANCE || getAngleRad() > ArmConstants.MAX_ANGLE_RADS + ArmConstants.ANGLE_TOLERANCE) {
@@ -273,6 +258,7 @@ public class Arm extends SubsystemBase {
             pid.setSetpoint(ArmConstants.MAX_ANGLE_RADS);
             setpoint = ArmConstants.MAX_ANGLE_RADS;
         }
+        
 
         // calculate the desired duty cycle
         // if(encoder.getDistance() < ArmConstants.MAX_ANGLE_RADS + .2 && encoder.getDistance() > ArmConstants.MIN_ANGLE_RADS - .2)  {
@@ -293,8 +279,8 @@ public class Arm extends SubsystemBase {
         motors[0].setControl(m_request.withOutput(dutyCycle));
 
         // report the arm angle in radians
-        SmartDashboard.putNumber("Arm angle", encoder.getDistance());
-        SmartDashboard.putNumber("Get Position", getAngleRad());
+        SmartDashboard.putNumber("abs value", encoder.getAbsolutePosition());
+        
 
         // TODO: Clean these up when not needed.
         // report dutycycle
@@ -308,10 +294,10 @@ public class Arm extends SubsystemBase {
         
         // report the absolute position in rotations. Use the abs rotations to set the OFFSET.
         SmartDashboard.putNumber("REV ABS", encoder.getAbsolutePosition());
+        SmartDashboard.putNumber("get Position", getPosition());
         // report whether the arm has reached its setpoint
         SmartDashboard.putBoolean("at setpoint?", atSetpoint());
         // report the arm current
-        SmartDashboard.putNumber("arm current", m_powerPanel.getCurrent(1));
     }
 
     @Override
