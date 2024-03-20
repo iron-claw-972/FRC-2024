@@ -164,18 +164,18 @@ public class Shoot extends Command {
                 // Set the outtake velocity
                 shooter.setTargetVelocity(v_shoot);
 
-                boolean sawTag = visionSawTagDebouncer.calculate(drive.canSeeTag());
+                boolean sawTag = true;//visionSawTagDebouncer.calculate(drive.canSeeTag());
                 // System.out.println("Arm Setpoint: "+arm.atSetpoint());
                 // System.out.println("Shooter Setpoint: "+shooter.atSetpoint());
                 // System.out.println("drive Setpoint: "+drive.atAlignAngle());
                 // TODO: Make this commented out if statement work (arm and shooter weren't getting to setpoint)
                 // if (arm.atSetpoint() && shooter.atSetpoint() && drive.atAlignAngle() && sawTag || shooting) {
-                SmartDashboard.putBoolean("arm setpoint", EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - theta_v, Units.degreesToRadians(5)));
+                SmartDashboard.putBoolean("arm setpoint", EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - theta_v, Units.degreesToRadians(3)));
                 SmartDashboard.putBoolean("shooter setpoint", shooter.atSetpoint());
                 SmartDashboard.putBoolean("drive setpoint", drive.atAlignAngle());
                 SmartDashboard.putBoolean("saw tag", sawTag);
 
-                if (EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - theta_v, Units.degreesToRadians(1)) && 
+                if (EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - theta_v, Units.degreesToRadians(3)) && 
                 shooter.atSetpoint() && drive.atAlignAngle() && sawTag && !shooting) {
                         shooting = true;
                         index.ejectIntoShooter();
