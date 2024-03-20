@@ -76,15 +76,18 @@ public class Shoot extends Command {
                 // Positive x displacement means we are to the left of the speaker
                 // Positive y displacement means we are below the speaker.
                 Pose3d speakerPose = Robot.getAlliance() == Alliance.Red ?
-                                VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
+                        VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
                 // shooterHeight and shooterOffset have an additional offset because the shooter is offset from the arm, right?
                 Rotation2d driveYaw = drive.getYaw();
+                double angleToShooter = arm.getAngleRad()+Units.degreesToRadians(28.78);
+                double shooterToPivot = Units.inchesToMeters(13.651);
+                double horizontalDist = ArmConstants.PIVOT_X + shooterToPivot * Math.cos(angleToShooter);
                 // Set displacement to speaker
                 displacement = new Pose3d(
-                        drive.getPose().getX() + shooterOffset * driveYaw.getCos()-speakerPose.getX(),
-                        drive.getPose().getY() + shooterOffset * driveYaw.getSin()-speakerPose.getY(),
+                        drive.getPose().getX() + horizontalDist * driveYaw.getCos()-speakerPose.getX(),
+                        drive.getPose().getY() + horizontalDist * driveYaw.getSin()-speakerPose.getY(),
                         // shooterHeight-speakerPose.getZ(),
-                        Units.inchesToMeters(22.7)-speakerPose.getZ(),
+                        ArmConstants.PIVOT_HEIGHT + shooterToPivot * Math.sin(angleToShooter) - speakerPose.getZ(),
                         new Rotation3d(
                         0,
                         ShooterConstants.ANGLE_OFFSET - arm.getAngleRad(),
