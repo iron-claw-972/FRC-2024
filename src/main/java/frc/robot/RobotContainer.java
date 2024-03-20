@@ -165,7 +165,8 @@ public class RobotContainer {
   }
 
   public void registerCommands() {
-    NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index).withTimeout(1)); // 3 seconds used at SVR
+    NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index).withTimeout(1.5));
+    NamedCommands.registerCommand("Intake_Note_2.5_Sec", new IntakeNote(intake, index).withTimeout(2.5)); // 3 seconds used at SVR
     NamedCommands.registerCommand("Stop", new RunCommand(()->drive.stop()).withTimeout(1)); 
     // NamedCommands.registerCommand("Stop", new WaitCommand(2)); // to represent stopping for shooting 
     // Mehaan -- Consulted with Jerry, just going to use a constraint zone going at .1 which should be fine instead of stopping for the area in which we are supposed to shoot
@@ -186,19 +187,26 @@ public class RobotContainer {
 
     // Whole time running
     NamedCommands.registerCommand("Set_Shooter", new SequentialCommandGroup(// TODO: This will end instantly
-      // TODO: Don't use setChassisSpeeds(), use drive() instead and add the drivetrain as a parameter so it is a requirement
       new ParallelDeadlineGroup(new PrepareShooter(shooter, 1750),
       new WaitCommand(.75)),
       new WaitCommand(.75)
     ));
 
     // Runs the Indexer
-    NamedCommands.registerCommand("Outtake", new SequentialCommandGroup(// TODO: This will end instantly
-      // TODO: Don't use setChassisSpeeds(), use drive() instead and add the drivetrain as a parameter so it is a requirement
+    NamedCommands.registerCommand("Outtake", new SequentialCommandGroup(
       new WaitCommand(.25),
       new InstantCommand(()-> index.runIndex()),
       new WaitCommand(.25)
     ));
+
+    NamedCommands.registerCommand("Lower_Set_Shooter_Sabotage_Prep", new SequentialCommandGroup(
+      new ParallelDeadlineGroup(new PrepareShooter(shooter, 50))
+    ));
+
+    NamedCommands.registerCommand("Sabotage_Second_Shot_Prep", new SequentialCommandGroup(
+      new ParallelDeadlineGroup(new PrepareShooter(shooter, 1250))
+    ));
+
     
       // new InstantCommand(() -> drive.setChassisSpeeds(new ChassisSpeeds(), true)),
       // new WaitCommand(.75)),
