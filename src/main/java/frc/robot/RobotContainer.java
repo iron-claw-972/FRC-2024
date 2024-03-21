@@ -213,7 +213,7 @@ public class RobotContainer {
     // Runs the Indexer
     NamedCommands.registerCommand("Outtake", new SequentialCommandGroup(
       new WaitCommand(.25),
-      new InstantCommand(()-> index.runIndex()),
+      new Shoot(shooter, arm, drive, index),
       new WaitCommand(.25)
     ));
 

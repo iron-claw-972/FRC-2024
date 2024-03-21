@@ -56,6 +56,17 @@
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
       }
+    },
+    {
+      "name": "New Constraints Zone",
+      "minWaypointRelativePos": 0.8,
+      "maxWaypointRelativePos": 1.4,
+      "constraints": {
+        "maxVelocity": 0.25,
+        "maxAcceleration": 0.25,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
     }
   ],
   "eventMarkers": [
