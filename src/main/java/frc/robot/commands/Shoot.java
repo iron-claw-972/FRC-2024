@@ -110,7 +110,7 @@ public class Shoot extends Command {
                 //                         drive.getChassisSpeeds().vyMetersPerSecond
                 // );
                 // TODO: Figure out what v_note is empirically
-                double v_note = 15;
+                double v_note = ShooterConstants.SHOOT_SPEED_MPS;
 
                 // X distance to speaker
                 double x = Math.sqrt((displacement.getX() * displacement.getX())
@@ -162,7 +162,7 @@ public class Shoot extends Command {
                 drive.setAlignAngle(Math.PI + theta_h); // would only pause rotational
 
                 // Set the outtake velocity
-                shooter.setTargetVelocity(v_note);
+                shooter.setTargetVelocity(v_shoot);
 
                 boolean sawTag = true;//visionSawTagDebouncer.calculate(drive.canSeeTag());
                 // System.out.println("Arm Setpoint: "+arm.atSetpoint());
