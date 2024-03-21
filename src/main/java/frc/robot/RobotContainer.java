@@ -175,7 +175,7 @@ public class RobotContainer {
   }
 
   public void registerCommands() {
-    NamedCommands.registerCommand("Intake_Note_1.75_Sec", new IntakeNote(intake, index, arm).withTimeout(1.75));
+    NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index, arm).withTimeout(1));
     
     // NamedCommands.registerCommand("Outtake_Note_1.50_Sec", new SequentialCommandGroup(
     //   new ParallelDeadlineGroup(
@@ -213,7 +213,7 @@ public class RobotContainer {
     // Runs the Indexer
     NamedCommands.registerCommand("Outtake", new SequentialCommandGroup(
       new WaitCommand(.25),
-      new Shoot(shooter, arm, drive, index),
+      new InstantCommand(()-> index.runIndex()),
       new WaitCommand(.25)
     ));
 

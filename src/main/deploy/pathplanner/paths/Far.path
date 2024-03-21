@@ -16,22 +16,6 @@
     },
     {
       "anchor": {
-        "x": 4.352714802295702,
-        "y": 6.232984317820488
-      },
-      "prevControl": {
-        "x": 3.3527148022957025,
-        "y": 6.232984317820488
-      },
-      "nextControl": {
-        "x": 5.054364068842098,
-        "y": 6.232984317820488
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
         "x": 5.533824400982135,
         "y": 6.232984317820488
       },
@@ -49,7 +33,7 @@
     {
       "name": "Set Up",
       "minWaypointRelativePos": 0,
-      "maxWaypointRelativePos": 0.15,
+      "maxWaypointRelativePos": 0.1,
       "constraints": {
         "maxVelocity": 0.5,
         "maxAcceleration": 0.5,
@@ -59,11 +43,11 @@
     },
     {
       "name": "New Constraints Zone",
-      "minWaypointRelativePos": 0.8,
-      "maxWaypointRelativePos": 1.4,
+      "minWaypointRelativePos": 0.7,
+      "maxWaypointRelativePos": 0.95,
       "constraints": {
-        "maxVelocity": 0.25,
-        "maxAcceleration": 0.25,
+        "maxVelocity": 0.01,
+        "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
       }
@@ -89,7 +73,7 @@
     },
     {
       "name": "Outtake 1",
-      "waypointRelativePos": 1.0,
+      "waypointRelativePos": 0.75,
       "command": {
         "type": "parallel",
         "data": {
