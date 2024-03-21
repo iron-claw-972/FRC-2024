@@ -49,7 +49,7 @@
     {
       "name": "Set Up",
       "minWaypointRelativePos": 0,
-      "maxWaypointRelativePos": 0.05,
+      "maxWaypointRelativePos": 0.15,
       "constraints": {
         "maxVelocity": 0.5,
         "maxAcceleration": 0.5,
@@ -78,7 +78,7 @@
     },
     {
       "name": "Outtake 1",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 1.0,
       "command": {
         "type": "parallel",
         "data": {

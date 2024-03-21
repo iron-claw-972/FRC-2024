@@ -2,12 +2,12 @@ package frc.robot;
 
 import java.rmi.server.Operation;
 import java.util.function.BooleanSupplier;
-
+import java.util.Optional;
 import com.ctre.phoenix6.SignalLogger;
 import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -198,11 +198,17 @@ public class RobotContainer {
      ));
 
     // Whole time running
-    NamedCommands.registerCommand("Set_Shooter", new SequentialCommandGroup(// TODO: This will end instantly
-      new ParallelDeadlineGroup(new PrepareShooter(shooter, 1750),
-      new WaitCommand(.75)),
-      new WaitCommand(.75)
-    ));
+    NamedCommands.registerCommand("Set_Shooter",
+      new SequentialCommandGroup(// TODO: This will end instantly
+        new PrepareShooter(shooter, 1750),
+        new WaitCommand(.75) ) );
+
+    // NamedCommands.registerCommand("Set_Shooter",
+    //   new SequentialCommandGroup(// TODO: This will end instantly
+    //     new ParallelDeadlineGroup(new PrepareShooter(shooter, 1750),
+    //         new WaitCommand(.75)),
+    //     new WaitCommand(.75) ) );
+
 
     // Runs the Indexer
     NamedCommands.registerCommand("Outtake", new SequentialCommandGroup(
