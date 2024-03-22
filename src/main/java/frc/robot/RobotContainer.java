@@ -122,8 +122,6 @@ public class RobotContainer {
         PathGroupLoader.loadPathGroups();
  
         shuffleboardManager = new ShuffleBoardManager(drive, vision);
-        SmartDashboard.putBoolean("Index beam", index.hasNote());
-       // SmartDashboard.putBoolean("Index beam", index.hasNote());
         break;
       }
 

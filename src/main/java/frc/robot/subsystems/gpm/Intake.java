@@ -96,7 +96,7 @@ public class Intake extends SubsystemBase {
 
         waitTimer.start();
 
-        publish();
+        // publish();
         if (Constants.DO_LOGGING) {
             LogManager.add("Intake/motorVolts", () -> motor.get() * Constants.ROBOT_VOLTAGE);
             LogManager.add("Intake/centeringMotorVolts", () -> centeringMotor.get() * Constants.ROBOT_VOLTAGE);
@@ -131,7 +131,7 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        publish();
+        // publish();
     }
 
     @Override

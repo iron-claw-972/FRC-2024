@@ -12,6 +12,7 @@ import frc.robot.commands.IntakeWithRumble;
 import frc.robot.commands.OuttakeAmp;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.ShootLock;
+import frc.robot.commands.gpm.IntakeNote;
 import frc.robot.commands.gpm.PrepareShooter;
 import frc.robot.commands.gpm.ShootKnownPos;
 import frc.robot.commands.gpm.ShootKnownPos.ShotPosition;
@@ -76,6 +77,7 @@ public class Operator {
         kDriver.get(Button.BACK).onTrue(new InstantCommand(()->{
             if(shooter != null){
                 shooter.setTargetRPM(0);
+                shooter.resetPID();
             }
             if(intake != null){
                 intake.setMode(Mode.DISABLED);

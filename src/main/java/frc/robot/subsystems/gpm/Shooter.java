@@ -46,7 +46,7 @@ public class Shooter extends SubsystemBase {
 	 * Tolerance in RPM.
 	 * At 1500 rpm, the simulator gives 1519 rpm.
 	 */
-	private static final double TOLERANCE = 80;
+	private static final double TOLERANCE = 50;
 
 	// 4-inch Colson wheels
 	// private static final double MASS_COLSON = 0.245;
@@ -115,6 +115,9 @@ public class Shooter extends SubsystemBase {
 
 	@Override
 	public void periodic() {
+
+		SmartDashboard.putBoolean("shooter setpoint", atSetpoint());
+
 		// PID loop uses RPM
 		double leftSpeed = getLeftMotorRPM();
 		double rightSpeed = getRightMotorRPM();
@@ -226,7 +229,7 @@ public class Shooter extends SubsystemBase {
 	 * @see frc.robot.subsystems.gpm.Shooter.removeSlip
 	 */
 	public static double addSlip(double output) {
-		return output / OUTPUT_COEF*0.93;
+		return output / OUTPUT_COEF;//*0.93;
 	}
 
 	/**
@@ -273,7 +276,8 @@ public class Shooter extends SubsystemBase {
 	 * @return boolean indicating whether both PIDs are at their setpoints
 	 */
 	public boolean atSetpoint() {
-		return EqualsUtil.epsilonEquals(getLeftMotorRPM(),leftPID.getSetpoint(),TOLERANCE);
+		return EqualsUtil.epsilonEquals(getLeftMotorRPM(),leftPID.getSetpoint(),TOLERANCE)&&
+		EqualsUtil.epsilonEquals(getRightMotorRPM(),rightPID.getSetpoint(),TOLERANCE);
 		//return leftPID.atSetpoint() && rightPID.atSetpoint();
 	}
 

@@ -201,9 +201,6 @@ public class Arm extends SubsystemBase {
 
         // TODO: remove when not needed.
         // Add some test commands
-        SmartDashboard.putData("Set Angle to 0.0", new InstantCommand(() -> setAngle(0.0)));
-        SmartDashboard.putData("Set Angle to 1.0 Rad", new InstantCommand(() -> setAngle(0.6)));
-        SmartDashboard.putData("arm pid", pid);
         if (Constants.DO_LOGGING) {
             LogManager.add("Arm/PositionError", () -> getAngleRad() - pid.getSetpoint(), Duration.ofSeconds(1));
             // pid setpoint and get radians
@@ -241,10 +238,9 @@ public class Arm extends SubsystemBase {
 		if (getAngleRad() < ArmConstants.MIN_ANGLE_RADS - ArmConstants.ANGLE_TOLERANCE || getAngleRad() > ArmConstants.MAX_ANGLE_RADS + ArmConstants.ANGLE_TOLERANCE) {
 			System.err.println("WARNING: THE ARM IS IN A SUPPOSEDLY UNREACHABLE POSITION AND HAS BEEN DISABLED. Found: " + getAngleRad() + ", Expected: " + ArmConstants.stowedSetpoint);
 			for (int i = 0; i < motors.length; i++) {
-				motors[i].setNeutralMode(NeutralModeValue.Coast);
+				// irrelevant for next line: motors[i].setNeutralMode(NeutralModeValue.Coast);
 				motors[i].set(0);
 			}
-			armEnabled = false;
             return;
 		}
 
