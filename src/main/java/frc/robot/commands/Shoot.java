@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
@@ -65,6 +66,7 @@ public class Shoot extends Command {
                 // Reset the timer
                 shootTimer.reset();
                 shootTimer.stop();
+                shooter.resetPID();
                 drive.setIsAlign(true); // Enable alignment mode on the drivetrain
                 drive.onlyUseTags(new int[]{3, 4, 7, 8});
                 shooting = false;
@@ -74,15 +76,18 @@ public class Shoot extends Command {
                 // Positive x displacement means we are to the left of the speaker
                 // Positive y displacement means we are below the speaker.
                 Pose3d speakerPose = Robot.getAlliance() == Alliance.Red ?
-                                VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
+                        VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
                 // shooterHeight and shooterOffset have an additional offset because the shooter is offset from the arm, right?
                 Rotation2d driveYaw = drive.getYaw();
+                double angleToShooter = arm.getAngleRad()+Units.degreesToRadians(28.78);
+                double shooterToPivot = Units.inchesToMeters(13.651);
+                double horizontalDist = ArmConstants.PIVOT_X + shooterToPivot * Math.cos(angleToShooter);
                 // Set displacement to speaker
                 displacement = new Pose3d(
-                        drive.getPose().getX() + shooterOffset * driveYaw.getCos()-speakerPose.getX(),
-                        drive.getPose().getY() + shooterOffset * driveYaw.getSin()-speakerPose.getY(),
+                        drive.getPose().getX() + horizontalDist * driveYaw.getCos()-speakerPose.getX(),
+                        drive.getPose().getY() + horizontalDist * driveYaw.getSin()-speakerPose.getY(),
                         // shooterHeight-speakerPose.getZ(),
-                        Units.inchesToMeters(22.7)-speakerPose.getZ(),
+                        ArmConstants.PIVOT_HEIGHT + shooterToPivot * Math.sin(angleToShooter) - speakerPose.getZ(),
                         new Rotation3d(
                         0,
                         ShooterConstants.ANGLE_OFFSET - arm.getAngleRad(),
@@ -105,7 +110,7 @@ public class Shoot extends Command {
                 //                         drive.getChassisSpeeds().vyMetersPerSecond
                 // );
                 // TODO: Figure out what v_note is empirically
-                double v_note = 15;
+                double v_note = ShooterConstants.SHOOT_SPEED_MPS;
 
                 // X distance to speaker
                 double x = Math.sqrt((displacement.getX() * displacement.getX())
@@ -157,19 +162,25 @@ public class Shoot extends Command {
                 drive.setAlignAngle(Math.PI + theta_h); // would only pause rotational
 
                 // Set the outtake velocity
-                shooter.setTargetVelocity(v_note);
+                shooter.setTargetVelocity(v_shoot);
 
-                boolean sawTag = visionSawTagDebouncer.calculate(drive.canSeeTag());
+                boolean sawTag = true;//visionSawTagDebouncer.calculate(drive.canSeeTag());
                 // System.out.println("Arm Setpoint: "+arm.atSetpoint());
                 // System.out.println("Shooter Setpoint: "+shooter.atSetpoint());
                 // System.out.println("drive Setpoint: "+drive.atAlignAngle());
                 // TODO: Make this commented out if statement work (arm and shooter weren't getting to setpoint)
                 // if (arm.atSetpoint() && shooter.atSetpoint() && drive.atAlignAngle() && sawTag || shooting) {
-                if (EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - theta_v, Units.degreesToRadians(1)) && 
-                shooter.atSetpoint() && drive.atAlignAngle() && sawTag || shooting) {
+                SmartDashboard.putBoolean("arm setpoint", EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - theta_v, Units.degreesToRadians(3)));
+                SmartDashboard.putBoolean("shooter setpoint", shooter.atSetpoint());
+                SmartDashboard.putBoolean("drive setpoint", drive.atAlignAngle());
+                SmartDashboard.putBoolean("saw tag", sawTag);
+
+                if (EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - theta_v, Units.degreesToRadians(3)) && 
+                shooter.atSetpoint() && drive.atAlignAngle() && sawTag && !shooting) {
                         shooting = true;
                         index.ejectIntoShooter();
                         shootTimer.start();
+                        System.out.println("DONE");
                 }
         }
 
@@ -185,5 +196,6 @@ public class Shoot extends Command {
                 arm.setAngle(ArmConstants.stowedSetpoint);
                 index.stopIndex();
                 drive.onlyUseTags(new int[0]);
+                shooter.resetPID();
         }
 }

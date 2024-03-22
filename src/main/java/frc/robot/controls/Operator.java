@@ -17,6 +17,7 @@ import frc.robot.commands.gpm.ShootKnownPos;
 import frc.robot.commands.gpm.ShootKnownPos.ShotPosition;
 import frc.robot.constants.ArmConstants;
 import frc.robot.constants.Constants;
+import frc.robot.constants.ShooterConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
@@ -84,7 +85,7 @@ public class Operator {
             getRightTrigger().onTrue(new Shoot(shooter, arm, drive, index));
         }
         if(shooter != null){
-            getLeftTrigger().onTrue(new PrepareShooter(shooter, 1750));
+            getLeftTrigger().onTrue(new PrepareShooter(shooter, Shooter.addSlip(Shooter.shooterSpeedToRPM(ShooterConstants.SHOOT_SPEED_MPS))));
         }
         if(arm != null && shooter != null && index != null){
             kDriver.get(Button.Y).onTrue(new ShootKnownPos(shooter, arm, index, ShotPosition.SUBWOOFER));

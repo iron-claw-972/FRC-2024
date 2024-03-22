@@ -11,11 +11,11 @@ public class StorageIndexConstants {
     public static final int stallLimit = 25;
 
     public static final double intakeSpeed = 0.25;
-    public static final double ejectShootSpeed = 0.2;
+    public static final double ejectShootSpeed = 0.4;
     public static final double ejectAmpFrontSpeed = 1.0;
     public static final double ejectTrapSpeed = 0.2;
      
-    public static final double ejectShootTimeout = 0.5;
+    public static final double ejectShootTimeout = 0.2;
     public static final double ejectAmpFrontTimeout = 0.5;
 
     public static final IdleMode idleMode = IdleMode.kBrake;
