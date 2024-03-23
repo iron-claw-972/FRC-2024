@@ -8,8 +8,11 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DoNothing;
+import frc.robot.commands.auto_comm.AutoShootCommand;
+import frc.robot.commands.auto_comm.ChoreoPathCommand;
 import frc.robot.commands.auto_comm.FollowPathCommand;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.util.ShuffleBoard.ShuffleBoardTabs;
 
 /** Add your docs here. */
@@ -18,9 +21,11 @@ public class AutoTab extends ShuffleBoardTabs {
     private final SendableChooser<Command> autoCommand = new SendableChooser<>();
 
     private Drivetrain drive;
+    private Shooter shooter;
 
-    public AutoTab(Drivetrain drive){
+    public AutoTab(Drivetrain drive, Shooter shooter){
         this.drive = drive;
+        this.shooter = shooter;
     }
     
     public void createEntries(){  
@@ -39,7 +44,13 @@ public class AutoTab extends ShuffleBoardTabs {
         autoCommand.addOption("Far", new FollowPathCommand("Far",true, drive));
         autoCommand.addOption("3 Source (pos 4) (B)", new FollowPathCommand("3 Source (pos 4) (B)",true, drive));
         autoCommand.addOption("Three Source (pos 4) center line", new FollowPathCommand("Three Piece (pos 4) center line",true, drive));
-        
+
+        autoCommand.addOption("Choreo Center 6", new AutoShootCommand(
+                shooter,
+                1750,
+                new ChoreoPathCommand("Center 6", true, drive)
+        ));
+
         // Previous Autos (Some will keep and still have to fix) autoCommand.setDefaultOption("Do Nothing", new PrintCommand("This will do nothing!"));
         // autoCommand.addOption("Example Path", new FollowPathCommand("Example Path",true, drive));
         // autoCommand.addOption("Two Piece (R) Close Shot", new FollowPathCommand("Two Piece (R) Close Shot",true, drive));
