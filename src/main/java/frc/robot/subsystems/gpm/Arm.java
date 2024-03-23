@@ -280,7 +280,7 @@ public class Arm extends SubsystemBase {
 
         // TODO: Clean these up when not needed.
         // report dutycycle
-        SmartDashboard.putNumber("arm pow", dutyCycle);
+       // SmartDashboard.putNumber("arm pow", dutyCycle);
 
         // these use the motor's internal encoder (not the REV absolute encoder)
         // report the rotor position. This should trigger an update so we get results faster than 4 times per second.)
@@ -292,7 +292,7 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putNumber("REV ABS", encoder.getAbsolutePosition());
         SmartDashboard.putNumber("get Position", getPosition());
         // report whether the arm has reached its setpoint
-        SmartDashboard.putBoolean("at setpoint?", atSetpoint());
+        //SmartDashboard.putBoolean("at setpoint?", atSetpoint());
         // report the arm current
     }
 

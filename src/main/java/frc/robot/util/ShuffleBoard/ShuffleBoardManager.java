@@ -19,16 +19,16 @@ public class ShuffleBoardManager {
     
     private Field feild;
 
-    private SwerveTab swerveTab;
+    //private SwerveTab swerveTab;
     private AutoTab autoTab;
     private VisionTab visionTab;
 
     public ShuffleBoardManager(Drivetrain drive, Vision vision){
         
-        swerveTab = new SwerveTab(drive);
+        // swerveTab = new SwerveTab(drive);
         autoTab = new AutoTab(drive);
         visionTab = new VisionTab(drive, vision);
-        tabs.add(swerveTab);
+        // tabs.add(swerveTab);
         tabs.add(autoTab);
         tabs.add(visionTab);
 
