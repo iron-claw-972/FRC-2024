@@ -127,7 +127,7 @@ public class Arm extends SubsystemBase {
 
 	private boolean armEnabled = true;
 
-    private PowerPanel m_powerPanel;
+    private PowerPanel m_powerPanel = new PowerPanel();
 
     public Arm() {
         // set the PID tolerance
@@ -157,6 +157,7 @@ public class Arm extends SubsystemBase {
                 // set slave mode
                 // the master is MOTOR_IDS[0]
                 // invert master for ids 2 and 3
+                
                 motors[i].setControl(new Follower(ArmConstants.MOTOR_IDS[0], (i >= motors.length / 2)));
             }
         }
@@ -186,8 +187,8 @@ public class Arm extends SubsystemBase {
             encoderSim.setDistance(ArmConstants.START_ANGLE_RADS);
 
             // put the display on the SmartDashboard
-            SmartDashboard.putData("ArmSim", wristDisplay);
-            SmartDashboard.putData("arm pid", pid);
+            // SmartDashboard.putData("ArmSim", wristDisplay);
+            // SmartDashboard.putData("arm pid", pid);
         }
         Timer.delay(2);
 		double cachedAngleRad = getAngleRad(); // don't get the angle five times
@@ -213,7 +214,7 @@ public class Arm extends SubsystemBase {
             // LogManager.add("Arm/SlaveErrors(ticks)", () -> slave_errors);
         }
 
-	SmartDashboard.putBoolean("Arm Enabled", armEnabled);
+	//SmartDashboard.putBoolean("Arm Enabled", armEnabled);
     }
 
     /**
@@ -239,7 +240,8 @@ public class Arm extends SubsystemBase {
 			System.err.println("WWARNING: THE ARM IS IN A SUPPOSEDLY UNREACHABLE POSITION AND HAS BEEN DISABLED. Found: " + getAngleRad() + ", Expected: " + ArmConstants.stowedSetpoint);
 			for (int i = 0; i < motors.length; i++) {
 				// irrelevant for next line: motors[i].setNeutralMode(NeutralModeValue.Coast);
-				motors[i].set(0);
+				//motors[i].set(0);
+                System.err.println("hwat");
 			}
             return;
 		}
@@ -275,7 +277,7 @@ public class Arm extends SubsystemBase {
         motors[0].setControl(m_request.withOutput(dutyCycle));
 
         // report the arm angle in radians
-        SmartDashboard.putNumber("abs value", encoder.getAbsolutePosition());
+        //SmartDashboard.putNumber("abs value", encoder.getAbsolutePosition());
         
 
         // TODO: Clean these up when not needed.
@@ -289,7 +291,7 @@ public class Arm extends SubsystemBase {
         // SmartDashboard.putNumber("Rotor delay", rotorPositionSignal.getTimestamp().getLatency());
         
         // report the absolute position in rotations. Use the abs rotations to set the OFFSET.
-        SmartDashboard.putNumber("REV ABS", encoder.getAbsolutePosition());
+        //SmartDashboard.putNumber("REV ABS", encoder.getAbsolutePosition());
         SmartDashboard.putNumber("get Position", getPosition());
         // report whether the arm has reached its setpoint
         //SmartDashboard.putBoolean("at setpoint?", atSetpoint());

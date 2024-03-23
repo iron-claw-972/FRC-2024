@@ -118,8 +118,8 @@ public class DriveConstants {
     public static final double kAnglePeakCurrentDuration = 0.01;
     public static final boolean kAngleEnableCurrentLimit = true;
 
-    public static final int kDriveContinuousCurrentLimit = 20;
-    public static final int kDrivePeakCurrentLimit = 20;
+    public static final int kDriveContinuousCurrentLimit = 25;
+    public static final int kDrivePeakCurrentLimit = 25;
     public static final double kDrivePeakCurrentDuration = 0.01;
     public static final boolean kDriveEnableCurrentLimit = true;
 

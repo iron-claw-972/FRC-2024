@@ -121,7 +121,7 @@ public class Shooter extends SubsystemBase {
 	@Override
 	public void periodic() {
 
-		SmartDashboard.putBoolean("shooter setpoint", atSetpoint());
+		//SmartDashboard.putBoolean("shooter setpoint", atSetpoint());
 
 		// PID loop uses RPM
 		double leftSpeed = getLeftMotorRPM();
@@ -136,8 +136,8 @@ public class Shooter extends SubsystemBase {
 		rightMotor.set(MathUtil.clamp(rightPower,-1,1));
 
 		// report some values to the Dashboard
-		SmartDashboard.putNumber("left speed", /* shooterRPMToSpeed */ (leftSpeed));
-		SmartDashboard.putNumber("right speed", /* shooterRPMToSpeed */ (rightSpeed));
+		// SmartDashboard.putNumber("left speed", /* shooterRPMToSpeed */ (leftSpeed));
+		// SmartDashboard.putNumber("right speed", /* shooterRPMToSpeed */ (rightSpeed));
 		// SmartDashboard.putData("left Shooter PID", leftPID);
 		// SmartDashboard.putData("right Shooter PID", rightPID);
 	}

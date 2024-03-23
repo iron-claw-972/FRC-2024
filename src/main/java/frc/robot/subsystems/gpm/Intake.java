@@ -108,11 +108,11 @@ public class Intake extends SubsystemBase {
 
     // Publish sensor to Smart Dashboard
     private void publish() {
-        SmartDashboard.putBoolean("Intake Sensor", sensor.get());
+        //SmartDashboard.putBoolean("Intake Sensor", sensor.get());
 
         if (RobotBase.isSimulation()) {
-            SmartDashboard.putNumber("Intake motor RPM", motorRPMSim);
-            SmartDashboard.putNumber("Intake centering motor RPM", centeringMotorRPMSim);
+            // SmartDashboard.putNumber("Intake motor RPM", motorRPMSim);
+            // SmartDashboard.putNumber("Intake centering motor RPM", centeringMotorRPMSim);
         }
     }
 
