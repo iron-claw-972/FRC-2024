@@ -187,7 +187,7 @@ public class RobotContainer {
   }
 
   public void registerCommands() {
-    NamedCommands.registerCommand("Intake_Note_1.75_Sec", new IntakeNote(intake, index, arm, consumer).withTimeout(1.75));
+    NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index, arm, consumer).withTimeout(1.75));
     
     // NamedCommands.registerCommand("Outtake_Note_1.50_Sec", new SequentialCommandGroup(
     //   new ParallelDeadlineGroup(
