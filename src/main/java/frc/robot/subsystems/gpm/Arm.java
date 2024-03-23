@@ -189,7 +189,7 @@ public class Arm extends SubsystemBase {
             SmartDashboard.putData("ArmSim", wristDisplay);
             SmartDashboard.putData("arm pid", pid);
         }
-        Timer.delay(1);
+        Timer.delay(2);
 		double cachedAngleRad = getAngleRad(); // don't get the angle five times
 		// some checks for the arm position
         SmartDashboard.putNumber("cached angle",cachedAngleRad);

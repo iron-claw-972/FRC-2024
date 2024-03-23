@@ -229,7 +229,7 @@ public class Shooter extends SubsystemBase {
 	 * @see frc.robot.subsystems.gpm.Shooter.removeSlip
 	 */
 	public static double addSlip(double output) {
-		return output / OUTPUT_COEF;//*0.93;
+		return output / OUTPUT_COEF*1.15;//*0.93;
 	}
 
 	/**
