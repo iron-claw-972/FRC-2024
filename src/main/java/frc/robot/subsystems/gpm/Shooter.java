@@ -34,7 +34,7 @@ public class Shooter extends SubsystemBase {
 			.radiansPerSecondToRotationsPerMinute(Shooter.gearbox.freeSpeedRadPerSec);
 
 	// PID constants. PID system measures RPM and outputs motor power [-1,1]
-	private static final double P = 0.001500;
+	private static final double P = 0.00200;
 	private static final double I = 0.000100;
 	private static final double D = 0.000010;
 
