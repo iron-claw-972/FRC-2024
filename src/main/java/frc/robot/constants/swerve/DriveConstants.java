@@ -90,7 +90,7 @@ public class DriveConstants {
     public static double kHeadingP = 5.5;
     public static double kHeadingD = 0;
 
-    public static final double HEADING_TOLERANCE = Units.degreesToRadians(3);
+    public static final double HEADING_TOLERANCE = Units.degreesToRadians(4);
 
     //translational PID
     public static double kTranslationalP = 1;

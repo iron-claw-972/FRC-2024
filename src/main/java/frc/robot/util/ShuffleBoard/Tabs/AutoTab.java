@@ -37,8 +37,8 @@ public class AutoTab extends ShuffleBoardTabs {
         autoCommand.addOption("Sabotage Trial (1)", new FollowPathCommand("Sabotage Trial (1)",true, drive));
         autoCommand.addOption("5 piece (pos 3) (under the stage -- test)", new FollowPathCommand("5 piece (pos 3) (under the stage -- test)",true, drive));
         autoCommand.addOption("Far", new FollowPathCommand("Far",true, drive));
-        autoCommand.addOption("3 piece (pos 4) (B)", new FollowPathCommand("3 piece (pos 4) (B)",true, drive));
-
+        autoCommand.addOption("3 Source (pos 4) (B)", new FollowPathCommand("3 Source (pos 4) (B)",true, drive));
+        autoCommand.addOption("Three Source (pos 4) center line", new FollowPathCommand("Three Piece (pos 4) center line",true, drive));
         
         // Previous Autos (Some will keep and still have to fix) autoCommand.setDefaultOption("Do Nothing", new PrintCommand("This will do nothing!"));
         // autoCommand.addOption("Example Path", new FollowPathCommand("Example Path",true, drive));
