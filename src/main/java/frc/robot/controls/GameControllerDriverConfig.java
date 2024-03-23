@@ -64,19 +64,7 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     // error
     kDriver.get(Button.A).onTrue(new InstantCommand(() -> getDrivetrain().resetModulesToAbsolute()));
 
-    // Align to subwoofer
-    kDriver.get(DPad.LEFT).whileTrue(new GoToPose(()->
-      Robot.getAlliance() == Alliance.Red ? VisionConstants.RED_SUBWOOFER_LEFT
-      : VisionConstants.BLUE_SUBWOOFER_LEFT,
-      getDrivetrain()));
-    kDriver.get(DPad.UP).whileTrue(new GoToPose(()->
-      Robot.getAlliance() == Alliance.Red ? VisionConstants.RED_SUBWOOFER_CENTER
-      : VisionConstants.BLUE_SUBWOOFER_CENTER,
-      getDrivetrain()));
-    kDriver.get(DPad.RIGHT).whileTrue(new GoToPose(()->
-      Robot.getAlliance() == Alliance.Red ? VisionConstants.RED_SUBWOOFER_RIGHT
-      : VisionConstants.BLUE_SUBWOOFER_RIGHT,
-      getDrivetrain()));
+   
 
     // Amp alignment
     if(arm != null && index != null && shooter != null){

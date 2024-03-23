@@ -6,10 +6,13 @@ package frc.robot.controls;
 
 import java.util.function.Consumer;
 
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Robot;
+import frc.robot.commands.GoToPose;
 import frc.robot.commands.IntakeWithRumble;
 import frc.robot.commands.OuttakeAmp;
 import frc.robot.commands.Shoot;
@@ -21,6 +24,7 @@ import frc.robot.commands.gpm.ShootKnownPos.ShotPosition;
 import frc.robot.constants.ArmConstants;
 import frc.robot.constants.Constants;
 import frc.robot.constants.ShooterConstants;
+import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
@@ -29,6 +33,7 @@ import frc.robot.subsystems.gpm.Intake.Mode;
 import frc.robot.subsystems.gpm.StorageIndex;
 import lib.controllers.GameController;
 import lib.controllers.GameController.Button;
+import lib.controllers.GameController.DPad;
 import lib.controllers.GameController.RumbleStatus;
 
 /** Add your docs here. */
@@ -102,6 +107,19 @@ public class Operator {
             kDriver.get(Button.RB).onTrue(new InstantCommand(()->arm.setAngle(ArmConstants.preClimbSetpoint), arm));
             kDriver.get(Button.LB).onTrue(new InstantCommand(()->arm.setAngle(ArmConstants.climbSetpoint), arm));
           }
+           // Align to subwoofer
+    kDriver.get(DPad.LEFT).whileTrue(new GoToPose(()->
+      Robot.getAlliance() == Alliance.Red ? VisionConstants.RED_SUBWOOFER_LEFT
+      : VisionConstants.BLUE_SUBWOOFER_LEFT,
+      drive));
+    kDriver.get(DPad.UP).whileTrue(new GoToPose(()->
+      Robot.getAlliance() == Alliance.Red ? VisionConstants.RED_SUBWOOFER_CENTER
+      : VisionConstants.BLUE_SUBWOOFER_CENTER,
+      drive));
+    kDriver.get(DPad.RIGHT).whileTrue(new GoToPose(()->
+      Robot.getAlliance() == Alliance.Red ? VisionConstants.RED_SUBWOOFER_RIGHT
+      : VisionConstants.BLUE_SUBWOOFER_RIGHT,
+      drive));
 
     }
     public Trigger getRightTrigger(){
