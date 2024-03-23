@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import java.util.function.Consumer;
+
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import frc.robot.commands.gpm.IntakeNote;
 import frc.robot.commands.gpm.PrepareShooter;
@@ -14,10 +16,10 @@ import frc.robot.subsystems.gpm.StorageIndex;
 
 /** Add your docs here. */
 public class BasicShoot extends ParallelRaceGroup{
-    public BasicShoot(Shooter shooter, Intake intake, StorageIndex index, Arm arm, double target){   
+    public BasicShoot(Shooter shooter, Intake intake, StorageIndex index, Arm arm, double target, Consumer<Boolean> consumer){   
     super(
         new PrepareShooter(shooter, 1750),
-        new IntakeNote(intake, index,arm)
+        new IntakeNote(intake, index,arm, consumer)
     );
 }
 }

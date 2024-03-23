@@ -128,4 +128,8 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     return kDriver.LEFT_TRIGGER_BUTTON.getAsBoolean();
   }
 
+  public GameController getGameController(){
+    return kDriver;
+  }
+
 }

@@ -106,7 +106,7 @@ public class Arm extends SubsystemBase {
 
     // Motor feedforward control
     public static final double S = 0;
-    public static final double G = 0;
+    public static final double G = 0.05;
     public static final double V = 0;
     private final ArmFeedforward feedforward = new ArmFeedforward(S, G, V);
 

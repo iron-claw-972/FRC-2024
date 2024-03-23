@@ -2,6 +2,7 @@ package frc.robot;
 
 import java.rmi.server.Operation;
 import java.util.function.BooleanSupplier;
+import java.util.function.Consumer;
 import java.util.Optional;
 import com.ctre.phoenix6.SignalLogger;
 import com.fasterxml.jackson.databind.util.Named;
@@ -38,6 +39,7 @@ import frc.robot.subsystems.gpm.StorageIndex;
 import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
+import lib.controllers.GameController.RumbleStatus;
 import frc.robot.commands.gpm.IntakeNote;
 import frc.robot.commands.gpm.PrepareShooter;
 import frc.robot.commands.gpm.SetShooterSpeed;
@@ -68,6 +70,19 @@ public class RobotContainer {
   private Operator operator =null;
   ShuffleBoardManager shuffleboardManager = null;
 
+  Consumer<Boolean> consumer = new Consumer<>(){
+    public void accept(Boolean bool){
+      if (bool){
+          operator.getGameController().setRumble(RumbleStatus.RUMBLE_ON);
+        ((GameControllerDriverConfig) driver).getGameController().setRumble(RumbleStatus.RUMBLE_ON);
+      }
+      else{
+          operator.getGameController().setRumble(RumbleStatus.RUMBLE_OFF);
+          ((GameControllerDriverConfig) driver).getGameController().setRumble(RumbleStatus.RUMBLE_OFF);
+      }
+  };
+  };
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    * <p>
@@ -85,7 +100,6 @@ public class RobotContainer {
       case TestBed2:
         intake = new Intake();
         index = new StorageIndex();
-        SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index, arm));
         break;
       case Vertigo:
           drive = new Drivetrain(vision);
@@ -107,7 +121,7 @@ public class RobotContainer {
 
         drive = new Drivetrain(vision);
         driver = new GameControllerDriverConfig(drive, vision, arm, intake, index, shooter);
-        operator = new Operator(intake, arm, index, shooter, drive);
+        operator = new Operator(intake, arm, index, shooter, drive, consumer);
 
         // Detected objects need access to the drivetrain
         //DetectedObject.setDrive(drive);
@@ -173,7 +187,7 @@ public class RobotContainer {
   }
 
   public void registerCommands() {
-    NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index, arm).withTimeout(1));
+    NamedCommands.registerCommand("Intake_Note_1.75_Sec", new IntakeNote(intake, index, arm, consumer).withTimeout(1.75));
     
     // NamedCommands.registerCommand("Outtake_Note_1.50_Sec", new SequentialCommandGroup(
     //   new ParallelDeadlineGroup(
@@ -182,7 +196,7 @@ public class RobotContainer {
     //   new WaitCommand(.75)
     // ));
 
-    NamedCommands.registerCommand("Intake_Note_2.5_Sec", new IntakeNote(intake, index, arm).withTimeout(2.5)); // 3 seconds used at SVR
+    NamedCommands.registerCommand("Intake_Note_2.5_Sec", new IntakeNote(intake, index, arm, consumer).withTimeout(2.5)); // 3 seconds used at SVR
     
     //Old
     NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new SequentialCommandGroup(// TODO: This will end instantly
@@ -231,21 +245,6 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("Prepare Shooter", new SequentialCommandGroup(new PrepareShooter(shooter, 1750), new WaitCommand(1)));
   }
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
 
   public static BooleanSupplier getAllianceColorBooleanSupplier() {
     return () -> {

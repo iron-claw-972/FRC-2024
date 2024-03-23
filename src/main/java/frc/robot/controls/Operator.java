@@ -4,6 +4,8 @@
 
 package frc.robot.controls;
 
+import java.util.function.Consumer;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -39,13 +41,16 @@ public class Operator {
     private StorageIndex index;
     private Shooter shooter;
     private Drivetrain drive;
+    private Consumer<Boolean> consumer;
+    IntakeNote intakeNote;
     
-    public Operator(Intake intake, Arm arm, StorageIndex index, Shooter shooter, Drivetrain drive) {
+    public Operator(Intake intake, Arm arm, StorageIndex index, Shooter shooter, Drivetrain drive, Consumer<Boolean> consumer) {
         this.intake = intake;
         this.arm = arm;
         this.index = index;
         this.shooter = shooter;
         this.drive = drive;
+        this.consumer = consumer;
     }
 
     public void configureControls() {
@@ -56,20 +61,13 @@ public class Operator {
             kDriver.get(Button.B).onTrue(new InstantCommand(() -> intake.setMode(Mode.ReverseMotors),intake));
             kDriver.get(Button.B).onFalse(new InstantCommand(() -> intake.setMode(Mode.DISABLED), intake));
         }
-        // if (intake != null) {
-        //     Command inakeWithRumble =  new IntakeWithRumble(intake, index, arm, (x)->{
-        //         if (x){
-        //             kDriver.setRumble(RumbleStatus.RUMBLE_ON);
-        //         }
-        //         else{
-        //             kDriver.setRumble(RumbleStatus.RUMBLE_OFF);
-        //         }
-        //     });
-        //     kDriver.get(Button.X).onTrue(inakeWithRumble);
-        //     kDriver.get(Button.X).onFalse(new InstantCommand(()->inakeWithRumble.cancel()));
+        if (intake != null) {
+            intakeNote = new IntakeNote(intake, index, arm, consumer);
+            kDriver.get(Button.X).onTrue(intakeNote);
+            kDriver.get(Button.X).onFalse(new InstantCommand(()->intakeNote.cancel()));
         //     kDriver.get(Button.B).onTrue(new InstantCommand(() -> intake.setMode(Mode.ReverseMotors),intake));
         //     kDriver.get(Button.B).onFalse(new InstantCommand(() -> intake.setMode(Mode.DISABLED), intake));
-        // }
+        }
         if(index != null){
             kDriver.get(Button.B).onTrue(new InstantCommand(() -> index.ejectBack(), index));
             kDriver.get(Button.B).onFalse(new InstantCommand(() -> index.stopIndex(), index));
@@ -104,24 +102,15 @@ public class Operator {
             kDriver.get(Button.RB).onTrue(new InstantCommand(()->arm.setAngle(ArmConstants.preClimbSetpoint), arm));
             kDriver.get(Button.LB).onTrue(new InstantCommand(()->arm.setAngle(ArmConstants.climbSetpoint), arm));
           }
-        if (intake!=null && arm!=null&& index!=null){
-            Command inakeWithRumble =  new IntakeWithRumble(intake, index, arm, (x)->{
-                if (x){
-                    kDriver.setRumble(RumbleStatus.RUMBLE_ON);
-                }
-                else{
-                    kDriver.setRumble(RumbleStatus.RUMBLE_OFF);
-                }
-            });
-            kDriver.get(Button.X).onTrue(inakeWithRumble);
-            //kDriver.get(Button.X).toggleOnTrue(intakeNote);
-            kDriver.get(Button.X).onFalse(new InstantCommand(()->inakeWithRumble.cancel()));
-        }
+
     }
     public Trigger getRightTrigger(){
         return new Trigger(kDriver.RIGHT_TRIGGER_BUTTON);
     }
     public Trigger getLeftTrigger(){
         return new Trigger(kDriver.LEFT_TRIGGER_BUTTON);
+    }
+    public GameController getGameController(){
+        return kDriver;
     }
 }
