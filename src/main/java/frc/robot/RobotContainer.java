@@ -25,6 +25,7 @@ import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.DoNothing;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.Climb.Chain;
+import frc.robot.commands.gpm.*;
 import frc.robot.constants.AutoConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.controls.BaseDriverConfig;
@@ -40,10 +41,6 @@ import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
 import lib.controllers.GameController.RumbleStatus;
-import frc.robot.commands.gpm.IntakeNote;
-import frc.robot.commands.gpm.PrepareShooter;
-import frc.robot.commands.gpm.SetShooterSpeed;
-import frc.robot.commands.gpm.ShootKnownPos;
 import frc.robot.commands.gpm.ShootKnownPos.ShotPosition;
 
 /**
@@ -70,18 +67,16 @@ public class RobotContainer {
   private Operator operator =null;
   ShuffleBoardManager shuffleboardManager = null;
 
-  Consumer<Boolean> consumer = new Consumer<>(){
-    public void accept(Boolean bool){
-      if (bool){
-          operator.getGameController().setRumble(RumbleStatus.RUMBLE_ON);
-        ((GameControllerDriverConfig) driver).getGameController().setRumble(RumbleStatus.RUMBLE_ON);
-      }
-      else{
-          operator.getGameController().setRumble(RumbleStatus.RUMBLE_OFF);
-          ((GameControllerDriverConfig) driver).getGameController().setRumble(RumbleStatus.RUMBLE_OFF);
-      }
-  };
-  };
+  Consumer<Boolean> consumer = bool -> {
+    if (bool){
+        operator.getGameController().setRumble(RumbleStatus.RUMBLE_ON);
+      ((GameControllerDriverConfig) driver).getGameController().setRumble(RumbleStatus.RUMBLE_ON);
+    }
+    else{
+        operator.getGameController().setRumble(RumbleStatus.RUMBLE_OFF);
+        ((GameControllerDriverConfig) driver).getGameController().setRumble(RumbleStatus.RUMBLE_OFF);
+    }
+};
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -135,7 +130,7 @@ public class RobotContainer {
         registerCommands();
         PathGroupLoader.loadPathGroups();
  
-        shuffleboardManager = new ShuffleBoardManager(drive, vision);
+        shuffleboardManager = new ShuffleBoardManager(drive, vision, shooter);
         break;
       }
 
@@ -187,7 +182,14 @@ public class RobotContainer {
   }
 
   public void registerCommands() {
-    NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index, arm, consumer).withTimeout(2));
+
+    // Stuff used in Choreo Paths
+    NamedCommands.registerCommand("Intake", new IntakeNote(intake, index, arm, (ignored) -> {}).withTimeout(1));
+    NamedCommands.registerCommand("LongIntake", new IntakeNote(intake, index, arm, (ignored) -> {}).withTimeout(10));
+    NamedCommands.registerCommand("Index", new IndexerFeed(index));
+    NamedCommands.registerCommand("End Shooter", new PrepareShooter(shooter, 0));
+
+    NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index, arm, consumer).withTimeout(1.75));
     
     // NamedCommands.registerCommand("Outtake_Note_1.50_Sec", new SequentialCommandGroup(
     //   new ParallelDeadlineGroup(
