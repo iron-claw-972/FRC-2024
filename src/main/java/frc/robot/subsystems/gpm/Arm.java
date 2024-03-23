@@ -210,7 +210,7 @@ public class Arm extends SubsystemBase {
                 slave_errors.add(each_talon.getPosition().getValue()-motors[0].getPosition().getValue());
             }
 
-            LogManager.add("Arm/SlaveErrors(ticks)", () -> slave_errors);
+            // LogManager.add("Arm/SlaveErrors(ticks)", () -> slave_errors);
         }
 
 	SmartDashboard.putBoolean("Arm Enabled", armEnabled);

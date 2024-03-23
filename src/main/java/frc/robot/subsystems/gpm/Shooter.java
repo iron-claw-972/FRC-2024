@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.util.EqualsUtil;
+import frc.robot.util.Log;
 import frc.robot.util.LogManager;
 
 public class Shooter extends SubsystemBase {
@@ -34,7 +35,7 @@ public class Shooter extends SubsystemBase {
 			.radiansPerSecondToRotationsPerMinute(Shooter.gearbox.freeSpeedRadPerSec);
 
 	// PID constants. PID system measures RPM and outputs motor power [-1,1]
-	private static final double P = 0.00200;
+	private static final double P = 0.00180;
 	private static final double I = 0.000100;
 	private static final double D = 0.000010;
 
@@ -101,7 +102,7 @@ public class Shooter extends SubsystemBase {
 			leftFlywheelSim = new FlywheelSim(gearbox, gearRatio, MOI_SHAFT);
 			rightFlywheelSim = new FlywheelSim(gearbox, gearRatio, MOI_SHAFT);
 		}
-
+		
 		if (Constants.DO_LOGGING) {
 			LogManager.add("Shooter/MotorSpeedDifference", () -> getMotorSpeedDifference(), Duration.ofSeconds(1));
 			LogManager.add("Shooter/LeftSpeedError", () -> leftPID.getSetpoint() - getLeftMotorSpeed(), Duration.ofSeconds(1));
@@ -111,6 +112,9 @@ public class Shooter extends SubsystemBase {
 			
 			LogManager.add("Shooter/VoltsRight", () -> rightMotor.get() * Constants.ROBOT_VOLTAGE, Duration.ofSeconds(1));
 		}
+			LogManager.add("Shooter/Leftspd", () -> leftPID.getSetpoint() - getLeftMotorSpeed());
+			LogManager.add("Shooter/Rightspd", () -> getRightMotorSpeed());
+
 	}
 
 	@Override

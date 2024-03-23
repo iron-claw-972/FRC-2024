@@ -20,5 +20,5 @@ public class ShooterConstants {
     // The angle the shooter is at when the arm is at 0 degrees
     public static final double ANGLE_OFFSET = Units.degreesToRadians(43.58322);
 
-    public static final double SPIN = 50;
+    public static final double SPIN = 25;
 }
