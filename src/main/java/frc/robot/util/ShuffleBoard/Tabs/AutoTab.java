@@ -50,6 +50,11 @@ public class AutoTab extends ShuffleBoardTabs {
                 1750,
                 new ChoreoPathCommand("Center 6", true, drive)
         ));
+        autoCommand.addOption("Choreo Source 3", new AutoShootCommand(
+                shooter,
+                1750,
+                new ChoreoPathCommand("Source 3", true, drive)
+        ));
 
         // Previous Autos (Some will keep and still have to fix) autoCommand.setDefaultOption("Do Nothing", new PrintCommand("This will do nothing!"));
         // autoCommand.addOption("Example Path", new FollowPathCommand("Example Path",true, drive));

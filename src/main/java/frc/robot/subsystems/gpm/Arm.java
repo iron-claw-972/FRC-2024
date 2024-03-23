@@ -320,10 +320,10 @@ public class Arm extends SubsystemBase {
 
         // see https://docs.google.com/spreadsheets/d/1UiHZFYeZiHPAPIu39uRrskQuQYfvJ03UjLeQVq--Mzg/edit#gid=0
         // Arm motors uses channels 1, 2, 4, 5
-        m_powerPanel.setCurrent(1, ampsPerMotor);
-        m_powerPanel.setCurrent(2, ampsPerMotor);
-        m_powerPanel.setCurrent(4, ampsPerMotor);
-        m_powerPanel.setCurrent(5, ampsPerMotor);
+        // m_powerPanel.setCurrent(1, ampsPerMotor);
+        // m_powerPanel.setCurrent(2, ampsPerMotor);
+        // m_powerPanel.setCurrent(4, ampsPerMotor);
+        // m_powerPanel.setCurrent(5, ampsPerMotor);
     }
 
     /**
