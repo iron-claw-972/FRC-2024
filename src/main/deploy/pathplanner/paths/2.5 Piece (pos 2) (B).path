@@ -121,7 +121,7 @@
     },
     {
       "name": "Outtake 1",
-      "waypointRelativePos": 1.75,
+      "waypointRelativePos": 2.0,
       "command": {
         "type": "parallel",
         "data": {
