@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 public class AutoShootCommand extends ParallelCommandGroup {
 
-    private static final double SHOOTER_WAIT_TIME = 2.0;
+    private static final double SHOOTER_WAIT_TIME = 1.0;
 
     //new ParallelDeadlineGroup(
     //                        new AutoShootCommand(shooter,
@@ -24,8 +24,8 @@ public class AutoShootCommand extends ParallelCommandGroup {
         super();
 
         var commandList = new ArrayList<>(Arrays.asList(commands));
-        commandList.add(0, new WaitCommand(SHOOTER_WAIT_TIME));
-        commandList.add(0, new PrepareShooter(shooter, rpm));
+        commandList.add(new PrepareShooter(shooter, rpm));
+        commandList.add(new WaitCommand(SHOOTER_WAIT_TIME));
 
         addCommands(new SequentialCommandGroup(
                 new ParallelDeadlineGroup(
