@@ -393,7 +393,7 @@
     },
     {
       "name": "Outtake 5",
-      "waypointRelativePos": 10.7,
+      "waypointRelativePos": 11.100000000000001,
       "command": {
         "type": "parallel",
         "data": {

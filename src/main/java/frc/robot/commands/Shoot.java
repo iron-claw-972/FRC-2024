@@ -67,7 +67,7 @@ public class Shoot extends Command {
                 shootTimer.reset();
                 shootTimer.stop();
                 shooter.resetPID();
-                drive.setIsAlign(true); // Enable alignment mode on the drivetrain
+                //drive.setIsAlign(true); // Enable alignment mode on the drivetrain
                 drive.onlyUseTags(new int[]{3, 4, 7, 8});
                 shooting = false;
         }
@@ -181,7 +181,7 @@ public class Shoot extends Command {
                         shooting = true;
                         index.ejectIntoShooter();
                         shootTimer.start();
-                        System.out.println("DONE");
+                        //System.out.println("DONE");
                 }
         }
 

@@ -35,8 +35,9 @@ public class Shooter extends SubsystemBase {
 			.radiansPerSecondToRotationsPerMinute(Shooter.gearbox.freeSpeedRadPerSec);
 
 	// PID constants. PID system measures RPM and outputs motor power [-1,1]
-	private static final double P = 0.00180;
+	private static final double P = 0.00170;
 	private static final double I = 0.000100;
+	private static final double leftI = 0;
 	private static final double D = 0.000010;
 
 	// FeedForward constants
@@ -71,7 +72,7 @@ public class Shooter extends SubsystemBase {
 	private final CANSparkFlex leftMotor = new CANSparkFlex(ShooterConstants.LEFT_MOTOR_ID, MotorType.kBrushless);
 	private final RelativeEncoder leftMotorEncoder = leftMotor.getEncoder();
 	/** PID controller uses RPM as input and outputs motor power */
-	protected final PIDController leftPID = new PIDController(P, I, D);
+	protected final PIDController leftPID = new PIDController(P, leftI, D);
 	private FlywheelSim leftFlywheelSim;
 	private double leftMotorSpeedSim = 0.0;
 	private double leftPower = 0.0;
@@ -111,10 +112,10 @@ public class Shooter extends SubsystemBase {
 			LogManager.add("Shooter/VoltsLeft", () -> leftMotor.get() * Constants.ROBOT_VOLTAGE, Duration.ofSeconds(1));	
 			
 			LogManager.add("Shooter/VoltsRight", () -> rightMotor.get() * Constants.ROBOT_VOLTAGE, Duration.ofSeconds(1));
-		}
+		
 			LogManager.add("Shooter/Leftspd", () -> leftPID.getSetpoint() - getLeftMotorSpeed());
 			LogManager.add("Shooter/Rightspd", () -> getRightMotorSpeed());
-
+		}
 	}
 
 	@Override
@@ -135,8 +136,8 @@ public class Shooter extends SubsystemBase {
 		rightMotor.set(MathUtil.clamp(rightPower,-1,1));
 
 		// report some values to the Dashboard
-		// SmartDashboard.putNumber("left speed", /* shooterRPMToSpeed */ (leftSpeed));
-		// SmartDashboard.putNumber("right speed", /* shooterRPMToSpeed */ (rightSpeed));
+		SmartDashboard.putNumber("left speed", /* shooterRPMToSpeed */ (leftSpeed));
+		SmartDashboard.putNumber("right speed", /* shooterRPMToSpeed */ (rightSpeed));
 		// SmartDashboard.putData("left Shooter PID", leftPID);
 		// SmartDashboard.putData("right Shooter PID", rightPID);
 	}
@@ -233,7 +234,7 @@ public class Shooter extends SubsystemBase {
 	 * @see frc.robot.subsystems.gpm.Shooter.removeSlip
 	 */
 	public static double addSlip(double output) {
-		return output / OUTPUT_COEF*1.05;//*0.93;
+		return output / OUTPUT_COEF*0.9;//*0.93;
 	}
 
 	/**

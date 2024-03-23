@@ -108,19 +108,7 @@ public class Operator {
             kDriver.get(Button.LB).onTrue(new InstantCommand(()->arm.setAngle(ArmConstants.climbSetpoint), arm));
           }
            // Align to subwoofer
-    kDriver.get(DPad.LEFT).whileTrue(new GoToPose(()->
-      Robot.getAlliance() == Alliance.Red ? VisionConstants.RED_SUBWOOFER_LEFT
-      : VisionConstants.BLUE_SUBWOOFER_LEFT,
-      drive));
-    kDriver.get(DPad.UP).whileTrue(new GoToPose(()->
-      Robot.getAlliance() == Alliance.Red ? VisionConstants.RED_SUBWOOFER_CENTER
-      : VisionConstants.BLUE_SUBWOOFER_CENTER,
-      drive));
-    kDriver.get(DPad.RIGHT).whileTrue(new GoToPose(()->
-      Robot.getAlliance() == Alliance.Red ? VisionConstants.RED_SUBWOOFER_RIGHT
-      : VisionConstants.BLUE_SUBWOOFER_RIGHT,
-      drive));
-
+   
     }
     public Trigger getRightTrigger(){
         return new Trigger(kDriver.RIGHT_TRIGGER_BUTTON);
