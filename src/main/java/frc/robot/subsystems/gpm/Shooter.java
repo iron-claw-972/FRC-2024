@@ -85,6 +85,7 @@ public class Shooter extends SubsystemBase {
 	private FlywheelSim rightFlywheelSim;
 	private double rightMotorSpeedSim = 0.0;
 	private double rightPower = 0.0;
+	private static double slipCoefficient = 0.92;
 
 	// TODO: TUNE THIS
 	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(S, V);
@@ -138,6 +139,7 @@ public class Shooter extends SubsystemBase {
 		// report some values to the Dashboard
 		SmartDashboard.putNumber("left speed", /* shooterRPMToSpeed */ (leftSpeed));
 		SmartDashboard.putNumber("right speed", /* shooterRPMToSpeed */ (rightSpeed));
+		SmartDashboard.putData("slip coefficient", slipCoefficient); /// FIXXX
 		// SmartDashboard.putData("left Shooter PID", leftPID);
 		// SmartDashboard.putData("right Shooter PID", rightPID);
 	}
@@ -234,7 +236,7 @@ public class Shooter extends SubsystemBase {
 	 * @see frc.robot.subsystems.gpm.Shooter.removeSlip
 	 */
 	public static double addSlip(double output) {
-		return output / OUTPUT_COEF*.92;//*0.93;
+		return output / OUTPUT_COEF*slipCoefficient;//*0.93;
 	}
 
 	/**
