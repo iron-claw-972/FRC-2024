@@ -136,8 +136,8 @@ public class Shooter extends SubsystemBase {
 		rightMotor.set(MathUtil.clamp(rightPower,-1,1));
 
 		// report some values to the Dashboard
-		// SmartDashboard.putNumber("left speed", /* shooterRPMToSpeed */ (leftSpeed));
-		// SmartDashboard.putNumber("right speed", /* shooterRPMToSpeed */ (rightSpeed));
+		SmartDashboard.putNumber("left speed", /* shooterRPMToSpeed */ (leftSpeed));
+		SmartDashboard.putNumber("right speed", /* shooterRPMToSpeed */ (rightSpeed));
 		// SmartDashboard.putData("left Shooter PID", leftPID);
 		// SmartDashboard.putData("right Shooter PID", rightPID);
 	}
@@ -234,7 +234,7 @@ public class Shooter extends SubsystemBase {
 	 * @see frc.robot.subsystems.gpm.Shooter.removeSlip
 	 */
 	public static double addSlip(double output) {
-		return output / OUTPUT_COEF*0.9;//*0.93;
+		return output / OUTPUT_COEF*.92;//*0.93;
 	}
 
 	/**
