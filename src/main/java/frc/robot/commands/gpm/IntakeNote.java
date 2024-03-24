@@ -65,7 +65,7 @@ public class IntakeNote extends Command{
         if(detectedNote){
             CommandScheduler.getInstance().schedule(new RunCommand(() -> {
                 rumbleConsumer.accept(true);
-            }).withTimeout(1).andThen(new InstantCommand(()->{
+            }).withTimeout(0.5).andThen(new InstantCommand(()->{
                 rumbleConsumer.accept(false);
             })));
         }

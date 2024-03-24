@@ -92,7 +92,7 @@ public class Arm extends SubsystemBase {
      * stow is 0.599
      * high is 0.357
      */
-    protected static final double OFFSET = 0.722 + Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
+    protected static final double OFFSET = 0.723 + Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
     /** REV encoder scale factor. This is fixed. */
     protected static final double DISTANCE_PER_ROTATION = -2 * Math.PI;
 
@@ -233,7 +233,7 @@ public class Arm extends SubsystemBase {
 
     @Override
     public void periodic() {
-
+        SmartDashboard.putNumber("get Position", getPosition());
 
         // Disable the arm if it is out of range
 		if (getAngleRad() < ArmConstants.MIN_ANGLE_RADS - ArmConstants.ANGLE_TOLERANCE || getAngleRad() > ArmConstants.MAX_ANGLE_RADS + ArmConstants.ANGLE_TOLERANCE) {
@@ -292,7 +292,7 @@ public class Arm extends SubsystemBase {
         
         // report the absolute position in rotations. Use the abs rotations to set the OFFSET.
         //SmartDashboard.putNumber("REV ABS", encoder.getAbsolutePosition());
-        SmartDashboard.putNumber("get Position", getPosition());
+        //SmartDashboard.putNumber("get Position", getPosition());
         // report whether the arm has reached its setpoint
         //SmartDashboard.putBoolean("at setpoint?", atSetpoint());
         // report the arm current

@@ -44,7 +44,7 @@ public class AutoTab extends ShuffleBoardTabs {
         autoCommand.addOption("Far", new FollowPathCommand("Far",true, drive));
         autoCommand.addOption("3 Source (pos 4) (B)", new FollowPathCommand("3 Source (pos 4) (B)",true, drive));
         autoCommand.addOption("Three Source (pos 4) center line", new FollowPathCommand("Three Piece (pos 4) center line",true, drive));
-
+        autoCommand.addOption("2.5 Piece (pos 2) (B)", new FollowPathCommand("2.5 Piece (pos 2) (B)",true, drive));
         autoCommand.addOption("Choreo Center 6", new AutoShootCommand(
                 shooter,
                 1750,

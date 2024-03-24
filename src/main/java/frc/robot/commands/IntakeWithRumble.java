@@ -26,7 +26,7 @@ public class IntakeWithRumble extends SequentialCommandGroup {
     addCommands(
       new IntakeNote(intake, storageIndex, arm, rumble),
       new InstantCommand(()->rumble.accept(true)),
-      new WaitCommand(0.5),
+      new WaitCommand(0.3),
       new InstantCommand(()->rumble.accept(false))
     );
   }
