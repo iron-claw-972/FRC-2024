@@ -301,7 +301,7 @@
     },
     {
       "name": "Intake",
-      "waypointRelativePos": 2.85,
+      "waypointRelativePos": 2.55,
       "command": {
         "type": "parallel",
         "data": {
@@ -335,7 +335,7 @@
     },
     {
       "name": "Intake",
-      "waypointRelativePos": 7.75,
+      "waypointRelativePos": 7.6,
       "command": {
         "type": "parallel",
         "data": {
@@ -370,7 +370,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 5.2,
-    "maxAcceleration": 4.8,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
