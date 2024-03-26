@@ -1,5 +1,5 @@
 {
-    "version": "v0.3",
+    "version": "v0.3.1",
     "robotConfiguration": {
         "mass": 73.8410170797483,
         "rotationalInertia": 5.8275989259364,
@@ -2349,6 +2349,7 @@
                 {
                     "name": "out1",
                     "target": 0,
+                    "trajTargetIndex": 0,
                     "targetTimestamp": 0,
                     "offset": 0,
                     "command": {
@@ -2361,6 +2362,7 @@
                 {
                     "name": "out2",
                     "target": 2,
+                    "trajTargetIndex": 2,
                     "targetTimestamp": 2.504522043032449,
                     "offset": 0,
                     "command": {
@@ -2373,6 +2375,7 @@
                 {
                     "name": "out3",
                     "target": 4,
+                    "trajTargetIndex": 4,
                     "targetTimestamp": 4.4850242859410425,
                     "offset": 0,
                     "command": {
@@ -2385,6 +2388,7 @@
                 {
                     "name": "out4",
                     "target": 6,
+                    "trajTargetIndex": 6,
                     "targetTimestamp": 6.986079135997766,
                     "offset": 0,
                     "command": {
@@ -2397,6 +2401,7 @@
                 {
                     "name": "out5",
                     "target": 10,
+                    "trajTargetIndex": 10,
                     "targetTimestamp": 12.096337505333114,
                     "offset": 0,
                     "command": {
@@ -2409,6 +2414,7 @@
                 {
                     "name": "out6",
                     "target": 14,
+                    "trajTargetIndex": 14,
                     "targetTimestamp": 17.333267579220053,
                     "offset": 0,
                     "command": {
@@ -2421,6 +2427,7 @@
                 {
                     "name": "in1",
                     "target": 1,
+                    "trajTargetIndex": 1,
                     "targetTimestamp": 1.2685252946475116,
                     "offset": 0,
                     "command": {
@@ -2433,6 +2440,7 @@
                 {
                     "name": "in2",
                     "target": 3,
+                    "trajTargetIndex": 3,
                     "targetTimestamp": 3.4876312467869415,
                     "offset": 0,
                     "command": {
@@ -2445,6 +2453,7 @@
                 {
                     "name": "in3",
                     "target": 5,
+                    "trajTargetIndex": 5,
                     "targetTimestamp": 5.715676407316895,
                     "offset": 0,
                     "command": {
@@ -2457,6 +2466,7 @@
                 {
                     "name": "in4",
                     "target": 8,
+                    "trajTargetIndex": 8,
                     "targetTimestamp": 9.518994788535938,
                     "offset": 0,
                     "command": {
@@ -2469,6 +2479,7 @@
                 {
                     "name": "in5",
                     "target": 12,
+                    "trajTargetIndex": 12,
                     "targetTimestamp": 14.677718678318119,
                     "offset": 0,
                     "command": {
@@ -5519,6 +5530,7 @@
                 {
                     "name": "out1",
                     "target": 0,
+                    "trajTargetIndex": 0,
                     "targetTimestamp": 0,
                     "offset": 0,
                     "command": {
@@ -5531,6 +5543,7 @@
                 {
                     "name": "in1",
                     "target": 2,
+                    "trajTargetIndex": 2,
                     "targetTimestamp": 3.003026254677303,
                     "offset": 0,
                     "command": {
@@ -5543,6 +5556,7 @@
                 {
                     "name": "out2",
                     "target": 4,
+                    "trajTargetIndex": 4,
                     "targetTimestamp": 6.053241093117889,
                     "offset": 0,
                     "command": {
@@ -5555,6 +5569,7 @@
                 {
                     "name": "in2",
                     "target": 6,
+                    "trajTargetIndex": 6,
                     "targetTimestamp": 9.318666432804578,
                     "offset": 0,
                     "command": {
@@ -5567,6 +5582,7 @@
                 {
                     "name": "out3",
                     "target": 8,
+                    "trajTargetIndex": 8,
                     "targetTimestamp": 12.599444360478843,
                     "offset": 0,
                     "command": {
@@ -5579,6 +5595,7 @@
                 {
                     "name": "in3",
                     "target": 11,
+                    "trajTargetIndex": 11,
                     "targetTimestamp": 16.18680411775167,
                     "offset": 0,
                     "command": {
@@ -5591,6 +5608,7 @@
                 {
                     "name": "out4",
                     "target": 14,
+                    "trajTargetIndex": 14,
                     "targetTimestamp": 19.854726183205884,
                     "offset": 0,
                     "command": {
@@ -8133,6 +8151,7 @@
                 {
                     "name": "in1",
                     "target": 2,
+                    "trajTargetIndex": 2,
                     "targetTimestamp": 2.97345275359754,
                     "offset": 0,
                     "command": {
@@ -8145,6 +8164,7 @@
                 {
                     "name": "out2",
                     "target": 4,
+                    "trajTargetIndex": 4,
                     "targetTimestamp": 5.272914016148438,
                     "offset": 0,
                     "command": {
@@ -8157,6 +8177,7 @@
                 {
                     "name": "out1",
                     "target": "first",
+                    "trajTargetIndex": 0,
                     "targetTimestamp": 0,
                     "offset": 0,
                     "command": {
@@ -8169,6 +8190,7 @@
                 {
                     "name": "in2",
                     "target": 7,
+                    "trajTargetIndex": 7,
                     "targetTimestamp": 7.53756153479413,
                     "offset": 0,
                     "command": {
@@ -8181,6 +8203,7 @@
                 {
                     "name": "out3",
                     "target": 10,
+                    "trajTargetIndex": 10,
                     "targetTimestamp": 9.916985365443708,
                     "offset": 0,
                     "command": {
@@ -8193,6 +8216,7 @@
                 {
                     "name": "in3",
                     "target": 13,
+                    "trajTargetIndex": 13,
                     "targetTimestamp": 12.23084335142946,
                     "offset": 0,
                     "command": {
@@ -8205,6 +8229,7 @@
                 {
                     "name": "out4",
                     "target": 15,
+                    "trajTargetIndex": 15,
                     "targetTimestamp": 14.47820283949281,
                     "offset": 0,
                     "command": {
@@ -10118,6 +10143,7 @@
                 {
                     "name": "in1",
                     "target": 1,
+                    "trajTargetIndex": 1,
                     "targetTimestamp": 1.3136656055341311,
                     "offset": 0,
                     "command": {
@@ -10130,6 +10156,7 @@
                 {
                     "name": "in2",
                     "target": 2,
+                    "trajTargetIndex": 2,
                     "targetTimestamp": 3.5158196448977397,
                     "offset": 0,
                     "command": {
@@ -10142,6 +10169,7 @@
                 {
                     "name": "in3",
                     "target": 5,
+                    "trajTargetIndex": 5,
                     "targetTimestamp": 7.478842160340026,
                     "offset": 0,
                     "command": {
@@ -10154,6 +10182,7 @@
                 {
                     "name": "in4",
                     "target": 9,
+                    "trajTargetIndex": 9,
                     "targetTimestamp": 11.684635061245807,
                     "offset": 0,
                     "command": {
@@ -10166,6 +10195,7 @@
                 {
                     "name": "in5",
                     "target": 11,
+                    "trajTargetIndex": 11,
                     "targetTimestamp": 13.155488068851918,
                     "offset": 0,
                     "command": {
@@ -12786,6 +12816,7 @@
                 {
                     "name": "in1",
                     "target": 1,
+                    "trajTargetIndex": 1,
                     "targetTimestamp": 1.2754534876359789,
                     "offset": 0,
                     "command": {
@@ -12798,6 +12829,7 @@
                 {
                     "name": "in2",
                     "target": 2,
+                    "trajTargetIndex": 2,
                     "targetTimestamp": 3.474586549894257,
                     "offset": 0,
                     "command": {
@@ -12810,6 +12842,7 @@
                 {
                     "name": "in3",
                     "target": 5,
+                    "trajTargetIndex": 5,
                     "targetTimestamp": 7.429836892020919,
                     "offset": 0,
                     "command": {
@@ -12822,6 +12855,7 @@
                 {
                     "name": "in5",
                     "target": 13,
+                    "trajTargetIndex": 13,
                     "targetTimestamp": 15.25222797779795,
                     "offset": 0,
                     "command": {
@@ -12834,6 +12868,7 @@
                 {
                     "name": "in6",
                     "target": 15,
+                    "trajTargetIndex": 15,
                     "targetTimestamp": 16.882002113777386,
                     "offset": 0,
                     "command": {
@@ -12846,6 +12881,7 @@
                 {
                     "name": "in4",
                     "target": 9,
+                    "trajTargetIndex": 9,
                     "targetTimestamp": 11.740040902530687,
                     "offset": 0,
                     "command": {
