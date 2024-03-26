@@ -30,14 +30,14 @@ import frc.robot.subsystems.gpm.StorageIndex;
  * The math tests should also not need to build the subsystems.
  * The math in the Shoot command is opaque.
  */
-@Disabled
+// @Disabled
 public class SWMTest {
     // TODO: the math tests should not require subsystems....
     // the subsystems
     //   if these are static, then the tests run faster (but the .close() calls should be removed)
     private PowerPanel powerPanel = new PowerPanel();
     private Shooter shooter = new Shooter();
-    private Arm arm = new Arm(powerPanel);
+    private Arm arm = new Arm(/*powerPanel*/);
     private Drivetrain drive = new Drivetrain(null);
     private StorageIndex indexer = new StorageIndex();
 
@@ -284,3 +284,4 @@ public class SWMTest {
         assertEquals(0.400 - 2.055, disp.getZ(), 0.00001);
     }
 }
+

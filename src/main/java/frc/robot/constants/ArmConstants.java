@@ -1,6 +1,7 @@
 package frc.robot.constants;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+
 import edu.wpi.first.math.util.Units;
 
 public class ArmConstants {
@@ -54,8 +55,13 @@ public class ArmConstants {
     public static final double PIVOT_HEIGHT = Units.inchesToMeters(16.75);
     public static final double PIVOT_X = Units.inchesToMeters(-10);
 
+	/** Whether to check if the arm is stowed on deploy */
+	public static final boolean ASSERT_AT_SETPOINT = true;
+	/** In radians */
+	public static final double ANGLE_TOLERANCE = 0.3;
+
     public static CurrentLimitsConfigs currentConfig = new CurrentLimitsConfigs()
         .withSupplyCurrentLimit(15)
         .withSupplyCurrentLimitEnable(true)
-        .withSupplyCurrentThreshold(40);
+        .withSupplyCurrentThreshold(20);
 }
