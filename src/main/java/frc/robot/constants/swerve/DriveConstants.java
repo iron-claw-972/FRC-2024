@@ -104,10 +104,10 @@ public class DriveConstants {
     public static double kPathplannerTranslationalD = 0;
 
     // CAN
-    public static String kDriveMotorCAN = Constants.CANIVORE_CAN;
-    public static String kSteerMotorCAN = Constants.CANIVORE_CAN;
-    public static String kSteerEncoderCAN = Constants.CANIVORE_CAN;
-    public static String kPigeonCAN = Constants.CANIVORE_CAN;
+    public static String kDriveMotorCAN = Constants.RIO_CAN;
+    public static String kSteerMotorCAN = Constants.RIO_CAN;
+    public static String kSteerEncoderCAN = Constants.RIO_CAN;
+    public static String kPigeonCAN = Constants.RIO_CAN;
 
 
     public static COTSFalconSwerveConstants kModuleConstants = COTSFalconSwerveConstants.SDSMK4i(kDriveGearRatio);
@@ -118,10 +118,10 @@ public class DriveConstants {
     public static final double kAnglePeakCurrentDuration = 0.01;
     public static final boolean kAngleEnableCurrentLimit = true;
 
-    public static final int kDriveContinuousCurrentLimit = 20;
-    public static final int kDrivePeakCurrentLimit = 20;
+    public static final int kDriveContinuousCurrentLimit = 60;
+    public static final int kDrivePeakCurrentLimit = 60;
     public static final double kDrivePeakCurrentDuration = 0.01;
-    public static final boolean kDriveEnableCurrentLimit = true;
+    public static final boolean kDriveEnableCurrentLimit = false;
 
     // TODO put slew rate limiter to reduce drift on drivetrain without killing battery.
 

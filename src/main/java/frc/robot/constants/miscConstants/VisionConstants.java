@@ -3,33 +3,25 @@ package frc.robot.constants.miscConstants;
  * Container class for vision constants.
  */
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import frc.robot.constants.swerve.DriveConstants;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class VisionConstants {
   /**
    * If April tag vision is enabled on the robot
    */
-  public static final boolean ENABLED = true;
+  public static final boolean ENABLED = false;
 
   /**
    * If object detection should be enabled
