@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.IntakeWithRumble;
 import frc.robot.commands.OuttakeAmp;
+import frc.robot.commands.OuttakeAmpManual;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.ShootLock;
 import frc.robot.commands.gpm.PrepareShooter;
@@ -89,7 +90,10 @@ public class Operator {
         }
         if(arm != null && shooter != null && index != null){
             kDriver.get(Button.Y).onTrue(new ShootKnownPos(shooter, arm, index, ShotPosition.SUBWOOFER));
-            kDriver.get(Button.A).onTrue(new OuttakeAmp(arm, index, shooter));
+            // kDriver.get(Button.A).onTrue(new OuttakeAmp(arm, index, shooter));
+            // TODO: decide which button to set for OutakeAmpManual
+            // kDriver.get(Button.RB).onTrue(new OuttakeAmpManual(arm, shooter));
+            kDriver.get(Button.A).onTrue(new OuttakeAmpManual(index, arm, shooter));
         }
         if(arm != null){
             kDriver.get(Button.RB).onTrue(new InstantCommand(()->arm.setAngle(ArmConstants.preClimbSetpoint), arm));
