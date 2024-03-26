@@ -24,8 +24,7 @@ public class OuttakeAmpManual extends SequentialCommandGroup {
                 // Starts spinning up shooter
                 new InstantCommand(() -> shooter.setTargetRPM(ShooterConstants.AMP_OUTTAKE_RPM), shooter)),
                 // Move arm to amp position 
-                new ArmToPos(arm, ArmConstants.ampSetpoint)
-            );
+                new ArmToPos(arm, ArmConstants.ampSetpoint));
     }
 
     /**
@@ -41,9 +40,9 @@ public class OuttakeAmpManual extends SequentialCommandGroup {
                 // Waits until note has been scored 
                 new WaitCommand(StorageIndexConstants.ejectAmpFrontTimeout),
                 // Set everything back to default state
-                new InstantCommand(() -> shooter.setTargetRPM(0)),
-                new InstantCommand(() -> index.stopIndex()),
-                new InstantCommand(() -> arm.setAngle(ArmConstants.stowedSetpoint))
-            );
+                new ParallelCommandGroup ( 
+                    new InstantCommand(() -> shooter.setTargetRPM(0)),
+                    new InstantCommand(() -> index.stopIndex()),
+                    new InstantCommand(() -> arm.setAngle(ArmConstants.stowedSetpoint))));
     }
 }
