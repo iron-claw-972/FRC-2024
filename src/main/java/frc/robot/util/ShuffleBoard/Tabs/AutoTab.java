@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.auto_comm.FollowPathCommand;
+import frc.robot.commands.auto_comm.ChoreoPathCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.util.ShuffleBoard.ShuffleBoardTabs;
@@ -31,39 +31,39 @@ public class AutoTab extends ShuffleBoardTabs {
         tab = Shuffleboard.getTab("Auto");
 
         autoCommand.setDefaultOption("Choreo Distance Center 6 (no shoot)", new SequentialCommandGroup(
-                new FollowPathCommand("Distance Center 6.1", true, drive),
+                new ChoreoPathCommand("Distance Center 6.1", true, drive),
                 new WaitCommand(1),
-                new FollowPathCommand("Distance Center 6.2", true, drive),
+                new ChoreoPathCommand("Distance Center 6.2", true, drive),
                 new WaitCommand(1),
-                new FollowPathCommand("Distance Center 6.3", true, drive),
+                new ChoreoPathCommand("Distance Center 6.3", true, drive),
                 new WaitCommand(1),
-                new FollowPathCommand("Distance Center 6.4", true, drive),
+                new ChoreoPathCommand("Distance Center 6.4", true, drive),
                 new WaitCommand(1),
-                new FollowPathCommand("Distance Center 6.5", true, drive)
+                new ChoreoPathCommand("Distance Center 6.5", true, drive)
         ));
 
         autoCommand.setDefaultOption("Choreo Distance Center 7 (no shoot)", new SequentialCommandGroup(
-                new FollowPathCommand("Distance Center 7.1", true, drive),
+                new ChoreoPathCommand("Distance Center 7.1", true, drive),
                 new WaitCommand(1),
-                new FollowPathCommand("Distance Center 7.2", true, drive),
+                new ChoreoPathCommand("Distance Center 7.2", true, drive),
                 new WaitCommand(1),
-                new FollowPathCommand("Distance Center 7.3", true, drive),
+                new ChoreoPathCommand("Distance Center 7.3", true, drive),
                 new WaitCommand(1),
-                new FollowPathCommand("Distance Center 7.4", true, drive),
+                new ChoreoPathCommand("Distance Center 7.4", true, drive),
                 new WaitCommand(1),
-                new FollowPathCommand("Distance Center 7.5", true, drive),
+                new ChoreoPathCommand("Distance Center 7.5", true, drive),
                 new WaitCommand(1),
-                new FollowPathCommand("Distance Center 7.6", true, drive),
+                new ChoreoPathCommand("Distance Center 7.6", true, drive),
                 new WaitCommand(1),
-                new FollowPathCommand("Distance Center 7.7", true, drive)
+                new ChoreoPathCommand("Distance Center 7.7", true, drive)
         ));
 
         autoCommand.setDefaultOption("Choreo Distance Source 4 (no shoot)", new SequentialCommandGroup(
-                new FollowPathCommand("Distance Source 6.1", true, drive),
+                new ChoreoPathCommand("Distance Source 6.1", true, drive),
                 new WaitCommand(1),
-                new FollowPathCommand("Distance Source 6.2", true, drive),
+                new ChoreoPathCommand("Distance Source 6.2", true, drive),
                 new WaitCommand(1),
-                new FollowPathCommand("Distance Source 6.3", true, drive)
+                new ChoreoPathCommand("Distance Source 6.3", true, drive)
         ));
 
         // Final Autos
