@@ -12859,6 +12859,6 @@
             "isTrajectoryStale": false
         }
     },
-    "splitTrajectoriesAtStopPoints": false,
+    "splitTrajectoriesAtStopPoints": true,
     "usesObstacles": true
 }
