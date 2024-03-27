@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.constants.Constants;
+import frc.robot.constants.miscConstants.FieldConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.constants.swerve.ModuleConstants;
@@ -74,6 +75,9 @@ public class Drivetrain extends SubsystemBase {
     // DO NOT CHANGE THIS HERE TO DISABLE VISION, change VisionConstants.ENABLED instead
     private boolean visionEnabled = true;
 
+    // Disables vision for the first few seconds after deploying
+    private Timer visionEnableTimer = new Timer();
+
     // If the robot should aim at the speaker
     private boolean isAlign = false;
     // Angle to align to, null for directly toward speaker
@@ -83,7 +87,7 @@ public class Drivetrain extends SubsystemBase {
     // used for drift control
     private boolean drive_turning = false;
 
-    SwerveSetpointGenerator setpointGenerator = new SwerveSetpointGenerator();
+    private SwerveSetpointGenerator setpointGenerator = new SwerveSetpointGenerator();
 
 
 
@@ -169,7 +173,6 @@ public class Drivetrain extends SubsystemBase {
     @Override
     public void periodic() {
         updateOdometry();
-        // System.out.println("drivetrain x: "+ getPose().getX() + "drivetrain y: "+ getPose().getY()); 
     }
 
     // DRIVE
@@ -234,6 +237,9 @@ public class Drivetrain extends SubsystemBase {
      * Updates the field relative position of the robot.
      */
     public void updateOdometry() {
+        // Start the timer if it hasn't started yet
+        visionEnableTimer.start();
+
         Pose2d pose1 = getPose();
 
         // Updates pose based on encoders and gyro. NOTE: must use yaw directly from gyro!
@@ -242,19 +248,24 @@ public class Drivetrain extends SubsystemBase {
         Pose2d pose2 = getPose();
 
         if(VisionConstants.ENABLED){
-            if(visionEnabled){
+            if(visionEnabled && visionEnableTimer.hasElapsed(5)){
                 vision.updateOdometry(poseEstimator);
             }
         }
 
         Pose2d pose3 = getPose();
         
-        //if the drivetrain pose is over 30: 
-        if(Math.abs(pose2.getX())>30){
-            //reset our odometry to the pose before(this is the right pose)
-            resetOdometry(pose1);
-        }else if(Math.abs(pose3.getX())>30){
-            //if our vision+drivetrain odometry is more than 30, reset our odometry to the pose before(this is the right pose)
+        // Reset the pose to a position on the field if it is off the field
+        if(!Vision.onField(pose1)){
+            // If the pose at the beginning of the method is off the field, reset to a position in the middle of the field
+            // Use the rotation of the pose after updating odometry so the yaw is right
+            resetOdometry(new Pose2d(FieldConstants.kFieldLength/2, FieldConstants.kFieldWidth/2, pose2.getRotation()));
+        }else if(!Vision.onField(pose2)){
+            // if the drivetrain pose is off the field, reset our odometry to the pose before(this is the right pose)
+            // Keep the rotation from pose2 so yaw is correct for driver
+            resetOdometry(new Pose2d(pose1.getTranslation(), pose2.getRotation()));
+        }else if(!Vision.onField(pose3)){
+            //if our vision+drivetrain odometry is off the field, reset our odometry to the pose before(this is the right pose)
             resetOdometry(pose2);
         }
     }

@@ -14,7 +14,10 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.util.Units;
 import frc.robot.commands.Shoot;
+import frc.robot.constants.ArmConstants;
+import frc.robot.constants.ShooterConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Arm;
@@ -30,7 +33,7 @@ import frc.robot.subsystems.gpm.StorageIndex;
  * The math tests should also not need to build the subsystems.
  * The math in the Shoot command is opaque.
  */
-// @Disabled
+@Disabled
 public class SWMTest {
     // TODO: the math tests should not require subsystems....
     // the subsystems
@@ -62,7 +65,7 @@ public class SWMTest {
     private enum TestCase {
         A(12.922, 5.537, 0, 0, 0, 0.423905, 3.140748, 15.000000),
         B(2, 1.5, 1.619, 0, 0, 0.417965, 2.017422, 15.000000),
-        C(1.5, 2, 1.619, 0, 0, 0.452867, 1.956002, 15.000000) /**/,
+        C(1.5, 2, 1.619, 0, 0, 0.452867, 1.956002, 15.000000) /*,
         D(1, 3, 1.619, 0, 0, 0.556990, 1.923729, 15.000000),
         
         E(2, 1.5, 1.619, 3, 0, 0.379936, 2.195832, 16.417273),
@@ -196,7 +199,8 @@ public class SWMTest {
         assertFalse(Double.isNaN(sh.exit_vel));
 
         // Shoot assumes v_note = 15 m/s
-        // double v_note = 15.0;
+        // double v_note = ShooterConstants.SHOOT_SPEED_MPS;
+        assertEquals(15.0, ShooterConstants.SHOOT_SPEED_MPS, 0.001);
         // check that equation was followed (we do not know phi_v)
         // assertEquals(sh.exit_vel, v_note * Math.sin(phi_v) / Math.sin(sh.vert_angle), 0.0001);
 
@@ -207,15 +211,21 @@ public class SWMTest {
         // TODO: the robot yaw is always zero!
         assertEquals(0.0, drive.getYaw().getRadians(), 0.001);
 
+        // TODO: these magic numbers should not be here! They should be in the Arm and Shooter subsystems
+        double armAngle = ArmConstants.standbySetpoint; // arm.getAngleRad();
+        double angleToShooter = armAngle + Units.degreesToRadians(28.78);
+        double shooterToPivot = Units.inchesToMeters(13.651);
+        double horizontalDist = ArmConstants.PIVOT_X + shooterToPivot * Math.cos(angleToShooter);
+
         // calculate the rotated offset.
-        double offsetX = Shoot.shooterOffset * driveYaw.getCos();
-        double offsetY = Shoot.shooterOffset * driveYaw.getSin();
+        double offsetX = horizontalDist * driveYaw.getCos();
+        double offsetY = horizontalDist * driveYaw.getSin();
 
         // the displacement should be calculated from the robot pose
-        // System.err.println("displacement");
-        // System.err.println(sh.displacement);
-        // System.err.println(drive.getPose().getX() + offsetX - speakerPose.getX());
-        // System.err.println(drive.getPose().getY() + offsetY - speakerPose.getY());
+        System.err.println("displacement");
+        System.err.println(sh.displacement);
+        System.err.println(drive.getPose().getX() + offsetX - speakerPose.getX());
+        System.err.println(drive.getPose().getY() + offsetY - speakerPose.getY());
         assertEquals(drive.getPose().getX() + offsetX - speakerPose.getX(), sh.displacement.getX(), 0.0001);
         assertEquals(drive.getPose().getY() + offsetY - speakerPose.getY(), sh.displacement.getY(), 0.0001);
 

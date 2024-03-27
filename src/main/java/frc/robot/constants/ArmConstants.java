@@ -58,7 +58,7 @@ public class ArmConstants {
 	/** Whether to check if the arm is stowed on deploy */
 	public static final boolean ASSERT_AT_SETPOINT = true;
 	/** In radians */
-	public static final double ANGLE_TOLERANCE = 0.3;
+	public static final double ANGLE_TOLERANCE = 0.15;
 
     public static CurrentLimitsConfigs currentConfig = new CurrentLimitsConfigs()
         .withSupplyCurrentLimit(15)

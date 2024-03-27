@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
@@ -119,7 +120,6 @@ public class Shoot extends Command {
                 // Positive x displacement means we are to the left of the speaker
                 // TODO: doesn't positive y displacement mean we are above the speaker?
                 // Positive y displacement means we are below the speaker.
-
                 // shooterHeight and shooterOffset have an additional offset because the shooter is offset from the arm, right?
                 // get the direction the robot is facing
                 Rotation2d driveYaw = drive.getYaw();
@@ -127,11 +127,16 @@ public class Shoot extends Command {
                 // calculate the displacement to the speaker
                 //   actually, this calculates the displacement **from** the speaker to the robot, so Z value is negative...
                 // TODO: 22.7 inches - speaker.z should be negative? speakerPose.getZ() is 80.5 inches.
+                // TODO: these magic numbers should not be here! They should be in the Arm and Shooter subsystems
+                double angleToShooter = arm.getAngleRad()+Units.degreesToRadians(28.78);
+                double shooterToPivot = Units.inchesToMeters(13.651);
+                double horizontalDist = ArmConstants.PIVOT_X + shooterToPivot * Math.cos(angleToShooter);
+                // Set displacement to speaker
                 displacement = new Pose3d(
-                        drive.getPose().getX() + shooterOffset * driveYaw.getCos()-speakerPose.getX(),
-                        drive.getPose().getY() + shooterOffset * driveYaw.getSin()-speakerPose.getY(),
+                        drive.getPose().getX() + horizontalDist * driveYaw.getCos()-speakerPose.getX(),
+                        drive.getPose().getY() + horizontalDist * driveYaw.getSin()-speakerPose.getY(),
                         // shooterHeight-speakerPose.getZ(),
-                        Units.inchesToMeters(22.7)-speakerPose.getZ(),
+                        ArmConstants.PIVOT_HEIGHT + shooterToPivot * Math.sin(angleToShooter) - speakerPose.getZ(),
                         new Rotation3d(
                         0,
                         ShooterConstants.ANGLE_OFFSET - arm.getAngleRad(),
@@ -156,7 +161,7 @@ public class Shoot extends Command {
                 // );
 
                 // TODO: Figure out what v_note is empirically
-                double v_note = 15;
+                double v_note = ShooterConstants.SHOOT_SPEED_MPS;
 
                 // X distance to speaker (along the floor to center of speaker)
                 double x = Math.hypot(displacement.getX(), displacement.getY());
@@ -207,7 +212,9 @@ public class Shoot extends Command {
                 // System.err.println(exit_vel);
 
                 // set the shooter angle
+                // TODO: Arm should have an arm.setShooterAngle() method.
                 arm.setAngle(ShooterConstants.ANGLE_OFFSET - theta_v);
+
                 // theta_h is relative to the horizontal, so
                 // drive.setAlignAngle switches from theta_h to pi/2-theta_h
                 // depending on if it's relative to the horizontal or the vertical.
@@ -217,22 +224,34 @@ public class Shoot extends Command {
                 drive.setAlignAngle(Math.PI + theta_h); // would only pause rotational
 
                 // Set the outtake velocity
-                shooter.setTargetVelocity(v_note);
+                shooter.setTargetVelocity(v_shoot);
 
-                boolean sawTag = visionSawTagDebouncer.calculate(drive.canSeeTag());
+                boolean sawTag = true;//visionSawTagDebouncer.calculate(drive.canSeeTag());
                 // System.out.println("Arm Setpoint: "+arm.atSetpoint());
                 // System.out.println("Shooter Setpoint: "+shooter.atSetpoint());
                 // System.out.println("drive Setpoint: "+drive.atAlignAngle());
 
-                // TODO: Make this commented out if statement work (arm and shooter weren't getting to setpoint)
-                // TODO: the proper test is !shooting && ... to only execute the body once
-                // if (arm.atSetpoint() && shooter.atSetpoint() && drive.atAlignAngle() && sawTag || shooting) {
-                if (EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - theta_v, Units.degreesToRadians(1)) && 
-                shooter.atSetpoint() && drive.atAlignAngle() && sawTag || shooting) {
+                // report the conditions needed to start shooting
+                // TODO: do not use epsilonEquals(); use arm.atSetpoint()
+                // The shooter should not be worried about PID Tolerance here; that belongs in Arm.
+                SmartDashboard.putBoolean("arm setpoint", EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - theta_v, Units.degreesToRadians(3)));
+                SmartDashboard.putBoolean("shooter setpoint", shooter.atSetpoint());
+                SmartDashboard.putBoolean("drive setpoint", drive.atAlignAngle());
+                SmartDashboard.putBoolean("saw tag", sawTag);
+
+                // put the !shooting test first
+                if (!shooting
+                        && EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - theta_v, Units.degreesToRadians(3))
+                        && shooter.atSetpoint() 
+                        && drive.atAlignAngle() 
+                        && sawTag) {
+                        // remember we are now shooting
                         shooting = true;
+                        // push the note into the shooter
                         index.ejectIntoShooter();
-                        // shooting is true, so the timer is started continually....
+                        // start the shooting timer
                         shootTimer.start();
+                        System.out.println("DONE");
                 }
         }
 
@@ -245,6 +264,7 @@ public class Shoot extends Command {
         public void end(boolean interrupted) {
                 // slow down/turn off the shooter
                 shooter.setTargetVelocity(REST_VEL);
+                shooter.resetPID();
 
                 // use normal driver controls
                 drive.setIsAlign(false);
