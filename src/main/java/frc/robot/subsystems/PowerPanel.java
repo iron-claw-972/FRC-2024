@@ -12,12 +12,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * See https://docs.google.com/spreadsheets/d/1UiHZFYeZiHPAPIu39uRrskQuQYfvJ03UjLeQVq--Mzg/edit#gid=0 for PDH assignments.
  */
 public class PowerPanel extends SubsystemBase {
-	private static final PowerDistribution PDH = new PowerDistribution();
-	private static PDPSim PDHSim; // not sure if this is only CTRE or what
+	private final PowerDistribution PDH = new PowerDistribution();
+	private PDPSim PDHSim; // not sure if this is only CTRE or what
 	/** The simulated battery voltage */
 	private double voltsBattery = 12.6;
 	// assume the battery resistance is about 25 milohms + some wire resistance
-	private static double ohmsResistance = 0.030;
+	private static final double ohmsResistance = 0.030;
 	
 	public PowerPanel() {
 		if (RobotBase.isSimulation()) {
@@ -26,6 +26,10 @@ public class PowerPanel extends SubsystemBase {
 			// TODO: find actual values for things like Beelink
 			PDHSim.setCurrent(18, 12.4); //this is an example
 		}
+	}
+
+	public void close() {
+		PDH.close();
 	}
 
 	@Override

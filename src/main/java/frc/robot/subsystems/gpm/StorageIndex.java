@@ -31,6 +31,11 @@ public class StorageIndex extends SubsystemBase {
     // Additional setup, possibly related to CAN Frames, could be documented here.
   }
 
+  public void close() {
+    m_indexmotor.close();
+    m_indexBeamBreak.close();
+  }
+
   @Override
   public void periodic() {
   }
