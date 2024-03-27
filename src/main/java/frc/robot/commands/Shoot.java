@@ -152,7 +152,7 @@ public class Shoot extends Command {
                 // System.err.println(vert_angle);
                 // System.err.println(exit_vel);
 
-                arm.setAngle(ShooterConstants.ANGLE_OFFSET - theta_v-Units.degreesToRadians(.25));
+                arm.setAngle(ShooterConstants.ANGLE_OFFSET - theta_v);
                 // theta_h is relative to the horizontal, so
                 // drive.setAlignAngle switches from theta_h to pi/2-theta_h
                 // depending on if it's relative to the horizontal or the vertical.
@@ -176,7 +176,7 @@ public class Shoot extends Command {
                 // SmartDashboard.putBoolean("drive setpoint", drive.atAlignAngle());
                 // SmartDashboard.putBoolean("saw tag", sawTag);
 
-                if (EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - (theta_v-Units.degreesToRadians(0.25)), Units.degreesToRadians(2 /* 4 */)) && 
+                if (EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - (theta_v), Units.degreesToRadians(1 /* 4 */)) && 
                  shooter.atSetpoint() && drive.atAlignAngle() && sawTag && !shooting) {
                         shooting = true;
                         index.ejectIntoShooter();
