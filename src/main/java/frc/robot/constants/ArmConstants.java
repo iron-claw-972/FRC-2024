@@ -19,8 +19,9 @@ public class ArmConstants {
     public static final int ENCODER_ID = 3;
 
     // TODO: use the real moment of inertia
-    // guess the MOI as radius = 0.5 meter and the mass is 10 kg
+    // guess the MOI as radius = 0.5 meter and the mass is 10.3 kg
     public static final double MOMENT_OF_INERTIA = 2.5;
+
     /** Arm length in meters */
     public static final double ARM_LENGTH = .5;
 
@@ -33,8 +34,7 @@ public class ArmConstants {
      */
     public static final double MIN_ANGLE_RADS = Units.degreesToRadians(-9.20);
     /** maximum arm angle in radians */
-    // TODO: jimmied to 73 so ampSetpoint will work
-    public static final double MAX_ANGLE_RADS = Units.degreesToRadians(70.5 + 3.5);
+    public static final double MAX_ANGLE_RADS = Units.degreesToRadians(74);
 
     /** 
      * starting angle in radians.

@@ -133,15 +133,6 @@ public class VisionConstants {
    * This pose sets the X coordinate at the center of the amp, and
    * the Y coordinate away from the amp by half the **width** of the robot + 5 inches.
    * <p>
-   * TODO: What is going on? Is the 5 inches just to press into the amp?
-   * <p>
-   * Maybe the 5 inches is for the intake on the competition robot,
-   * but why is it being added here? That moves the robot 5 inches into the amp!
-   * It should move the robot negative 5 inches to compensate for the intake.
-   * However, the stern of the robot should be against the amp (we shoot from the stern),
-   * and that should be half the bumper width away from the robot center;
-   * the intake's additional length on the bow should not come into play.
-   * <p>
    * The robot orientation has the bow facing down so the shooter will eject into the amp.
    * <p>
    * April Tag ID 6 is on the amplifier.

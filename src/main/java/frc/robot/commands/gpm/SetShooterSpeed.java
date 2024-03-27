@@ -16,22 +16,17 @@ public class SetShooterSpeed extends Command{
 	* @see                frc.robot.commands.gpm.PrepareShooter
 	*/
     public SetShooterSpeed(Shooter shooter, double targetSpeed) {
-
         m_shooter = shooter;
         this.targetSpeed = targetSpeed;
-
     }
 
     @Override
     public void initialize(){
         m_shooter.setTargetRPM(targetSpeed);
-
     }
 
     @Override
-    public void execute(){
-
-    }
+    public void execute(){}
 
       @Override
     public boolean isFinished(){

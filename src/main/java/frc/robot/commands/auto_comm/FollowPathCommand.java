@@ -14,7 +14,9 @@ import frc.robot.commands.SupplierCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.PathGroupLoader;
 
-/** Add your docs here. */
+/** 
+ * Command for pathplanner to run the path.
+ */
 public class FollowPathCommand extends SequentialCommandGroup {
     Drivetrain drive;
     PathPlannerPath path;
