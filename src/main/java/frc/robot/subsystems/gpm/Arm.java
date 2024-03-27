@@ -277,7 +277,7 @@ public class Arm extends SubsystemBase {
         motors[0].setControl(m_request.withOutput(dutyCycle));
 
         // report the arm angle in radians
-        //SmartDashboard.putNumber("abs value", encoder.getAbsolutePosition());
+        SmartDashboard.putNumber("abs value", encoder.getAbsolutePosition());
         
 
         // TODO: Clean these up when not needed.

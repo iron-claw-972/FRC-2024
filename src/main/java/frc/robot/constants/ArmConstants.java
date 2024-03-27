@@ -47,7 +47,7 @@ public class ArmConstants {
     public static final double stowedSetpoint = MIN_ANGLE_RADS;
     public static final double standbySetpoint = Units.degreesToRadians(40);
     public static final double subwooferSetpoint = MIN_ANGLE_RADS;
-    public static final double preClimbSetpoint = MAX_ANGLE_RADS;
+    public static final double preClimbSetpoint = 0;//MAX_ANGLE_RADS;
     public static final double climbSetpoint = MIN_ANGLE_RADS;
     // TODO: if the max angle is 70.5, then why is this being set to 73?
     public static final double ampSetpoint = Units.degreesToRadians(73.0);

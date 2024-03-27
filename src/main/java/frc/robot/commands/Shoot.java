@@ -36,6 +36,7 @@ public class Shoot extends Command {
         private final Timer shootTimer = new Timer();
 
         // for testing sakes
+        public double X,ANG,Y;
         public double horiz_angle;
         public double vert_angle;
         public double exit_vel;
@@ -116,8 +117,10 @@ public class Shoot extends Command {
                 double x = Math.sqrt((displacement.getX() * displacement.getX())
                                 // Y distance to speaker
                                 + displacement.getY() * displacement.getY());
+                X = x;
                 // height (sorry that it's called y)
                 double y = displacement.getZ();
+                Y=y;
                 // Basic vertical angle calculation (static robot)
                 double phi_v = Math.atan(Math.pow(v_note, 2) / 9.8 / x * (1 - Math.sqrt(1
                                 + 19.6 / Math.pow(v_note, 2) * (y - 4.9 * x * x / Math.pow(v_note, 2)))));
@@ -147,6 +150,7 @@ public class Shoot extends Command {
                 double v_shoot = v_note * Math.sin(phi_v) / Math.sin(theta_v);
                 horiz_angle = theta_h;
                 vert_angle = theta_v;
+                ANG = ShooterConstants.ANGLE_OFFSET - theta_v;
                 exit_vel = v_shoot;
                 // System.err.println(horiz_angle);
                 // System.err.println(vert_angle);
@@ -162,7 +166,7 @@ public class Shoot extends Command {
                 drive.setAlignAngle(Math.PI + theta_h); // would only pause rotational
 
                 // Set the outtake velocity
-                shooter.setTargetVelocity(v_shoot);
+                // shooter.setTargetVelocity(v_shoot); // change back
 
                 boolean sawTag = true;//visionSawTagDebouncer.calculate(drive.canSeeTag());
                 // System.out.println("Arm Setpoint: "+arm.atSetpoint());
@@ -177,9 +181,9 @@ public class Shoot extends Command {
                 // SmartDashboard.putBoolean("saw tag", sawTag);
 
                 if (EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - (theta_v), Units.degreesToRadians(1 /* 4 */)) && 
-                 shooter.atSetpoint() && drive.atAlignAngle() && sawTag && !shooting) {
+                 shooter.atSetpoint() && drive.atAlignAngle() && sawTag && !shooting && false) {
                         shooting = true;
-                        index.ejectIntoShooter();
+                        // index.ejectIntoShooter(); // change back
                         shootTimer.start();
                         //System.out.println("DONE");
                 }
@@ -192,6 +196,7 @@ public class Shoot extends Command {
 
         @Override
         public void end(boolean interrupted) {
+                System.out.println("x " + X+" y "+Y+" ang "+ANG + " actual " + arm.getAngleRad());
                 shooter.setTargetVelocity(REST_VEL);
                 drive.setIsAlign(false); // Use normal driver controls
                 arm.setAngle(ArmConstants.stowedSetpoint);
