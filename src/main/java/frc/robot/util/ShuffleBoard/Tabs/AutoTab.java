@@ -50,17 +50,15 @@ public class AutoTab extends ShuffleBoardTabs {
                 new WaitCommand(1),
                 new ChoreoPathCommand("Distance Center 7.5", true, drive),
                 new WaitCommand(1),
-                new ChoreoPathCommand("Distance Center 7.6", true, drive),
-                new WaitCommand(1),
-                new ChoreoPathCommand("Distance Center 7.7", true, drive)
+                new ChoreoPathCommand("Distance Center 7.6", true, drive)
         ));
 
         autoCommand.setDefaultOption("Choreo Distance Source 4 (no shoot)", new SequentialCommandGroup(
-                new ChoreoPathCommand("Distance Source 6.1", true, drive),
+                new ChoreoPathCommand("Distance Source 4.1", true, drive),
                 new WaitCommand(1),
-                new ChoreoPathCommand("Distance Source 6.2", true, drive),
+                new ChoreoPathCommand("Distance Source 4.2", true, drive),
                 new WaitCommand(1),
-                new ChoreoPathCommand("Distance Source 6.3", true, drive)
+                new ChoreoPathCommand("Distance Source 4.3", true, drive)
         ));
 
         // Final Autos
