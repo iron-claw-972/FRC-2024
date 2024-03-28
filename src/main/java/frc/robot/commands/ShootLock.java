@@ -1,13 +1,10 @@
 package frc.robot.commands;
-import edu.wpi.first.math.filter.Debouncer;
-import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.constants.ArmConstants;
@@ -40,9 +37,9 @@ public class ShootLock extends Command {
         public Pose3d displacement;
         public double v_rx;
         public double v_ry;
-        // TODO: put in constants for other commands to use
-        private final double REST_VEL = 4; // TODO: determine the fastest idle note-exit velocity that won't kill the
-                                           // battery.
+
+        private final double REST_VEL = 4; 
+
         public static final double shooterHeight = ArmConstants.ARM_LENGTH*Math.sin(ArmConstants.standbySetpoint) + ArmConstants.PIVOT_HEIGHT;
         public static final double shooterOffset = ArmConstants.PIVOT_X + ArmConstants.ARM_LENGTH * Math.cos(ArmConstants.standbySetpoint);
 
@@ -93,7 +90,7 @@ public class ShootLock extends Command {
                                         drive.getChassisSpeeds().vxMetersPerSecond+" "+
                                         drive.getChassisSpeeds().vyMetersPerSecond
                 );
-                // TODO: Figure out what v_note is empirically
+
                 double v_note = 10;
 
                 // X distance to speaker
@@ -122,9 +119,6 @@ public class ShootLock extends Command {
                 horiz_angle = theta_h;
                 vert_angle = theta_v;
                 exit_vel = v_shoot;
-                System.err.println(horiz_angle);
-                System.err.println(vert_angle);
-                System.err.println(exit_vel);
 
                 arm.setAngle(ShooterConstants.ANGLE_OFFSET - theta_v);
                 // use driveheading with x, y speed (keep same), angle;
@@ -142,7 +136,6 @@ public class ShootLock extends Command {
                         index.ejectIntoShooter();
                         shootTimer.start();
                     }
-                    SmartDashboard.putBoolean("ShootLock ready?",arm.atSetpoint() && shooter.atSetpoint() && drive.atAlignAngle());
                     has_elapsed = true;
                 }
         }

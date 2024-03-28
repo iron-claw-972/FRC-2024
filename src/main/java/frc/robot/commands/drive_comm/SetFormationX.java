@@ -22,7 +22,6 @@ public class SetFormationX extends SequentialCommandGroup {
                         new SwerveModuleState(0, new Rotation2d(Units.degreesToRadians(-45))),
                         new SwerveModuleState(0, new Rotation2d(Units.degreesToRadians(45)))
                 }, false), drive)
-                // TODO: add a check to WaitUntil() it has reached the setpoint, then re-enable state deadband. This would make the RepeatCommand in the Driver control unecessary
                    );
     }
 }
