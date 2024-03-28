@@ -170,70 +170,72 @@ public class RobotContainer {
   }
 
   public void registerCommands() {
+    // Prevent crashes on other robots
+    if(intake != null && index != null && shooter != null){
+      // Stuff used in Choreo Paths
+      NamedCommands.registerCommand("Intake", new IntakeNote(intake, index, arm, (ignored) -> {}).withTimeout(1));
+      NamedCommands.registerCommand("LongIntake", new IntakeNote(intake, index, arm, (ignored) -> {}).withTimeout(10));
+      NamedCommands.registerCommand("Index", new IndexerFeed(index));
+      NamedCommands.registerCommand("End Shooter", new PrepareShooter(shooter, 0));
 
-    // Stuff used in Choreo Paths
-    NamedCommands.registerCommand("Intake", new IntakeNote(intake, index, arm, (ignored) -> {}).withTimeout(1));
-    NamedCommands.registerCommand("LongIntake", new IntakeNote(intake, index, arm, (ignored) -> {}).withTimeout(10));
-    NamedCommands.registerCommand("Index", new IndexerFeed(index));
-    NamedCommands.registerCommand("End Shooter", new PrepareShooter(shooter, 0));
+      NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index, arm, consumer).withTimeout(1.75));
+      
+      NamedCommands.registerCommand("Outtake_Note_1.50_Sec", new SequentialCommandGroup(
+        new ParallelDeadlineGroup(
+        new InstantCommand(() -> drive.setChassisSpeeds(new ChassisSpeeds(), true)),
+        new WaitCommand(.75)),
+      new WaitCommand(.75)
+      ));
 
-    NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index, arm, consumer).withTimeout(1.75));
-    
-     NamedCommands.registerCommand("Outtake_Note_1.50_Sec", new SequentialCommandGroup(
-       new ParallelDeadlineGroup(
-       new InstantCommand(() -> drive.setChassisSpeeds(new ChassisSpeeds(), true)),
-       new WaitCommand(.75)),
-     new WaitCommand(.75)
-     ));
+      NamedCommands.registerCommand("Intake_Note_2.5_Sec", new IntakeNote(intake, index, arm, consumer).withTimeout(2.5)); // 3 seconds used at SVR
+      
+      //Old
+      NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new SequentialCommandGroup(// TODO: This will end instantly
+      // TODO: Don't use setChassisSpeeds(), use drive() instead and add the drivetrain as a parameter so it is a requirement
+        new ParallelDeadlineGroup(new PrepareShooter(shooter, 1750),
+        new WaitCommand(.75)),
+        new WaitCommand(.75),
+        new InstantCommand(()-> index.runIndex()),
+        new WaitCommand(.75),
+        new ParallelDeadlineGroup(new PrepareShooter(shooter, 0))
+      ));
 
-    NamedCommands.registerCommand("Intake_Note_2.5_Sec", new IntakeNote(intake, index, arm, consumer).withTimeout(2.5)); // 3 seconds used at SVR
-    
-    //Old
-    NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new SequentialCommandGroup(// TODO: This will end instantly
-    // TODO: Don't use setChassisSpeeds(), use drive() instead and add the drivetrain as a parameter so it is a requirement
-      new ParallelDeadlineGroup(new PrepareShooter(shooter, 1750),
-      new WaitCommand(.75)),
-      new WaitCommand(.75),
-      new InstantCommand(()-> index.runIndex()),
-      new WaitCommand(.75),
-      new ParallelDeadlineGroup(new PrepareShooter(shooter, 0))
-     ));
+      // Whole time running
+      NamedCommands.registerCommand("Set_Shooter",
+        new SequentialCommandGroup(// TODO: This will end instantly
+          new PrepareShooter(shooter, 1750),
+          new WaitCommand(.75) ) );
 
-    // Whole time running
-    NamedCommands.registerCommand("Set_Shooter",
-      new SequentialCommandGroup(// TODO: This will end instantly
-        new PrepareShooter(shooter, 1750),
-        new WaitCommand(.75) ) );
-
-    // NamedCommands.registerCommand("Set_Shooter",
-    //   new SequentialCommandGroup(// TODO: This will end instantly
-    //     new ParallelDeadlineGroup(new PrepareShooter(shooter, 1750),
-    //         new WaitCommand(.75)),
-    //     new WaitCommand(.75) ) );
+      // NamedCommands.registerCommand("Set_Shooter",
+      //   new SequentialCommandGroup(// TODO: This will end instantly
+      //     new ParallelDeadlineGroup(new PrepareShooter(shooter, 1750),
+      //         new WaitCommand(.75)),
+      //     new WaitCommand(.75) ) );
 
 
-    // Runs the Indexer
-    NamedCommands.registerCommand("Outtake", new SequentialCommandGroup(
-      new WaitCommand(.25),
-      new InstantCommand(()-> index.runIndex()),
-      new WaitCommand(.25)
-    ));
+      // Runs the Indexer
+      NamedCommands.registerCommand("Outtake", new SequentialCommandGroup(
+        new WaitCommand(.25),
+        new InstantCommand(()-> index.runIndex()),
+        new WaitCommand(.25)
+      ));
 
-    NamedCommands.registerCommand("Lower_Set_Shooter_Sabotage_Prep", new SequentialCommandGroup(
-      new ParallelDeadlineGroup(new PrepareShooter(shooter, 50))
-    ));
+      NamedCommands.registerCommand("Lower_Set_Shooter_Sabotage_Prep", new SequentialCommandGroup(
+        new ParallelDeadlineGroup(new PrepareShooter(shooter, 50))
+      ));
 
-    NamedCommands.registerCommand("Sabotage_Second_Shot_Prep", new SequentialCommandGroup(
-      new ParallelDeadlineGroup(new PrepareShooter(shooter, 1250))
-    ));
-    
-      // new InstantCommand(() -> drive.setChassisSpeeds(new ChassisSpeeds(), true)),
-      // new WaitCommand(.75)),
-      // new InstantCommand(()-> index.runIndex()),
-      // new WaitCommand(.5))); 
-      //TODO: Stop index after command finishes
+      NamedCommands.registerCommand("Sabotage_Second_Shot_Prep", new SequentialCommandGroup(
+        new ParallelDeadlineGroup(new PrepareShooter(shooter, 1250))
+      ));
+      
+        // new InstantCommand(() -> drive.setChassisSpeeds(new ChassisSpeeds(), true)),
+        // new WaitCommand(.75)),
+        // new InstantCommand(()-> index.runIndex()),
+        // new WaitCommand(.5))); 
+        //TODO: Stop index after command finishes
 
-    NamedCommands.registerCommand("Prepare Shooter", new SequentialCommandGroup(new PrepareShooter(shooter, 1750), new WaitCommand(1)));
+      NamedCommands.registerCommand("Prepare Shooter", new SequentialCommandGroup(new PrepareShooter(shooter, 1750), new WaitCommand(1)));
+    }
   }
 
   public static BooleanSupplier getAllianceColorBooleanSupplier() {
