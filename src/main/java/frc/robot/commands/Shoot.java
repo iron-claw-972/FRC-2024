@@ -149,6 +149,7 @@ public class Shoot extends Command {
                 // also here
                 double v_shoot = v_note * Math.sin(phi_v) / Math.sin(theta_v);
                 horiz_angle = theta_h;
+                theta_v += Units.degreesToRadians(1);
                 vert_angle = theta_v;
                 ANG = ShooterConstants.ANGLE_OFFSET - theta_v;
                 exit_vel = v_shoot;
@@ -166,7 +167,7 @@ public class Shoot extends Command {
                 drive.setAlignAngle(Math.PI + theta_h); // would only pause rotational
 
                 // Set the outtake velocity
-                // shooter.setTargetVelocity(v_shoot); // change back
+                shooter.setTargetVelocity(v_shoot);
 
                 boolean sawTag = true;//visionSawTagDebouncer.calculate(drive.canSeeTag());
                 // System.out.println("Arm Setpoint: "+arm.atSetpoint());
@@ -174,16 +175,15 @@ public class Shoot extends Command {
                 // System.out.println("drive Setpoint: "+drive.atAlignAngle());
                 // TODO: Make this commented out if statement work (arm and shooter weren't getting to setpoint)
                 // if (arm.atSetpoint() && shooter.atSetpoint() && drive.atAlignAngle() && sawTag || shooting) {
+                SmartDashboard.putBoolean("arm setpoint", EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - theta_v, Units.degreesToRadians(1)));
+                SmartDashboard.putBoolean("shooter setpoint", shooter.atSetpoint());
+                SmartDashboard.putBoolean("drive setpoint", drive.atAlignAngle());
+                SmartDashboard.putBoolean("saw tag", sawTag);
 
-                // SmartDashboard.putBoolean("arm setpoint", EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - theta_v, Units.degreesToRadians(4)));
-                // SmartDashboard.putBoolean("shooter setpoint", shooter.atSetpoint());
-                // SmartDashboard.putBoolean("drive setpoint", drive.atAlignAngle());
-                // SmartDashboard.putBoolean("saw tag", sawTag);
-
-                if (EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - (theta_v), Units.degreesToRadians(1 /* 4 */)) && 
-                 shooter.atSetpoint() && drive.atAlignAngle() && sawTag && !shooting && false) {
+                if (EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - (theta_v), Units.degreesToRadians(1 /* 4, 1 */)) && 
+                 shooter.atSetpoint() && drive.atAlignAngle() && sawTag && !shooting) {
                         shooting = true;
-                        // index.ejectIntoShooter(); // change back
+                        index.ejectIntoShooter();
                         shootTimer.start();
                         //System.out.println("DONE");
                 }

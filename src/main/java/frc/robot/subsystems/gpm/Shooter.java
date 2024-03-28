@@ -139,6 +139,7 @@ public class Shooter extends SubsystemBase {
 		// report some values to the Dashboard
 		SmartDashboard.putNumber("left speed", /* shooterRPMToSpeed */ (leftSpeed));
 		SmartDashboard.putNumber("right speed", /* shooterRPMToSpeed */ (rightSpeed));
+		SmartDashboard.putBoolean("right setpoint", atSetpoint());
 		//SmartDashboard.putData("slip coefficient", slipCoefficient); /// FIXXX
 		// SmartDashboard.putData("left Shooter PID", leftPID);
 		// SmartDashboard.putData("right Shooter PID", rightPID);
