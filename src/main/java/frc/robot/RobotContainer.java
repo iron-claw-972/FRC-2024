@@ -198,9 +198,8 @@ public class RobotContainer {
      new WaitCommand(.75)
      ));
 
-    NamedCommands.registerCommand("Intake_Note_2.5_Sec", new IntakeNote(intake, index, arm).withTimeout(2.5)); // 3 seconds used at SVR
-    NamedCommands.registerCommand("Intake_Note_2_Sec", new IntakeNote(intake, index, arm).withTimeout(2)); 
     NamedCommands.registerCommand("Intake_Note_2.5_Sec", new IntakeNote(intake, index, arm, consumer).withTimeout(2.5)); // 3 seconds used at SVR
+    NamedCommands.registerCommand("Intake_Note_2_Sec", new IntakeNote(intake, index, arm, consumer).withTimeout(2)); 
     
     //Old
     NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new SequentialCommandGroup(// TODO: This will end instantly
