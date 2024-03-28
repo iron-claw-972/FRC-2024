@@ -34,7 +34,7 @@ public class ArmConstants {
     public static final double MIN_ANGLE_RADS = Units.degreesToRadians(-9.20);
     /** maximum arm angle in radians */
     // TODO: jimmied to 73 so ampSetpoint will work
-    public static final double MAX_ANGLE_RADS = Units.degreesToRadians(70.5 + 2.5);
+    public static final double MAX_ANGLE_RADS = Units.degreesToRadians(70.5 + 3.5);
 
     /** 
      * starting angle in radians.
@@ -58,7 +58,7 @@ public class ArmConstants {
 	/** Whether to check if the arm is stowed on deploy */
 	public static final boolean ASSERT_AT_SETPOINT = true;
 	/** In radians */
-	public static final double ANGLE_TOLERANCE = 0.3;
+	public static final double ANGLE_TOLERANCE = 0.2;
 
     public static CurrentLimitsConfigs currentConfig = new CurrentLimitsConfigs()
         .withSupplyCurrentLimit(15)

@@ -90,7 +90,7 @@ public class DriveConstants {
     public static double kHeadingP = 5.5;
     public static double kHeadingD = 0;
 
-    public static final double HEADING_TOLERANCE = Units.degreesToRadians(3);
+    public static final double HEADING_TOLERANCE = Units.degreesToRadians(4);
 
     //translational PID
     public static double kTranslationalP = 1;
@@ -118,8 +118,8 @@ public class DriveConstants {
     public static final double kAnglePeakCurrentDuration = 0.01;
     public static final boolean kAngleEnableCurrentLimit = true;
 
-    public static final int kDriveContinuousCurrentLimit = 20;
-    public static final int kDrivePeakCurrentLimit = 20;
+    public static final int kDriveContinuousCurrentLimit = 25;
+    public static final int kDrivePeakCurrentLimit = 25;
     public static final double kDrivePeakCurrentDuration = 0.01;
     public static final boolean kDriveEnableCurrentLimit = true;
 

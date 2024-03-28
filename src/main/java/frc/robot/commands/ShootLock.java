@@ -142,7 +142,7 @@ public class ShootLock extends Command {
                         index.ejectIntoShooter();
                         shootTimer.start();
                     }
-                    SmartDashboard.putBoolean("ShootLock ready?",arm.atSetpoint() && shooter.atSetpoint() && drive.atAlignAngle());
+                    //SmartDashboard.putBoolean("ShootLock ready?",arm.atSetpoint() && shooter.atSetpoint() && drive.atAlignAngle());
                     has_elapsed = true;
                 }
         }

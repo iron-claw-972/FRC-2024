@@ -151,13 +151,13 @@ public class Drivetrain extends SubsystemBase {
             LogManager.add("Drivetrain/SpeedY", () -> getChassisSpeeds().vyMetersPerSecond);
             LogManager.add("Drivetrain/Speed", () -> Math.hypot(getChassisSpeeds().vxMetersPerSecond, getChassisSpeeds().vyMetersPerSecond));
             LogManager.add("Drivetrain/SpeedRot", () -> getChassisSpeeds().omegaRadiansPerSecond);
-
+        }
             LogManager.add("Drivetrain/Pose2d", () -> new Double[]{
                 getPose().getX(),
                 getPose().getY(),
                 getPose().getRotation().getRadians()
                 });
-        }
+        
     }
 
     @Override
