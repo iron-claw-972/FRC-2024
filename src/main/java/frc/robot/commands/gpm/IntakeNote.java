@@ -1,6 +1,5 @@
 package frc.robot.commands.gpm;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 import edu.wpi.first.wpilibj.Timer;

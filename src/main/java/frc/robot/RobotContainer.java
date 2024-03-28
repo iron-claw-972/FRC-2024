@@ -1,30 +1,18 @@
 package frc.robot;
 
-import java.rmi.server.Operation;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
-import java.util.Optional;
-import com.ctre.phoenix6.SignalLogger;
-import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.Climb;
 import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.commands.DoNothing;
-import frc.robot.commands.Shoot;
-import frc.robot.commands.Climb.Chain;
 import frc.robot.commands.gpm.*;
 import frc.robot.constants.AutoConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
@@ -37,11 +25,11 @@ import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
 import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.subsystems.gpm.StorageIndex;
+import frc.robot.util.DetectedObject;
 import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
 import lib.controllers.GameController.RumbleStatus;
-import frc.robot.commands.gpm.ShootKnownPos.ShotPosition;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -98,7 +86,7 @@ public class RobotContainer {
         break;
       case Vertigo:
           drive = new Drivetrain(vision);
-          driver = new GameControllerDriverConfig(drive, vision, arm, intake, index, shooter);
+          driver = new GameControllerDriverConfig(drive);
           driver.configureControls();
           drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
           break;
@@ -115,11 +103,11 @@ public class RobotContainer {
 
 
         drive = new Drivetrain(vision);
-        driver = new GameControllerDriverConfig(drive, vision, arm, intake, index, shooter);
+        driver = new GameControllerDriverConfig(drive);
         operator = new Operator(intake, arm, index, shooter, drive, consumer);
 
         // Detected objects need access to the drivetrain
-        //DetectedObject.setDrive(drive);
+        DetectedObject.setDrive(drive);
         
         //SignalLogger.start();
 

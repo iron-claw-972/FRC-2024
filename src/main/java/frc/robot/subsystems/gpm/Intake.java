@@ -81,8 +81,6 @@ public class Intake extends SubsystemBase {
         setMode(Mode.DISABLED);
 
         // digital inputs
-        // addChild("Intake motor", motor);
-        // addchild("Centering motor", centeringMotor);
         addChild("Intake sensor", sensor);
 
         // Simulation objects
@@ -111,8 +109,8 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putBoolean("Intake Sensor", sensor.get());
 
         if (RobotBase.isSimulation()) {
-            // SmartDashboard.putNumber("Intake motor RPM", motorRPMSim);
-            // SmartDashboard.putNumber("Intake centering motor RPM", centeringMotorRPMSim);
+            SmartDashboard.putNumber("Intake motor RPM", motorRPMSim);
+            SmartDashboard.putNumber("Intake centering motor RPM", centeringMotorRPMSim);
         }
     }
 

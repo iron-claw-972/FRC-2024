@@ -30,7 +30,4 @@ public class AutoConstants {
         Math.sqrt(2)*DriveConstants.kTrackWidth/2,
         replanningConfig
     );
-
-    private AutoConstants() {
-    }
 }

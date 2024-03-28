@@ -10,7 +10,6 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.Tabs.AutoTab;
-import frc.robot.util.ShuffleBoard.Tabs.SwerveTab;
 import frc.robot.util.ShuffleBoard.Tabs.VisionTab;
 
 /** Add your docs here. */
@@ -20,7 +19,7 @@ public class ShuffleBoardManager {
     
     private Field feild;
 
-    //private SwerveTab swerveTab;
+    // private SwerveTab swerveTab;
     private AutoTab autoTab;
     private VisionTab visionTab;
 

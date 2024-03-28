@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.util.ShuffleBoard.Tabs;
 
 import edu.wpi.first.math.MathUtil;
@@ -14,9 +10,6 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.module.Module;
 import frc.robot.util.ShuffleBoard.ShuffleBoardTabs;
 
-
-
-/** Add your docs here. */
 public class SwerveTab extends ShuffleBoardTabs {
     
     private Drivetrain drive;
@@ -82,7 +75,6 @@ public class SwerveTab extends ShuffleBoardTabs {
         yOdemetry = tab.add("y odemetry", 0).withPosition(1, 3).getEntry();
         rotOdemetry = tab.add("chassis rotation", 0).withPosition(3, 3).getEntry();
     }
-
 
     public void update(){
         for(int i = 0; i<modules.length; i++){

@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.util.EqualsUtil;
-import frc.robot.util.Log;
 import frc.robot.util.LogManager;
 
 public class Shooter extends SubsystemBase {
@@ -49,11 +48,6 @@ public class Shooter extends SubsystemBase {
 	 * At 1500 rpm, the simulator gives 1519 rpm.
 	 */
 	private static final double TOLERANCE = 50;
-
-	// 4-inch Colson wheels
-	// private static final double MASS_COLSON = 0.245;
-	// private static final double RADIUS_COLSON = Units.inchesToMeters(2.0);
-	// private static final double MOI_COLSON = 0.5 * MASS_COLSON * RADIUS_COLSON * RADIUS_COLSON;
 
 	// 4-inch Stealth
 	// mass is 0.097 kg. About half of that is in the rim.
@@ -87,7 +81,6 @@ public class Shooter extends SubsystemBase {
 	private double rightPower = 0.0;
 	private static double slipCoefficient = 0.91;
 
-	// TODO: TUNE THIS
 	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(S, V);
 
 	public Shooter() {
@@ -121,9 +114,6 @@ public class Shooter extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-
-		//SmartDashboard.putBoolean("shooter setpoint", atSetpoint());
-
 		// PID loop uses RPM
 		double leftSpeed = getLeftMotorRPM();
 		double rightSpeed = getRightMotorRPM();
@@ -139,9 +129,6 @@ public class Shooter extends SubsystemBase {
 		// report some values to the Dashboard
 		SmartDashboard.putNumber("left speed", /* shooterRPMToSpeed */ (leftSpeed));
 		SmartDashboard.putNumber("right speed", /* shooterRPMToSpeed */ (rightSpeed));
-		//SmartDashboard.putData("slip coefficient", slipCoefficient); /// FIXXX
-		// SmartDashboard.putData("left Shooter PID", leftPID);
-		// SmartDashboard.putData("right Shooter PID", rightPID);
 	}
 
 	@Override
@@ -164,8 +151,7 @@ public class Shooter extends SubsystemBase {
 		leftMotorSpeedSim = leftFlywheelSim.getAngularVelocityRPM();
 		rightMotorSpeedSim = rightFlywheelSim.getAngularVelocityRPM();
 
-		// we would like to set the encoder velocities to those values, but REV does not
-		// let us do that
+		// we would like to set the encoder velocities to those values, but REV does not let us do that
 	}
 
 	/**
@@ -260,7 +246,7 @@ public class Shooter extends SubsystemBase {
 	 * @see setTargetVelocity
 	 */
 	public void setTargetRPM(double speed) {
-		double spin = speed < 300 ? 0 : ShooterConstants.SPIN;
+		double spin = speed < ShooterConstants.SPIN ? 0 : ShooterConstants.SPIN;
 		setTargetRPM(speed+spin, speed-spin);
 	}
 
@@ -283,6 +269,7 @@ public class Shooter extends SubsystemBase {
 	 * @return boolean indicating whether both PIDs are at their setpoints
 	 */
 	public boolean atSetpoint() {
+		// TODO: pid.atSetpoint should work
 		return EqualsUtil.epsilonEquals(getLeftMotorRPM(),leftPID.getSetpoint(),TOLERANCE)&&
 		EqualsUtil.epsilonEquals(getRightMotorRPM(),rightPID.getSetpoint(),TOLERANCE);
 		//return leftPID.atSetpoint() && rightPID.atSetpoint();

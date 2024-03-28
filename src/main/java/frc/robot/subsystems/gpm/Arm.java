@@ -25,7 +25,6 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ArmConstants;
 import frc.robot.constants.Constants;
@@ -136,11 +135,6 @@ public class Arm extends SubsystemBase {
         // set the PID the starting position
         pid.setSetpoint(ArmConstants.START_ANGLE_RADS);
 
-		// set the arm offset
-		// assumes the arm is at its lowest position on startup
-		// if the arm is not at its stowedSetpoint, then this will likely break the arm
-		//OFFSET = getAngleRad() - ArmConstants.MIN_ANGLE_RADS;
-
         // make the encoder report arm angle in radians
         encoder.setDistancePerRotation(DISTANCE_PER_ROTATION);
         encoder.setPositionOffset(OFFSET);
@@ -149,7 +143,6 @@ public class Arm extends SubsystemBase {
         for (int i = 0; i < motors.length; i++) {
             // create the motor
             motors[i] = new TalonFX(ArmConstants.MOTOR_IDS[i]);
-            // TODO: why is this done here? The slave should follow when neutral mode is set below.
             motors[i].setNeutralMode(NeutralModeValue.Brake);
 
             // i==0 is the master; the others are slaves
@@ -322,10 +315,10 @@ public class Arm extends SubsystemBase {
 
         // see https://docs.google.com/spreadsheets/d/1UiHZFYeZiHPAPIu39uRrskQuQYfvJ03UjLeQVq--Mzg/edit#gid=0
         // Arm motors uses channels 1, 2, 4, 5
-        // m_powerPanel.setCurrent(1, ampsPerMotor);
-        // m_powerPanel.setCurrent(2, ampsPerMotor);
-        // m_powerPanel.setCurrent(4, ampsPerMotor);
-        // m_powerPanel.setCurrent(5, ampsPerMotor);
+        m_powerPanel.setCurrent(1, ampsPerMotor);
+        m_powerPanel.setCurrent(2, ampsPerMotor);
+        m_powerPanel.setCurrent(4, ampsPerMotor);
+        m_powerPanel.setCurrent(5, ampsPerMotor);
     }
 
     /**

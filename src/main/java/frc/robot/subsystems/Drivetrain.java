@@ -18,6 +18,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -89,13 +90,16 @@ public class Drivetrain extends SubsystemBase {
 
     private SwerveSetpointGenerator setpointGenerator = new SwerveSetpointGenerator();
 
-
-
     /**
      * Creates a new Swerve Style Drivetrain.
      */
     public Drivetrain(Vision vision) {
         this.vision = vision;
+
+        // This variable should never be changed. Read the comment.
+        if(!visionEnabled){
+            DriverStation.reportError("CHANGE VISIION ENABLED BACK TO TRUE!", false);
+        }
 
         modules = new Module[4];
 
@@ -152,20 +156,17 @@ public class Drivetrain extends SubsystemBase {
             LogManager.add("Drivetrain/Speed", () -> Math.hypot(getChassisSpeeds().vxMetersPerSecond, getChassisSpeeds().vyMetersPerSecond));
             LogManager.add("Drivetrain/SpeedRot", () -> getChassisSpeeds().omegaRadiansPerSecond);
         }
-            LogManager.add("Drivetrain/Pose2d", () -> new Double[]{
-                getPose().getX(),
-                getPose().getY(),
-                getPose().getRotation().getRadians()
-                });
-        
+        LogManager.add("Drivetrain/Pose2d", () -> new Double[]{
+            getPose().getX(),
+            getPose().getY(),
+            getPose().getRotation().getRadians()
+        });
     }
 
     @Override
     public void periodic() {
         updateOdometry();
     }
-
-    // DRIVE
 
     /**
      * Method to drive the robot using joystick info.
@@ -176,17 +177,14 @@ public class Drivetrain extends SubsystemBase {
      * @param fieldRelative whether the provided x and y speeds are relative to the field
      * @param isOpenLoop    whether to use velocity control for the drive motors
      */
-
-    
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean isOpenLoop) {
         rot = headingControl(rot, xSpeed, ySpeed);
-        setChassisSpeeds((
-                                 fieldRelative
-                                         ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getYaw())
-                                         : new ChassisSpeeds(xSpeed, ySpeed, rot)
-                         ),
-                         isOpenLoop
-                        );
+        setChassisSpeeds(
+            fieldRelative
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getYaw())
+                : new ChassisSpeeds(xSpeed, ySpeed, rot),
+            isOpenLoop
+        );
     }
 
     /**
@@ -199,12 +197,11 @@ public class Drivetrain extends SubsystemBase {
      */
     public void driveHeading(double xSpeed, double ySpeed, double heading, boolean fieldRelative) {
         double rot = rotationController.calculate(getYaw().getRadians(), heading);
-        setChassisSpeeds((
-                        fieldRelative
-                                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getYaw())
-                                : new ChassisSpeeds(xSpeed, ySpeed, rot)
-                ),
-                false
+        setChassisSpeeds(
+            fieldRelative
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getYaw())
+                : new ChassisSpeeds(xSpeed, ySpeed, rot),
+            false
         );
     }
 
@@ -266,9 +263,6 @@ public class Drivetrain extends SubsystemBase {
     public void stop() {
         Arrays.stream(modules).forEach(Module::stop);
     }
-
-
-    // GETTERS AND SETTERS
 
     /**
      * Sets the desired states for all swerve modules.
@@ -447,7 +441,9 @@ public class Drivetrain extends SubsystemBase {
         if(alignAngle != null){
             return alignAngle;
         }
+        // Angle to score in amp
         return -Math.PI/2;
+        // Angle to point at speaker (not used by default)
         // Pose2d pose = getPose();
         // return Math.PI + (Robot.getAlliance() == Alliance.Blue ?
         //     Math.atan2(VisionConstants.BLUE_SPEAKER_POSE.getY() - pose.getY(), VisionConstants.BLUE_SPEAKER_POSE.getX() - pose.getX()) :

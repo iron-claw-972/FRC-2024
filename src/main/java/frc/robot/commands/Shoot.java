@@ -1,7 +1,5 @@
 package frc.robot.commands;
 
-import edu.wpi.first.math.filter.Debouncer;
-import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -47,8 +45,6 @@ public class Shoot extends Command {
         private final double REST_VEL = 0;
         public static final double shooterHeight = ArmConstants.ARM_LENGTH*Math.sin(ArmConstants.standbySetpoint) + ArmConstants.PIVOT_HEIGHT;
         public static final double shooterOffset = ArmConstants.PIVOT_X + ArmConstants.ARM_LENGTH * Math.cos(ArmConstants.standbySetpoint);
-
-        private Debouncer visionSawTagDebouncer = new Debouncer(0.2, DebounceType.kFalling);
 
         Timer timer = new Timer();
         private boolean shooting = false;
@@ -151,17 +147,14 @@ public class Shoot extends Command {
                 // Set the outtake velocity
                 shooter.setTargetVelocity(v_shoot);
 
-                boolean sawTag = true;
-
                 if(Constants.DO_LOGGING)  {
-                SmartDashboard.putBoolean("arm setpoint", EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - theta_v, Units.degreesToRadians(4)));
-                SmartDashboard.putBoolean("shooter setpoint", shooter.atSetpoint());
-                SmartDashboard.putBoolean("drive setpoint", drive.atAlignAngle());
-                SmartDashboard.putBoolean("saw tag", sawTag);
+                        SmartDashboard.putBoolean("arm setpoint", EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - theta_v, Units.degreesToRadians(4)));
+                        SmartDashboard.putBoolean("shooter setpoint", shooter.atSetpoint());
+                        SmartDashboard.putBoolean("drive setpoint", drive.atAlignAngle());
                 }
 
                 if (EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - (theta_v-Units.degreesToRadians(0.25)), Units.degreesToRadians(2 /* 4 */)) && 
-                 shooter.atSetpoint() && drive.atAlignAngle() && sawTag && !shooting) {
+                 shooter.atSetpoint() && drive.atAlignAngle() && !shooting) {
                         shooting = true;
                         index.ejectIntoShooter();
                         shootTimer.start();

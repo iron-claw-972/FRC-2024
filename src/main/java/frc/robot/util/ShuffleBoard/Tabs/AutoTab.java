@@ -56,7 +56,7 @@ public class AutoTab extends ShuffleBoardTabs {
                 new ChoreoPathCommand("Source 3", true, drive)
         ));
 
-        // Previous Autos (Some will keep and still have to fix) autoCommand.setDefaultOption("Do Nothing", new PrintCommand("This will do nothing!"));
+        // Previous Autos (Some will keep and still have to fix)
         // autoCommand.addOption("Example Path", new FollowPathCommand("Example Path",true, drive));
         // autoCommand.addOption("Two Piece (R) Close Shot", new FollowPathCommand("Two Piece (R) Close Shot",true, drive));
         // autoCommand.addOption("1 point auto (R)", new FollowPathCommand("1 point auto (R)",true, drive));

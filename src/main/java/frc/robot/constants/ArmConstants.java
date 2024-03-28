@@ -30,7 +30,6 @@ public class ArmConstants {
      * <p>
      * This angle is really the stow or rest angle of the arm.
      * it was measured with a protractor.
-    * 
      */
     public static final double MIN_ANGLE_RADS = Units.degreesToRadians(-9.20);
     /** maximum arm angle in radians */
@@ -42,7 +41,6 @@ public class ArmConstants {
     public static final double START_ANGLE_RADS = Units.degreesToRadians(-9.20);
 
     // If you add another setpoint field, check its validity in test/java/frc/robot/subsystems/gpm/ArmTest.java
-    // TODO: update these values; e.g., stowedSetpoint should probably be MIN_ANGLE_RADS
     public static final double intakeSetpoint = MIN_ANGLE_RADS;
     public static final double stowedSetpoint = MIN_ANGLE_RADS;
     public static final double standbySetpoint = Units.degreesToRadians(40);
@@ -52,6 +50,7 @@ public class ArmConstants {
     // TODO: if the max angle is 70.5, then why is this being set to 73?
     public static final double ampSetpoint = Units.degreesToRadians(73.0);
 
+    // Location of the pivot
     public static final double PIVOT_HEIGHT = Units.inchesToMeters(16.75);
     public static final double PIVOT_X = Units.inchesToMeters(-10);
 
