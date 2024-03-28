@@ -1,6 +1,5 @@
 package frc.robot.commands.gpm;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -11,8 +10,8 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.constants.ArmConstants;
 import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
-import frc.robot.subsystems.gpm.StorageIndex;
 import frc.robot.subsystems.gpm.Intake.Mode;
+import frc.robot.subsystems.gpm.StorageIndex;
 
 public class IntakeNote extends Command{
 
@@ -25,26 +24,34 @@ public class IntakeNote extends Command{
     private final Timer timer = new Timer();
     private Boolean detectedNote = false;
 
+	private boolean doStuff = true;
+
     public IntakeNote(Intake intake, StorageIndex storageIndex, Arm arm, Consumer<Boolean> rumbleConsumer) {
         this.intake = intake;
         this.storageIndex = storageIndex;
         this.arm = arm;
         this.rumbleConsumer = rumbleConsumer;
-        addRequirements(intake, storageIndex, arm);
+		if (intake == null || storageIndex == null || arm == null || rumbleConsumer == null)
+			doStuff = false;
+		else
+			addRequirements(intake, storageIndex, arm);
     }
 
     @Override
     public void initialize() {
-        detectedNote = false;
         timer.reset();
         timer.stop();
-        intake.setMode(Mode.INTAKE);
-        storageIndex.runIndex();
-        arm.setAngle(ArmConstants.intakeSetpoint);
+		if (doStuff) {
+			detectedNote = false;
+			intake.setMode(Mode.INTAKE);
+			storageIndex.runIndex();
+			arm.setAngle(ArmConstants.intakeSetpoint);
+		}
     }
 
     @Override
     public void execute(){
+		if (!doStuff) return;
         storageIndex.runIndex();
         if (intake.hasNote()){
             detectedNote = true;
@@ -62,6 +69,9 @@ public class IntakeNote extends Command{
 
     @Override
     public void end(boolean interupted){
+        timer.stop();
+        timer.reset();
+		if (!doStuff) return;
         if(detectedNote){
             CommandScheduler.getInstance().schedule(new RunCommand(() -> {
                 rumbleConsumer.accept(true);
@@ -72,8 +82,6 @@ public class IntakeNote extends Command{
         intake.setMode(Mode.DISABLED);
         storageIndex.stopIndex();
         arm.setAngle(ArmConstants.stowedSetpoint);
-        timer.stop();
-        timer.reset();
         detectedNote = false;
     }
     
