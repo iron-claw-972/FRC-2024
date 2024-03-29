@@ -86,6 +86,7 @@ public class Shooter extends SubsystemBase {
 	private double rightMotorSpeedSim = 0.0;
 	private double rightPower = 0.0;
 	private static double slipCoefficient = 0.91;
+	private int spinRemainder = 0;
 
 	// TODO: TUNE THIS
 	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(S, V);
@@ -141,8 +142,8 @@ public class Shooter extends SubsystemBase {
 		SmartDashboard.putNumber("right speed", /* shooterRPMToSpeed */ (rightSpeed));
 		SmartDashboard.putBoolean("right setpoint", atSetpoint());
 		//SmartDashboard.putData("slip coefficient", slipCoefficient); /// FIXXX
-		// SmartDashboard.putData("left Shooter PID", leftPID);
-		// SmartDashboard.putData("right Shooter PID", rightPID);
+		SmartDashboard.putData("left Shooter PID", leftPID);
+		SmartDashboard.putData("right Shooter PID", rightPID);
 	}
 
 	@Override
@@ -284,8 +285,8 @@ public class Shooter extends SubsystemBase {
 	 * @return boolean indicating whether both PIDs are at their setpoints
 	 */
 	public boolean atSetpoint() {
-		return EqualsUtil.epsilonEquals(getLeftMotorRPM(),leftPID.getSetpoint(),TOLERANCE)&&
-		EqualsUtil.epsilonEquals(getRightMotorRPM(),rightPID.getSetpoint(),TOLERANCE);
+		return EqualsUtil.epsilonEquals(getLeftMotorRPM(),leftPID.getSetpoint(), TOLERANCE)&&
+		EqualsUtil.epsilonEquals(getRightMotorRPM(),rightPID.getSetpoint(), TOLERANCE);
 		//return leftPID.atSetpoint() && rightPID.atSetpoint();
 	}
 

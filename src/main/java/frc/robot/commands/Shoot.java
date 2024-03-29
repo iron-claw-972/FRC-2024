@@ -32,7 +32,7 @@ public class Shoot extends Command {
         public final Arm arm;
         public final Drivetrain drive;
         private final StorageIndex index;
-
+        public boolean first_time = true;
         private final Timer shootTimer = new Timer();
 
         // for testing sakes
@@ -53,6 +53,7 @@ public class Shoot extends Command {
 
         Timer timer = new Timer();
         private boolean shooting = false;
+        private int spinRemainder = 0;
 
         public Shoot(Shooter shooter, Arm arm, Drivetrain drivetrain, StorageIndex index) {
                 this.shooter = shooter;
@@ -74,6 +75,7 @@ public class Shoot extends Command {
         }
         @Override
         public void execute() {
+                
                 // Positive x displacement means we are to the left of the speaker
                 // Positive y displacement means we are below the speaker.
                 Pose3d speakerPose = Robot.getAlliance() == Alliance.Red ?
@@ -149,7 +151,7 @@ public class Shoot extends Command {
                 // also here
                 double v_shoot = v_note * Math.sin(phi_v) / Math.sin(theta_v);
                 horiz_angle = theta_h;
-                theta_v += Units.degreesToRadians(1);
+                theta_v += Units.degreesToRadians(2);
                 vert_angle = theta_v;
                 ANG = ShooterConstants.ANGLE_OFFSET - theta_v;
                 exit_vel = v_shoot;
@@ -176,7 +178,7 @@ public class Shoot extends Command {
                 // TODO: Make this commented out if statement work (arm and shooter weren't getting to setpoint)
                 // if (arm.atSetpoint() && shooter.atSetpoint() && drive.atAlignAngle() && sawTag || shooting) {
                 SmartDashboard.putBoolean("arm setpoint", EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - theta_v, Units.degreesToRadians(1)));
-                SmartDashboard.putBoolean("shooter setpoint", shooter.atSetpoint());
+                SmartDashboard.putBoolean("shooter at setpoint", shooter.atSetpoint());
                 SmartDashboard.putBoolean("drive setpoint", drive.atAlignAngle());
                 SmartDashboard.putBoolean("saw tag", sawTag);
 
