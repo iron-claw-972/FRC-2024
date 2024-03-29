@@ -22,7 +22,7 @@ public class ChoreoPathCommand extends SequentialCommandGroup {
                 trajectory, //
                 drive::getPose, //
                 drive.getXController(), //
-                drive.getYController(),8
+                drive.getYController(),
                 drive.getRotationController(),
                 (ChassisSpeeds speeds) -> //
                         drive.setChassisSpeeds(speeds, false),
