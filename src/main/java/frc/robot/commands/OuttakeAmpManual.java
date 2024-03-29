@@ -11,19 +11,13 @@ import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.subsystems.gpm.StorageIndex;
 
-public class OuttakeAmpManual extends SequentialCommandGroup { 
-    
-    private boolean AmpOrder = true; 
-
+public class OuttakeAmpManual extends SequentialCommandGroup {  
     /**
-     * First press of button raises arm to amp position and starts spinning up shooter and second press of button 
-     * ejects note and returns to default state 
+     * Sets arm to amp position and starts to spin up shooter 
      * @param arm
      * @param shooter
      */
-    public OuttakeAmpManual(Arm arm, Shooter shooter, StorageIndex index) {  
-        if (AmpOrder) {
-            AmpOrder = false; 
+    public OuttakeAmpManual(Arm arm, Shooter shooter) {  
             addCommands(
                 new ParallelCommandGroup (
                     // Starts spinning up shooter
@@ -31,17 +25,24 @@ public class OuttakeAmpManual extends SequentialCommandGroup {
                     // Move arm to amp position  
                     new ArmToPos(arm, ArmConstants.ampSetpoint));    
         }
-        else {
-            AmpOrder = true; 
+    /**
+     * Outtakes note and returns to default state
+     * @param arm
+     * @param shooter
+     * @param index
+     */
+    public OuttakeAmpManual(Arm arm, Shooter shooter, StorageIndex index) {
             addCommands(
                 new InstantCommand(() -> index.runIndex()),
                 // Waits until note has been scored 
                 new WaitCommand(StorageIndexConstants.ejectAmpFrontTimeout),
                 // Set everything back to default state
-                new ParallelCommandGroup ( 
-                    new InstantCommand(() -> shooter.setTargetRPM(0)),
-                    new InstantCommand(() -> index.stopIndex()),
-                    new InstantCommand(() -> arm.setAngle(ArmConstants.stowedSetpoint))));
-        }      
-    }
-}
+                new InstantCommand(() -> {
+                    shooter.setTargetRPM(0);
+                    index.stopIndex();
+                    arm.setAngle(ArmConstants.stowedSetpoint);},
+                    shooter,
+                    index,
+                    arm)); 
+        }
+    }      
