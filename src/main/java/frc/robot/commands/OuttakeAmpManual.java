@@ -33,7 +33,7 @@ public class OuttakeAmpManual extends SequentialCommandGroup {
      */
     public OuttakeAmpManual(Arm arm, Shooter shooter, StorageIndex index) {
             addCommands(
-                new InstantCommand(() -> index.runIndex()),
+                new InstantCommand(() -> index.runIndex(), index),
                 // Waits until note has been scored 
                 new WaitCommand(StorageIndexConstants.ejectAmpFrontTimeout),
                 // Set everything back to default state
