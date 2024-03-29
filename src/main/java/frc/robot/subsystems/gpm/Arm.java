@@ -28,7 +28,6 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ArmConstants;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.PowerPanel;
 import frc.robot.util.LogManager;
 
 /**
@@ -126,7 +125,7 @@ public class Arm extends SubsystemBase {
 
 	private boolean armEnabled = true;
 
-    private PowerPanel m_powerPanel = new PowerPanel();
+    // private PowerPanel m_powerPanel = new PowerPanel();
 
     public Arm() {
         // set the PID tolerance
@@ -150,14 +149,12 @@ public class Arm extends SubsystemBase {
                 // set slave mode
                 // the master is MOTOR_IDS[0]
                 // invert master for ids 2 and 3
-                
                 motors[i].setControl(new Follower(ArmConstants.MOTOR_IDS[0], (i >= motors.length / 2)));
             }
         }
 
         // common configuration for each motor
         // configure the master after the slaves have been linked so slaves will copy the same settings.
-        motors[0].setNeutralMode(NeutralModeValue.Brake);
         motors[0].setInverted(false);
         motors[0].getConfigurator().apply(ArmConstants.currentConfig);
 
@@ -230,12 +227,8 @@ public class Arm extends SubsystemBase {
 
         // Disable the arm if it is out of range
 		if (getAngleRad() < ArmConstants.MIN_ANGLE_RADS - ArmConstants.ANGLE_TOLERANCE || getAngleRad() > ArmConstants.MAX_ANGLE_RADS + ArmConstants.ANGLE_TOLERANCE) {
-			System.err.println("WWARNING: THE ARM IS IN A SUPPOSEDLY UNREACHABLE POSITION AND HAS BEEN DISABLED. Found: " + getAngleRad() + ", Expected: " + ArmConstants.stowedSetpoint);
-			for (int i = 0; i < motors.length; i++) {
-				// irrelevant for next line: motors[i].setNeutralMode(NeutralModeValue.Coast);
-				//motors[i].set(0);
-                System.err.println("hwat");
-			}
+            motors[0].setNeutralMode(NeutralModeValue.Coast);
+            motors[0].set(0);
             return;
 		}
 
@@ -268,10 +261,6 @@ public class Arm extends SubsystemBase {
 
         // use the Phoenix 6 version of setting the motor "power"
         motors[0].setControl(m_request.withOutput(dutyCycle));
-
-        // report the arm angle in radians
-        //SmartDashboard.putNumber("abs value", encoder.getAbsolutePosition());
-        
 
         // TODO: Clean these up when not needed.
         // report dutycycle
@@ -311,14 +300,14 @@ public class Arm extends SubsystemBase {
         encoderSim.setDistance(simulation.getAngleRads());
 
         // Calculate the current drawn by one of the motors
-        double ampsPerMotor = simulation.getCurrentDrawAmps() / 4;
+        // double ampsPerMotor = simulation.getCurrentDrawAmps() / 4;
 
         // see https://docs.google.com/spreadsheets/d/1UiHZFYeZiHPAPIu39uRrskQuQYfvJ03UjLeQVq--Mzg/edit#gid=0
         // Arm motors uses channels 1, 2, 4, 5
-        m_powerPanel.setCurrent(1, ampsPerMotor);
-        m_powerPanel.setCurrent(2, ampsPerMotor);
-        m_powerPanel.setCurrent(4, ampsPerMotor);
-        m_powerPanel.setCurrent(5, ampsPerMotor);
+        // m_powerPanel.setCurrent(1, ampsPerMotor);
+        // m_powerPanel.setCurrent(2, ampsPerMotor);
+        // m_powerPanel.setCurrent(4, ampsPerMotor);
+        // m_powerPanel.setCurrent(5, ampsPerMotor);
     }
 
     /**

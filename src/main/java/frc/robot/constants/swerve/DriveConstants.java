@@ -28,7 +28,11 @@ public class DriveConstants {
     /** Distance between the left and right wheels [meters]. */
     public static double kTrackWidth = Units.inchesToMeters(20.75);//22.75 swerve bot, 20.75 comp bot
 
-  
+    // Mk4i gear ratios
+    // https://www.swervedrivespecialties.com/products/mk4i-swerve-module
+    //   standard gear ratios
+    // https://www.swervedrivespecialties.com/products/kit-adapter-16t-drive-pinion-gear-mk4i
+
     //   changes 14-tooth pinion to 16-tooth pinion -- (50.0 / 14.0) becomes (50.0 / 16.0).
     /** Drive gear ratio for an Mk4i with L2-Plus gearing */
     public static double kDriveGearRatio = (50.0 / 16.0) * (17.0 / 27.0) * (45.0 / 15.0);

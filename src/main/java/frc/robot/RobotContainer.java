@@ -20,6 +20,7 @@ import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
 import frc.robot.controls.Operator;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.PowerPanel;
 // import frc.robot.util.DetectedObject;
 import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
@@ -53,9 +54,11 @@ public class RobotContainer {
   // Controllers are defined here
   private BaseDriverConfig driver = null;
   private Operator operator =null;
-  ShuffleBoardManager shuffleboardManager = null;
+  private ShuffleBoardManager shuffleboardManager = null;
+  @SuppressWarnings("unused") // Might be unused
+  private PowerPanel powerPanel;
 
-  Consumer<Boolean> consumer = bool -> {
+  private Consumer<Boolean> consumer = bool -> {
     if (bool){
         operator.getGameController().setRumble(RumbleStatus.RUMBLE_ON);
       ((GameControllerDriverConfig) driver).getGameController().setRumble(RumbleStatus.RUMBLE_ON);
@@ -119,6 +122,7 @@ public class RobotContainer {
         PathGroupLoader.loadPathGroups();
  
         shuffleboardManager = new ShuffleBoardManager(drive, vision, shooter);
+        powerPanel = new PowerPanel();
         break;
       }
 
