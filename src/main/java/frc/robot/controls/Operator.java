@@ -12,6 +12,8 @@ import frc.robot.commands.IntakeWithRumble;
 import frc.robot.commands.OuttakeAmp;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.ShootLock;
+import frc.robot.commands.ShootTrap;
+import frc.robot.commands.ShootTrap.Trap;
 import frc.robot.commands.gpm.PrepareShooter;
 import frc.robot.commands.gpm.ShootKnownPos;
 import frc.robot.commands.gpm.ShootKnownPos.ShotPosition;
@@ -26,6 +28,7 @@ import frc.robot.subsystems.gpm.Intake.Mode;
 import frc.robot.subsystems.gpm.StorageIndex;
 import lib.controllers.GameController;
 import lib.controllers.GameController.Button;
+import lib.controllers.GameController.DPad;
 import lib.controllers.GameController.RumbleStatus;
 
 /** Add your docs here. */
@@ -83,6 +86,9 @@ public class Operator {
         }));
         if (index != null && arm != null && shooter != null && drive != null) {
             getRightTrigger().onTrue(new Shoot(shooter, arm, drive, index));
+            kDriver.get(DPad.LEFT).toggleOnTrue(new ShootTrap(Trap.LEFT, drive, shooter, arm, index));
+            kDriver.get(DPad.UP).toggleOnTrue(new ShootTrap(Trap.CENTER, drive, shooter, arm, index));
+            kDriver.get(DPad.RIGHT).toggleOnTrue(new ShootTrap(Trap.RIGHT, drive, shooter, arm, index));
         }
         if(shooter != null){
             getLeftTrigger().onTrue(new PrepareShooter(shooter, Shooter.addSlip(Shooter.shooterSpeedToRPM(ShooterConstants.SHOOT_SPEED_MPS))));

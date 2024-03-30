@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 import frc.robot.constants.ArmConstants;
-import frc.robot.constants.miscConstants.VisionConstants.CHAIN_POSES;
+import frc.robot.constants.miscConstants.VisionConstants.STAGE_POSES;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Arm;
 
@@ -38,22 +38,22 @@ public class Climb extends SequentialCommandGroup {
 
     private void getPoses(Chain chain){
         boolean red = Robot.getAlliance() == Alliance.Red;
-        CHAIN_POSES poses = null;
+        STAGE_POSES poses = null;
         switch(chain){
             case LEFT:
-                poses = red?CHAIN_POSES.RED_LEFT:CHAIN_POSES.BLUE_LEFT;
+                poses = red?STAGE_POSES.RED_LEFT:STAGE_POSES.BLUE_LEFT;
                 break;
             case CENTER:
-                poses = red?CHAIN_POSES.RED_CENTER:CHAIN_POSES.BLUE_CENTER;
+                poses = red?STAGE_POSES.RED_CENTER:STAGE_POSES.BLUE_CENTER;
                 break;
             case RIGHT:
-                poses = red?CHAIN_POSES.RED_RIGHT:CHAIN_POSES.BLUE_RIGHT;
+                poses = red?STAGE_POSES.RED_RIGHT:STAGE_POSES.BLUE_RIGHT;
                 break;
             default:
                 System.err.println("That chain doesn't exist");
                 return;
         }
-        pose1 = poses.pose1;
-        pose2 = poses.pose2;
+        pose1 = poses.preClimb;
+        pose2 = poses.climb;
     }
 }

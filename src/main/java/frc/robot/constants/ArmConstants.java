@@ -51,6 +51,7 @@ public class ArmConstants {
     public static final double climbSetpoint = MIN_ANGLE_RADS;
     // TODO: if the max angle is 70.5, then why is this being set to 73?
     public static final double ampSetpoint = Units.degreesToRadians(73.0);
+    public static final double trapSetpoint = Units.degreesToRadians(10);
 
     public static final double PIVOT_HEIGHT = Units.inchesToMeters(16.75);
     public static final double PIVOT_X = Units.inchesToMeters(-10);

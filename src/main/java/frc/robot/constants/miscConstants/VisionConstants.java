@@ -224,7 +224,7 @@ public class VisionConstants {
     new Rotation2d(Math.PI).minus(BLUE_PODIUM_POSE.getRotation())
   );
 
-  public enum CHAIN_POSES{
+  public enum STAGE_POSES{
     RED_LEFT(FieldConstants.APRIL_TAGS.get(10)),
     RED_RIGHT(FieldConstants.APRIL_TAGS.get(11)),
     RED_CENTER(FieldConstants.APRIL_TAGS.get(12)),
@@ -232,13 +232,16 @@ public class VisionConstants {
     BLUE_LEFT(FieldConstants.APRIL_TAGS.get(14)),
     BLUE_RIGHT(FieldConstants.APRIL_TAGS.get(15));
 
-    private double dist1 = Units.inchesToMeters(50);
-    private double dist2 = Units.inchesToMeters(9);
-    public final Pose2d pose1;
-    public final Pose2d pose2;
-    private CHAIN_POSES(AprilTag tag){
-      pose1 = tag.pose.toPose2d().plus(new Transform2d(new Translation2d(dist1, 0/*tag.pose.toPose2d().getRotation()*/), new Rotation2d(Math.PI)));
-      pose2 = tag.pose.toPose2d().plus(new Transform2d(new Translation2d(dist2, 0/*tag.pose.toPose2d().getRotation()*/), new Rotation2d(Math.PI)));
+    private double preClimbDist = Units.inchesToMeters(50);
+    private double climbDist = Units.inchesToMeters(9);
+    private double trapAlignDist = Units.inchesToMeters(72);
+    public final Pose2d preClimb;
+    public final Pose2d climb;
+    public final Pose2d trap;
+    private STAGE_POSES(AprilTag tag){
+      preClimb = tag.pose.toPose2d().plus(new Transform2d(new Translation2d(preClimbDist, 0), new Rotation2d(Math.PI)));
+      climb = tag.pose.toPose2d().plus(new Transform2d(new Translation2d(climbDist, 0), new Rotation2d(Math.PI)));
+      trap = tag.pose.toPose2d().plus(new Transform2d(new Translation2d(trapAlignDist, 0), new Rotation2d(Math.PI)));
     }
   }
 
