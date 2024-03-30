@@ -186,7 +186,6 @@ public class RobotContainer {
     // Stuff used in Choreo Paths
     NamedCommands.registerCommand("Intake", new IntakeNote(intake, index, arm, (ignored) -> {}).withTimeout(1.5));
     NamedCommands.registerCommand("Index", new IndexerFeed(index));
-    NamedCommands.registerCommand("End Shooter", new PrepareShooter(shooter, 0));
 
     NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index, arm, consumer).withTimeout(1.75));
     
