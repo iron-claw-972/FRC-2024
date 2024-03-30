@@ -12,14 +12,6 @@ public class AutoShootCommand extends ParallelCommandGroup {
 
     private static final double SHOOTER_WAIT_TIME = 1.0;
 
-    //new ParallelDeadlineGroup(
-    //                        new AutoShootCommand(shooter,
-    //                                new FollowPathCommand("Two Piece (pos 4) center line", true, drive)
-    //                        ),
-    //                        new WaitCommand(15)
-    //                ),
-    //                new PrepareShooter(shooter, 0)
-
     public AutoShootCommand(Shooter shooter, int rpm, Command... commands) {
         super();
 
