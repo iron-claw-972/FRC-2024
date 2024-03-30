@@ -1,35 +1,54 @@
 package frc.robot.commands.auto_comm;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathPlannerPath;
+import com.choreo.lib.Choreo;
+import com.choreo.lib.ChoreoTrajectory;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.RobotContainer;
-import frc.robot.commands.SupplierCommand;
 import frc.robot.subsystems.Drivetrain;
+
+import java.util.Optional;
 
 public class ChoreoPathCommand extends SequentialCommandGroup {
     private final Drivetrain drive;
-    private final PathPlannerPath path;
+    private final ChoreoTrajectory trajectory;
 
     public ChoreoPathCommand(String pathName, boolean resetOdemetry, Drivetrain drive){
         this.drive = drive;
-        this.path = PathPlannerPath.fromChoreoTrajectory(pathName);
+        this.trajectory = Choreo.getTrajectory(pathName);
+
+        var command = Choreo.choreoSwerveCommand(
+                trajectory, //
+                drive::getPose, //
+                drive.getXController(), //
+                drive.getYController(),
+                drive.getRotationController(),
+                (ChassisSpeeds speeds) -> //
+                        drive.setChassisSpeeds(speeds, false),
+                this::getShouldFlip,
+                drive
+                                                );
+
         addCommands(
                 new InstantCommand(()->resetOdemetry(resetOdemetry)),
-                new SupplierCommand(()-> AutoBuilder.followPath(path), drive)
-        );
+                command
+                   );
     }
 
     public void resetOdemetry(boolean resetOdemetry){
         if (resetOdemetry){
-            if(RobotContainer.getAllianceColorBooleanSupplier().getAsBoolean()){
-                drive.resetOdometry(path.flipPath().getPreviewStartingHolonomicPose());
-            }
-            else{
-                drive.resetOdometry(path.getPreviewStartingHolonomicPose());
+            boolean shouldFlip = getShouldFlip();
+            if (shouldFlip){
+                drive.resetOdometry(trajectory.getFlippedInitialPose());
+            } else {
+                drive.resetOdometry(trajectory.getInitialPose());
             }
         }
     }
-}
 
+    private boolean getShouldFlip() {
+        Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
+        return alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red;
+    }
+}
