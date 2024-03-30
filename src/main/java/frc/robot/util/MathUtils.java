@@ -138,7 +138,7 @@ public class MathUtils {
     }
 
 	/**
-	 * Converts a firmware version to a number that {} likes.
+	 * Converts a firmware version to a number that getFirmware likes.
 	 * <p>
 	 * Versions are typically of the form major.minor.patch (eg: 22.1.1 to 5633).
 	 * 
@@ -147,8 +147,21 @@ public class MathUtils {
 	 * @param patch the patch number
 	 * @return the converted number
 	 */
-	public static int encodeFirmwareVersion(int major, int minor, int patch) {
+	public static int talonEncodeFirmwareVersion(int major, int minor, int patch) {
 		return (major << 8) + minor;
+	}
+
+	/**
+	 * Converts a firmware version to a number that getFirmwareVersion likes.
+	 * 
+	 * @param major the major version number
+	 * @param minor the minor version number
+	 * @param build_h the build H
+	 * @param build_l the build L
+	 * @return the converted number
+	 */
+	public static int revFlexEncodeFirmwareVersion(int major, int minor, int build_h, int build_l) {
+		return (major << 24) + (minor << 16) + (build_h << 8) + build_l;
 	}
 
     private static double[] doubleListToArray(List<Double> arrayList) {

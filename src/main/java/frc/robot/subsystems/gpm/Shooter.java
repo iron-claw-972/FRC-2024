@@ -87,6 +87,8 @@ public class Shooter extends SubsystemBase {
 	// TODO: TUNE THIS
 	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(S, V);
 
+	private int periodicCounter = 0;
+
 	public Shooter() {
 		// set the RPM tolerance of the PID controllers
 		leftPID.setTolerance(TOLERANCE);
@@ -115,6 +117,10 @@ public class Shooter extends SubsystemBase {
 
 	@Override
 	public void periodic() {
+		periodicCounter++;
+		if (periodicCounter == 100)
+			testFirmware();
+
 		// PID loop uses RPM
 		double leftSpeed = getLeftMotorRPM();
 		double rightSpeed = getRightMotorRPM();
@@ -132,6 +138,13 @@ public class Shooter extends SubsystemBase {
 		SmartDashboard.putNumber("right speed", /* shooterRPMToSpeed */ (rightSpeed));
 		SmartDashboard.putData("left Shooter PID", leftPID);
 		SmartDashboard.putData("right Shooter PID", rightPID);
+	}
+
+	private void testFirmware() {
+		if (rightMotor.getFirmwareVersion() < Constants.CTRE_FIRMWARE_VERSION)
+			throw new RuntimeException("Right arm motor firmware version is old. (expected: " + Constants.CTRE_FIRMWARE_VERSION + ", got: " + rightMotor.getFirmwareVersion() + ")");
+		if (leftMotor.getFirmwareVersion() < Constants.CTRE_FIRMWARE_VERSION)
+			throw new RuntimeException("Left arm motor firmware version is old. (expected: " + Constants.CTRE_FIRMWARE_VERSION + ", got: " + leftMotor.getFirmwareVersion() + ")");
 	}
 
 	@Override

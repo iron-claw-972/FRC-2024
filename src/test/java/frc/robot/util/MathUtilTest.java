@@ -8,7 +8,8 @@ class MathUtilTest {
 
 	@Test
 	public void firmwareTest() {
-		assertEquals(5633, MathUtils.encodeFirmwareVersion(22, 1, 1));
+		assertEquals(5633, MathUtils.talonEncodeFirmwareVersion(22, 1, 1));
+		assertEquals(402653184, MathUtils.revFlexEncodeFirmwareVersion(24, 0, 0, 0));
 	}
 
 }

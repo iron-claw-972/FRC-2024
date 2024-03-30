@@ -31,12 +31,15 @@ public class Constants {
 
     // falcon constants:
  
-    public static final int FIRMWARE_VERSION = MathUtils.encodeFirmwareVersion(22, 1, 1);
+    public static final int FIRMWARE_VERSION = MathUtils.talonEncodeFirmwareVersion(22, 1, 1);
     public static final boolean BREAK_ON_WRONG_FIRMWARE = false; // TODO: fix issue that make the robot break
 
     public static final double RESOLUTION = 2048;
     // Kraken Speed
     public static double MAX_RPM = 5800.0; // Rotations per minute
+
+	/** CTRE firmware version to check against. */
+	public static int CTRE_FIRMWARE_VERSION = MathUtils.revFlexEncodeFirmwareVersion(24, 0, 0, 0);
 
 
     /*
