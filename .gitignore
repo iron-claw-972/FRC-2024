@@ -167,6 +167,8 @@ networktables.json.bck
 
 # Simulation puts log files in root of repo
 *.wpilog
+logs/*.wpilog
+logs/*.hoot
 
 # Don't commit ctre_sim directory
 ctre_sim/*
