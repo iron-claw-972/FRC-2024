@@ -74,8 +74,6 @@ public class AutoTab extends ShuffleBoardTabs {
         ));
 
         autoCommand.addOption("Choreo Distance Source 4", new AutoShootCommand(shooter, 1750,
-                // Either add a command to index here or add a command to index in the path using the "Index" named command
-                // new IndexerFeed(...)
                 new ShootChoreoPathCommand("Distance Source 6.1", drive, arm, indexer),
                 new ShootChoreoPathCommand("Distance Source 6.2", drive, arm, indexer),
                 new ShootChoreoPathCommand("Distance Source 6.3", drive, arm, indexer)
