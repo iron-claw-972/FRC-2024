@@ -9,9 +9,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.auto_comm.AutoShootCommand;
+import frc.robot.commands.auto_comm.ShootChoreoPathCommand;
 import frc.robot.commands.auto_comm.ChoreoPathCommand;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Shooter;
+import frc.robot.subsystems.gpm.StorageIndex;
 import frc.robot.util.ShuffleBoard.ShuffleBoardTabs;
 
 /** Add your docs here. */
@@ -21,16 +25,19 @@ public class AutoTab extends ShuffleBoardTabs {
 
     private Drivetrain drive;
     private Shooter shooter;
+    private Arm arm;
+    private StorageIndex indexer;
 
-    public AutoTab(Drivetrain drive, Shooter shooter){
+    public AutoTab(Drivetrain drive, Shooter shooter, Arm arm, StorageIndex indexer){
         this.drive = drive;
         this.shooter = shooter;
+        this.arm = arm;
     }
     
     public void createEntries(){  
         tab = Shuffleboard.getTab("Auto");
 
-        autoCommand.setDefaultOption("Choreo Distance Center 6 (no shoot)", new SequentialCommandGroup(
+        autoCommand.addOption("Choreo Distance Center 6 (no shoot)", new SequentialCommandGroup(
                 new ChoreoPathCommand("Distance Center 6.1", true, drive),
                 new WaitCommand(1),
                 new ChoreoPathCommand("Distance Center 6.2", true, drive),
@@ -42,7 +49,7 @@ public class AutoTab extends ShuffleBoardTabs {
                 new ChoreoPathCommand("Distance Center 6.5", true, drive)
         ));
 
-        autoCommand.setDefaultOption("Choreo Distance Center 7 (no shoot)", new SequentialCommandGroup(
+        autoCommand.addOption("Choreo Distance Center 7 (no shoot)", new SequentialCommandGroup(
                 new ChoreoPathCommand("Distance Center 7.1", true, drive),
                 new WaitCommand(1),
                 new ChoreoPathCommand("Distance Center 7.2", true, drive),
@@ -58,12 +65,20 @@ public class AutoTab extends ShuffleBoardTabs {
                 new ChoreoPathCommand("Distance Center 7.7", true, drive)
         ));
 
-        autoCommand.setDefaultOption("Choreo Distance Source 4 (no shoot)", new SequentialCommandGroup(
+        autoCommand.addOption("Choreo Distance Source 4 (no shoot)", new SequentialCommandGroup(
                 new ChoreoPathCommand("Distance Source 6.1", true, drive),
                 new WaitCommand(1),
                 new ChoreoPathCommand("Distance Source 6.2", true, drive),
                 new WaitCommand(1),
                 new ChoreoPathCommand("Distance Source 6.3", true, drive)
+        ));
+
+        autoCommand.addOption("Choreo Distance Source 4", new AutoShootCommand(shooter, 1750,
+                // Either add a command to index here or add a command to index in the path using the "Index" named command
+                // new IndexerFeed(...)
+                new ShootChoreoPathCommand("Distance Source 6.1", drive, arm, indexer),
+                new ShootChoreoPathCommand("Distance Source 6.2", drive, arm, indexer),
+                new ShootChoreoPathCommand("Distance Source 6.3", drive, arm, indexer)
         ));
 
         // Final Autos

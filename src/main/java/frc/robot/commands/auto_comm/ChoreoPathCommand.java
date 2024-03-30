@@ -12,34 +12,34 @@ import java.util.Optional;
 
 public class ChoreoPathCommand extends SequentialCommandGroup {
     private final Drivetrain drive;
-    private final ChoreoTrajectory trajectory;
+    public final ChoreoTrajectory trajectory;
 
-    public ChoreoPathCommand(String pathName, boolean resetOdemetry, Drivetrain drive){
+    public ChoreoPathCommand(String pathName, boolean resetOdemetry, Drivetrain drive) {
         this.drive = drive;
         this.trajectory = Choreo.getTrajectory(pathName);
 
         var command = Choreo.choreoSwerveCommand(
-                trajectory, //
-                drive::getPose, //
-                drive.getXController(), //
+                trajectory,
+                drive::getPose,
+                drive.getXController(),
                 drive.getYController(),
                 drive.getRotationController(),
-                (ChassisSpeeds speeds) -> //
+                (ChassisSpeeds speeds) ->
                         drive.setChassisSpeeds(speeds, false),
                 this::getShouldFlip,
                 drive
                                                 );
 
         addCommands(
-                new InstantCommand(()->resetOdemetry(resetOdemetry)),
+                new InstantCommand(() -> resetOdemetry(resetOdemetry)),
                 command
                    );
     }
 
-    public void resetOdemetry(boolean resetOdemetry){
-        if (resetOdemetry){
+    public void resetOdemetry(boolean resetOdemetry) {
+        if (resetOdemetry) {
             boolean shouldFlip = getShouldFlip();
-            if (shouldFlip){
+            if (shouldFlip) {
                 drive.resetOdometry(trajectory.getFlippedInitialPose());
             } else {
                 drive.resetOdometry(trajectory.getInitialPose());
@@ -47,7 +47,7 @@ public class ChoreoPathCommand extends SequentialCommandGroup {
         }
     }
 
-    private boolean getShouldFlip() {
+    public boolean getShouldFlip() {
         Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
         return alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red;
     }

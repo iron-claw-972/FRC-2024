@@ -130,7 +130,7 @@ public class RobotContainer {
         registerCommands();
         PathGroupLoader.loadPathGroups();
  
-        shuffleboardManager = new ShuffleBoardManager(drive, vision, shooter);
+        shuffleboardManager = new ShuffleBoardManager(drive, vision, shooter, arm, index);
         break;
       }
 
@@ -185,7 +185,6 @@ public class RobotContainer {
 
     // Stuff used in Choreo Paths
     NamedCommands.registerCommand("Intake", new IntakeNote(intake, index, arm, (ignored) -> {}).withTimeout(1));
-    NamedCommands.registerCommand("LongIntake", new IntakeNote(intake, index, arm, (ignored) -> {}).withTimeout(10));
     NamedCommands.registerCommand("Index", new IndexerFeed(index));
     NamedCommands.registerCommand("End Shooter", new PrepareShooter(shooter, 0));
 
