@@ -39,7 +39,7 @@ public class Constants {
     public static double MAX_RPM = 5800.0; // Rotations per minute
 
 	/** CTRE firmware version to check against. */
-	public static int CTRE_FIRMWARE_VERSION = MathUtils.revFlexEncodeFirmwareVersion(24, 0, 0, 0);
+	public static int CTRE_FIRMWARE_VERSION = MathUtils.revEncodeFirmwareVersion(24, 0, 0, 0);
 
 
     /*

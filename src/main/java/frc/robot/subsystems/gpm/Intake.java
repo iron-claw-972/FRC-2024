@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.simulation.DIOSim;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,7 +17,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.IntakeConstants;
 import frc.robot.util.LogManager;
-import edu.wpi.first.wpilibj.Timer;
 
 
 public class Intake extends SubsystemBase {
@@ -71,6 +71,8 @@ public class Intake extends SubsystemBase {
     private Mode mode;
 
     private Timer waitTimer = new Timer();
+
+	private int periodicCounter = 0;
 
     public Intake() {
         centeringMotor.setIdleMode(IntakeConstants.idleMode);
@@ -131,8 +133,19 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
+		periodicCounter++;
+		if (periodicCounter == 100) 
+			testFirmware();
+
         publish();
     }
+
+	private void testFirmware() {
+		if (motor.getFirmwareVersion() < Constants.CTRE_FIRMWARE_VERSION)
+			throw new RuntimeException("Intake motor firmware version is old. (expected: " + Constants.CTRE_FIRMWARE_VERSION + ", got: " + motor.getFirmwareVersion() + ")");
+		if (centeringMotor.getFirmwareVersion() < Constants.CTRE_FIRMWARE_VERSION)
+			throw new RuntimeException("Intake centering motor firmware version is old. (expected: " + Constants.CTRE_FIRMWARE_VERSION + ", got: " + centeringMotor.getFirmwareVersion() + ")");
+	}
 
     @Override
     public void simulationPeriodic() {

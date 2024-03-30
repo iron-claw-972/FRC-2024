@@ -160,7 +160,7 @@ public class MathUtils {
 	 * @param build_l the build L
 	 * @return the converted number
 	 */
-	public static int revFlexEncodeFirmwareVersion(int major, int minor, int build_h, int build_l) {
+	public static int revEncodeFirmwareVersion(int major, int minor, int build_h, int build_l) {
 		return (major << 24) + (minor << 16) + (build_h << 8) + build_l;
 	}
 
