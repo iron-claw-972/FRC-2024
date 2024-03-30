@@ -7976,6 +7976,19 @@
                             "name": "Intake"
                         }
                     }
+                },
+                {
+                    "name": "out preload",
+                    "target": 0,
+                    "trajTargetIndex": 0,
+                    "targetTimestamp": 0,
+                    "offset": 0,
+                    "command": {
+                        "type": "named",
+                        "data": {
+                            "name": "Index"
+                        }
+                    }
                 }
             ],
             "isTrajectoryStale": false
@@ -9940,6 +9953,19 @@
                         "type": "named",
                         "data": {
                             "name": "Intake"
+                        }
+                    }
+                },
+                {
+                    "name": "out preload",
+                    "target": 0,
+                    "trajTargetIndex": 0,
+                    "targetTimestamp": 0,
+                    "offset": 0,
+                    "command": {
+                        "type": "named",
+                        "data": {
+                            "name": "Index"
                         }
                     }
                 }
@@ -12626,6 +12652,19 @@
                         "type": "named",
                         "data": {
                             "name": "Intake"
+                        }
+                    }
+                },
+                {
+                    "name": "out preload",
+                    "target": 0,
+                    "trajTargetIndex": 0,
+                    "targetTimestamp": 0,
+                    "offset": 0,
+                    "command": {
+                        "type": "named",
+                        "data": {
+                            "name": "Index"
                         }
                     }
                 }

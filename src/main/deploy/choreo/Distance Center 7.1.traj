@@ -163,6 +163,15 @@
           "name": "Intake"
         }
       }
+    },
+    {
+      "timestamp": 0,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Index"
+        }
+      }
     }
   ]
 }
