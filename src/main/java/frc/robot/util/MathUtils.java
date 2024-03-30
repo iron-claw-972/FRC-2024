@@ -1,9 +1,9 @@
 package frc.robot.util;
 
+import java.util.List;
+
 import edu.wpi.first.math.MathUtil;
 import frc.robot.constants.Constants;
-
-import java.util.List;
 
 /**
  * Utility class for useful functions.
@@ -136,6 +136,20 @@ public class MathUtils {
         }
         return Math.sqrt(total / (data.length - 1));
     }
+
+	/**
+	 * Converts a firmware version to a number that {} likes.
+	 * <p>
+	 * Versions are typically of the form major.minor.patch (eg: 22.1.1 to 5633).
+	 * 
+	 * @param major the major version number
+	 * @param minor the minor version number
+	 * @param patch the patch number
+	 * @return the converted number
+	 */
+	public static int encodeFirmwareVersion(int major, int minor, int patch) {
+		return (major << 8) + minor;
+	}
 
     private static double[] doubleListToArray(List<Double> arrayList) {
         return arrayList.stream().mapToDouble(Double::doubleValue).toArray();

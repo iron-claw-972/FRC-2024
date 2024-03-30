@@ -1,12 +1,13 @@
 package frc.robot.constants;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
-
-import java.util.ArrayList;
-import java.util.List;
+import frc.robot.util.MathUtils;
 
 public class Constants {
 
@@ -30,7 +31,7 @@ public class Constants {
 
     // falcon constants:
  
-    public static final int FIRMWARE_VERSION = 5633; // version 22.1.1.0
+    public static final int FIRMWARE_VERSION = MathUtils.encodeFirmwareVersion(22, 1, 1);
     public static final boolean BREAK_ON_WRONG_FIRMWARE = false; // TODO: fix issue that make the robot break
 
     public static final double RESOLUTION = 2048;
