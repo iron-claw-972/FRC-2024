@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Robot;
 import frc.robot.commands.GoToPose;
 import frc.robot.commands.OuttakeAmp;
+import frc.robot.commands.SysIDDriveCommand;
 import frc.robot.commands.drive_comm.SetFormationX;
 //import frc.robot.commands.vision.AcquireGamePiece;
 import frc.robot.constants.Constants;
@@ -63,7 +64,7 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
     // Resets the modules to absolute if they are having the unresolved zeroing
     // error
     kDriver.get(Button.RB).onTrue(new InstantCommand(() -> getDrivetrain().resetModulesToAbsolute()));
-
+    //kDriver.get(Button.RB).onTrue(new SysIDDriveCommand(getDrivetrain()));
     kDriver.get(Button.X).whileTrue(new GoToPose(()->
       Robot.getAlliance() == Alliance.Red ? VisionConstants.RED_SUBWOOFER_LEFT
       : VisionConstants.BLUE_SUBWOOFER_LEFT,

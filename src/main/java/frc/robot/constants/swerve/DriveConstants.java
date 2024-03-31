@@ -79,7 +79,7 @@ public class DriveConstants {
     public static int kDriveBackLeft = 7;
     public static int kSteerBackLeft = 8;
     public static int kEncoderBackLeft = 9;
-    public static double kSteerOffsetBackLeft =63.389;//-2.540267050266266;//0.650406539440155+Math.PI;
+    public static double kSteerOffsetBackLeft =304.795;//-2.540267050266266;//0.650406539440155+Math.PI;
 
     public static int kDriveBackRight = 4;
     public static int kSteerBackRight = 5;
@@ -90,11 +90,11 @@ public class DriveConstants {
     public static double kHeadingP = 5.5;
     public static double kHeadingD = 0;
 
-    public static final double HEADING_TOLERANCE = Units.degreesToRadians(4);
+    public static final double HEADING_TOLERANCE = Units.degreesToRadians(1.5);
 
     //translational PID
     public static double kTranslationalP = 1;
-    public static double kTranslationalD = 0.001;//0.001
+    public static double kTranslationalD = 0.001;
 
     //The PIDs for PathPlanner Command
     public static double kPathplannerHeadingP = 3.5;
@@ -118,8 +118,8 @@ public class DriveConstants {
     public static final double kAnglePeakCurrentDuration = 0.01;
     public static final boolean kAngleEnableCurrentLimit = true;
 
-    public static final int kDriveContinuousCurrentLimit = 25;
-    public static final int kDrivePeakCurrentLimit = 25;
+    public static final int kDriveContinuousCurrentLimit = 80;
+    public static final int kDrivePeakCurrentLimit = 80;
     public static final double kDrivePeakCurrentDuration = 0.01;
     public static final boolean kDriveEnableCurrentLimit = true;
 

@@ -92,21 +92,21 @@ public class Arm extends SubsystemBase {
      * stow is 0.599
      * high is 0.357
      */
-    protected static final double OFFSET = 0.723 + Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
+    protected static final double OFFSET =  0.723 + Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
     /** REV encoder scale factor. This is fixed. */
     protected static final double DISTANCE_PER_ROTATION = -2 * Math.PI;
 
     // Motor PID control
-    private static final double TOLERANCE = Units.degreesToRadians(6.0);
+    private static final double TOLERANCE = Units.degreesToRadians(1);
     // P = 5 worked during simulation
-    private static final double P = 0.6;
+    private static final double P = 0.85;
     private static final double I = 0;
     private static final double D = 0;
     private final PIDController pid = new PIDController(P, I, D);
 
     // Motor feedforward control
     public static final double S = 0;
-    public static final double G = 0;
+    public static final double G = 0.02;
     public static final double V = 0;
     private final ArmFeedforward feedforward = new ArmFeedforward(S, G, V);
 
@@ -188,12 +188,11 @@ public class Arm extends SubsystemBase {
 
             // put the display on the SmartDashboard
             // SmartDashboard.putData("ArmSim", wristDisplay);
-            // SmartDashboard.putData("arm pid", pid);
         }
         Timer.delay(2);
 		double cachedAngleRad = getAngleRad(); // don't get the angle five times
+        SmartDashboard.putNumber("cached angle", getAngleRad());
 		// some checks for the arm position
-        SmartDashboard.putNumber("cached angle",cachedAngleRad);
 		if (cachedAngleRad < ArmConstants.MIN_ANGLE_RADS - ArmConstants.ANGLE_TOLERANCE || cachedAngleRad > ArmConstants.MAX_ANGLE_RADS + ArmConstants.ANGLE_TOLERANCE) {
 
 			System.err.println("WARNING: THE ARM IS IN A SUPPOSEDLY UNREACHABLE POSITION AND HAS BEEN DISABLED. Please double check the arm constants and redeploy. Found: " + cachedAngleRad + ", Expected: " + ArmConstants.stowedSetpoint);
@@ -233,14 +232,17 @@ public class Arm extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if(Math.abs(pid.getSetpoint() - ArmConstants.stowedSetpoint) < 0.05 && pid.atSetpoint()) {
+				//motors[0].set(0);
+        }
         SmartDashboard.putNumber("get Position", getPosition());
-
+        SmartDashboard.putData("arm pid", pid);
+        SmartDashboard.putBoolean("if at setpoint", pid.atSetpoint());
         // Disable the arm if it is out of range
 		if (getAngleRad() < ArmConstants.MIN_ANGLE_RADS - ArmConstants.ANGLE_TOLERANCE || getAngleRad() > ArmConstants.MAX_ANGLE_RADS + ArmConstants.ANGLE_TOLERANCE) {
-			System.err.println("WWARNING: THE ARM IS IN A SUPPOSEDLY UNREACHABLE POSITION AND HAS BEEN DISABLED. Found: " + getAngleRad() + ", Expected: " + ArmConstants.stowedSetpoint);
+			System.err.println("WARNING: THE ARM IS IN A SUPPOSEDLY UNREACHABLE POSITION AND HAS BEEN DISABLED. Found: " + getAngleRad() + ", Expected: " + ArmConstants.stowedSetpoint);
 			for (int i = 0; i < motors.length; i++) {
 				// irrelevant for next line: motors[i].setNeutralMode(NeutralModeValue.Coast);
-				//motors[i].set(0);
                 System.err.println("hwat");
 			}
             return;
@@ -264,6 +266,9 @@ public class Arm extends SubsystemBase {
                         pid.calculate(getAngleRad()) + feedforward.calculate(pid.getSetpoint(), 0),
                         -1,
                         1);
+        SmartDashboard.putNumber("pid output", pid.calculate(getAngleRad()));
+        SmartDashboard.putNumber("duty cycle", dutyCycle);
+
         // }
         // else 
         // {
@@ -277,7 +282,7 @@ public class Arm extends SubsystemBase {
         motors[0].setControl(m_request.withOutput(dutyCycle));
 
         // report the arm angle in radians
-        //SmartDashboard.putNumber("abs value", encoder.getAbsolutePosition());
+        SmartDashboard.putNumber("abs value", encoder.getAbsolutePosition());
         
 
         // TODO: Clean these up when not needed.

@@ -37,12 +37,12 @@ public class Shooter extends SubsystemBase {
 	// PID constants. PID system measures RPM and outputs motor power [-1,1]
 	private static final double P = 0.00170;
 	private static final double I = 0.000100;
-	private static final double leftI = 0;
+	private static final double leftI = 0.000100;
 	private static final double D = 0.000010;
 
 	// FeedForward constants
 	private static final double S = 0;
-	private static final double V = 1.0 / rpmFreeSpeed;
+	private static final double V = 1.25 / rpmFreeSpeed;
 
 	/**
 	 * Tolerance in RPM.
@@ -86,6 +86,7 @@ public class Shooter extends SubsystemBase {
 	private double rightMotorSpeedSim = 0.0;
 	private double rightPower = 0.0;
 	private static double slipCoefficient = 0.91;
+	private int spinRemainder = 0;
 
 	// TODO: TUNE THIS
 	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(S, V);
@@ -139,9 +140,10 @@ public class Shooter extends SubsystemBase {
 		// report some values to the Dashboard
 		SmartDashboard.putNumber("left speed", /* shooterRPMToSpeed */ (leftSpeed));
 		SmartDashboard.putNumber("right speed", /* shooterRPMToSpeed */ (rightSpeed));
+		SmartDashboard.putBoolean("right setpoint", atSetpoint());
 		//SmartDashboard.putData("slip coefficient", slipCoefficient); /// FIXXX
-		// SmartDashboard.putData("left Shooter PID", leftPID);
-		// SmartDashboard.putData("right Shooter PID", rightPID);
+		SmartDashboard.putData("left Shooter PID", leftPID);
+		SmartDashboard.putData("right Shooter PID", rightPID);
 	}
 
 	@Override
@@ -236,7 +238,7 @@ public class Shooter extends SubsystemBase {
 	 * @see frc.robot.subsystems.gpm.Shooter.removeSlip
 	 */
 	public static double addSlip(double output) {
-		return output / OUTPUT_COEF*slipCoefficient;//*0.93;
+		return output / OUTPUT_COEF;//*slipCoefficient;//*0.93;
 	}
 
 	/**
@@ -283,8 +285,8 @@ public class Shooter extends SubsystemBase {
 	 * @return boolean indicating whether both PIDs are at their setpoints
 	 */
 	public boolean atSetpoint() {
-		return EqualsUtil.epsilonEquals(getLeftMotorRPM(),leftPID.getSetpoint(),TOLERANCE)&&
-		EqualsUtil.epsilonEquals(getRightMotorRPM(),rightPID.getSetpoint(),TOLERANCE);
+		return EqualsUtil.epsilonEquals(getLeftMotorRPM(),leftPID.getSetpoint(), TOLERANCE)&&
+		EqualsUtil.epsilonEquals(getRightMotorRPM(),rightPID.getSetpoint(), TOLERANCE);
 		//return leftPID.atSetpoint() && rightPID.atSetpoint();
 	}
 
