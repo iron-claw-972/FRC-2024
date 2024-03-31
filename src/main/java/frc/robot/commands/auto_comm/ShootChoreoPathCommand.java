@@ -48,8 +48,6 @@ public class ShootChoreoPathCommand extends SequentialCommandGroup {
                         //.times(-1);
                 
                 // get the drivetrain velocities
-                double driveSpeed = Math.hypot(drive.getChassisSpeeds().vxMetersPerSecond, drive.getChassisSpeeds().vyMetersPerSecond);
-                double heading = driveYaw.getRadians() + Math.atan2(drive.getChassisSpeeds().vyMetersPerSecond, drive.getChassisSpeeds().vxMetersPerSecond);
                 double v_note = ShooterConstants.SHOOT_SPEED_MPS;
 
                 // X distance to speaker
