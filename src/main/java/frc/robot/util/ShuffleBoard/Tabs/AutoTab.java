@@ -82,11 +82,11 @@ public class AutoTab extends ShuffleBoardTabs {
         ));
 
         autoCommand.addOption("Choreo Distance Source 4 (no shoot)", new SequentialCommandGroup(
-                new ChoreoPathCommand("Distance Source 6.1", true, drive),
+                new ChoreoPathCommand("Distance Source 4.1", true, drive),
                 new WaitCommand(1),
-                new ChoreoPathCommand("Distance Source 6.2", true, drive),
+                new ChoreoPathCommand("Distance Source 4.2", true, drive),
                 new WaitCommand(1),
-                new ChoreoPathCommand("Distance Source 6.3", true, drive)
+                new ChoreoPathCommand("Distance Source 4.3", true, drive)
         ));
 
         autoCommand.addOption("Choreo Distance Source 4", new AutoShootCommand(shooter, Shooter.addSlip(Shooter.shooterSpeedToRPM(ShooterConstants.SHOOT_SPEED_MPS))/*1750*/,
