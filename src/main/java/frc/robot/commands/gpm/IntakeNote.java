@@ -1,8 +1,5 @@
 package frc.robot.commands.gpm;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -11,8 +8,10 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.constants.ArmConstants;
 import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
-import frc.robot.subsystems.gpm.StorageIndex;
 import frc.robot.subsystems.gpm.Intake.Mode;
+import frc.robot.subsystems.gpm.StorageIndex;
+
+import java.util.function.Consumer;
 
 public class IntakeNote extends Command{
 
