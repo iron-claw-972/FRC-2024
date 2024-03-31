@@ -38,6 +38,21 @@ public class AutoTab extends ShuffleBoardTabs {
     public void createEntries(){  
         tab = Shuffleboard.getTab("Auto");
 
+        autoCommand.addOption("Choreo Center 6", new SequentialCommandGroup(
+                new ChoreoPathCommand("Center 6.1", true, drive),
+                new ChoreoPathCommand("Center 6.2", true, drive),
+                new ChoreoPathCommand("Center 6.3", true, drive),
+                new ChoreoPathCommand("Center 6.4", true, drive),
+                new ChoreoPathCommand("Center 6.5", true, drive)
+        ));
+
+        autoCommand.addOption("Choreo Source 4", new SequentialCommandGroup(
+                new ChoreoPathCommand("Source 6.1", true, drive),
+                new ChoreoPathCommand("Source 6.2", true, drive),
+                new ChoreoPathCommand("Source 6.3", true, drive),
+                new ChoreoPathCommand("Source 6.4", true, drive),
+        ));
+
         autoCommand.addOption("Choreo Distance Center 6 (no shoot)", new SequentialCommandGroup(
                 new ChoreoPathCommand("Distance Center 6.1", true, drive),
                 new WaitCommand(1),
