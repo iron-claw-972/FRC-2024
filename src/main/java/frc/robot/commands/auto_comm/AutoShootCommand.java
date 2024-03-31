@@ -12,7 +12,7 @@ public class AutoShootCommand extends ParallelCommandGroup {
 
     private static final double SHOOTER_WAIT_TIME = 1.0;
 
-    public AutoShootCommand(Shooter shooter, int rpm, Command... commands) {
+    public AutoShootCommand(Shooter shooter, double rpm, Command... commands) {
         super();
 
         var commandList = new ArrayList<>();

@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.auto_comm.AutoShootCommand;
 import frc.robot.commands.auto_comm.ShootChoreoPathCommand;
+import frc.robot.constants.ShooterConstants;
 import frc.robot.commands.auto_comm.ChoreoPathCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Arm;
@@ -73,7 +74,7 @@ public class AutoTab extends ShuffleBoardTabs {
                 new ChoreoPathCommand("Distance Source 6.3", true, drive)
         ));
 
-        autoCommand.addOption("Choreo Distance Source 4", new AutoShootCommand(shooter, 1750,
+        autoCommand.addOption("Choreo Distance Source 4", new AutoShootCommand(shooter, Shooter.addSlip(Shooter.shooterSpeedToRPM(ShooterConstants.SHOOT_SPEED_MPS))/*1750*/,
                 new ShootChoreoPathCommand("Distance Source 6.1", drive, arm, indexer),
                 new ShootChoreoPathCommand("Distance Source 6.2", drive, arm, indexer),
                 new ShootChoreoPathCommand("Distance Source 6.3", drive, arm, indexer)
