@@ -92,7 +92,7 @@ public class Arm extends SubsystemBase {
      * stow is 0.599
      * high is 0.357
      */
-    protected static final double OFFSET = 0.723 + Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
+    protected static final double OFFSET =  0.723 + Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
     /** REV encoder scale factor. This is fixed. */
     protected static final double DISTANCE_PER_ROTATION = -2 * Math.PI;
 
@@ -191,6 +191,7 @@ public class Arm extends SubsystemBase {
         }
         Timer.delay(2);
 		double cachedAngleRad = getAngleRad(); // don't get the angle five times
+        SmartDashboard.putNumber("cached angle", getAngleRad());
 		// some checks for the arm position
 		if (cachedAngleRad < ArmConstants.MIN_ANGLE_RADS - ArmConstants.ANGLE_TOLERANCE || cachedAngleRad > ArmConstants.MAX_ANGLE_RADS + ArmConstants.ANGLE_TOLERANCE) {
 
@@ -235,7 +236,6 @@ public class Arm extends SubsystemBase {
 				//motors[0].set(0);
         }
         SmartDashboard.putNumber("get Position", getPosition());
-        SmartDashboard.putNumber("cached angle", getAngleRad());
         SmartDashboard.putData("arm pid", pid);
         SmartDashboard.putBoolean("if at setpoint", pid.atSetpoint());
         // Disable the arm if it is out of range

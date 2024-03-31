@@ -38,7 +38,7 @@ public class Robot extends TimedRobot {
         //   Uncomment the next line, set the desired RobotId, deploy, and then comment the line out
         //RobotId.setRobotId(RobotId.Vertigo);
         DriveConstants.update(RobotId.getRobotId());
-        //RobotController.setBrownoutVoltage(6);
+        RobotController.setBrownoutVoltage(6);
         // obtain this robot's identity
         RobotId robotId = RobotId.getRobotId();
 

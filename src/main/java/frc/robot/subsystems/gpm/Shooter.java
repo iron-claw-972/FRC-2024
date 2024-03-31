@@ -37,12 +37,12 @@ public class Shooter extends SubsystemBase {
 	// PID constants. PID system measures RPM and outputs motor power [-1,1]
 	private static final double P = 0.00170;
 	private static final double I = 0.000100;
-	private static final double leftI = 0;
+	private static final double leftI = 0.000100;
 	private static final double D = 0.000010;
 
 	// FeedForward constants
 	private static final double S = 0;
-	private static final double V = 1.0 / rpmFreeSpeed;
+	private static final double V = 1.25 / rpmFreeSpeed;
 
 	/**
 	 * Tolerance in RPM.
