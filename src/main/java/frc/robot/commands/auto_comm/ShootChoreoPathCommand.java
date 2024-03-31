@@ -5,12 +5,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Robot;
 import frc.robot.commands.ArmToPos;
-import frc.robot.commands.gpm.IndexerFeed;
 import frc.robot.constants.ArmConstants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
@@ -26,24 +26,26 @@ public class ShootChoreoPathCommand extends SequentialCommandGroup {
         var endPose = pathCommand.getShouldFlip()
                               ? pathCommand.trajectory.getFlippedFinalPose()
                               : pathCommand.trajectory.getFinalPose();
+
+
         // yoink from shoot.java
                 Pose3d speakerPose = Robot.getAlliance() == Alliance.Red ?
                         VisionConstants.RED_SPEAKER_POSE : VisionConstants.BLUE_SPEAKER_POSE;
                 // shooterHeight and shooterOffset have an additional offset because the shooter is offset from the arm, right?
-                Rotation2d driveYaw = drive.getYaw();
+                Rotation2d rotation = endPose.getRotation();
                 double angleToShooter = arm.getAngleRad()+Units.degreesToRadians(28.78);
                 double shooterToPivot = Units.inchesToMeters(13.651);
                 double horizontalDist = ArmConstants.PIVOT_X + shooterToPivot * Math.cos(angleToShooter);
                 // Set displacement to speaker
                 Pose3d displacement = new Pose3d(
-                        endPose.getX() + horizontalDist * driveYaw.getCos()-speakerPose.getX(),
-                        endPose.getY() + horizontalDist * driveYaw.getSin()-speakerPose.getY(),
+                        endPose.getX() + horizontalDist * rotation.getCos()-speakerPose.getX(),
+                        endPose.getY() + horizontalDist * rotation.getSin()-speakerPose.getY(),
                         // shooterHeight-speakerPose.getZ(),
                         ArmConstants.PIVOT_HEIGHT + shooterToPivot * Math.sin(angleToShooter) - speakerPose.getZ(),
                         new Rotation3d(
                         0,
                         ShooterConstants.ANGLE_OFFSET - arm.getAngleRad(),
-                        Math.PI + driveYaw.getRadians()));
+                        Math.PI + rotation.getRadians()));
                         // .relativeTo(speakerPose);
                         //.times(-1);
                 
@@ -71,7 +73,7 @@ public class ShootChoreoPathCommand extends SequentialCommandGroup {
         addCommands(
                 driveCommands,
                 new WaitCommand(0.2),
-                new IndexerFeed(indexer)
+                new InstantCommand(indexer::ejectIntoShooter)
                    );
     }
 }

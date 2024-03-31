@@ -1,7 +1,5 @@
 package frc.robot.commands.gpm;
 
-import java.util.function.Consumer;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -12,6 +10,8 @@ import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
 import frc.robot.subsystems.gpm.Intake.Mode;
 import frc.robot.subsystems.gpm.StorageIndex;
+
+import java.util.function.Consumer;
 
 public class IntakeNote extends Command{
 
@@ -33,8 +33,8 @@ public class IntakeNote extends Command{
         this.rumbleConsumer = rumbleConsumer;
 		if (intake == null || storageIndex == null || arm == null || rumbleConsumer == null)
 			doStuff = false;
-		else
-			addRequirements(intake, storageIndex, arm);
+		else {}
+//			addRequirements(intake, storageIndex, arm);
     }
 
     @Override

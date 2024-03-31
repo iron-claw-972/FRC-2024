@@ -21,10 +21,8 @@ public class AutoShootCommand extends ParallelCommandGroup {
         commandList.addAll(Arrays.asList(commands));
 
         addCommands(new SequentialCommandGroup(
-                new ParallelRaceGroup(
-                        new WaitCommand(15.0 - SHOOTER_WAIT_TIME),
-                        new SequentialCommandGroup(commandList.toArray(new Command[]{}))
-                ),
+                new SequentialCommandGroup(commandList.toArray(new Command[]{}))
+                        .withTimeout(15.0 - SHOOTER_WAIT_TIME),
                 new ConditionalCommand(
                         new PrepareShooter(shooter, 0),
                         new DoNothing(),

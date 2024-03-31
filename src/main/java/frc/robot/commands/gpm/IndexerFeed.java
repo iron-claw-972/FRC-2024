@@ -17,10 +17,8 @@ public class IndexerFeed extends Command {
 
 	@Override
     public void initialize (){
-
         m_index.ejectIntoShooter();
         timer.restart();
-
     }
 
 	@Override
