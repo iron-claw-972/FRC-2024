@@ -13382,8 +13382,7 @@
                     "scope": [
                         "first"
                     ],
-                    "type": "StopPoint",
-                    "direction": 0
+                    "type": "StopPoint"
                 },
                 {
                     "scope": [
