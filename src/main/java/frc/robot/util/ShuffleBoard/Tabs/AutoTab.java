@@ -13,6 +13,7 @@ import frc.robot.commands.auto_comm.MoveArmForShoot;
 import frc.robot.commands.gpm.IndexerFeed;
 import frc.robot.commands.gpm.IntakeNote;
 import frc.robot.commands.gpm.PrepareShooter;
+import frc.robot.commands.gpm.SetShooterSpeed;
 import frc.robot.constants.ArmConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Arm;
@@ -73,6 +74,8 @@ public class AutoTab extends ShuffleBoardTabs {
                 new WaitCommand(SHOOTER_SPINUP_TIME),
                 index(),
 
+                new SetShooterSpeed(shooter, 18),
+
                 intakeAndDistanceShot("Distance Center 6.1"),
                 intakeAndDistanceShot("Distance Center 6.2"),
                 intakeAndDistanceShot("Distance Center 6.3"),
@@ -84,6 +87,8 @@ public class AutoTab extends ShuffleBoardTabs {
                 new PrepareShooter(shooter, 1800),
                 new WaitCommand(SHOOTER_SPINUP_TIME),
                 index(),
+
+                new SetShooterSpeed(shooter, 18),
 
                 intakeAndDistanceShot("Distance Center 6 Wing First.1"),
                 intakeAndDistanceShot("Distance Center 6 Wing First.2"),
@@ -99,6 +104,9 @@ public class AutoTab extends ShuffleBoardTabs {
 
                 intakeAndSubwooferShot("Distance Center 6 Wing First Subwoofer.1"),
                 intakeAndSubwooferShot("Distance Center 6 Wing First Subwoofer.2"),
+
+                new SetShooterSpeed(shooter, 18),
+
                 intakeAndDistanceShot("Distance Center 6 Wing First Subwoofer.3"),
                 intakeAndDistanceShot("Distance Center 6 Wing First Subwoofer.4"),
                 intakeAndDistanceShot("Distance Center 6 Wing First Subwoofer.5")
@@ -108,6 +116,8 @@ public class AutoTab extends ShuffleBoardTabs {
                 new PrepareShooter(shooter, 1800),
                 new WaitCommand(SHOOTER_SPINUP_TIME),
                 index(),
+
+                new SetShooterSpeed(shooter, 18),
 
                 intakeAndDistanceShot("Distance Center 7.1"),
                 intakeAndDistanceShot("Distance Center 7.2"),
@@ -121,6 +131,8 @@ public class AutoTab extends ShuffleBoardTabs {
                 new PrepareShooter(shooter, 1800),
                 new WaitCommand(SHOOTER_SPINUP_TIME),
                 index(),
+
+                new SetShooterSpeed(shooter, 18),
 
                 intakeAndDistanceShot("Distance Source 4.1"),
                 intakeAndDistanceShot("Distance Source 4.2"),
