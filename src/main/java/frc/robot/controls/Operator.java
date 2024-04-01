@@ -7,9 +7,12 @@ package frc.robot.controls;
 import java.util.function.Consumer;
 
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.OuttakeAmp;
+import frc.robot.commands.OuttakeAmpManual;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.gpm.IntakeNote;
 import frc.robot.commands.gpm.PrepareShooter;
@@ -36,9 +39,10 @@ public class Operator {
     private StorageIndex index;
     private Shooter shooter;
     private Drivetrain drive;
-    private Consumer<Boolean> rumbleConsumer;
-    
-    public Operator(Intake intake, Arm arm, StorageIndex index, Shooter shooter, Drivetrain drive, Consumer<Boolean> rumbleConsumer) {
+
+    private boolean ampOrder = false; 
+
+    public Operator(Intake intake, Arm arm, StorageIndex index, Shooter shooter, Drivetrain drive) {
         this.intake = intake;
         this.arm = arm;
         this.index = index;
@@ -84,7 +88,14 @@ public class Operator {
         }
         if(arm != null && shooter != null && index != null){
             kController.get(Button.Y).onTrue(new ShootKnownPos(shooter, arm, index, ShotPosition.SUBWOOFER));
-            kController.get(Button.A).onTrue(new OuttakeAmp(arm, index, shooter));
+            // First button press sets arm and spins shooter and second button press outtakes note
+            // and returns to default state
+            kController.get(Button.A).onTrue(new SequentialCommandGroup(
+                                            new InstantCommand(() -> {ampOrder=!ampOrder;}),
+                                            new ConditionalCommand(
+                                                new OuttakeAmpManual(arm, shooter), 
+                                                new OuttakeAmpManual(arm, shooter, index), 
+                                                () -> ampOrder)));
         }
         if(arm != null){
             kController.get(Button.RB).onTrue(new InstantCommand(()->arm.setAngle(ArmConstants.preClimbSetpoint), arm));
