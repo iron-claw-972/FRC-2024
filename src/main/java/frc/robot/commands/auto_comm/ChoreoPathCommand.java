@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public class ChoreoPathCommand extends SequentialCommandGroup {
     private final Drivetrain drive;
-    public final ChoreoTrajectory trajectory;
+    private final ChoreoTrajectory trajectory;
 
     public ChoreoPathCommand(String pathName, boolean resetOdemetry, Drivetrain drive) {
         this.drive = drive;
@@ -26,7 +26,7 @@ public class ChoreoPathCommand extends SequentialCommandGroup {
                 drive.getRotationController(),
                 (ChassisSpeeds speeds) ->
                         drive.setChassisSpeeds(speeds, false),
-                this::getShouldFlip,
+                ChoreoPathCommand::getShouldFlip,
                 drive
                                                 );
 
@@ -47,7 +47,7 @@ public class ChoreoPathCommand extends SequentialCommandGroup {
         }
     }
 
-    public boolean getShouldFlip() {
+    public static boolean getShouldFlip() {
         Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
         return alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red;
     }

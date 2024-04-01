@@ -6,17 +6,14 @@ package frc.robot.util.ShuffleBoard.Tabs;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.DoNothing;
+import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.commands.ArmToPos;
 import frc.robot.commands.auto_comm.ChoreoPathCommand;
-import frc.robot.commands.auto_comm.FollowPathCommand;
-import frc.robot.commands.auto_comm.ShootChoreoPathCommand;
+import frc.robot.commands.auto_comm.MoveArmForShoot;
 import frc.robot.commands.gpm.IndexerFeed;
 import frc.robot.commands.gpm.IntakeNote;
 import frc.robot.commands.gpm.PrepareShooter;
-import frc.robot.constants.ShooterConstants;
+import frc.robot.constants.ArmConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
@@ -27,7 +24,7 @@ import frc.robot.util.ShuffleBoard.ShuffleBoardTabs;
 /** Add your docs here. */
 public class AutoTab extends ShuffleBoardTabs {
 
-    private static final double SHOOTER_SPINUP_TIME = 0.5;
+    private static final double SHOOTER_SPINUP_TIME = 0.4;
 
     private final SendableChooser<Command> autoCommand = new SendableChooser<>();
 
@@ -52,84 +49,92 @@ public class AutoTab extends ShuffleBoardTabs {
                 new SequentialCommandGroup(
                         new PrepareShooter(shooter, 1800),
                         new WaitCommand(SHOOTER_SPINUP_TIME),
-                        new IndexerFeed(indexer),
-                        new IntakeNote(intake, indexer, arm, (ignored) -> {}),
-                        new ChoreoPathCommand("Center 6.1", true, drive),
-                        new IndexerFeed(indexer),
-                        new IntakeNote(intake, indexer, arm, (ignored) -> {}),
-                        new ChoreoPathCommand("Center 6.2", true, drive),
-                        new IndexerFeed(indexer),
-                        new IntakeNote(intake, indexer, arm, (ignored) -> {}),
-                        new ChoreoPathCommand("Center 6.3", true, drive),
-                        new IndexerFeed(indexer),
-                        new IntakeNote(intake, indexer, arm, (ignored) -> {}),
-                        new ChoreoPathCommand("Center 6.4", true, drive),
-                        new IndexerFeed(indexer),
-                        new IntakeNote(intake, indexer, arm, (ignored) -> {}),
-                        new ChoreoPathCommand("Center 6.5", true, drive),
-                        new IndexerFeed(indexer)
+                        index(),
+
+                        intakeAndSubwooferShot("Center 6.1"),
+                        intakeAndSubwooferShot("Center 6.2"),
+                        intakeAndSubwooferShot("Center 6.3"),
+                        intakeAndSubwooferShot("Center 6.4"),
+                        intakeAndSubwooferShot("Center 6.5")
                 ));
 
         autoCommand.addOption("Choreo Source 4", new SequentialCommandGroup(
                 new PrepareShooter(shooter, 1800),
                 new WaitCommand(SHOOTER_SPINUP_TIME),
-                new IndexerFeed(indexer),
-                new IntakeNote(intake, indexer, arm, (ignored) -> {}),
-                new ChoreoPathCommand("Source 4.1", true, drive),
-                new IndexerFeed(indexer),
-                new IntakeNote(intake, indexer, arm, (ignored) -> {}),
-                new ChoreoPathCommand("Source 4.2", true, drive),
-                new IndexerFeed(indexer),
-                new IntakeNote(intake, indexer, arm, (ignored) -> {}),
-                new ChoreoPathCommand("Source 4.3", true, drive),
-                new IndexerFeed(indexer)
+                index(),
+
+                intakeAndSubwooferShot("Source 4.1"),
+                intakeAndSubwooferShot("Source 4.2"),
+                intakeAndSubwooferShot("Source 4.3")
         ));
 
         autoCommand.addOption("Choreo Distance Center 6", new SequentialCommandGroup(
                 new PrepareShooter(shooter, 1800),
                 new WaitCommand(SHOOTER_SPINUP_TIME),
-                new IndexerFeed(indexer),
-                new IntakeNote(intake, indexer, arm, (ignored) -> {}),
-                new ShootChoreoPathCommand("Distance Center 6.1", drive, arm, indexer),
-                new IntakeNote(intake, indexer, arm, (ignored) -> {}),
-                new ShootChoreoPathCommand("Distance Center 6.2", drive, arm, indexer),
-                new IntakeNote(intake, indexer, arm, (ignored) -> {}),
-                new ShootChoreoPathCommand("Distance Center 6.3", drive, arm, indexer),
-                new IntakeNote(intake, indexer, arm, (ignored) -> {}),
-                new ShootChoreoPathCommand("Distance Center 6.4", drive, arm, indexer),
-                new IntakeNote(intake, indexer, arm, (ignored) -> {}),
-                new ShootChoreoPathCommand("Distance Center 6.5", drive, arm, indexer)
+                index(),
+
+                intakeAndDistanceShot("Distance Center 6.1"),
+                intakeAndDistanceShot("Distance Center 6.2"),
+                intakeAndDistanceShot("Distance Center 6.3"),
+                intakeAndDistanceShot("Distance Center 6.4"),
+                intakeAndDistanceShot("Distance Center 6.5")
+        ));
+
+        autoCommand.addOption("Choreo Distance Center 6 Wing First", new SequentialCommandGroup(
+                new PrepareShooter(shooter, 1800),
+                new WaitCommand(SHOOTER_SPINUP_TIME),
+                index(),
+
+                intakeAndDistanceShot("Distance Center 6 Wing First.1"),
+                intakeAndDistanceShot("Distance Center 6 Wing First.2"),
+                intakeAndDistanceShot("Distance Center 6 Wing First.3"),
+                intakeAndDistanceShot("Distance Center 6 Wing First.4"),
+                intakeAndDistanceShot("Distance Center 6 Wing First.5")
+        ));
+
+        autoCommand.addOption("Choreo Distance Center 6 Wing First Subwoofer", new SequentialCommandGroup(
+                new PrepareShooter(shooter, 1800),
+                new WaitCommand(SHOOTER_SPINUP_TIME),
+                index(),
+
+                intakeAndSubwooferShot("Distance Center 6 Wing First Subwoofer.1"),
+                intakeAndSubwooferShot("Distance Center 6 Wing First Subwoofer.2"),
+                intakeAndDistanceShot("Distance Center 6 Wing First Subwoofer.3"),
+                intakeAndDistanceShot("Distance Center 6 Wing First Subwoofer.4"),
+                intakeAndDistanceShot("Distance Center 6 Wing First Subwoofer.5")
         ));
 
         autoCommand.addOption("Choreo Distance Center 7", new SequentialCommandGroup(
                 new PrepareShooter(shooter, 1800),
                 new WaitCommand(SHOOTER_SPINUP_TIME),
-                new IndexerFeed(indexer),
-                new IntakeNote(intake, indexer, arm, (ignored) -> {}),
-                new ShootChoreoPathCommand("Distance Center 7.1", drive, arm, indexer),
-                new IntakeNote(intake, indexer, arm, (ignored) -> {}),
-                new ShootChoreoPathCommand("Distance Center 7.2", drive, arm, indexer),
-                new IntakeNote(intake, indexer, arm, (ignored) -> {}),
-                new ShootChoreoPathCommand("Distance Center 7.3", drive, arm, indexer),
-                new IntakeNote(intake, indexer, arm, (ignored) -> {}),
-                new ShootChoreoPathCommand("Distance Center 7.4", drive, arm, indexer),
-                new IntakeNote(intake, indexer, arm, (ignored) -> {}),
-                new ShootChoreoPathCommand("Distance Center 7.5", drive, arm, indexer),
-                new IntakeNote(intake, indexer, arm, (ignored) -> {}),
-                new ShootChoreoPathCommand("Distance Center 7.6", drive, arm, indexer)
+                index(),
+
+                intakeAndDistanceShot("Distance Center 7.1"),
+                intakeAndDistanceShot("Distance Center 7.2"),
+                intakeAndDistanceShot("Distance Center 7.3"),
+                intakeAndDistanceShot("Distance Center 7.4"),
+                intakeAndDistanceShot("Distance Center 7.5"),
+                intakeAndDistanceShot("Distance Center 7.6")
         ));
 
         autoCommand.addOption("Choreo Distance Source 4", new SequentialCommandGroup(
                 new PrepareShooter(shooter, 1800),
                 new WaitCommand(SHOOTER_SPINUP_TIME),
-                new IndexerFeed(indexer),
-                new IntakeNote(intake, indexer, arm, (ignored) -> {}),
-                new ShootChoreoPathCommand("Distance Source 4.1", drive, arm, indexer),
-                new IntakeNote(intake, indexer, arm, (ignored) -> {}),
-                new ShootChoreoPathCommand("Distance Source 4.2", drive, arm, indexer),
-                new IntakeNote(intake, indexer, arm, (ignored) -> {}),
-                new ChoreoPathCommand("Distance Source 4.3", true, drive),
-                new ShootChoreoPathCommand("Distance Source 4.4", drive, arm, indexer)
+                index(),
+
+                intakeAndDistanceShot("Distance Source 4.1"),
+                intakeAndDistanceShot("Distance Source 4.2"),
+
+                new ParallelCommandGroup(
+                        new ArmToPos(arm, ArmConstants.stowedSetpoint)
+                                .andThen(new IntakeNote(intake, indexer, arm, (ignored) -> {})),
+                        new ChoreoPathCommand("Distance Source 4.3", true, drive)
+                ),
+                new ParallelCommandGroup(
+                        new MoveArmForShoot("Distance Source 4.4", arm),
+                        new ChoreoPathCommand("Distance Source 4.4", true, drive)
+                                .andThen(index())
+                )
         ));
 
         // Final Autos
@@ -168,5 +173,29 @@ public class AutoTab extends ShuffleBoardTabs {
 
     public SendableChooser<Command> getChooser(){
         return autoCommand;
+    }
+
+    private ParallelCommandGroup intakeAndSubwooferShot(String pathName) {
+        return new ParallelCommandGroup(
+                new IntakeNote(intake, indexer, arm, (ignored) -> {}),
+                new ChoreoPathCommand(pathName, true, drive)
+                        .andThen(index())
+        );
+    }
+
+    private ParallelCommandGroup intakeAndDistanceShot(String pathName) {
+        return new ParallelCommandGroup(
+                new ArmToPos(arm, ArmConstants.stowedSetpoint)
+                        .andThen(new IntakeNote(intake, indexer, arm, (ignored) -> {}))
+                        .andThen(new MoveArmForShoot(pathName, arm)),
+                new ChoreoPathCommand(pathName, true, drive)
+                        .andThen(index())
+        );
+    }
+
+    private Command index() {
+        return new RunCommand(() -> indexer.ejectIntoShooter())
+                       .withTimeout(0.1)
+                       .andThen(new InstantCommand(() -> indexer.stopIndex()));
     }
 }
