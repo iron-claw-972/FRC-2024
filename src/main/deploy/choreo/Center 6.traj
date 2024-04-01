@@ -2044,51 +2044,5 @@
       "timestamp": 17.203873427041867
     }
   ],
-  "eventMarkers": [
-    {
-      "timestamp": 1.2080201889284545,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Intake"
-        }
-      }
-    },
-    {
-      "timestamp": 3.398797373367676,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Intake"
-        }
-      }
-    },
-    {
-      "timestamp": 5.782485206143044,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Intake"
-        }
-      }
-    },
-    {
-      "timestamp": 9.490262631932852,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Intake"
-        }
-      }
-    },
-    {
-      "timestamp": 14.591282912515812,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Intake"
-        }
-      }
-    }
-  ]
+  "eventMarkers": []
 }

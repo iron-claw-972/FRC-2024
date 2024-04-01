@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Arm;
+import frc.robot.subsystems.gpm.Intake;
 import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.subsystems.gpm.StorageIndex;
 import frc.robot.util.Vision;
@@ -26,10 +27,10 @@ public class ShuffleBoardManager {
     private AutoTab autoTab;
     private VisionTab visionTab;
 
-    public ShuffleBoardManager(Drivetrain drive, Vision vision, Shooter shooter, Arm arm, StorageIndex index){
+    public ShuffleBoardManager(Drivetrain drive, Vision vision, Shooter shooter, Arm arm, StorageIndex index, Intake intake){
         
         // swerveTab = new SwerveTab(drive);
-        autoTab = new AutoTab(drive, shooter, arm, index);
+        autoTab = new AutoTab(drive, shooter, arm, index, intake);
          swerveTab = new SwerveTab(drive);
         visionTab = new VisionTab(drive, vision);
          tabs.add(swerveTab);

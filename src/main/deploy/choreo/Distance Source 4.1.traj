@@ -712,15 +712,5 @@
       "timestamp": 5.087834181958761
     }
   ],
-  "eventMarkers": [
-    {
-      "timestamp": 1.9128911512887257,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Intake"
-        }
-      }
-    }
-  ]
+  "eventMarkers": []
 }
