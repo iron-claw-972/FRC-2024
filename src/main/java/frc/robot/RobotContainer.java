@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.Climb;
@@ -37,6 +38,7 @@ import frc.robot.subsystems.gpm.StorageIndex;
 import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 import frc.robot.util.ShuffleBoard.ShuffleBoardManager;
+import frc.robot.commands.gpm.IndexerFeed;
 import frc.robot.commands.gpm.IntakeNote;
 import frc.robot.commands.gpm.PrepareShooter;
 import frc.robot.commands.gpm.SetShooterSpeed;
@@ -82,9 +84,11 @@ public class RobotContainer {
         break;
 
       case TestBed2:
-        intake = new Intake();
+        shooter = new Shooter();
         index = new StorageIndex();
         SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index, arm));
+        SmartDashboard.putData("Prepare Shooter", new IndexerFeed(index).andThen(new PrintCommand("bye")));
+        SmartDashboard.putData("Prepare Shooter2", new PrintCommand("hi"));
         break;
         
       default:
