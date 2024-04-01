@@ -17,5 +17,5 @@ public class BasicShoot extends ParallelRaceGroup{
         new PrepareShooter(shooter, 1750),
         new IntakeNote(intake, index,arm, consumer)
     );
-}
+    }
 }

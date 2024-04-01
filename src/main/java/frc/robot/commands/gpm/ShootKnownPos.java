@@ -59,4 +59,3 @@ public class ShootKnownPos extends SequentialCommandGroup {
 				new PrepareShooter(shooter, 0)));
 	}
 }
-

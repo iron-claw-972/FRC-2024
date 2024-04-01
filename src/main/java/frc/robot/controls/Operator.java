@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.OuttakeAmp;
 import frc.robot.commands.OuttakeAmpManual;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.gpm.IntakeNote;
@@ -40,9 +39,10 @@ public class Operator {
     private Shooter shooter;
     private Drivetrain drive;
 
-    private boolean ampOrder = false; 
+    private boolean ampOrder = false;
+    private Consumer<Boolean> rumbleConsumer;
 
-    public Operator(Intake intake, Arm arm, StorageIndex index, Shooter shooter, Drivetrain drive) {
+    public Operator(Intake intake, Arm arm, StorageIndex index, Shooter shooter, Drivetrain drive, Consumer<Boolean> rumbleConsumer) {
         this.intake = intake;
         this.arm = arm;
         this.index = index;
