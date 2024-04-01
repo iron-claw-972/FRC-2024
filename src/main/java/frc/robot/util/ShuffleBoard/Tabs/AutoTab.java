@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.commands.ArmToPos;
 import frc.robot.commands.auto_comm.ChoreoPathCommand;
 import frc.robot.commands.auto_comm.MoveArmForShoot;
-import frc.robot.commands.gpm.IndexerFeed;
 import frc.robot.commands.gpm.IntakeNote;
 import frc.robot.commands.gpm.PrepareShooter;
 import frc.robot.commands.gpm.SetShooterSpeed;
@@ -48,8 +47,7 @@ public class AutoTab extends ShuffleBoardTabs {
 
         autoCommand.addOption("Choreo Center 6",
                 new SequentialCommandGroup(
-                        new PrepareShooter(shooter, 1800),
-                        new WaitCommand(SHOOTER_SPINUP_TIME),
+                        prepare(),
                         index(),
 
                         intakeAndSubwooferShot("Center 6.1"),
@@ -60,8 +58,7 @@ public class AutoTab extends ShuffleBoardTabs {
                 ));
 
         autoCommand.addOption("Choreo Source 4", new SequentialCommandGroup(
-                new PrepareShooter(shooter, 1800),
-                new WaitCommand(SHOOTER_SPINUP_TIME),
+                prepare(),
                 index(),
 
                 intakeAndSubwooferShot("Source 4.1"),
@@ -69,37 +66,34 @@ public class AutoTab extends ShuffleBoardTabs {
                 intakeAndSubwooferShot("Source 4.3")
         ));
 
-        autoCommand.addOption("Choreo Distance Center 6", new SequentialCommandGroup(
-                new PrepareShooter(shooter, 1800),
-                new WaitCommand(SHOOTER_SPINUP_TIME),
-                index(),
+//        autoCommand.addOption("Choreo Distance Center 6", new SequentialCommandGroup(
+//                prepare(),
+//                index(),
+//
+//                new SetShooterSpeed(shooter, 18),
+//
+//                intakeAndDistanceShot("Distance Center 6.1"),
+//                intakeAndDistanceShot("Distance Center 6.2"),
+//                intakeAndDistanceShot("Distance Center 6.3"),
+//                intakeAndDistanceShot("Distance Center 6.4"),
+//                intakeAndDistanceShot("Distance Center 6.5")
+//        ));
 
-                new SetShooterSpeed(shooter, 18),
-
-                intakeAndDistanceShot("Distance Center 6.1"),
-                intakeAndDistanceShot("Distance Center 6.2"),
-                intakeAndDistanceShot("Distance Center 6.3"),
-                intakeAndDistanceShot("Distance Center 6.4"),
-                intakeAndDistanceShot("Distance Center 6.5")
-        ));
-
-        autoCommand.addOption("Choreo Distance Center 6 Wing First", new SequentialCommandGroup(
-                new PrepareShooter(shooter, 1800),
-                new WaitCommand(SHOOTER_SPINUP_TIME),
-                index(),
-
-                new SetShooterSpeed(shooter, 18),
-
-                intakeAndDistanceShot("Distance Center 6 Wing First.1"),
-                intakeAndDistanceShot("Distance Center 6 Wing First.2"),
-                intakeAndDistanceShot("Distance Center 6 Wing First.3"),
-                intakeAndDistanceShot("Distance Center 6 Wing First.4"),
-                intakeAndDistanceShot("Distance Center 6 Wing First.5")
-        ));
+//        autoCommand.addOption("Choreo Distance Center 6 Wing First", new SequentialCommandGroup(
+//                prepare(),
+//                index(),
+//
+//                new SetShooterSpeed(shooter, 18),
+//
+//                intakeAndDistanceShot("Distance Center 6 Wing First.1"),
+//                intakeAndDistanceShot("Distance Center 6 Wing First.2"),
+//                intakeAndDistanceShot("Distance Center 6 Wing First.3"),
+//                intakeAndDistanceShot("Distance Center 6 Wing First.4"),
+//                intakeAndDistanceShot("Distance Center 6 Wing First.5")
+//        ));
 
         autoCommand.addOption("Choreo Distance Center 6 Wing First Subwoofer", new SequentialCommandGroup(
-                new PrepareShooter(shooter, 1800),
-                new WaitCommand(SHOOTER_SPINUP_TIME),
+                prepare(),
                 index(),
 
                 intakeAndSubwooferShot("Distance Center 6 Wing First Subwoofer.1"),
@@ -112,24 +106,22 @@ public class AutoTab extends ShuffleBoardTabs {
                 intakeAndDistanceShot("Distance Center 6 Wing First Subwoofer.5")
         ));
 
-        autoCommand.addOption("Choreo Distance Center 7", new SequentialCommandGroup(
-                new PrepareShooter(shooter, 1800),
-                new WaitCommand(SHOOTER_SPINUP_TIME),
-                index(),
-
-                new SetShooterSpeed(shooter, 18),
-
-                intakeAndDistanceShot("Distance Center 7.1"),
-                intakeAndDistanceShot("Distance Center 7.2"),
-                intakeAndDistanceShot("Distance Center 7.3"),
-                intakeAndDistanceShot("Distance Center 7.4"),
-                intakeAndDistanceShot("Distance Center 7.5"),
-                intakeAndDistanceShot("Distance Center 7.6")
-        ));
+//        autoCommand.addOption("Choreo Distance Center 7", new SequentialCommandGroup(
+//                prepare(),
+//                index(),
+//
+//                new SetShooterSpeed(shooter, 18),
+//
+//                intakeAndDistanceShot("Distance Center 7.1"),
+//                intakeAndDistanceShot("Distance Center 7.2"),
+//                intakeAndDistanceShot("Distance Center 7.3"),
+//                intakeAndDistanceShot("Distance Center 7.4"),
+//                intakeAndDistanceShot("Distance Center 7.5"),
+//                intakeAndDistanceShot("Distance Center 7.6")
+//        ));
 
         autoCommand.addOption("Choreo Distance Source 4", new SequentialCommandGroup(
-                new PrepareShooter(shooter, 1800),
-                new WaitCommand(SHOOTER_SPINUP_TIME),
+                prepare(),
                 index(),
 
                 new SetShooterSpeed(shooter, 18),
@@ -209,5 +201,12 @@ public class AutoTab extends ShuffleBoardTabs {
         return new RunCommand(() -> indexer.ejectIntoShooter())
                        .withTimeout(0.1)
                        .andThen(new InstantCommand(() -> indexer.stopIndex()));
+    }
+
+    private Command prepare() {
+        return new SequentialCommandGroup(
+                new PrepareShooter(shooter, 1800),
+                new WaitCommand(SHOOTER_SPINUP_TIME)
+        );
     }
 }
