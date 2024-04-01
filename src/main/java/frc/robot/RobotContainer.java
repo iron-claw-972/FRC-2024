@@ -86,7 +86,6 @@ public class RobotContainer {
       case TestBed2:
         shooter = new Shooter();
         index = new StorageIndex();
-        SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index, arm));
         SmartDashboard.putData("Prepare Shooter", new IndexerFeed(index).andThen(new PrintCommand("bye")));
         SmartDashboard.putData("Prepare Shooter2", new PrintCommand("hi"));
         break;
