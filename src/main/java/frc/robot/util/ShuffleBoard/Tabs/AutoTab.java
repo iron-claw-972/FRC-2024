@@ -25,7 +25,6 @@ public class AutoTab extends ShuffleBoardTabs {
     
     public void createEntries(){  
         tab = Shuffleboard.getTab("Auto");
-    
         // Final Autos
         autoCommand.setDefaultOption("Do nothing", new DoNothing());
         autoCommand.addOption("3 piece (pos 4) [3]", new FollowPathCommand("3 piece (pos 4) [3]",true, drive));
@@ -35,6 +34,20 @@ public class AutoTab extends ShuffleBoardTabs {
         autoCommand.addOption("3 piece (pos 4) (original)", new FollowPathCommand("3 piece (pos 4) (original)",true, drive));
         autoCommand.addOption("5 piece (pos 3) (original-tested)", new FollowPathCommand("5 piece (pos 3) (original-tested)",true, drive));
         autoCommand.addOption("Changed 5 piece (pos 3)", new FollowPathCommand("Changed 5 piece (pos 3)",true, drive));
+
+
+        
+        // // Prev Autos
+        // autoCommand.addOption("God Path", new FollowPathCommand("God Path",true, drive));
+        // autoCommand.addOption("Test", new FollowPathCommand("Test",true, drive));
+        // autoCommand.addOption("5 piece (pos 3) (normal)", new FollowPathCommand("5 piece (pos 3) (normal)",true, drive));
+        // autoCommand.addOption("5 piece (pos 3) (test)", new FollowPathCommand("5 piece (pos 3) (test)",true, drive));
+        // autoCommand.addOption("5 piece (pos 3) (under the stage -- test)", new FollowPathCommand("5 piece (pos 3) (under the stage -- test)",true, drive));
+        // autoCommand.addOption("Test1", new FollowPathCommand("Test1",true, drive));
+        // autoCommand.addOption("Sabotage Trial (1)", new FollowPathCommand("Sabotage Trial (1)",true, drive));
+        // autoCommand.addOption("5 piece (pos 3) (under the stage -- test)", new FollowPathCommand("5 piece (pos 3) (under the stage -- test)",true, drive));
+        // autoCommand.addOption("Far", new FollowPathCommand("Far",true, drive));
+        // autoCommand.addOption("3 piece (pos 4) (B)", new FollowPathCommand("3 piece (pos 4) (B)",true, drive));
 
   
         // Repleacement Auto, don't delete
