@@ -31,7 +31,7 @@ public class PowerPanel extends SubsystemBase {
 	@Override
 	public void periodic() {
 		// put the current draw on the SmartDashboard
-		//SmartDashboard.putNumber("PDH Current (Amps)", PDH.getTotalCurrent());
+		SmartDashboard.putNumber("PDH Current (Amps)", PDH.getTotalCurrent());
 
 		// TODO: put the Energy draw on the SmartDashboard
 

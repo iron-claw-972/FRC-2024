@@ -36,7 +36,7 @@ public class LogManager {
   }
 
   public static void update() {
-    // if (!Constants.DO_LOGGING) return;
+    if (!Constants.DO_LOGGING) return;
     logs.forEach(Log::update);
   }
 

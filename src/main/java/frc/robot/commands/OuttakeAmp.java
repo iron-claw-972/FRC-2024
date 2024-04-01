@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Robot;
-import frc.robot.commands.gpm.PrepareShooter;
 import frc.robot.constants.ArmConstants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.constants.StorageIndexConstants;
@@ -37,7 +36,7 @@ public class OuttakeAmp extends SequentialCommandGroup {
     addCommands(
         // Get the shooter to the right speed while moving arm
         new ParallelCommandGroup (
-          new PrepareShooter(shooter, ShooterConstants.AMP_OUTTAKE_RPM),
+          new InstantCommand(() -> shooter.setTargetRPM(ShooterConstants.AMP_OUTTAKE_RPM), shooter),
           // Move arm
           new ArmToPos(arm, ArmConstants.ampSetpoint)
         ),

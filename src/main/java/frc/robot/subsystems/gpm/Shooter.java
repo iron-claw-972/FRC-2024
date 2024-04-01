@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.util.EqualsUtil;
-import frc.robot.util.Log;
 import frc.robot.util.LogManager;
 
 public class Shooter extends SubsystemBase {
@@ -35,9 +34,8 @@ public class Shooter extends SubsystemBase {
 			.radiansPerSecondToRotationsPerMinute(Shooter.gearbox.freeSpeedRadPerSec);
 
 	// PID constants. PID system measures RPM and outputs motor power [-1,1]
-	private static final double P = 0.00170;
+	private static final double P = 0.001500;
 	private static final double I = 0.000100;
-	private static final double leftI = 0;
 	private static final double D = 0.000010;
 
 	// FeedForward constants
@@ -48,7 +46,7 @@ public class Shooter extends SubsystemBase {
 	 * Tolerance in RPM.
 	 * At 1500 rpm, the simulator gives 1519 rpm.
 	 */
-	private static final double TOLERANCE = 50;
+	private static final double TOLERANCE = 80;
 
 	// 4-inch Colson wheels
 	// private static final double MASS_COLSON = 0.245;
@@ -72,7 +70,7 @@ public class Shooter extends SubsystemBase {
 	private final CANSparkFlex leftMotor = new CANSparkFlex(ShooterConstants.LEFT_MOTOR_ID, MotorType.kBrushless);
 	private final RelativeEncoder leftMotorEncoder = leftMotor.getEncoder();
 	/** PID controller uses RPM as input and outputs motor power */
-	protected final PIDController leftPID = new PIDController(P, leftI, D);
+	protected final PIDController leftPID = new PIDController(P, I, D);
 	private FlywheelSim leftFlywheelSim;
 	private double leftMotorSpeedSim = 0.0;
 	private double leftPower = 0.0;
@@ -85,7 +83,6 @@ public class Shooter extends SubsystemBase {
 	private FlywheelSim rightFlywheelSim;
 	private double rightMotorSpeedSim = 0.0;
 	private double rightPower = 0.0;
-	private static double slipCoefficient = 0.91;
 
 	// TODO: TUNE THIS
 	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(S, V);
@@ -104,7 +101,7 @@ public class Shooter extends SubsystemBase {
 			leftFlywheelSim = new FlywheelSim(gearbox, gearRatio, MOI_SHAFT);
 			rightFlywheelSim = new FlywheelSim(gearbox, gearRatio, MOI_SHAFT);
 		}
-		
+
 		if (Constants.DO_LOGGING) {
 			LogManager.add("Shooter/MotorSpeedDifference", () -> getMotorSpeedDifference(), Duration.ofSeconds(1));
 			LogManager.add("Shooter/LeftSpeedError", () -> leftPID.getSetpoint() - getLeftMotorSpeed(), Duration.ofSeconds(1));
@@ -113,17 +110,11 @@ public class Shooter extends SubsystemBase {
 			LogManager.add("Shooter/VoltsLeft", () -> leftMotor.get() * Constants.ROBOT_VOLTAGE, Duration.ofSeconds(1));	
 			
 			LogManager.add("Shooter/VoltsRight", () -> rightMotor.get() * Constants.ROBOT_VOLTAGE, Duration.ofSeconds(1));
-		
-			LogManager.add("Shooter/Leftspd", () -> leftPID.getSetpoint() - getLeftMotorSpeed());
-			LogManager.add("Shooter/Rightspd", () -> getRightMotorSpeed());
 		}
 	}
 
 	@Override
 	public void periodic() {
-
-		//SmartDashboard.putBoolean("shooter setpoint", atSetpoint());
-
 		// PID loop uses RPM
 		double leftSpeed = getLeftMotorRPM();
 		double rightSpeed = getRightMotorRPM();
@@ -139,9 +130,8 @@ public class Shooter extends SubsystemBase {
 		// report some values to the Dashboard
 		SmartDashboard.putNumber("left speed", /* shooterRPMToSpeed */ (leftSpeed));
 		SmartDashboard.putNumber("right speed", /* shooterRPMToSpeed */ (rightSpeed));
-		//SmartDashboard.putData("slip coefficient", slipCoefficient); /// FIXXX
-		// SmartDashboard.putData("left Shooter PID", leftPID);
-		// SmartDashboard.putData("right Shooter PID", rightPID);
+		SmartDashboard.putData("left Shooter PID", leftPID);
+		SmartDashboard.putData("right Shooter PID", rightPID);
 	}
 
 	@Override
@@ -236,7 +226,7 @@ public class Shooter extends SubsystemBase {
 	 * @see frc.robot.subsystems.gpm.Shooter.removeSlip
 	 */
 	public static double addSlip(double output) {
-		return output / OUTPUT_COEF*slipCoefficient;//*0.93;
+		return output / OUTPUT_COEF*0.93;
 	}
 
 	/**
@@ -283,8 +273,7 @@ public class Shooter extends SubsystemBase {
 	 * @return boolean indicating whether both PIDs are at their setpoints
 	 */
 	public boolean atSetpoint() {
-		return EqualsUtil.epsilonEquals(getLeftMotorRPM(),leftPID.getSetpoint(),TOLERANCE)&&
-		EqualsUtil.epsilonEquals(getRightMotorRPM(),rightPID.getSetpoint(),TOLERANCE);
+		return EqualsUtil.epsilonEquals(getLeftMotorRPM(),leftPID.getSetpoint(),TOLERANCE);
 		//return leftPID.atSetpoint() && rightPID.atSetpoint();
 	}
 
