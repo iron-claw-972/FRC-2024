@@ -46,101 +46,103 @@ public class AutoTab extends ShuffleBoardTabs {
     
     public void createEntries(){  
         tab = Shuffleboard.getTab("Auto");
+        autoCommand.addOption("5 piece (original-tested)", new FollowPathCommand("5 piece (original-tested)",true, drive));
+        autoCommand.addOption("5 piece new", new FollowPathCommand("5 piece new",true, drive));
+        
+//         autoCommand.addOption("Choreo Center 6",
+//                 new SequentialCommandGroup(
+//                         prepare(),
+//                         index(),
 
-        autoCommand.addOption("Choreo Center 6",
-                new SequentialCommandGroup(
-                        prepare(),
-                        index(),
+//                         intakeAndSubwooferShot("Center 6.1"),
+//                         intakeAndSubwooferShot("Center 6.2"),
+//                         intakeAndSubwooferShot("Center 6.3"),
+//                         intakeAndSubwooferShot("Center 6.4"),
+//                         intakeAndSubwooferShot("Center 6.5")
+//                 ));
 
-                        intakeAndSubwooferShot("Center 6.1"),
-                        intakeAndSubwooferShot("Center 6.2"),
-                        intakeAndSubwooferShot("Center 6.3"),
-                        intakeAndSubwooferShot("Center 6.4"),
-                        intakeAndSubwooferShot("Center 6.5")
-                ));
+//         autoCommand.addOption("Choreo Source 3", new SequentialCommandGroup(
+//                 prepare(),
+//                 index(),
 
-        autoCommand.addOption("Choreo Source 3", new SequentialCommandGroup(
-                prepare(),
-                index(),
+//                 intakeAndSubwooferShot("Source 3.1"),
+//                 intakeAndSubwooferShot("Source 3.2")
+//         ));
 
-                intakeAndSubwooferShot("Source 3.1"),
-                intakeAndSubwooferShot("Source 3.2")
-        ));
+// //        autoCommand.addOption("Choreo Distance Center 6", new SequentialCommandGroup(
+// //                prepare(),
+// //                index(),
+// //
+// //                new SetShooterSpeed(shooter, 18),
+// //
+// //                intakeAndDistanceShot("Distance Center 6.1"),
+// //                intakeAndDistanceShot("Distance Center 6.2"),
+// //                intakeAndDistanceShot("Distance Center 6.3"),
+// //                intakeAndDistanceShot("Distance Center 6.4"),
+// //                intakeAndDistanceShot("Distance Center 6.5")
+// //        ));
 
-//        autoCommand.addOption("Choreo Distance Center 6", new SequentialCommandGroup(
-//                prepare(),
-//                index(),
-//
-//                new SetShooterSpeed(shooter, 18),
-//
-//                intakeAndDistanceShot("Distance Center 6.1"),
-//                intakeAndDistanceShot("Distance Center 6.2"),
-//                intakeAndDistanceShot("Distance Center 6.3"),
-//                intakeAndDistanceShot("Distance Center 6.4"),
-//                intakeAndDistanceShot("Distance Center 6.5")
-//        ));
+// //        autoCommand.addOption("Choreo Distance Center 6 Wing First", new SequentialCommandGroup(
+// //                prepare(),
+// //                index(),
+// //
+// //                new SetShooterSpeed(shooter, 18),
+// //
+// //                intakeAndDistanceShot("Distance Center 6 Wing First.1"),
+// //                intakeAndDistanceShot("Distance Center 6 Wing First.2"),
+// //                intakeAndDistanceShot("Distance Center 6 Wing First.3"),
+// //                intakeAndDistanceShot("Distance Center 6 Wing First.4"),
+// //                intakeAndDistanceShot("Distance Center 6 Wing First.5")
+// //        ));
 
-//        autoCommand.addOption("Choreo Distance Center 6 Wing First", new SequentialCommandGroup(
-//                prepare(),
-//                index(),
-//
-//                new SetShooterSpeed(shooter, 18),
-//
-//                intakeAndDistanceShot("Distance Center 6 Wing First.1"),
-//                intakeAndDistanceShot("Distance Center 6 Wing First.2"),
-//                intakeAndDistanceShot("Distance Center 6 Wing First.3"),
-//                intakeAndDistanceShot("Distance Center 6 Wing First.4"),
-//                intakeAndDistanceShot("Distance Center 6 Wing First.5")
-//        ));
+//         autoCommand.addOption("Choreo Distance Center 6 Wing First Subwoofer", new SequentialCommandGroup(
+//                 prepare(),
+//                 index(),
 
-        autoCommand.addOption("Choreo Distance Center 6 Wing First Subwoofer", new SequentialCommandGroup(
-                prepare(),
-                index(),
+//                 intakeAndSubwooferShot("Distance Center 6 Wing First Subwoofer.1"),
+//                 intakeAndSubwooferShot("Distance Center 6 Wing First Subwoofer.2"),
 
-                intakeAndSubwooferShot("Distance Center 6 Wing First Subwoofer.1"),
-                intakeAndSubwooferShot("Distance Center 6 Wing First Subwoofer.2"),
+//                 new SetShooterSpeed(shooter, 18),
 
-                new SetShooterSpeed(shooter, 18),
+//                 intakeAndDistanceShot("Distance Center 6 Wing First Subwoofer.3"),
+//                 intakeAndDistanceShot("Distance Center 6 Wing First Subwoofer.4"),
+//                 intakeAndDistanceShot("Distance Center 6 Wing First Subwoofer.5")
+//         ));
 
-                intakeAndDistanceShot("Distance Center 6 Wing First Subwoofer.3"),
-                intakeAndDistanceShot("Distance Center 6 Wing First Subwoofer.4"),
-                intakeAndDistanceShot("Distance Center 6 Wing First Subwoofer.5")
-        ));
+// //        autoCommand.addOption("Choreo Distance Center 7", new SequentialCommandGroup(
+// //                prepare(),
+// //                index(),
+// //
+// //                new SetShooterSpeed(shooter, 18),
+// //
+// //                intakeAndDistanceShot("Distance Center 7.1"),
+// //                intakeAndDistanceShot("Distance Center 7.2"),
+// //                intakeAndDistanceShot("Distance Center 7.3"),
+// //                intakeAndDistanceShot("Distance Center 7.4"),
+// //                intakeAndDistanceShot("Distance Center 7.5"),
+// //                intakeAndDistanceShot("Distance Center 7.6")
+// //        ));
 
-//        autoCommand.addOption("Choreo Distance Center 7", new SequentialCommandGroup(
-//                prepare(),
-//                index(),
-//
-//                new SetShooterSpeed(shooter, 18),
-//
-//                intakeAndDistanceShot("Distance Center 7.1"),
-//                intakeAndDistanceShot("Distance Center 7.2"),
-//                intakeAndDistanceShot("Distance Center 7.3"),
-//                intakeAndDistanceShot("Distance Center 7.4"),
-//                intakeAndDistanceShot("Distance Center 7.5"),
-//                intakeAndDistanceShot("Distance Center 7.6")
-//        ));
+//         autoCommand.addOption("Choreo Distance Source 4", new SequentialCommandGroup(
+//                 prepare(),
+//                 index(),
 
-        autoCommand.addOption("Choreo Distance Source 4", new SequentialCommandGroup(
-                prepare(),
-                index(),
+//                 new SetShooterSpeed(shooter, 18),
 
-                new SetShooterSpeed(shooter, 18),
+//                 intakeAndDistanceShot("Distance Source 4.1"),
+//                 intakeAndDistanceShot("Distance Source 4.2"),
 
-                intakeAndDistanceShot("Distance Source 4.1"),
-                intakeAndDistanceShot("Distance Source 4.2"),
-
-                new ParallelCommandGroup(
-                        new ArmToPos(arm, ArmConstants.stowedSetpoint)
-                                .andThen(new IntakeNote(intake, indexer, arm, (ignored) -> {})),
-                        new ChoreoPathCommand("Distance Source 4.3", true, drive)
-                ),
-                new ParallelCommandGroup(
-                        new MoveArmForShoot("Distance Source 4.4", arm),
-                        new ChoreoPathCommand("Distance Source 4.4", true, drive)
-                                .andThen(index())
-                )
-        ));
+//                 new ParallelCommandGroup(
+//                         new ArmToPos(arm, ArmConstants.stowedSetpoint)
+//                                 .andThen(new IntakeNote(intake, indexer, arm, (ignored) -> {})),
+//                         new ChoreoPathCommand("Distance Source 4.3", true, drive)
+//                 ),
+//                 new ParallelCommandGroup(
+//                         new MoveArmForShoot("Distance Source 4.4", arm),
+//                         new ChoreoPathCommand("Distance Source 4.4", true, drive)
+//                                 .andThen(index())
+//                 )
+//         ));
 
         // Final Autos
 //        autoCommand.setDefaultOption("Do nothing", new DoNothing());
@@ -162,8 +164,6 @@ public class AutoTab extends ShuffleBoardTabs {
 //         autoCommand.addOption("Two Piece (R) Close Shot", new FollowPathCommand("Two Piece (R) Close Shot",true, drive));
 //         autoCommand.addOption("1 point auto (R)", new FollowPathCommand("1 point auto (R)",true, drive));
 //         autoCommand.addOption("Two Piece (R) Close Shot", new FollowPathCommand("Two Piece (R) Close Shot",true, drive));
-//         autoCommand.addOption("Accuracy", new FollowPathCommand("Accuracy",true, drive));
-//         autoCommand.addOption("Three Piece (L)", new FollowPathCommand("Three Piece (L)",true, drive));
         
 
 //         Repleacement Auto, don't delete
