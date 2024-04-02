@@ -22,10 +22,6 @@ public class DriveConstants {
      */
     public static double kRobotWidthWithBumpers = Units.inchesToMeters(26.5 + 3.25 * 2);
 
-    // TODO: missing robot length
-    // TODO: missing robot center of rotation to back bumper and center of rotation to front bumper
-    // the center of rotation need not be the geometric center of the robot.
-
     /** Radius of the drive wheels [meters]. */
     public static double kWheelRadius = Units.inchesToMeters(2);
 
@@ -36,6 +32,7 @@ public class DriveConstants {
     // https://www.swervedrivespecialties.com/products/mk4i-swerve-module
     //   standard gear ratios
     // https://www.swervedrivespecialties.com/products/kit-adapter-16t-drive-pinion-gear-mk4i
+
     //   changes 14-tooth pinion to 16-tooth pinion -- (50.0 / 14.0) becomes (50.0 / 16.0).
     /** Drive gear ratio for an Mk4i with L2-Plus gearing */
     public static double kDriveGearRatio = (50.0 / 16.0) * (17.0 / 27.0) * (45.0 / 15.0);
@@ -69,39 +66,32 @@ public class DriveConstants {
     public static int kDriveFrontLeft = 1;
     public static int kSteerFrontLeft = 2;
     public static int kEncoderFrontLeft = 3;
-    public static double kSteerOffsetFrontLeft = 100.184;//0.058291152119637;//-3.060285486280918+Math.PI;
+    public static double kSteerOffsetFrontLeft = 100.184;
 
     public static int kDriveFrontRight = 10;
     public static int kSteerFrontRight = 11;
     public static int kEncoderFrontRight = 12;
-    public static double kSteerOffsetFrontRight = 224.293-180;//-2.994324445724487;//-3.001994334161282;
+    public static double kSteerOffsetFrontRight = 224.293-180;
 
     public static int kDriveBackLeft = 7;
     public static int kSteerBackLeft = 8;
     public static int kEncoderBackLeft = 9;
-    public static double kSteerOffsetBackLeft =63.389;//-2.540267050266266;//0.650406539440155+Math.PI;
+    public static double kSteerOffsetBackLeft =63.389;
 
     public static int kDriveBackRight = 4;
     public static int kSteerBackRight = 5;
     public static int kEncoderBackRight = 6;
-    public static double kSteerOffsetBackRight = 201.177;//2.626169800758362;//2.771897681057453;
+    public static double kSteerOffsetBackRight = 201.177;
 
     // heading PID
     public static double kHeadingP = 5.5;
     public static double kHeadingD = 0;
 
-    public static final double HEADING_TOLERANCE = Units.degreesToRadians(3);
+    public static final double HEADING_TOLERANCE = Units.degreesToRadians(4);
 
     //translational PID
     public static double kTranslationalP = 1;
-    public static double kTranslationalD = 0.001;//0.001
-
-    //The PIDs for PathPlanner Command
-    public static double kPathplannerHeadingP = 3.5;
-    public static double kPathplannerHeadingD = 0;
-
-    public static double kPathplannerTranslationalP = 6;
-    public static double kPathplannerTranslationalD = 0;
+    public static double kTranslationalD = 0.001;
 
     // CAN
     public static String kDriveMotorCAN = Constants.CANIVORE_CAN;
@@ -118,15 +108,13 @@ public class DriveConstants {
     public static final double kAnglePeakCurrentDuration = 0.01;
     public static final boolean kAngleEnableCurrentLimit = true;
 
-    public static final int kDriveContinuousCurrentLimit = 20;
-    public static final int kDrivePeakCurrentLimit = 20;
+    public static final int kDriveContinuousCurrentLimit = 25;
+    public static final int kDrivePeakCurrentLimit = 25;
     public static final double kDrivePeakCurrentDuration = 0.01;
     public static final boolean kDriveEnableCurrentLimit = true;
 
-    // TODO put slew rate limiter to reduce drift on drivetrain without killing battery.
-
     /* Motor inversions */
-    public static final boolean kDriveMotorInvert = true;//kModuleConstants.driveMotorInvert;
+    public static final boolean kDriveMotorInvert = true;
     public static final boolean kAngleMotorInvert = kModuleConstants.angleMotorInvert;
 
     /* Neutral Modes */
@@ -139,7 +127,6 @@ public class DriveConstants {
         0.075025,
         0.1088,
         0.085856
-        
     };
     public static final double[] I_Values= {
         0,
@@ -199,13 +186,13 @@ public class DriveConstants {
             
             kPigeon = 13;
 
-            kSteerOffsetFrontLeft = 4.185;//0.058291152119637;//-3.060285486280918+Math.PI;
+            kSteerOffsetFrontLeft = 4.185;
 
-            kSteerOffsetFrontRight = 101.519+90;//-2.994324445724487;//-3.001994334161282;
+            kSteerOffsetFrontRight = 101.519+90;
 
-            kSteerOffsetBackLeft = 38.997+180;//-2.540267050266266;//0.650406539440155+Math.PI;
+            kSteerOffsetBackLeft = 38.997+180;
 
-            kSteerOffsetBackRight = 242.847-90;//2.626169800758362;//2.771897681057453;
+            kSteerOffsetBackRight = 242.847-90;
             
             kDriveGearRatio = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
             kModuleConstants = COTSFalconSwerveConstants.SDSMK4i(kDriveGearRatio);
@@ -215,19 +202,18 @@ public class DriveConstants {
         } 
         else if (robotId == RobotId.SwerveTest) {
 
-            kTrackWidth = Units.inchesToMeters(22.75); //22.75 swerve bot, 20.75 comp bot
+            kTrackWidth = Units.inchesToMeters(22.75); 
 
             kPigeon = 13;
         
             kSteerOffsetFrontLeft = -448.91;
 
             kSteerOffsetFrontRight = 112.473;
-            // kSteerOffsetFrontRight = 10.957+90;
 
             kSteerOffsetBackLeft = 180;
-            // [new one] kSteerOffsetBackLeft = 339.689;
 
             kSteerOffsetBackRight = 333.241;
+            
             // Talon Speed
             Constants.MAX_RPM = 6080.0;
 

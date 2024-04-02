@@ -17,29 +17,20 @@ public class IndexerFeed extends Command {
 
 	@Override
     public void initialize (){
-
         m_index.ejectIntoShooter();
         timer.restart();
-
     }
 
 	@Override
-    public void execute(){
-
-    }
+    public void execute(){}
 
 	@Override
     public boolean isFinished(){
-
         return timer.hasElapsed(StorageIndexConstants.ejectShootTimeout);
-        
     }
 
 	@Override
     public void end(boolean interupted){
-
         m_index.stopIndex();
-
     }
-    
 }

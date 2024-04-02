@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Robot;
+import frc.robot.commands.gpm.PrepareShooter;
 import frc.robot.constants.ArmConstants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.constants.StorageIndexConstants;
@@ -23,7 +24,6 @@ import frc.robot.subsystems.gpm.StorageIndex;
  */
 public class OuttakeAmp extends SequentialCommandGroup {
   private Pose2d ampPose;
-  // private Pose2d ampPose2;
 
   /**
    * Scores in the amp
@@ -36,7 +36,7 @@ public class OuttakeAmp extends SequentialCommandGroup {
     addCommands(
         // Get the shooter to the right speed while moving arm
         new ParallelCommandGroup (
-          new InstantCommand(() -> shooter.setTargetRPM(ShooterConstants.AMP_OUTTAKE_RPM), shooter),
+          new PrepareShooter(shooter, ShooterConstants.AMP_OUTTAKE_RPM),
           // Move arm
           new ArmToPos(arm, ArmConstants.ampSetpoint)
         ),
@@ -81,10 +81,7 @@ public class OuttakeAmp extends SequentialCommandGroup {
 
   public OuttakeAmp(Drivetrain drive){
     addCommands(
-      new InstantCommand(()->getPoses()),
-      // new GoToPose(ampPose2, drive).until(()->{
-      //   return drive.getPose().getTranslation().getDistance(ampPose2.getTranslation()) < VisionConstants.AMP_TOLERANCE_DISTANCE;
-      // }),
+      new InstantCommand(() -> getPoses()),
       new GoToPose(() -> ampPose, drive)
     );
   }
@@ -92,7 +89,5 @@ public class OuttakeAmp extends SequentialCommandGroup {
   public void getPoses(){
     ampPose = Robot.getAlliance() == Alliance.Red ? VisionConstants.RED_AMP_POSE
         : VisionConstants.BLUE_AMP_POSE;
-    // ampPose2 = Robot.getAlliance() == Alliance.Red ? VisionConstants.RED_AMP_POSE_2
-    //     : VisionConstants.BLUE_AMP_POSE_2;
   }
 }

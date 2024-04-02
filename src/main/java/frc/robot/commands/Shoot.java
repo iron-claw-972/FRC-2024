@@ -1,7 +1,5 @@
 package frc.robot.commands;
 
-import edu.wpi.first.math.filter.Debouncer;
-import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -12,6 +10,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.constants.ArmConstants;
+import frc.robot.constants.Constants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.constants.StorageIndexConstants;
 import frc.robot.constants.miscConstants.VisionConstants;
@@ -77,9 +76,6 @@ public class Shoot extends Command {
          */
         public static final double shooterOffset = ArmConstants.PIVOT_X + ArmConstants.ARM_LENGTH * Math.cos(ArmConstants.standbySetpoint);
 
-        // TODO: why should this command know anything about about tags?
-        private Debouncer visionSawTagDebouncer = new Debouncer(0.2, DebounceType.kFalling);
-
         Timer timer = new Timer();
         private boolean shooting = false;
 
@@ -131,6 +127,7 @@ public class Shoot extends Command {
                 double angleToShooter = arm.getAngleRad()+Units.degreesToRadians(28.78);
                 double shooterToPivot = Units.inchesToMeters(13.651);
                 double horizontalDist = ArmConstants.PIVOT_X + shooterToPivot * Math.cos(angleToShooter);
+                
                 // Set displacement to speaker
                 displacement = new Pose3d(
                         drive.getPose().getX() + horizontalDist * driveYaw.getCos()-speakerPose.getX(),
@@ -150,15 +147,6 @@ public class Shoot extends Command {
                 double heading = driveYaw.getRadians() + Math.atan2(drive.getChassisSpeeds().vyMetersPerSecond, drive.getChassisSpeeds().vxMetersPerSecond);
                 v_rx = driveSpeed * Math.cos(heading);
                 v_ry = driveSpeed * Math.sin(heading);
-                //System.err.println(displacement.getX()+" " +
-                //                 displacement.getY()+" " +
-                //                 displacement.getZ()+" " +
-                //                         v_rx+" " +
-                //                         v_ry+" "+
-                //                         heading+" "+
-                //                         drive.getChassisSpeeds().vxMetersPerSecond+" "+
-                //                         drive.getChassisSpeeds().vyMetersPerSecond
-                // );
 
                 // TODO: Figure out what v_note is empirically
                 double v_note = ShooterConstants.SHOOT_SPEED_MPS;
@@ -168,19 +156,17 @@ public class Shoot extends Command {
                 // height (sorry that it's called y)
                 // TODO: but y is negative from above
                 double y = displacement.getZ();
-                // System.err.println("Negative y " + y);
 
                 // Basic vertical angle calculation (static robot)
                 double phi_v = Math.atan(Math.pow(v_note, 2) / 9.8 / x * (1 - Math.sqrt(1
                                 + 19.6 / Math.pow(v_note, 2) * (y - 4.9 * x * x / Math.pow(v_note, 2)))));
-                //System.err.println("*pv " + phi_v);
 
                 // Angle to goal
                 // TODO: isn't this calculation simplified with atan2()?
                 double phi_h = Math.atan(displacement.getY()/ displacement.getX());
+
                 // flip angle
                 if (displacement.getX()>=0) phi_h += Math.PI;
-                //System.err.println("*ph " + phi_h);
 
                 // TODO: isn't this calculation simplified with atan2()?
                 double theta_h = Math.atan((v_note * Math.cos(phi_v) * Math.sin(phi_h) - v_ry) / (v_note * Math.cos(phi_v) * Math.cos(phi_h) - v_rx));
@@ -191,12 +177,7 @@ public class Shoot extends Command {
                 // theta_h conversion (i.e. pi-theta_h if necessary)
                 // if the mirrored angle is the same-ish direction??? logic may break at high
                 // v_rx and v_ry but don't worry about it
-                /*
-                if (Math.signum(Math.sin(theta_h)) != Math.signum(Math.sin(phi_h))
-                                || Math.signum(Math.cos(theta_h)) != Math.signum(Math.cos(theta_h))) {
-                        theta_h += Math.PI;
-                }
-                */
+                
                 double theta_v = Math.atan(
                                 (v_note * Math.sin(phi_v) * Math.cos(theta_h)) /
                                 (v_note * Math.cos(phi_v) * Math.cos(phi_h) - v_rx));
@@ -207,9 +188,6 @@ public class Shoot extends Command {
                 horiz_angle = theta_h;
                 vert_angle = theta_v;
                 exit_vel = v_shoot;
-                // System.err.println(horiz_angle);
-                // System.err.println(vert_angle);
-                // System.err.println(exit_vel);
 
                 // set the shooter angle
                 // TODO: Arm should have an arm.setShooterAngle() method.
@@ -226,32 +204,19 @@ public class Shoot extends Command {
                 // Set the outtake velocity
                 shooter.setTargetVelocity(v_shoot);
 
-                boolean sawTag = true;//visionSawTagDebouncer.calculate(drive.canSeeTag());
-                // System.out.println("Arm Setpoint: "+arm.atSetpoint());
-                // System.out.println("Shooter Setpoint: "+shooter.atSetpoint());
-                // System.out.println("drive Setpoint: "+drive.atAlignAngle());
+                if(Constants.DO_LOGGING)  {
+                        SmartDashboard.putBoolean("arm setpoint", EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - theta_v, Units.degreesToRadians(4)));
+                        SmartDashboard.putBoolean("shooter setpoint", shooter.atSetpoint());
+                        SmartDashboard.putBoolean("drive setpoint", drive.atAlignAngle());
+                }
 
-                // report the conditions needed to start shooting
-                // TODO: do not use epsilonEquals(); use arm.atSetpoint()
-                // The shooter should not be worried about PID Tolerance here; that belongs in Arm.
-                SmartDashboard.putBoolean("arm setpoint", EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - theta_v, Units.degreesToRadians(3)));
-                SmartDashboard.putBoolean("shooter setpoint", shooter.atSetpoint());
-                SmartDashboard.putBoolean("drive setpoint", drive.atAlignAngle());
-                SmartDashboard.putBoolean("saw tag", sawTag);
-
-                // put the !shooting test first
-                if (!shooting
-                        && EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - theta_v, Units.degreesToRadians(3))
-                        && shooter.atSetpoint() 
-                        && drive.atAlignAngle() 
-                        && sawTag) {
-                        // remember we are now shooting
+                if (EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - (theta_v-Units.degreesToRadians(0.25)), Units.degreesToRadians(2 /* 4 */)) && 
+                 shooter.atSetpoint() && drive.atAlignAngle() && !shooting) {
                         shooting = true;
                         // push the note into the shooter
                         index.ejectIntoShooter();
                         // start the shooting timer
                         shootTimer.start();
-                        System.out.println("DONE");
                 }
         }
 
