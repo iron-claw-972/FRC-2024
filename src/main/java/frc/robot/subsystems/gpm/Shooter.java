@@ -1,11 +1,8 @@
 package frc.robot.subsystems.gpm;
 
-import java.time.Duration;
-
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -18,8 +15,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.util.EqualsUtil;
-import frc.robot.util.Log;
 import frc.robot.util.LogManager;
+
+import java.time.Duration;
 
 public class Shooter extends SubsystemBase {
 	// each of the shooter shafts is driven by one Neo Vortex motor
@@ -35,10 +33,10 @@ public class Shooter extends SubsystemBase {
 			.radiansPerSecondToRotationsPerMinute(Shooter.gearbox.freeSpeedRadPerSec);
 
 	// PID constants. PID system measures RPM and outputs motor power [-1,1]
-	private static final double P = 0.00170;
-	private static final double I = 0.000100;
-	private static final double leftI = 0.000100;
-	private static final double D = 0.000010;
+	private static final double P = 0.0015 ;
+	private static final double I = 0.00002;
+	private static final double leftI = I;
+	private static final double D = 0.00001;
 
 	// FeedForward constants
 	private static final double S = 0;
