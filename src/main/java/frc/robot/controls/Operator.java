@@ -100,8 +100,8 @@ public class Operator {
           }
 
         // Find buttons for shuttling, 10m/s is good
-//        kDriver.get(Button.LB).onTrue(new InstantCommand(() -> shooter.setTargetVelocity(10)));
-           // Align to subwoofer
+        kDriver.get(GameController.DPad.UP)
+                .toggleOnTrue(new InstantCommand(() -> shooter.setTargetVelocity(10)));
    
     }
     public Trigger getRightTrigger(){
