@@ -100,7 +100,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Old",
   "previewStartingState": {
     "rotation": 60.64224645720866,
     "velocity": 0
