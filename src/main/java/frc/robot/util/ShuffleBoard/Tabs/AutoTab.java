@@ -4,6 +4,7 @@
 
 package frc.robot.util.ShuffleBoard.Tabs;
 
+import com.choreo.lib.Choreo;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.*;
@@ -14,6 +15,7 @@ import frc.robot.commands.gpm.IntakeNote;
 import frc.robot.commands.gpm.PrepareShooter;
 import frc.robot.commands.gpm.SetShooterSpeed;
 import frc.robot.constants.ArmConstants;
+import frc.robot.constants.ShooterConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
@@ -24,7 +26,7 @@ import frc.robot.util.ShuffleBoard.ShuffleBoardTabs;
 /** Add your docs here. */
 public class AutoTab extends ShuffleBoardTabs {
 
-    private static final double SHOOTER_SPINUP_TIME = 0.4;
+    private static final double SHOOTER_SPINUP_TIME = 1.0;
 
     private final SendableChooser<Command> autoCommand = new SendableChooser<>();
 
@@ -181,7 +183,8 @@ public class AutoTab extends ShuffleBoardTabs {
 
     private ParallelCommandGroup intakeAndSubwooferShot(String pathName) {
         return new ParallelCommandGroup(
-                new IntakeNote(intake, indexer, arm, (ignored) -> {}),
+                new IntakeNote(intake, indexer, arm, (ignored) -> {})
+                        .withTimeout(Choreo.getTrajectory(pathName).getTotalTime()),
                 new ChoreoPathCommand(pathName, true, drive)
                         .andThen(index())
         );
@@ -190,7 +193,8 @@ public class AutoTab extends ShuffleBoardTabs {
     private ParallelCommandGroup intakeAndDistanceShot(String pathName) {
         return new ParallelCommandGroup(
                 new ArmToPos(arm, ArmConstants.stowedSetpoint)
-                        .andThen(new IntakeNote(intake, indexer, arm, (ignored) -> {}))
+                        .andThen(new IntakeNote(intake, indexer, arm, (ignored) -> {})
+                                .withTimeout(Choreo.getTrajectory(pathName).getTotalTime()))
                         .andThen(new MoveArmForShoot(pathName, arm)),
                 new ChoreoPathCommand(pathName, true, drive)
                         .andThen(index())
@@ -199,13 +203,13 @@ public class AutoTab extends ShuffleBoardTabs {
 
     private Command index() {
         return new RunCommand(() -> indexer.ejectIntoShooter())
-                       .withTimeout(0.1)
+                       .withTimeout(0.2)
                        .andThen(new InstantCommand(() -> indexer.stopIndex()));
     }
 
     private Command prepare() {
         return new SequentialCommandGroup(
-                new PrepareShooter(shooter, 1800),
+                new PrepareShooter(shooter, Shooter.addSlip(Shooter.shooterSpeedToRPM(ShooterConstants.SHOOT_SPEED_MPS-1.0))),
                 new WaitCommand(SHOOTER_SPINUP_TIME)
         );
     }

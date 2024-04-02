@@ -1,14 +1,10 @@
 package frc.robot.subsystems.gpm;
 
-import java.time.Duration;
-import java.util.ArrayList;
-
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
@@ -25,12 +21,14 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ArmConstants;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.PowerPanel;
 import frc.robot.util.LogManager;
+
+import java.time.Duration;
+import java.util.ArrayList;
 
 /**
  * Subsystem that controls the arm.
@@ -92,7 +90,7 @@ public class Arm extends SubsystemBase {
      * stow is 0.599
      * high is 0.357
      */
-    protected static final double OFFSET =  0.723 + Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
+    protected static final double OFFSET =  0.9 + Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
     /** REV encoder scale factor. This is fixed. */
     protected static final double DISTANCE_PER_ROTATION = -2 * Math.PI;
 
@@ -150,7 +148,7 @@ public class Arm extends SubsystemBase {
             // create the motor
             motors[i] = new TalonFX(ArmConstants.MOTOR_IDS[i]);
             // TODO: why is this done here? The slave should follow when neutral mode is set below.
-            motors[i].setNeutralMode(NeutralModeValue.Brake);
+            motors[i].setNeutralMode(NeutralModeValue.Coast);
 
             // i==0 is the master; the others are slaves
             if (i > 0) {
@@ -164,7 +162,7 @@ public class Arm extends SubsystemBase {
 
         // common configuration for each motor
         // configure the master after the slaves have been linked so slaves will copy the same settings.
-        motors[0].setNeutralMode(NeutralModeValue.Brake);
+        motors[0].setNeutralMode(NeutralModeValue.Coast);
         motors[0].setInverted(false);
         motors[0].getConfigurator().apply(ArmConstants.currentConfig);
 
@@ -232,6 +230,7 @@ public class Arm extends SubsystemBase {
 
     @Override
     public void periodic() {
+        SmartDashboard.putNumber("abs value", encoder.getAbsolutePosition());
         if(Math.abs(pid.getSetpoint() - ArmConstants.stowedSetpoint) < 0.05 && pid.atSetpoint()) {
 				//motors[0].set(0);
         }
@@ -258,7 +257,7 @@ public class Arm extends SubsystemBase {
             pid.setSetpoint(ArmConstants.MAX_ANGLE_RADS);
             setpoint = ArmConstants.MAX_ANGLE_RADS;
         }
-        
+
 
         // calculate the desired duty cycle
         // if(encoder.getDistance() < ArmConstants.MAX_ANGLE_RADS + .2 && encoder.getDistance() > ArmConstants.MIN_ANGLE_RADS - .2)  {
@@ -270,20 +269,19 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putNumber("duty cycle", dutyCycle);
 
         // }
-        // else 
+        // else
         // {
         //     for(int i=0;i<motors.length;i++) {
         //         motors[i].setNeutralMode(NeutralModeValue.Coast);
         //     }
-            
+
         // }
 
         // use the Phoenix 6 version of setting the motor "power"
         motors[0].setControl(m_request.withOutput(dutyCycle));
 
         // report the arm angle in radians
-        SmartDashboard.putNumber("abs value", encoder.getAbsolutePosition());
-        
+
 
         // TODO: Clean these up when not needed.
         // report dutycycle
