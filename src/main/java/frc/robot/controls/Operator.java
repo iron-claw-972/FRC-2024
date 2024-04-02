@@ -4,37 +4,25 @@
 
 package frc.robot.controls;
 
-import java.util.function.Consumer;
-
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Robot;
-import frc.robot.commands.GoToPose;
-import frc.robot.commands.IntakeWithRumble;
-import frc.robot.commands.OuttakeAmp;
 import frc.robot.commands.Shoot;
-import frc.robot.commands.ShootLock;
-import frc.robot.commands.gpm.IntakeNote;
-import frc.robot.commands.gpm.PrepareShooter;
-import frc.robot.commands.gpm.ShootKnownPos;
+import frc.robot.commands.gpm.*;
 import frc.robot.commands.gpm.ShootKnownPos.ShotPosition;
 import frc.robot.constants.ArmConstants;
 import frc.robot.constants.Constants;
 import frc.robot.constants.ShooterConstants;
-import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
-import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.subsystems.gpm.Intake.Mode;
+import frc.robot.subsystems.gpm.Shooter;
 import frc.robot.subsystems.gpm.StorageIndex;
 import lib.controllers.GameController;
 import lib.controllers.GameController.Button;
-import lib.controllers.GameController.DPad;
-import lib.controllers.GameController.RumbleStatus;
+
+import java.util.function.Consumer;
 
 /** Add your docs here. */
 public class Operator {
@@ -101,12 +89,16 @@ public class Operator {
         }
         if(arm != null && shooter != null && index != null){
             kDriver.get(Button.Y).onTrue(new ShootKnownPos(shooter, arm, index, ShotPosition.SUBWOOFER));
-            kDriver.get(Button.A).onTrue(new OuttakeAmp(arm, index, shooter));
+//            kDriver.get(Button.A).onTrue(new OuttakeAmp(arm, index, shooter));
         }
         if(arm != null){
             kDriver.get(Button.RB).onTrue(new InstantCommand(()->arm.setAngle(ArmConstants.preClimbSetpoint), arm));
             kDriver.get(Button.LB).onTrue(new InstantCommand(()->arm.setAngle(ArmConstants.climbSetpoint), arm));
           }
+
+        // Find buttons for shuttling, 10m/s is good
+//        kDriver.get(Button.RB).onTrue(new IndexerFeed(index));
+//        kDriver.get(Button.LB).onTrue(new InstantCommand(() -> shooter.setTargetVelocity(10)));
            // Align to subwoofer
    
     }
