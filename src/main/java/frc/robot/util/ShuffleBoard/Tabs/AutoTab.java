@@ -59,13 +59,12 @@ public class AutoTab extends ShuffleBoardTabs {
                         intakeAndSubwooferShot("Center 6.5")
                 ));
 
-        autoCommand.addOption("Choreo Source 4", new SequentialCommandGroup(
+        autoCommand.addOption("Choreo Source 3", new SequentialCommandGroup(
                 prepare(),
                 index(),
 
-                intakeAndSubwooferShot("Source 4.1"),
-                intakeAndSubwooferShot("Source 4.2"),
-                intakeAndSubwooferShot("Source 4.3")
+                intakeAndSubwooferShot("Source 3.1"),
+                intakeAndSubwooferShot("Source 3.2")
         ));
 
 //        autoCommand.addOption("Choreo Distance Center 6", new SequentialCommandGroup(
