@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.commands.ArmToPos;
 import frc.robot.commands.auto_comm.ChoreoPathCommand;
+import frc.robot.commands.auto_comm.FollowPathCommand;
 import frc.robot.commands.auto_comm.MoveArmForShoot;
 import frc.robot.commands.gpm.IntakeNote;
 import frc.robot.commands.gpm.PrepareShooter;
