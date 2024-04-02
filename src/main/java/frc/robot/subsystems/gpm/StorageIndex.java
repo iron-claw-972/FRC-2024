@@ -28,6 +28,11 @@ public class StorageIndex extends SubsystemBase {
     m_indexmotor.setIdleMode(StorageIndexConstants.idleMode);
   }
 
+  public void close() {
+    m_indexmotor.close();
+    m_indexBeamBreak.close();
+  }
+
   @Override
   public void periodic() {
   }

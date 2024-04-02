@@ -78,6 +78,12 @@ public class Module extends SubsystemBase {
         setDesiredState(new SwerveModuleState(0, getAngle()), false);
     }
 
+    public void close() {
+        angleMotor.close();
+        driveMotor.close();
+        CANcoder.close();
+    }
+
     public void periodic() {
         
     }
