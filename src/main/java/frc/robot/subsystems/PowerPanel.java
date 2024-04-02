@@ -33,14 +33,16 @@ public class PowerPanel extends SubsystemBase {
 			PDHSim = new PDPSim(PDH);
 
 			// TODO: find actual values for things like Beelink
-			PDHSim.setCurrent(18, 12.4); //this is an example
+			// this is just an example...
+			PDHSim.setCurrent(18, 12.4);
 		}
 	}
 
 	@Override
 	public void periodic() {
 		// put the current draw on the SmartDashboard
-		SmartDashboard.putNumber("PDH Current (Amps)", PDH.getTotalCurrent());
+		// TODO: this call may be slow....
+		SmartDashboard.putNumber("PDH Current", PDH.getTotalCurrent());
 
 		// TODO: put the Energy draw on the SmartDashboard
 

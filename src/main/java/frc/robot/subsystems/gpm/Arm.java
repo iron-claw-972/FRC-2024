@@ -129,7 +129,10 @@ public class Arm extends SubsystemBase {
 
     private PowerPanel m_powerPanel;
 
-    public Arm() {
+    public Arm(PowerPanel powerPanel) {
+        // save the information subsystem.
+        m_powerPanel = powerPanel;
+
         // set the PID tolerance
         pid.setTolerance(TOLERANCE);
 
@@ -302,8 +305,6 @@ public class Arm extends SubsystemBase {
 
     @Override
     public void simulationPeriodic() {
-		if (!armEnabled) return;
-
         // Assuming the volts
         double voltsBattery = 12.8;
 
