@@ -160,6 +160,16 @@ public class Drivetrain extends SubsystemBase {
         }
     }
 
+    public void close() {
+        // close the gyro
+        pigeon.close();
+
+        // close each of the modules
+        for (int i = 0; i < modules.length; i++) {
+            modules[i].close();
+        }
+    }
+
     @Override
     public void periodic() {
         updateOdometry();
@@ -465,10 +475,13 @@ public class Drivetrain extends SubsystemBase {
     }
     /**
      * Returns if vision has seen an April tag in the last frame
-     * @return If vision saw a tag last frame or if vision is disabled
+     * @return true if vision saw a tag last frame or if vision is disabled
      */
     public boolean canSeeTag(){
-        return vision != null && vision.canSeeTag() || !visionEnabled || !VisionConstants.ENABLED;
+        // if no vision system, then return true
+        if (vision == null) return true;
+
+        return vision.canSeeTag() || !visionEnabled || !VisionConstants.ENABLED;
     }
 
     /**

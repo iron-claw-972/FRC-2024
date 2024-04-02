@@ -385,4 +385,16 @@ public class Arm extends SubsystemBase {
     public boolean atSetpoint() {
         return pid.atSetpoint();
     }
+
+    /**
+     * Reclaim resources.
+     * Needed for simulation and unit tests.
+     */
+    public void close() {
+        for (int i = 0; i < motors.length; i++) {
+            motors[i].close();
+        }
+
+        encoder.close();
+    }
 }
