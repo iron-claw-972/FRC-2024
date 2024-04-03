@@ -25,7 +25,7 @@ public class PowerPanel extends SubsystemBase {
 	/** The simulated battery voltage */
 	private double voltsBattery = 12.6;
 	// assume the battery resistance is about 25 milohms + some wire resistance
-	private static double ohmsResistance = 0.030;
+	private static final double ohmsResistance = 0.030;
 	
 	public PowerPanel() {
 		// if we are simulating
@@ -36,6 +36,10 @@ public class PowerPanel extends SubsystemBase {
 			// this is just an example...
 			PDHSim.setCurrent(18, 12.4);
 		}
+	}
+
+	public void close() {
+		PDH.close();
 	}
 
 	@Override
