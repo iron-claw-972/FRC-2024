@@ -1,5 +1,3 @@
-
-
 {
   "version": 1.0,
   "waypoints": [
@@ -404,18 +402,10 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Final Autos",
+  "folder": "Old",
   "previewStartingState": {
     "rotation": -60.0,
     "velocity": 0
   },
   "useDefaultConstraints": false
 }
-
-
-
-
-
-
-
-
