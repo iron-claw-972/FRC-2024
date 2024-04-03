@@ -87,6 +87,8 @@ public class Shooter extends SubsystemBase {
 	// TODO: TUNE THIS
 	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(S, V);
 
+	private int tickCount = 0;
+
 	public Shooter() {
 		// set the RPM tolerance of the PID controllers
 		leftPID.setTolerance(TOLERANCE);
@@ -132,6 +134,11 @@ public class Shooter extends SubsystemBase {
 		SmartDashboard.putNumber("right speed", /* shooterRPMToSpeed */ (rightSpeed));
 		SmartDashboard.putData("left Shooter PID", leftPID);
 		SmartDashboard.putData("right Shooter PID", rightPID);
+
+		if (tickCount++ > 50) {
+			tickCount = 0;
+			SmartDashboard.putNumber("shooterTemp", shooterTempLeft());
+		}
 	}
 
 	@Override
@@ -375,5 +382,13 @@ public class Shooter extends SubsystemBase {
 	public void resetPID(){
 		leftPID.reset();
 		rightPID.reset();
+	}
+
+	public double shooterTempLeft() {
+		return leftMotor.getMotorTemperature();
+	}
+
+	public double shooterTempRight() {
+		return rightMotor.getMotorTemperature();
 	}
 }
