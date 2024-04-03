@@ -50,7 +50,9 @@ public class AutoTab extends ShuffleBoardTabs {
         autoCommand.addOption("5 piece (original-tested)", new FollowPathCommand("5 piece (original-tested)",true, drive));
         autoCommand.addOption("5.5 piece (original-tested)", new FollowPathCommand("5.5 piece (original-tested)",true, drive));
         autoCommand.addOption("6 piece", new FollowPathCommand("6 piece",true, drive));
+        autoCommand.addOption("6 piece (new)", new FollowPathCommand("6 piece (new)",true, drive));
 
+        
 //         autoCommand.addOption("Choreo Center 6",
 //                 new SequentialCommandGroup(
 //                         prepare(),
