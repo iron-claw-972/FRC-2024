@@ -57,6 +57,7 @@ public class Operator {
             kDriver.get(Button.B).onTrue(new InstantCommand(() -> intake.setMode(Mode.ReverseMotors),intake));
             kDriver.get(Button.B).onFalse(new InstantCommand(() -> intake.setMode(Mode.DISABLED), intake));
         }
+        
         if (intake != null) {
             intakeNote = new IntakeNote(intake, index, arm, consumer);
             kDriver.get(Button.X).onTrue(intakeNote);
@@ -88,7 +89,7 @@ public class Operator {
             getRightTrigger().onTrue(new Shoot(shooter, arm, drive, index));
         }
         if(shooter != null){
-            getLeftTrigger().onTrue(new PrepareShooter(shooter, Shooter.addSlip(Shooter.shooterSpeedToRPM(ShooterConstants.SHOOT_SPEED_MPS-1))));
+            getLeftTrigger().onTrue(new PrepareShooter(shooter, Shooter.addSlip(Shooter.shooterSpeedToRPM(ShooterConstants.SHOOT_SPEED_MPS))));
         }
         if(arm != null && shooter != null && index != null){
             kDriver.get(Button.Y).onTrue(new ShootKnownPos(shooter, arm, index, ShotPosition.SUBWOOFER));

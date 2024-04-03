@@ -151,7 +151,7 @@ public class Shoot extends Command {
                 // also here
                 double v_shoot = v_note * Math.sin(phi_v) / Math.sin(theta_v);
                 horiz_angle = theta_h;
-                theta_v += Units.degreesToRadians(0.5);
+                theta_v += Units.degreesToRadians(5);
                 vert_angle = theta_v;
                 ANG = ShooterConstants.ANGLE_OFFSET - theta_v;
                 exit_vel = v_shoot;
