@@ -276,6 +276,20 @@ public class VisionConstants {
     new Rotation2d(Math.PI-BLUE_SUBWOOFER_LEFT.getRotation().getRadians())
   );
 
+  // Distance to the speaker for preset stage shooting
+  private static final double distToSpeaker = 4;
+  // Positions to shoot from near the stage
+  public static final Pose2d BLUE_STAGE_SHOOT_POSE = new Pose2d(
+    FieldConstants.APRIL_TAGS.get(6).pose.getX() - distToSpeaker,
+    FieldConstants.APRIL_TAGS.get(6).pose.getY(),
+    new Rotation2d(0)
+  );
+  public static final Pose2d RED_STAGE_SHOOT_POSE = new Pose2d(
+    FieldConstants.APRIL_TAGS.get(3).pose.getX() - distToSpeaker,
+    BLUE_STAGE_SHOOT_POSE.getY(),
+    new Rotation2d(Math.PI).minus(BLUE_STAGE_SHOOT_POSE.getRotation())
+  );
+
   /**
    * The camera poses
    * <p>
