@@ -218,7 +218,7 @@ public class Shoot extends Command {
                 // SmartDashboard.putBoolean("saw tag", sawTag);
 
                 if (!shooting && EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - (theta_v), Units.degreesToRadians(1 /* 4, 1 */)) && 
-                 shooter.atSetpoint() && drive.atAlignAngle() && sawTag) {
+                 shooter.atSetpoint() && drive.atAlignAngle()) {
                         // remember we are now shooting
                         shooting = true;
                         // push the note into the shooter
