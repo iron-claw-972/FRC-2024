@@ -129,7 +129,10 @@ public class Arm extends SubsystemBase {
 
     private PowerPanel m_powerPanel;
 
-    public Arm() {
+    public Arm(PowerPanel powerPanel) {
+        // save the information subsystem.
+        m_powerPanel = powerPanel;
+
         // set the PID tolerance
         pid.setTolerance(TOLERANCE);
 
@@ -302,8 +305,6 @@ public class Arm extends SubsystemBase {
 
     @Override
     public void simulationPeriodic() {
-		if (!armEnabled) return;
-
         // Assuming the volts
         double voltsBattery = 12.8;
 
@@ -365,13 +366,19 @@ public class Arm extends SubsystemBase {
     /**
      * Returns the angle of the arm in radians.
      * <p>
-     * Stop chasing ghosts. This method just re-implements encoder.getDistance().
+     * This method just re-implements encoder.getDistance().
+     * There is an issue with .getDistance().
+     * If the RoboRIO browns out, then getDistance() may add 2 pi to the reading.
+     * The addition may happen because the abs encoder is reading > 0.5 when the brownout happens.
+     * If the reading then drops to zero, .getDistance() may assume the encoder wrapped around.
      * @return arm angle in radians with zero being horizontal.
      * @Deprecated use getAngleRad()
      */
     @Deprecated
     public double getPosition()  {
+        // calculate the angle using the absolute encoder's raw reading
         double angle = -Units.rotationsToRadians(encoder.getAbsolutePosition() - encoder.getPositionOffset());
+
         return MathUtil.angleModulus(angle);
     }
 
