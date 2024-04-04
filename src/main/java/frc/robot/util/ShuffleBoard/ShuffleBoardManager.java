@@ -23,7 +23,7 @@ public class ShuffleBoardManager {
     
     private Field feild;
 
-    private SwerveTab swerveTab;
+    //private SwerveTab swerveTab;
     private AutoTab autoTab;
     private VisionTab visionTab;
 
@@ -31,9 +31,9 @@ public class ShuffleBoardManager {
         
         // swerveTab = new SwerveTab(drive);
         autoTab = new AutoTab(drive, shooter, arm, index, intake);
-         swerveTab = new SwerveTab(drive);
+         //swerveTab = new SwerveTab(drive);
         visionTab = new VisionTab(drive, vision);
-         tabs.add(swerveTab);
+         //tabs.add(swerveTab);
         tabs.add(autoTab);
         tabs.add(visionTab);
 

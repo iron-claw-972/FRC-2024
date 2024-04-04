@@ -98,6 +98,7 @@ public class Operator {
         if(arm != null){
             kDriver.get(Button.RB).onTrue(new InstantCommand(()->arm.setAngle(ArmConstants.preClimbSetpoint), arm));
             kDriver.get(Button.LB).onTrue(new InstantCommand(()->arm.setAngle(ArmConstants.climbSetpoint), arm));
+            kDriver.get(Button.START).onTrue(new InstantCommand(()->arm.setAngle(ArmConstants.zeroSetpoint), arm));
           }
 
         // Find buttons for shuttling, 10m/s is good

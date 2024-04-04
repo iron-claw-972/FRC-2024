@@ -90,7 +90,7 @@ public class Arm extends SubsystemBase {
      * stow is 0.599
      * high is 0.357
      */
-    protected static final double OFFSET =  0.9 + Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
+    protected static final double OFFSET =  0.1463 + Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
     /** REV encoder scale factor. This is fixed. */
     protected static final double DISTANCE_PER_ROTATION = -2 * Math.PI;
 
@@ -148,7 +148,7 @@ public class Arm extends SubsystemBase {
             // create the motor
             motors[i] = new TalonFX(ArmConstants.MOTOR_IDS[i]);
             // TODO: why is this done here? The slave should follow when neutral mode is set below.
-            motors[i].setNeutralMode(NeutralModeValue.Brake);
+            motors[i].setNeutralMode(NeutralModeValue.Coast);
 
             // i==0 is the master; the others are slaves
             if (i > 0) {
@@ -162,7 +162,7 @@ public class Arm extends SubsystemBase {
 
         // common configuration for each motor
         // configure the master after the slaves have been linked so slaves will copy the same settings.
-        motors[0].setNeutralMode(NeutralModeValue.Brake);
+        motors[0].setNeutralMode(NeutralModeValue.Coast);
         motors[0].setInverted(false);
         motors[0].getConfigurator().apply(ArmConstants.currentConfig);
 
