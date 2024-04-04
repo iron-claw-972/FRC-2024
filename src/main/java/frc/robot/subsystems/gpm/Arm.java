@@ -148,7 +148,7 @@ public class Arm extends SubsystemBase {
             // create the motor
             motors[i] = new TalonFX(ArmConstants.MOTOR_IDS[i]);
             // TODO: why is this done here? The slave should follow when neutral mode is set below.
-            motors[i].setNeutralMode(NeutralModeValue.Coast);
+            motors[i].setNeutralMode(NeutralModeValue.Brake);
 
             // i==0 is the master; the others are slaves
             if (i > 0) {
@@ -162,7 +162,7 @@ public class Arm extends SubsystemBase {
 
         // common configuration for each motor
         // configure the master after the slaves have been linked so slaves will copy the same settings.
-        motors[0].setNeutralMode(NeutralModeValue.Coast);
+        motors[0].setNeutralMode(NeutralModeValue.Brake);
         motors[0].setInverted(false);
         motors[0].getConfigurator().apply(ArmConstants.currentConfig);
 
