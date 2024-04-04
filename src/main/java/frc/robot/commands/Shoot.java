@@ -181,7 +181,7 @@ public class Shoot extends Command {
 
                 // save the results
                 horiz_angle = theta_h;
-                theta_v += Units.degreesToRadians(0);
+                theta_v += Units.degreesToRadians(4);
                 vert_angle = theta_v;
                 ANG = ShooterConstants.ANGLE_OFFSET - theta_v;
                 exit_vel = v_shoot;
