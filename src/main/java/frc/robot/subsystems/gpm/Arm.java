@@ -125,7 +125,7 @@ public class Arm extends SubsystemBase {
 
 	private boolean armEnabled = true;
 
-    private PowerPanel m_powerPanel = new PowerPanel();
+    //private PowerPanel m_powerPanel = new PowerPanel();
 
     public Arm() {
         // set the PID tolerance
@@ -210,7 +210,7 @@ public class Arm extends SubsystemBase {
 
             // LogManager.add("Arm/SlaveErrors(ticks)", () -> slave_errors);
         }
-
+    
 	//SmartDashboard.putBoolean("Arm Enabled", armEnabled);
     }
 
@@ -231,6 +231,7 @@ public class Arm extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("abs value", encoder.getAbsolutePosition());
+        SmartDashboard.putNumber("arm fudge factor", ArmConstants.armFudgeFactor);
         if(Math.abs(pid.getSetpoint() - ArmConstants.stowedSetpoint) < 0.05 && pid.atSetpoint()) {
 				//motors[0].set(0);
         }
