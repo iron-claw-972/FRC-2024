@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 1.4,
-        "y": 5.8
+        "y": 5.67
       },
       "prevControl": null,
       "nextControl": {
         "x": 1.4323995739159567,
-        "y": 5.278486410249174
+        "y": 5.148486410249174
       },
       "isLocked": false,
       "linkedName": null
@@ -228,12 +228,12 @@
         "y": 6.75
       },
       "prevControl": {
-        "x": 4.528076233556909,
-        "y": 6.831677607565221
+        "x": 4.766479542290036,
+        "y": 6.92695606620672
       },
       "nextControl": {
-        "x": 3.960668691665485,
-        "y": 6.604911811820768
+        "x": 3.960668691665484,
+        "y": 6.60491181182077
       },
       "isLocked": true,
       "linkedName": null
@@ -306,7 +306,7 @@
     },
     {
       "waypointRelativePos": 12.9,
-      "rotationDegrees": 3.972,
+      "rotationDegrees": 5.0,
       "rotateFast": false
     },
     {
@@ -320,7 +320,41 @@
       "rotateFast": false
     }
   ],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Inital",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 0.05,
+      "constraints": {
+        "maxVelocity": 3.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    },
+    {
+      "name": "Intake Outer 2",
+      "minWaypointRelativePos": 12.8,
+      "maxWaypointRelativePos": 13.05,
+      "constraints": {
+        "maxVelocity": 4.0,
+        "maxAcceleration": 4.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    },
+    {
+      "name": "Intake Outer 1",
+      "minWaypointRelativePos": 8.65,
+      "maxWaypointRelativePos": 9.1,
+      "constraints": {
+        "maxVelocity": 3.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    }
+  ],
   "eventMarkers": [
     {
       "name": "Set Shooter",
@@ -443,7 +477,7 @@
     },
     {
       "name": "Intake 4",
-      "waypointRelativePos": 8.75,
+      "waypointRelativePos": 8.85,
       "command": {
         "type": "parallel",
         "data": {
@@ -460,7 +494,7 @@
     },
     {
       "name": "Outtake 5",
-      "waypointRelativePos": 10.65,
+      "waypointRelativePos": 10.75,
       "command": {
         "type": "parallel",
         "data": {
@@ -494,7 +528,7 @@
     },
     {
       "name": "Intake 5",
-      "waypointRelativePos": 12.85,
+      "waypointRelativePos": 12.899999999999999,
       "command": {
         "type": "parallel",
         "data": {
@@ -528,14 +562,14 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 5.75,
-    "maxAcceleration": 5.75,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 5.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.49008877367517734,
+    "rotation": 0.0,
     "rotateFast": false
   },
   "reversed": false,
