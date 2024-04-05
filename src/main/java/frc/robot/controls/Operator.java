@@ -104,6 +104,12 @@ public class Operator {
         // Find buttons for shuttling, 10m/s is good
         kDriver.get(GameController.DPad.UP)
                 .toggleOnTrue(new InstantCommand(() -> shooter.setTargetVelocity(10)));
+        kDriver.get(GameController.DPad.RIGHT).onTrue(new InstantCommand(()->{
+            ArmConstants.armFudgeFactor+=0.5;
+        }));
+        kDriver.get(GameController.DPad.LEFT).onTrue(new InstantCommand(()->{
+            ArmConstants.armFudgeFactor-=0.5;
+        }));
    
     }
     public Trigger getRightTrigger(){

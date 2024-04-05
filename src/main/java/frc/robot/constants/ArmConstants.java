@@ -50,6 +50,7 @@ public class ArmConstants {
     public static final double preClimbSetpoint = MAX_ANGLE_RADS;
     public static final double climbSetpoint = MIN_ANGLE_RADS;
     public static final double zeroSetpoint = 0;
+    public static double armFudgeFactor = 4; 
 
     // TODO: if the max angle is 70.5, then why is this being set to 73?
     public static final double ampSetpoint = Units.degreesToRadians(73.0);
