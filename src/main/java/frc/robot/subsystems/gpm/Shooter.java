@@ -94,8 +94,8 @@ public class Shooter extends SubsystemBase {
 		leftPID.setTolerance(TOLERANCE);
 		rightPID.setTolerance(TOLERANCE);
 		// invert the right motor so +power sends the note out
-		rightMotor.setInverted(true);
-		leftMotor.setInverted(false);
+		rightMotor.setInverted(false);
+		leftMotor.setInverted(true);
 
 		// are we simulating?
 		if (RobotBase.isSimulation()) {

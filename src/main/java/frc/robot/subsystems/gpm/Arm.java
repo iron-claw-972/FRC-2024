@@ -90,7 +90,7 @@ public class Arm extends SubsystemBase {
      * stow is 0.599
      * high is 0.357
      */
-    protected static final double OFFSET =  0.1473 + Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
+    protected static final double OFFSET =  0.1483 + Units.radiansToRotations(ArmConstants.MIN_ANGLE_RADS);
     /** REV encoder scale factor. This is fixed. */
     protected static final double DISTANCE_PER_ROTATION = -2 * Math.PI;
 
@@ -128,6 +128,7 @@ public class Arm extends SubsystemBase {
     //private PowerPanel m_powerPanel = new PowerPanel();
 
     public Arm() {
+        LogManager.add("fudge facotr", ()->{return ArmConstants.armFudgeFactor;});
         // set the PID tolerance
         pid.setTolerance(TOLERANCE);
 
@@ -232,6 +233,8 @@ public class Arm extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("abs value", encoder.getAbsolutePosition());
         SmartDashboard.putNumber("arm fudge factor", ArmConstants.armFudgeFactor);
+        SmartDashboard.putNumber("arm fudge changes", ArmConstants.armFudgeFactorChanges);
+
         if(Math.abs(pid.getSetpoint() - ArmConstants.stowedSetpoint) < 0.05 && pid.atSetpoint()) {
 				//motors[0].set(0);
         }

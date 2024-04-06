@@ -269,7 +269,7 @@
     },
     {
       "name": "Intake 1",
-      "waypointRelativePos": 0.9,
+      "waypointRelativePos": 0.85,
       "command": {
         "type": "parallel",
         "data": {
@@ -286,7 +286,7 @@
     },
     {
       "name": "Outtake 2",
-      "waypointRelativePos": 1.8,
+      "waypointRelativePos": 1.85,
       "command": {
         "type": "parallel",
         "data": {
@@ -320,7 +320,7 @@
     },
     {
       "name": "Outtake 3",
-      "waypointRelativePos": 3.7499999999999996,
+      "waypointRelativePos": 3.8499999999999996,
       "command": {
         "type": "parallel",
         "data": {

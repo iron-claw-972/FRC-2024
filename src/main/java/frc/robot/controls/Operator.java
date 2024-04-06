@@ -106,9 +106,12 @@ public class Operator {
                 .toggleOnTrue(new InstantCommand(() -> shooter.setTargetVelocity(10)));
         kDriver.get(GameController.DPad.RIGHT).onTrue(new InstantCommand(()->{
             ArmConstants.armFudgeFactor+=0.5;
+            ArmConstants.armFudgeFactorChanges++;
         }));
         kDriver.get(GameController.DPad.LEFT).onTrue(new InstantCommand(()->{
             ArmConstants.armFudgeFactor-=0.5;
+            ArmConstants.armFudgeFactorChanges++;
+
         }));
    
     }
