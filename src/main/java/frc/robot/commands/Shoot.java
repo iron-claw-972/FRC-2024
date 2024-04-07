@@ -236,7 +236,7 @@ public class Shoot extends Command {
 
         @Override
         public void end(boolean interrupted) {
-                System.out.println("x " + X+" y "+Y+" ang "+ANG + " actual " + arm.getAngleRad());
+                // System.out.println("x " + X+" y "+Y+" ang "+ANG + " actual " + arm.getAngleRad());
                 
                 // slow down/turn off the shooter
                 shooter.setTargetVelocity(REST_VEL);

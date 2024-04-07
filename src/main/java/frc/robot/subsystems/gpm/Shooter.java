@@ -136,12 +136,12 @@ public class Shooter extends SubsystemBase {
 		rightMotor.set(MathUtil.clamp(rightPower,-1,1));
 
 		// report some values to the Dashboard
-		SmartDashboard.putNumber("left speed", /* shooterRPMToSpeed */ (leftSpeed));
-		SmartDashboard.putNumber("right speed", /* shooterRPMToSpeed */ (rightSpeed));
-		SmartDashboard.putBoolean("right setpoint", atSetpoint());
-		//SmartDashboard.putData("slip coefficient", slipCoefficient); /// FIXXX
-		SmartDashboard.putData("left Shooter PID", leftPID);
-		SmartDashboard.putData("right Shooter PID", rightPID);
+		// SmartDashboard.putNumber("left speed", /* shooterRPMToSpeed */ (leftSpeed));
+		// SmartDashboard.putNumber("right speed", /* shooterRPMToSpeed */ (rightSpeed));
+		// SmartDashboard.putBoolean("right setpoint", atSetpoint());
+		// //SmartDashboard.putData("slip coefficient", slipCoefficient); /// FIXXX
+		// SmartDashboard.putData("left Shooter PID", leftPID);
+		// SmartDashboard.putData("right Shooter PID", rightPID);
 	}
 
 	@Override

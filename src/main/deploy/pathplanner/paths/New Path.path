@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 1.0315749406427588,
-        "y": 6.911245275482004
+        "x": 0.8678567784485995,
+        "y": 7.028186819906404
       },
       "prevControl": {
-        "x": 0.9146333962183595,
-        "y": 6.794303731057604
+        "x": 0.7509152340242002,
+        "y": 6.9112452754820035
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,42 @@
       }
     }
   ],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "PrepareShooter"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Outtake"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,

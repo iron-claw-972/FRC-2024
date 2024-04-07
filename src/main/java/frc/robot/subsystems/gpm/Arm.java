@@ -128,7 +128,7 @@ public class Arm extends SubsystemBase {
     //private PowerPanel m_powerPanel = new PowerPanel();
 
     public Arm() {
-        LogManager.add("fudge facotr", ()->{return ArmConstants.armFudgeFactor;});
+        //LogManager.add("fudge facotr", ()->{return ArmConstants.armFudgeFactor;});
         // set the PID tolerance
         pid.setTolerance(TOLERANCE);
 
@@ -239,8 +239,8 @@ public class Arm extends SubsystemBase {
 				//motors[0].set(0);
         }
         SmartDashboard.putNumber("get Position", getPosition());
-        SmartDashboard.putData("arm pid", pid);
-        SmartDashboard.putBoolean("if at setpoint", pid.atSetpoint());
+        // SmartDashboard.putData("arm pid", pid);
+        // SmartDashboard.putBoolean("if at setpoint", pid.atSetpoint());
         // Disable the arm if it is out of range
 		if (getAngleRad() < ArmConstants.MIN_ANGLE_RADS - ArmConstants.ANGLE_TOLERANCE || getAngleRad() > ArmConstants.MAX_ANGLE_RADS + ArmConstants.ANGLE_TOLERANCE) {
 			System.err.println("WARNING: THE ARM IS IN A SUPPOSEDLY UNREACHABLE POSITION AND HAS BEEN DISABLED. Found: " + getAngleRad() + ", Expected: " + ArmConstants.stowedSetpoint);
@@ -269,8 +269,8 @@ public class Arm extends SubsystemBase {
                         pid.calculate(getAngleRad()) + feedforward.calculate(pid.getSetpoint(), 0),
                         -1,
                         1);
-        SmartDashboard.putNumber("pid output", pid.calculate(getAngleRad()));
-        SmartDashboard.putNumber("duty cycle", dutyCycle);
+        // SmartDashboard.putNumber("pid output", pid.calculate(getAngleRad()));
+        // SmartDashboard.putNumber("duty cycle", dutyCycle);
 
         // }
         // else

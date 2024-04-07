@@ -325,7 +325,7 @@
     },
     {
       "name": "Outtake 3",
-      "waypointRelativePos": 3.7499999999999996,
+      "waypointRelativePos": 3.6,
       "command": {
         "type": "parallel",
         "data": {
@@ -359,7 +359,7 @@
     },
     {
       "name": "Outtake 4",
-      "waypointRelativePos": 5.95,
+      "waypointRelativePos": 5.7,
       "command": {
         "type": "parallel",
         "data": {
@@ -393,7 +393,7 @@
     },
     {
       "name": "Outtake 5",
-      "waypointRelativePos": 10.700000000000001,
+      "waypointRelativePos": 10.55,
       "command": {
         "type": "parallel",
         "data": {
@@ -410,7 +410,7 @@
     },
     {
       "name": "Outtake",
-      "waypointRelativePos": 0.1,
+      "waypointRelativePos": 0.049999999999999996,
       "command": {
         "type": "parallel",
         "data": {

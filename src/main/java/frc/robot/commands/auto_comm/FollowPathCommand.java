@@ -28,8 +28,10 @@ public class FollowPathCommand extends SequentialCommandGroup {
         this.path = PathGroupLoader.getPathGroup(pathName);
         addCommands(
             new InstantCommand(()->resetOdemetry(resetOdemetry)),
-            new SupplierCommand(()->AutoBuilder.followPath(path), drive)
-        );
+            new SupplierCommand(()->AutoBuilder.followPath(path), drive) // "problem" (254)
+            // or pp's interaction with the drivetrain
+            // or pp config
+            );
     }
 
     public void resetOdemetry(boolean resetOdemetry){
