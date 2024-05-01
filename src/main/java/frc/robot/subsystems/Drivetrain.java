@@ -248,7 +248,7 @@ public class Drivetrain extends SubsystemBase {
         Pose2d pose2 = getPose();
 
         if(VisionConstants.ENABLED){
-            if(visionEnabled && visionEnableTimer.hasElapsed(5)){
+            if(visionEnabled && visionEnableTimer.hasElapsed(5) && vision != null){
                 vision.updateOdometry(poseEstimator);
             }
         }
@@ -256,15 +256,15 @@ public class Drivetrain extends SubsystemBase {
         Pose2d pose3 = getPose();
         
         // Reset the pose to a position on the field if it is off the field
-        if(!Vision.onField(pose1)){
+        if(vision != null && !Vision.onField(pose1)){
             // If the pose at the beginning of the method is off the field, reset to a position in the middle of the field
             // Use the rotation of the pose after updating odometry so the yaw is right
             resetOdometry(new Pose2d(FieldConstants.kFieldLength/2, FieldConstants.kFieldWidth/2, pose2.getRotation()));
-        }else if(!Vision.onField(pose2)){
+        }else if(vision != null && !Vision.onField(pose2)){
             // if the drivetrain pose is off the field, reset our odometry to the pose before(this is the right pose)
             // Keep the rotation from pose2 so yaw is correct for driver
             resetOdometry(new Pose2d(pose1.getTranslation(), pose2.getRotation()));
-        }else if(!Vision.onField(pose3)){
+        }else if(vision != null && !Vision.onField(pose3)){
             //if our vision+drivetrain odometry is off the field, reset our odometry to the pose before(this is the right pose)
             resetOdometry(pose2);
         }

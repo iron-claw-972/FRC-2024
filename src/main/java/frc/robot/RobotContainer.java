@@ -2,12 +2,12 @@ package frc.robot;
 
 import java.rmi.server.Operation;
 import java.util.function.BooleanSupplier;
-
+import java.util.Optional;
 import com.ctre.phoenix6.SignalLogger;
 import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.Climb;
@@ -86,6 +87,12 @@ public class RobotContainer {
         index = new StorageIndex();
         SmartDashboard.putData("IntakeNote", new IntakeNote(intake, index, arm));
         break;
+      case Vertigo:
+          drive = new Drivetrain(vision);
+          driver = new GameControllerDriverConfig(drive, vision, arm, intake, index, shooter);
+          driver.configureControls();
+          drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
+          break;
         
       default:
       case SwerveCompetition:
@@ -93,7 +100,7 @@ public class RobotContainer {
         intake = new Intake();
         index = new StorageIndex();
         shooter = new Shooter();
-
+ 
       case SwerveTest:
         vision = new Vision(VisionConstants.APRIL_TAG_CAMERAS);
 
@@ -111,10 +118,11 @@ public class RobotContainer {
         operator.configureControls();
         initializeAutoBuilder();
         drive.setDefaultCommand(new DefaultDriveCommand(drive, driver));
-       // registerCommands();
-       // PathGroupLoader.loadPathGroups();
+        registerCommands();
+        PathGroupLoader.loadPathGroups();
  
         shuffleboardManager = new ShuffleBoardManager(drive, vision);
+        SmartDashboard.putBoolean("Index beam", index.hasNote());
        // SmartDashboard.putBoolean("Index beam", index.hasNote());
         break;
       }
@@ -167,15 +175,80 @@ public class RobotContainer {
   }
 
   public void registerCommands() {
-    NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index, arm).withTimeout(3));
-    NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new SequentialCommandGroup(
-      new ParallelDeadlineGroup(
-      new InstantCommand(() -> drive.setChassisSpeeds(new ChassisSpeeds(), true)),
+    NamedCommands.registerCommand("Intake_Note_1.5_Sec", new IntakeNote(intake, index, arm).withTimeout(1));
+    
+    // NamedCommands.registerCommand("Outtake_Note_1.50_Sec", new SequentialCommandGroup(
+    //   new ParallelDeadlineGroup(
+    //   new InstantCommand(() -> drive.setChassisSpeeds(new ChassisSpeeds(), true)),
+    //   new WaitCommand(.75)),
+    //   new WaitCommand(.75)
+    // ));
+
+    NamedCommands.registerCommand("Intake_Note_2.5_Sec", new IntakeNote(intake, index, arm).withTimeout(2.5)); // 3 seconds used at SVR
+    NamedCommands.registerCommand("Intake_Note_2_Sec", new IntakeNote(intake, index, arm).withTimeout(2)); 
+    
+    //Old
+    NamedCommands.registerCommand("Outtake_Note_1.5_Sec", new SequentialCommandGroup(// TODO: This will end instantly
+    // TODO: Don't use setChassisSpeeds(), use drive() instead and add the drivetrain as a parameter so it is a requirement
+      new ParallelDeadlineGroup(new PrepareShooter(shooter, 1750),
       new WaitCommand(.75)),
+      new WaitCommand(.75),
       new InstantCommand(()-> index.runIndex()),
-      new WaitCommand(.5)));
+      new WaitCommand(.75),
+      new ParallelDeadlineGroup(new PrepareShooter(shooter, 0))
+     ));
+
+    // Whole time running
+    NamedCommands.registerCommand("Set_Shooter",
+      new SequentialCommandGroup(// TODO: This will end instantly
+        new PrepareShooter(shooter, 1750),
+        new WaitCommand(.75) ) );
+
+    // NamedCommands.registerCommand("Set_Shooter",
+    //   new SequentialCommandGroup(// TODO: This will end instantly
+    //     new ParallelDeadlineGroup(new PrepareShooter(shooter, 1750),
+    //         new WaitCommand(.75)),
+    //     new WaitCommand(.75) ) );
+
+
+    // Runs the Indexer
+    NamedCommands.registerCommand("Outtake", new SequentialCommandGroup(
+      new WaitCommand(.25),
+      new InstantCommand(()-> index.runIndex()),
+      new WaitCommand(.25)
+    ));
+
+    NamedCommands.registerCommand("Lower_Set_Shooter_Sabotage_Prep", new SequentialCommandGroup(
+      new ParallelDeadlineGroup(new PrepareShooter(shooter, 50))
+    ));
+
+    NamedCommands.registerCommand("Sabotage_Second_Shot_Prep", new SequentialCommandGroup(
+      new ParallelDeadlineGroup(new PrepareShooter(shooter, 1250))
+    ));
+    
+      // new InstantCommand(() -> drive.setChassisSpeeds(new ChassisSpeeds(), true)),
+      // new WaitCommand(.75)),
+      // new InstantCommand(()-> index.runIndex()),
+      // new WaitCommand(.5))); 
+      //TODO: Stop index after command finishes
+
     NamedCommands.registerCommand("Prepare Shooter", new SequentialCommandGroup(new PrepareShooter(shooter, 1750), new WaitCommand(1)));
   }
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
 
   public static BooleanSupplier getAllianceColorBooleanSupplier() {
     return () -> {

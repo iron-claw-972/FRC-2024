@@ -7,7 +7,7 @@ import frc.robot.Robot;
 import frc.robot.commands.GoToPose;
 import frc.robot.commands.OuttakeAmp;
 import frc.robot.commands.drive_comm.SetFormationX;
-import frc.robot.commands.vision.AcquireGamePiece;
+//import frc.robot.commands.vision.AcquireGamePiece;
 import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
