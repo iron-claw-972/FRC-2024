@@ -7,10 +7,14 @@ import frc.robot.commands.Climb.Chain;
 import frc.robot.constants.miscConstants.VisionConstants.CHAIN_POSES;
 import frc.robot.subsystems.Drivetrain;
 
+/*
+ * Aligning to the chain, based on which chain. 
+ */
 public class ChainAlign extends GoToPose {
     public ChainAlign(Chain chain, Drivetrain drive){
         super(()->getChainPose(chain), drive);
     }
+
     private static Pose2d getChainPose(Chain chain){
         switch(chain){
             case LEFT:

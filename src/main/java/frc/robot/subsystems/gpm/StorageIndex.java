@@ -26,9 +26,6 @@ public class StorageIndex extends SubsystemBase {
     m_indexmotor.setInverted(false);
 
     m_indexmotor.setIdleMode(StorageIndexConstants.idleMode);
-
-
-    // Additional setup, possibly related to CAN Frames, could be documented here.
   }
 
   public void close() {
@@ -109,5 +106,4 @@ public class StorageIndex extends SubsystemBase {
     return !m_indexBeamBreak.get(); // Inverted as beambreak sensor returns true when beam not broken and false when
                                     // beam is broken
   }
-
 }

@@ -26,8 +26,6 @@ import frc.robot.constants.swerve.DriveConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.ConversionUtils;
 
-
-/**TODO: MOST CONSTRUCTORS DON'T WORK YET*/
 public class PathPlannerCommand extends SequentialCommandGroup {
    public PathPlannerCommand(Drivetrain drive){
   }
@@ -56,14 +54,6 @@ public class PathPlannerCommand extends SequentialCommandGroup {
       new GoalEndState(0, waypoints.get(1).rotationTarget.getTarget())
     ))), 0, drive, false, useAllianceColor, true);
   }
-  
-  // public PathPlannerCommand(String pathGroupName, int pathIndex, Drivetrain drive) {
-  //   this(PathGroupLoader.getPathGroup(pathGroupName), pathIndex, drive, true, true, false); 
-  // }
-  
-  // public PathPlannerCommand(String pathGroupName, int pathIndex, Drivetrain drive, boolean resetPose) {
-  //   this(PathGroupLoader.getPathGroup(pathGroupName), pathIndex, drive, resetPose, true, false); 
-  // }
 
   public PathPlannerCommand(List<PathPlannerPath> pathGroup, int pathIndex, Drivetrain drive, boolean resetPose){
     this(pathGroup, pathIndex, drive, resetPose, true, false);
@@ -134,7 +124,6 @@ public class PathPlannerCommand extends SequentialCommandGroup {
         poseSupplier,
         speedSupplier,
         outputChassisSpeeds,
-        // TODO: Decide if we should have dynamic replanning
         new HolonomicPathFollowerConfig(maxModuleSpeed, driveBaseReadius, new ReplanningConfig(true, true)),
         useAllianceColor,
         drive

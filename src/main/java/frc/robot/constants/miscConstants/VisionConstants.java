@@ -37,13 +37,13 @@ public class VisionConstants {
   public static final boolean OBJECT_DETECTION_ENABLED = false;
 
   /** If odometry should be updated using vision during auto */
-  public static final boolean ENABLED_AUTO = false;
+  public static final boolean ENABLED_AUTO = true;
 
   /** If odometry should be updated using vision while running the GoToPose and GoToPosePID commands in teleop */
   public static final boolean ENABLED_GO_TO_POSE = true;
 
   /** If vision should be simulated */
-  public static final boolean ENABLED_SIM = true;
+  public static final boolean ENABLED_SIM = false;
 
   /** If vision should only return values if it can see 2 good targets */
   public static final boolean ONLY_USE_2_TAGS = false;
@@ -132,15 +132,6 @@ public class VisionConstants {
    * <p>
    * This pose sets the X coordinate at the center of the amp, and
    * the Y coordinate away from the amp by half the **width** of the robot + 5 inches.
-   * <p>
-   * TODO: What is going on? Is the 5 inches just to press into the amp?
-   * <p>
-   * Maybe the 5 inches is for the intake on the competition robot,
-   * but why is it being added here? That moves the robot 5 inches into the amp!
-   * It should move the robot negative 5 inches to compensate for the intake.
-   * However, the stern of the robot should be against the amp (we shoot from the stern),
-   * and that should be half the bumper width away from the robot center;
-   * the intake's additional length on the bow should not come into play.
    * <p>
    * The robot orientation has the bow facing down so the shooter will eject into the amp.
    * <p>

@@ -1,7 +1,12 @@
 package frc.robot.commands.gpm;
 
+import java.util.function.Consumer;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.constants.ArmConstants;
 import frc.robot.subsystems.gpm.Arm;
 import frc.robot.subsystems.gpm.Intake;
@@ -13,13 +18,17 @@ public class IntakeNote extends Command{
     private final Intake intake;
     private final StorageIndex storageIndex;
     private final Arm arm;
-    Timer timer = new Timer();
-    Boolean detectedNote = false;
 
-    public IntakeNote(Intake intake, StorageIndex storageIndex, Arm arm) {
+    private final Consumer<Boolean> rumbleConsumer;
+
+    private final Timer timer = new Timer();
+    private Boolean detectedNote = false;
+
+    public IntakeNote(Intake intake, StorageIndex storageIndex, Arm arm, Consumer<Boolean> rumbleConsumer) {
         this.intake = intake;
         this.storageIndex = storageIndex;
         this.arm = arm;
+        this.rumbleConsumer = rumbleConsumer;
         addRequirements(intake, storageIndex, arm);
     }
 
@@ -42,6 +51,7 @@ public class IntakeNote extends Command{
         if(!intake.hasNote() && detectedNote){
             timer.start();
         }
+        rumbleConsumer.accept(detectedNote);
     }
 
     @Override
@@ -51,6 +61,13 @@ public class IntakeNote extends Command{
 
     @Override
     public void end(boolean interupted){
+        if(detectedNote){
+            CommandScheduler.getInstance().schedule(new RunCommand(() -> {
+                rumbleConsumer.accept(true);
+            }).withTimeout(0.5).andThen(new InstantCommand(()->{
+                rumbleConsumer.accept(false);
+            })));
+        }
         intake.setMode(Mode.DISABLED);
         storageIndex.stopIndex();
         arm.setAngle(ArmConstants.stowedSetpoint);

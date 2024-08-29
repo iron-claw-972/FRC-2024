@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.simulation.PDPSim;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -35,7 +34,7 @@ public class PowerPanel extends SubsystemBase {
 	@Override
 	public void periodic() {
 		// put the current draw on the SmartDashboard
-		SmartDashboard.putNumber("PDH Current (Amps)", PDH.getTotalCurrent());
+		//SmartDashboard.putNumber("PDH Current (Amps)", PDH.getTotalCurrent());
 
 		// TODO: put the Energy draw on the SmartDashboard
 

@@ -7,7 +7,6 @@ package frc.robot;
 import java.util.Optional;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -38,7 +37,7 @@ public class Robot extends TimedRobot {
         //   Uncomment the next line, set the desired RobotId, deploy, and then comment the line out
         //RobotId.setRobotId(RobotId.Vertigo);
         DriveConstants.update(RobotId.getRobotId());
-        RobotController.setBrownoutVoltage(6);
+        //RobotController.setBrownoutVoltage(6);
         // obtain this robot's identity
         RobotId robotId = RobotId.getRobotId();
 
