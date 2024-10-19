@@ -96,7 +96,6 @@ public class Intake extends SubsystemBase {
 
         waitTimer.start();
 
-        publish();
         if (Constants.DO_LOGGING) {
             LogManager.add("Intake/motorVolts", () -> motor.get() * Constants.ROBOT_VOLTAGE);
             LogManager.add("Intake/centeringMotorVolts", () -> centeringMotor.get() * Constants.ROBOT_VOLTAGE);
@@ -104,6 +103,7 @@ public class Intake extends SubsystemBase {
             LogManager.add("Intake/motorRPM", () -> motor.getAbsoluteEncoder().getVelocity(), Duration.ofSeconds(1));
             LogManager.add("Intake/centeringMotorRPM", () -> centeringMotor.getAbsoluteEncoder().getVelocity(), Duration.ofSeconds(1));            
         }
+
     }
 
     // Publish sensor to Smart Dashboard
@@ -111,8 +111,8 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putBoolean("Intake Sensor", sensor.get());
 
         if (RobotBase.isSimulation()) {
-            SmartDashboard.putNumber("Intake motor RPM", motorRPMSim);
-            SmartDashboard.putNumber("Intake centering motor RPM", centeringMotorRPMSim);
+            // SmartDashboard.putNumber("Intake motor RPM", motorRPMSim);
+            // SmartDashboard.putNumber("Intake centering motor RPM", centeringMotorRPMSim);
         }
     }
 
@@ -131,7 +131,7 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        publish();
+         publish();
     }
 
     @Override

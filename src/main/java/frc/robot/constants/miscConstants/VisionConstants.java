@@ -37,13 +37,13 @@ public class VisionConstants {
   public static final boolean OBJECT_DETECTION_ENABLED = false;
 
   /** If odometry should be updated using vision during auto */
-  public static final boolean ENABLED_AUTO = false;
+  public static final boolean ENABLED_AUTO = true;
 
   /** If odometry should be updated using vision while running the GoToPose and GoToPosePID commands in teleop */
   public static final boolean ENABLED_GO_TO_POSE = true;
 
   /** If vision should be simulated */
-  public static final boolean ENABLED_SIM = true;
+  public static final boolean ENABLED_SIM = false;
 
   /** If vision should only return values if it can see 2 good targets */
   public static final boolean ONLY_USE_2_TAGS = false;
@@ -274,6 +274,20 @@ public class VisionConstants {
     FieldConstants.APRIL_TAGS.get(3).pose.getX()-Units.inchesToMeters(27.562),
     BLUE_SUBWOOFER_LEFT.getY(),
     new Rotation2d(Math.PI-BLUE_SUBWOOFER_LEFT.getRotation().getRadians())
+  );
+
+  // Distance to the speaker for preset stage shooting
+  private static final double distToSpeaker = 4;
+  // Positions to shoot from near the stage
+  public static final Pose2d BLUE_STAGE_SHOOT_POSE = new Pose2d(
+    FieldConstants.APRIL_TAGS.get(6).pose.getX() - distToSpeaker,
+    FieldConstants.APRIL_TAGS.get(6).pose.getY(),
+    new Rotation2d(0)
+  );
+  public static final Pose2d RED_STAGE_SHOOT_POSE = new Pose2d(
+    FieldConstants.APRIL_TAGS.get(3).pose.getX() - distToSpeaker,
+    BLUE_STAGE_SHOOT_POSE.getY(),
+    new Rotation2d(Math.PI).minus(BLUE_STAGE_SHOOT_POSE.getRotation())
   );
 
   /**

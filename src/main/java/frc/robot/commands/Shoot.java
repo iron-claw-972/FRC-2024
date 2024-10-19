@@ -33,9 +33,10 @@ public class Shoot extends Command {
         private final Arm arm;
         private final Drivetrain drive;
         private final StorageIndex index;
-
-        // timers prevent faster-than-real-time simulation....
         private final Timer shootTimer = new Timer();
+
+        // for testing sakes
+        public double X,ANG,Y;
 
         /** Speaker pose determined when the Shoot command runs initialize() */
         public Pose3d speakerPose;
@@ -57,30 +58,6 @@ public class Shoot extends Command {
         private final double REST_VEL = 0;
         // TODO: determine the fastest idle note-exit velocity that won't kill the battery.
 
-        /**
-         * Shooter height when the arm is at the standbySetpoint.
-         * <p>
-         * This value should be in the Shooter subsystem.
-         * <p>
-         * The arm height is the pivot height + armLength * sin(standbyAngle).
-         * This calculation seems wrong because the shooter sits on top of the arm.
-         * The shooter exit is not level with the pivot when the arm is level.
-         */
-        public static final double shooterHeight = ArmConstants.ARM_LENGTH*Math.sin(ArmConstants.standbySetpoint) + ArmConstants.PIVOT_HEIGHT;
-
-        /**
-         * Shooter position relative to the robot center.
-         * <p>
-         * This value should be in the Shooter subsystem.
-         * <p>
-         * The shooter exit is the pivot x + armLength * cos(standbyAngle).
-         */
-        public static final double shooterOffset = ArmConstants.PIVOT_X + ArmConstants.ARM_LENGTH * Math.cos(ArmConstants.standbySetpoint);
-
-        // TODO: why should this command know anything about about tags?
-        private Debouncer visionSawTagDebouncer = new Debouncer(0.2, DebounceType.kFalling);
-
-        Timer timer = new Timer();
         private boolean shooting = false;
 
         public Shoot(Shooter shooter, Arm arm, Drivetrain drivetrain, StorageIndex index) {
@@ -168,8 +145,7 @@ public class Shoot extends Command {
                 // height (sorry that it's called y)
                 // TODO: but y is negative from above
                 double y = displacement.getZ();
-                // System.err.println("Negative y " + y);
-
+                Y=y;
                 // Basic vertical angle calculation (static robot)
                 double phi_v = Math.atan(Math.pow(v_note, 2) / 9.8 / x * (1 - Math.sqrt(1
                                 + 19.6 / Math.pow(v_note, 2) * (y - 4.9 * x * x / Math.pow(v_note, 2)))));
@@ -205,7 +181,9 @@ public class Shoot extends Command {
 
                 // save the results
                 horiz_angle = theta_h;
+                theta_v += Units.degreesToRadians(ArmConstants.armFudgeFactor);
                 vert_angle = theta_v;
+                ANG = ShooterConstants.ANGLE_OFFSET - theta_v;
                 exit_vel = v_shoot;
                 // System.err.println(horiz_angle);
                 // System.err.println(vert_angle);
@@ -226,32 +204,28 @@ public class Shoot extends Command {
                 // Set the outtake velocity
                 shooter.setTargetVelocity(v_shoot);
 
-                boolean sawTag = true;//visionSawTagDebouncer.calculate(drive.canSeeTag());
                 // System.out.println("Arm Setpoint: "+arm.atSetpoint());
                 // System.out.println("Shooter Setpoint: "+shooter.atSetpoint());
                 // System.out.println("drive Setpoint: "+drive.atAlignAngle());
-
+                // TODO: Make this commented out if statement work (arm and shooter weren't getting to setpoint)
+                // if (arm.atSetpoint() && shooter.atSetpoint() && drive.atAlignAngle() && sawTag || shooting) {
                 // report the conditions needed to start shooting
                 // TODO: do not use epsilonEquals(); use arm.atSetpoint()
                 // The shooter should not be worried about PID Tolerance here; that belongs in Arm.
-                SmartDashboard.putBoolean("arm setpoint", EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - theta_v, Units.degreesToRadians(3)));
-                SmartDashboard.putBoolean("shooter setpoint", shooter.atSetpoint());
-                SmartDashboard.putBoolean("drive setpoint", drive.atAlignAngle());
-                SmartDashboard.putBoolean("saw tag", sawTag);
+                // SmartDashboard.putBoolean("arm setpoint", EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - theta_v, Units.degreesToRadians(1)));
+                // SmartDashboard.putBoolean("shooter at setpoint", shooter.atSetpoint());
+                // SmartDashboard.putBoolean("drive setpoint", drive.atAlignAngle());
+                // SmartDashboard.putBoolean("saw tag", sawTag);
 
-                // put the !shooting test first
-                if (!shooting
-                        && EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - theta_v, Units.degreesToRadians(3))
-                        && shooter.atSetpoint() 
-                        && drive.atAlignAngle() 
-                        && sawTag) {
+                if (!shooting && EqualsUtil.epsilonEquals(arm.getAngleRad(), ShooterConstants.ANGLE_OFFSET - (theta_v), Units.degreesToRadians(1 /* 4, 1 */)) && 
+                 shooter.atSetpoint() && drive.atAlignAngle()) {
                         // remember we are now shooting
                         shooting = true;
                         // push the note into the shooter
                         index.ejectIntoShooter();
                         // start the shooting timer
                         shootTimer.start();
-                        System.out.println("DONE");
+                        //System.out.println("DONE");
                 }
         }
 
@@ -262,6 +236,8 @@ public class Shoot extends Command {
 
         @Override
         public void end(boolean interrupted) {
+                // System.out.println("x " + X+" y "+Y+" ang "+ANG + " actual " + arm.getAngleRad());
+                
                 // slow down/turn off the shooter
                 shooter.setTargetVelocity(REST_VEL);
                 shooter.resetPID();

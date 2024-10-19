@@ -14,14 +14,14 @@ public class AutoConstants {
     // Pathplanner output folder should be src/main/deploy/pathplanner
     public static final String TRAJECTORY_DIRECTORY = "pathplanner/paths/";
 
-    public static final double MAX_AUTO_SPEED = 4.3; // m/s
-    public static final double MAX_AUTO_ACCEL = 1.1; // m/s^2
+    public static final double MAX_AUTO_SPEED = 5.2; // m/s
+    public static final double MAX_AUTO_ACCEL = 4.8; // m/s^2
 
     // TODO: Tune these
     public static final PIDConstants translationConstants = new PIDConstants(5,0,0);
     public static final PIDConstants rotationConstants = new PIDConstants(5,0,0);
 
-    public static final ReplanningConfig replanningConfig = new ReplanningConfig(true, false);
+    public static final ReplanningConfig replanningConfig = new ReplanningConfig(false, false);
 
     public static final HolonomicPathFollowerConfig config = new HolonomicPathFollowerConfig(
         translationConstants,

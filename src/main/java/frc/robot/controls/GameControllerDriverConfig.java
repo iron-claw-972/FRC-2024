@@ -6,8 +6,9 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Robot;
 import frc.robot.commands.GoToPose;
 import frc.robot.commands.OuttakeAmp;
+import frc.robot.commands.SysIDDriveCommand;
 import frc.robot.commands.drive_comm.SetFormationX;
-import frc.robot.commands.vision.AcquireGamePiece;
+//import frc.robot.commands.vision.AcquireGamePiece;
 import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
@@ -62,28 +63,28 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
 
     // Resets the modules to absolute if they are having the unresolved zeroing
     // error
-    kDriver.get(Button.A).onTrue(new InstantCommand(() -> getDrivetrain().resetModulesToAbsolute()));
-
-    // Align to subwoofer
-    kDriver.get(DPad.LEFT).whileTrue(new GoToPose(()->
+    kDriver.get(Button.RB).onTrue(new InstantCommand(() -> getDrivetrain().resetModulesToAbsolute()));
+    //kDriver.get(Button.RB).onTrue(new SysIDDriveCommand(getDrivetrain()));
+    kDriver.get(Button.X).whileTrue(new GoToPose(()->
       Robot.getAlliance() == Alliance.Red ? VisionConstants.RED_SUBWOOFER_LEFT
       : VisionConstants.BLUE_SUBWOOFER_LEFT,
       getDrivetrain()));
-    kDriver.get(DPad.UP).whileTrue(new GoToPose(()->
+    kDriver.get(Button.Y).whileTrue(new GoToPose(()->
       Robot.getAlliance() == Alliance.Red ? VisionConstants.RED_SUBWOOFER_CENTER
       : VisionConstants.BLUE_SUBWOOFER_CENTER,
-      getDrivetrain()));
-    kDriver.get(DPad.RIGHT).whileTrue(new GoToPose(()->
+       getDrivetrain()));
+    kDriver.get(Button.B).whileTrue(new GoToPose(()->
       Robot.getAlliance() == Alliance.Red ? VisionConstants.RED_SUBWOOFER_RIGHT
       : VisionConstants.BLUE_SUBWOOFER_RIGHT,
       getDrivetrain()));
 
+
     // Amp alignment
     if(arm != null && index != null && shooter != null){
       // kDriver.get(Button.B).whileTrue(new OuttakeAmp(arm, index, shooter, getDrivetrain()));
-      kDriver.get(Button.B).whileTrue(new OuttakeAmp(getDrivetrain()));
+      kDriver.get(Button.A).whileTrue(new OuttakeAmp(getDrivetrain()));
     }else{
-      kDriver.get(Button.B).whileTrue(new OuttakeAmp(getDrivetrain()));
+      kDriver.get(Button.A).whileTrue(new OuttakeAmp(getDrivetrain()));
     }
     // Podium alignment
     kDriver.get(Button.LB)
@@ -126,6 +127,10 @@ public class GameControllerDriverConfig extends BaseDriverConfig {
   @Override
   public boolean getIsAlign() {
     return kDriver.LEFT_TRIGGER_BUTTON.getAsBoolean();
+  }
+
+  public GameController getGameController(){
+    return kDriver;
   }
 
 }

@@ -31,15 +31,15 @@ public class ArmConstants {
      * it was measured with a protractor.
     * 
      */
-    public static final double MIN_ANGLE_RADS = Units.degreesToRadians(-9.20);
+    public static final double MIN_ANGLE_RADS = Units.degreesToRadians(-8.8);
     /** maximum arm angle in radians */
     // TODO: jimmied to 73 so ampSetpoint will work
-    public static final double MAX_ANGLE_RADS = Units.degreesToRadians(70.5 + 2.5);
+    public static final double MAX_ANGLE_RADS = Units.degreesToRadians(70.5 + 3.5);
 
     /** 
      * starting angle in radians.
      */
-    public static final double START_ANGLE_RADS = Units.degreesToRadians(-9.20);
+    public static final double START_ANGLE_RADS = MIN_ANGLE_RADS; // 9.2
 
     // If you add another setpoint field, check its validity in test/java/frc/robot/subsystems/gpm/ArmTest.java
     // TODO: update these values; e.g., stowedSetpoint should probably be MIN_ANGLE_RADS
@@ -49,6 +49,10 @@ public class ArmConstants {
     public static final double subwooferSetpoint = MIN_ANGLE_RADS;
     public static final double preClimbSetpoint = MAX_ANGLE_RADS;
     public static final double climbSetpoint = MIN_ANGLE_RADS;
+    public static final double zeroSetpoint = 0;
+    public static double armFudgeFactor = 0; 
+    public static double armFudgeFactorChanges = 0;
+
     // TODO: if the max angle is 70.5, then why is this being set to 73?
     public static final double ampSetpoint = Units.degreesToRadians(73.0);
 
@@ -58,7 +62,7 @@ public class ArmConstants {
 	/** Whether to check if the arm is stowed on deploy */
 	public static final boolean ASSERT_AT_SETPOINT = true;
 	/** In radians */
-	public static final double ANGLE_TOLERANCE = 0.15;
+	public static final double ANGLE_TOLERANCE = 0.2;
 
     public static CurrentLimitsConfigs currentConfig = new CurrentLimitsConfigs()
         .withSupplyCurrentLimit(15)

@@ -12,15 +12,13 @@ public class IndexerFeed extends Command {
 
     public IndexerFeed(StorageIndex index){
         this.m_index = index;
-        addRequirements(index);
+//        addRequirements(index);
     }
 
 	@Override
     public void initialize (){
-
         m_index.ejectIntoShooter();
         timer.restart();
-
     }
 
 	@Override
