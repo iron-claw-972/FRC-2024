@@ -51,10 +51,11 @@ public class ConstantsTest {
     enum SwerveDriveSpecialties {
         // Gearbox ratios from the SDS webpage
         //  https://www.swervedrivespecialties.com/products/mk4i-swerve-module
+        // the standard 14-tooth pinion
         L1((50.0 / 14.0) * (19.0 / 25.0) * (45.0 / 15.0)),
         L2((50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0)),
         L3((50.0 / 14.0) * (16.0 / 28.0) * (45.0 / 15.0)),
-        // 16-tooth pinion
+        // the special 16-tooth pinion
         //    https://www.swervedrivespecialties.com/products/kit-adapter-16t-drive-pinion-gear-mk4i
         L1P((50.0 / 16.0) * (19.0 / 25.0) * (45.0 / 15.0)),
         L2P((50.0 / 16.0) * (17.0 / 27.0) * (45.0 / 15.0)),
@@ -76,15 +77,20 @@ public class ConstantsTest {
 
     @Test
     public void testSwerveRatios() {
-        // check the mroe exact ratios against the published-to-2-digits ratios
+        // check the more exact ratios against the published-to-2-digits standard L ratios
         assertEquals(8.14, SwerveDriveSpecialties.L1.driveRatio, 0.01);
         assertEquals(6.75, SwerveDriveSpecialties.L2.driveRatio, 0.01);
         assertEquals(6.12, SwerveDriveSpecialties.L3.driveRatio, 0.01);
 
+        // 16 pinion ratios are not published
+        assertEquals(7.125, SwerveDriveSpecialties.L1P.driveRatio, 0.001);
+        assertEquals(5.903, SwerveDriveSpecialties.L2P.driveRatio, 0.001);
+        assertEquals(5.357, SwerveDriveSpecialties.L3P.driveRatio, 0.001);
+
         // The drive ratio could be more accurate, but does not hurt
         assertEquals(SwerveDriveSpecialties.L2P.driveRatio, DriveConstants.kDriveGearRatio, 0.01);
 
-        // The steer ratio
+        // The steer ratio is the same for all modules
         // print the relative error: 0.6e-4. After 100 rotations, error would be 0.6e-2 rotations (about 1.5 degrees)
         // System.out.println((DriveConstants.kSteerGearRatio - SwerveDriveSpecialties.L2.steerRatio) / SwerveDriveSpecialties.L2.steerRatio);
         assertEquals(SwerveDriveSpecialties.L2P.steerRatio, DriveConstants.kSteerGearRatio, 0.01);
